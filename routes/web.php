@@ -4,6 +4,6 @@ Route::get('/', function () {
 });
 
 
-Route::group(['as' => 'adm.', 'prefix' => 'usuario'], function(){	
+Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){	
   Route::get('/novo', ['as' => 'criar', 'uses' => 'UsuarioController@criar']);	
 });
