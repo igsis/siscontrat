@@ -1,0 +1,14 @@
+<?php
+
+namespace siscontrat\Http\Controllers;
+
+use Illuminate\Http\Request;
+use siscontrat\Http\Controllers\Controller;
+
+class UsuarioController extends Controller
+{
+  public function form()
+  {
+    return view("usuario.form");
+  }    
+}
