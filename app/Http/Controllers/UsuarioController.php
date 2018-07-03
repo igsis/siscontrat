@@ -7,8 +7,8 @@ use siscontrat\Http\Controllers\Controller;
 
 class UsuarioController extends Controller
 {
-  public function form()
+  public function criar()
   {
-    return view("usuario.form");
+    return view("usuario.criar");
   }    
 }

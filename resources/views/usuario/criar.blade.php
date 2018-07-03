@@ -4,7 +4,7 @@
   Cadastro de usuário
 @stop()
 
-@section('conteudo')
+@section('conteudo')  
   <form>
   	<div class="form-group">
   	  <label for="nome_completo">Nome Completo</label>	

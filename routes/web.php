@@ -3,9 +3,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/**USUÁRIO**/
-Route::group(['prefix' => 'usuario'], function(){
-	
-	Route::get('/cadastro', 'UsuarioController@form');	
 
+Route::group(['as' => 'adm.', 'prefix' => 'usuario'], function(){	
+  Route::get('/novo', ['as' => 'criar', 'uses' => 'UsuarioController@criar']);	
 });
