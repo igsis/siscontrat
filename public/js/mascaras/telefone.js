@@ -9,7 +9,7 @@ function setMascara(phone, getMascara){
 function aplicaMascara(){
   telefone.value=mascara(telefone.value)
 }
-    
+
 function getMascara(telefone){      
       
   telefone=telefone.replace(/\D/g,"");             
@@ -18,3 +18,4 @@ function getMascara(telefone){
       
   return telefone;
 }
+    
