@@ -5,7 +5,7 @@
 @stop()
 
 @section('conteudo')  
-  <form action={!! route('usuario.salvar') !!} method="POST">  	
+  <form action="{!!route('usuario.salvar')!!}" method="POST">  	
     
     {{csrf_field()}}
 
