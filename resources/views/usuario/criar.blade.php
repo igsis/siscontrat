@@ -39,12 +39,14 @@
 
   	<div class="form-group">
   	  <label for="telefone">Telefone</label>	
-  	  <input type="tel" name="telefone" class="form-control" min="10" max="15"    
-  	         placeholder="(99)99999-9999" id="telefone"
-  	         pattern="\([0-9]{2}\)[\s][0-9]{4,5}-[0-9]{4}">
+  	  <input type="tel" name="telefone" class="form-control" id="telefone"  
+             placeholder="(99)99999-9999" 
+  	         pattern="\([0-9]{2}\)[\s][0-9]{4,5}-[0-9]{4}" 
+             maxlength="15" 
+             onkeyup="setMascara( this, getMascara );">
   	</div>
 
   	<button type="submit">Enviar</button>
-
   </form>  
+  <script type="text/javascript" src="/js/mascaraTelefone.js"></script>
 @stop()

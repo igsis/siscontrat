@@ -7,8 +7,13 @@ use siscontrat\Http\Controllers\Controller;
 
 class UsuarioController extends Controller
 {
+  
+   
+
   public function criar()
   {
     return view("usuario.criar");
   }    
+
+  
 }
