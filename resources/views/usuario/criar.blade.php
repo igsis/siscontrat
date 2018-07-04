@@ -5,8 +5,11 @@
 @stop()
 
 @section('conteudo')  
-  <form>
-  	<div class="form-group">
+  <form action={!! route('usuario.salvar') !!} method="POST">  	
+    
+    {{csrf_field()}}
+
+    <div class="form-group">
   	  <label for="nome_completo">Nome Completo</label>	
   	  <input type="text" name="nome_completo" class="form-control" 
              minlength="7" maxlength="70"    
@@ -49,9 +52,8 @@
              onkeyup="setMascara( this, getMascara );">
   	</div>
 
-  	<button type="submit">Enviar</button>
+  	<button type="submit" class="btn btn-primary">Salvar</button>
   </form>  
   <script type="text/javascript" src="/js/mascaras/telefone.js"></script>
-  <script type="text/javascript" src="/js/validacoes/msgRequired.js"></script>
-  
+  <script type="text/javascript" src="/js/validacoes/msgRequired.js"></script>  
 @stop()
