@@ -18,8 +18,8 @@
                 class="dropdown-toggle" 
                 data-toggle="dropdown">Usuário</a>
               <ul class="dropdown-menu">
-                <li><a href="#">Perfil</a></li>
-                <li><a href="{{action('UsuarioController@criar')}}">Novo</a></li>                
+                <li><a href="{{action('PerfilController@criar')}}">Perfil</a></li>
+                <li><a href="{{action('UsuarioController@criar')}}">Novo</a></li>
               </ul>
             </li>             
           </ul>

@@ -1,4 +1,20 @@
 (function (){      
+      'Valida descrição perfil';
+      var descricao = document.querySelector('#desc_perfil');  
+
+      descricao.addEventListener('invalid', function () {
+        var $this = this;
+        var errorsMessage = 'Informe um nome para a descrição do usuário';
+
+        $this.setCustomValidity('');
+
+        if (!$this.validity.valid) {
+          $this.setCustomValidity(errorsMessage);
+        };
+      });    
+    })();
+    
+(function (){      
       'Valida nome';
       var nome = document.querySelector('#nome_completo');  
 
@@ -93,3 +109,5 @@
         };
       });    
     })();
+
+    

@@ -4,16 +4,15 @@ namespace siscontrat\Http\Controllers;
 
 use Request;
 use siscontrat\Http\Controllers\Controller;
-use siscontrat\Models\Usuario;
-use siscontrat\Models\Perfil;
+use siscontrat\Models\admin\Usuario;
+use siscontrat\Models\admin\Perfil;
 
 
 class UsuarioController extends Controller
 {  
-
   public function criar()
   {
-    return view("usuario.criar")
+    return view("admin.usuario.criar")
       ->with('perfils', Perfil::orderBy('descricao')->get()); 
 
   }    

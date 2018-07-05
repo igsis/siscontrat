@@ -1,4 +1,4 @@
-@extends('layout.header')
+@extends('layout.menu.admin')
 
 @section('titulo')
   Cadastro de usuário
@@ -64,5 +64,5 @@
   	<button type="submit" class="btn btn-primary">Salvar</button>
   </form>  
   <script type="text/javascript" src="/js/mascaras/telefone.js"></script>
-  <script type="text/javascript" src="/js/validacoes/msgRequired.js"></script>  
+  <script type="text/javascript" src="/js/validacoes/admin/usuario.js"></script>  
 @stop()

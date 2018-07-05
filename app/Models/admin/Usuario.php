@@ -1,6 +1,6 @@
 <?php
 
-namespace siscontrat\Models;
+namespace siscontrat\Models\admin;
 
 use Illuminate\Database\Eloquent\Model;
 
