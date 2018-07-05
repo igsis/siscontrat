@@ -15,6 +15,8 @@ class PerfilController extends Controller
 
   public function salvar()
   {      
-    return "salvar";
+    Perfil::create(Request::all());
+
+    return view('admin.perfil.criar');
   }
 }
