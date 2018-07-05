@@ -11,8 +11,6 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
 
 });
 
-/*Route::get('/usuario/criar', 'UsuarioController@criar');
-Route::post('/usuario/salvar', 'UsuarioController@salvar');*/
 
 
 

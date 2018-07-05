@@ -2,20 +2,25 @@
 
 namespace siscontrat\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Request;
 use siscontrat\Http\Controllers\Controller;
+use siscontrat\Models\Usuario;
+use siscontrat\Models\Perfil;
+
 
 class UsuarioController extends Controller
 {  
 
   public function criar()
   {
-    return view("usuario.criar");
+    return view("usuario.criar")
+      ->with('perfils', Perfil::orderBy('descricao')->get()); 
+
   }    
 
   public function salvar()
-  {
-  	return "salvar";
+  {      
+    Usuario::create(Request::all());    
   }
 
   
