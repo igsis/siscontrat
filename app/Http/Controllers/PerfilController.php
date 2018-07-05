@@ -8,6 +8,13 @@ use siscontrat\Models\admin\Perfil;
 
 class PerfilController extends Controller
 {
+  public function index()
+  {
+    return view("admin.perfil.index")
+      ->with("perfis", Perfil::all());
+  }
+
+
   public function criar()
   {
     return view("admin.perfil.criar");

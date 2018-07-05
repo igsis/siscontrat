@@ -10,6 +10,11 @@ use siscontrat\Models\admin\Perfil;
 
 class UsuarioController extends Controller
 {  
+  public function index()
+  {
+    return view("admin.usuario.index");
+  }
+
   public function criar()
   {
     return view("admin.usuario.criar")

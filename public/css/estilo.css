@@ -18,3 +18,18 @@ body{
     display: block;    
     background: #000;
 }
+
+table a
+{
+  color: #fff;
+}
+
+table th, td
+{
+  text-align: center; 
+}
+
+.tabela-perfil{  
+  width:900px;
+  width: 900px;  
+}
