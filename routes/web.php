@@ -5,7 +5,7 @@ Route::get('/', function () {
 
 Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){	
   
-  Route::get('/criar',  ['as' => 'criar',  'uses' => 'UsuarioController@criar']);
+  Route::get('/novo',  ['as' => 'criar',  'uses' => 'UsuarioController@criar']);
   
   Route::post('/salvar', ['as' => 'salvar', 'uses' => 'UsuarioController@salvar']);
 
