@@ -5,22 +5,18 @@
 @stop()
 
 @section('conteudo')
-<table align="center" class=" table tabela-perfil table-dark" >
+<table align="center" class=" table table-stripped table-hover tabela-perfil " >
   <thead>
-    <tr>
-      <th scope="col">Descrição</th>  	      
+    <tr>      
     </tr>	
   </thead>	
   <tbody>
     @foreach($perfis as $perfil)
       <tr scope="row">      
-        <td>{{$perfil->descricao}}</td>        
+        <td>{{$perfil->descricao}}</td>                
         <td>
-          <a href="#">Alterar</a>
-        </td>
-        <td>
-          <a href="#">Desabilitar</a>
-        </td>            
+          <a href="/perfil/editar/{{$perfil->id}}">Alterar</a>
+        </td>        
       </tr>	
     @endforeach        
   </tbody>

@@ -14,16 +14,34 @@ class PerfilController extends Controller
       ->with("perfis", Perfil::all());
   }
 
-
   public function criar()
   {
-    return view("admin.perfil.criar");
+    return view("admin.perfil.criar");      
   }
 
   public function salvar()
   {      
     Perfil::create(Request::all());
 
-    return view('admin.perfil.criar');
+    return redirect()
+      ->action('PerfilController@criar')
+      ->withInput(Request::only('descricao'));
+  }
+
+  public function editar($id)
+  {
+     return view('admin.perfil.criar')
+       ->with('perfil', Perfil::find($id));
+  }
+
+  public function atualizar()
+  {
+    $perfil = Perfil::find(Request::input('id'));
+    $perfil->descricao = Request::input('descricao');
+    $perfil->save();
+
+    return redirect()
+      ->action('PerfilController@index')
+      ->withInput(Request::only(['id', 'descricao']));
   }
 }

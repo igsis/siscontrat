@@ -19,11 +19,6 @@ body{
     background: #000;
 }
 
-table a
-{
-  color: #fff;
-}
-
 table th, td
 {
   text-align: center; 
