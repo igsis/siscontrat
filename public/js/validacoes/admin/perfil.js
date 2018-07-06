@@ -4,7 +4,7 @@
 
    descricao.addEventListener('invalid', function () {
      var $this = this;
-     var errorsMessage = 'Informe um nome para a descrição do usuário';
+     var errorsMessage = 'Informe um nome para o perfil do usuário';
 
      $this.setCustomValidity('');
 

@@ -5,10 +5,8 @@
 @stop()
 
 @section('conteudo')  
-  <form action="{!!route('perfil.salvar')!!}" method="POST">    
-    
+  <form action="{!!route('perfil.salvar')!!}" method="POST">        
     {{csrf_field()}}
-
     <div class="form-group">
       <label for="descrica">Descricao</label> 
       <input type="text" name="descricao" class="form-control" 
