@@ -9,10 +9,12 @@ use siscontrat\Http\Requests\PerfilRequest;
 
 class PerfilController extends Controller
 {
+  private $totalPagina = 10;  
+  
   public function index()
   {
     return view("admin.perfil.index")
-      ->with("perfis", Perfil::orderBy('descricao', 'asc')->get());
+      ->with("perfis", Perfil::paginate($this->totalPagina));
   }
 
   public function criar()

@@ -6,9 +6,12 @@
 
 @section('conteudo')
 @include('admin.perfil.mensagens', ['msg' => old('id')])
+<a href="{!! route('perfil.criar') !!}" class="btn btn-primary">+Novo</a>
 <table align="center" class=" table table-stripped table-hover tabela-perfil " >
   <thead>
-    <tr>      
+    <tr>    
+      <th>Descrição</th>      
+      <th>Ação</th>
     </tr>	
   </thead>	
   <tbody>
@@ -22,5 +25,8 @@
     @endforeach        
   </tbody>
 </table>  
-</div>
+<div class="paginacao">
+  {!! $perfis->links() !!}  
+</div>  
 @stop
+
