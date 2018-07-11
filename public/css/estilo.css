@@ -32,6 +32,6 @@ table th, td
 .paginacao{
   position: absolute;
   left: 50px;
-  bottom: 50px;
+  bottom: 40px;
   margin-left: 650px;  
 }
