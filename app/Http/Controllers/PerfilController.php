@@ -5,6 +5,7 @@ namespace siscontrat\Http\Controllers;
 use Request;
 use siscontrat\Http\Controllers\Controller;
 use siscontrat\Models\admin\Perfil;
+use siscontrat\Http\Requests\PerfilRequest;
 
 class PerfilController extends Controller
 {
@@ -19,9 +20,9 @@ class PerfilController extends Controller
     return view("admin.perfil.form");      
   }
 
-  public function salvar()
+  public function salvar(PerfilRequest $request)
   {      
-    Perfil::create(Request::all());
+    Perfil::create($request->all());
 
     return redirect()
       ->action('PerfilController@criar')

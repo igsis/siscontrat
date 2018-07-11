@@ -4,7 +4,7 @@
 
    descricao.addEventListener('invalid', function () {
      var $this = this;
-     var errorsMessage = 'Informe um nome para o perfil do usuário';
+     var errorsMessage = 'Informe um nome de perfil com pelo menos 3 caracteres';
 
      $this.setCustomValidity('');
 

@@ -7,8 +7,7 @@
 <?php  $path = isset($perfil) ? 'perfil.atualizar' : 'perfil.salvar'; ?>   
 
 @section('conteudo')            
-  @include('admin.perfil.mensagens', ['msg' => old('descricao')])            
-  
+  @include('admin.perfil.mensagens')   
   <form action="{{route($path)}}" method="POST">        
     {{csrf_field()}}
     
@@ -18,7 +17,7 @@
       <label for="descrica">Descricao</label> 
       
       <input type="text" name="descricao" class="form-control" 
-             minlength="3" maxlength="30"    
+             minlength="3" maxlength="35"    
              placeholder="Informe uma descrição para o perfil do usuário" id="descricao" required
              value="{{isset($perfil) ? $perfil->descricao : ''}}">
     </div>

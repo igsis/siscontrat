@@ -8,6 +8,7 @@ use siscontrat\Models\admin\Usuario;
 use siscontrat\Models\admin\Perfil;
 
 
+
 class UsuarioController extends Controller
 {  
   public function index()
