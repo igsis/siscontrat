@@ -4,15 +4,11 @@
   Cadastro de perfil
 @stop()
 
-<?php 
-  $path = isset($perfil) 
-    ? 'perfil.atualizar' 
-    : 'perfil.salvar'; 
-?>
+<?php  $path = isset($perfil) ? 'perfil.atualizar' : 'perfil.salvar'; ?>   
 
-@section('conteudo')      
-  @include('admin.perfil.mensagens', ['msg' => old('id')])
-  @include('admin.perfil.mensagens', ['msg' => old('descricao')])      
+@section('conteudo')            
+  @include('admin.perfil.mensagens', ['msg' => old('descricao')])            
+  
   <form action="{{route($path)}}" method="POST">        
     {{csrf_field()}}
     

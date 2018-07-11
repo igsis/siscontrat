@@ -5,6 +5,7 @@
 @stop()
 
 @section('conteudo')
+@include('admin.perfil.mensagens', ['msg' => old('id')])
 <table align="center" class=" table table-stripped table-hover tabela-perfil " >
   <thead>
     <tr>      
