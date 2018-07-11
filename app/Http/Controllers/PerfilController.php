@@ -11,12 +11,12 @@ class PerfilController extends Controller
   public function index()
   {
     return view("admin.perfil.index")
-      ->with("perfis", Perfil::all());
+      ->with("perfis", Perfil::orderBy('descricao', 'asc')->get());
   }
 
   public function criar()
   {
-    return view("admin.perfil.criar");      
+    return view("admin.perfil.form");      
   }
 
   public function salvar()
@@ -30,7 +30,7 @@ class PerfilController extends Controller
 
   public function editar($id)
   {
-     return view('admin.perfil.criar')
+     return view('admin.perfil.form')
        ->with('perfil', Perfil::find($id));
   }
 
@@ -44,4 +44,5 @@ class PerfilController extends Controller
       ->action('PerfilController@index')
       ->withInput(Request::only(['id', 'descricao']));
   }
+
 }

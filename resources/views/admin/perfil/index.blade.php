@@ -17,7 +17,7 @@
         <td>{{$perfil->descricao}}</td>                
         <td>
           <a href="/perfil/editar/{{$perfil->id}}">Alterar</a>
-        </td>        
+        </td>                
       </tr>	
     @endforeach        
   </tbody>
