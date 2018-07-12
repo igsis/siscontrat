@@ -18,9 +18,10 @@ Route::group(['as' => 'perfil.', 'prefix' => 'perfil'], function(){
 Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){	  
   Route::get('/lista',   ['as' => 'index',  'uses' => 'UsuarioController@index']);
   Route::get('/novo',    ['as' => 'criar',  'uses' => 'UsuarioController@criar']);  
-  Route::post('/salvar', ['as' => 'salvar', 'uses' => 'UsuarioController@salvar']);
+  Route::post('/salvar', ['as' => 'salvar', 'uses' => 'UsuarioController@salvar']);  
 });
 
+Route::get('/usuario/novo/validaLogin/{nome}', 'UsuarioController@validaLogin');
 
 
 

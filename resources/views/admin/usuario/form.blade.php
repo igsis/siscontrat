@@ -4,22 +4,29 @@
   Cadastro de usuário
 @stop()
 
-@section('conteudo')  
+<?php 
+  if(isset($nome)):
+    echo "Achou";  
+  endif;  
+?>
+
+@section('conteudo')      
   <form action="{!!route('usuario.salvar')!!}" method="POST">  	
-    
     {{csrf_field()}}
 
     <div class="form-group">
   	  <label for="nome_completo">Nome Completo</label>	
   	  <input type="text" name="nome_completo" class="form-control" 
              minlength="7" maxlength="70"    
-  	         placeholder="Informe o nome completo do usuário" id="nome_completo" required>
+  	         placeholder="Informe o nome completo do usuário" id="nome_completo" 
+             required>
   	</div>
-
-  	<div class="form-group">
+  	
+    <div class="form-group">
   	  <label for="usuario">Usuário</label>	
   	  <input type="text" name="usuario" class="form-control" minlength="7" maxlength="7"    
-  	         placeholder="Informe o login de acesso para o usuário" id="usuario" required>
+  	         placeholder="Informe o login de acesso para o usuário" id="usuario" required
+             onblur="validaLogin()">
   	</div>
 
   	<div class="form-group">
@@ -64,5 +71,14 @@
   	<button type="submit" class="btn btn-primary">Salvar</button>
   </form>  
   <script type="text/javascript" src="/js/mascaras/telefone.js"></script>
-  <script type="text/javascript" src="/js/validacoes/admin/usuario.js"></script>  
+  <script type="text/javascript" src="/js/validacoes/admin/usuario.js"></script> 
+  <script type="text/javascript">
+    function validaLogin(){
+      event.preventDefault();  
+      var nome = document.getElementById('usuario');      
+      window.location.href="/usuario/novo/validaLogin/"+nome.value;      
+      
+    }
+  </script>
+
 @stop()

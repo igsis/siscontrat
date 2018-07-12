@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Usuario extends Model
 {
-  protected $fillable = ['nome_completo', 'usuario', 'senha', 'email', 'telefone'];
+  protected $fillable = 
+    ['nome_completo', 'usuario', 'senha', 'email', 'telefone', 'perfil_id'];
   protected $guarded = '[id]';
   public $timestamps = false;
 
