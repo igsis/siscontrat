@@ -2,16 +2,11 @@
 
 @section('titulo')
   Cadastro de usuário
-@stop()
+@stop()  
 
-<?php 
-  if(isset($nome)):
-    echo "Achou";  
-  endif;  
-?>
-
-@section('conteudo')      
-  <form action="{!!route('usuario.salvar')!!}" method="POST">  	
+@section('conteudo')        
+  @include('admin.usuario.mensagens')
+  <form action="{!!route('usuario.salvar')!!}" method="POST" id="cadastroUsuario">  	
     {{csrf_field()}}
 
     <div class="form-group">
@@ -19,14 +14,16 @@
   	  <input type="text" name="nome_completo" class="form-control" 
              minlength="7" maxlength="70"    
   	         placeholder="Informe o nome completo do usuário" id="nome_completo" 
-             required>
+             required
+             value="{{old('nome_completo')}}">
   	</div>
   	
     <div class="form-group">
   	  <label for="usuario">Usuário</label>	
   	  <input type="text" name="usuario" class="form-control" minlength="7" maxlength="7"    
   	         placeholder="Informe o login de acesso para o usuário" id="usuario" required
-             onblur="validaLogin()">
+             onblur="validaUsuario()"
+             value="{{old('usuario')}}">
   	</div>
 
   	<div class="form-group">
@@ -46,7 +43,8 @@
   	  <label for="email">Email</label>	
   	  <input type="email" name="email" class="form-control" minlength="13" maxlength="60"    
   	         placeholder="Informe um email do usuário" id="email" 
-             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>  	         
+             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required
+             value="{{old('email')}}">  	         
   	         
   	</div>    
 
@@ -56,29 +54,23 @@
              placeholder="(99)99999-9999"   	         
              maxlength="15" 
              pattern="\([0-9]{2}\)[\s][0-9]{4,5}-[0-9]{4}" required 
-             onkeyup="setMascara( this, getMascara );">
+             onkeyup="setMascara( this, getMascara );"
+             value="{{old('telefone')}}">
   	</div>
 
     <div class="form-group">
       <label for="">Perfil</label>
       <select name="perfil_id" class="form-control">
         @foreach($perfils as $perfil)
-          <option value="{{$perfil->id}}">{{$perfil->descricao}}</option>  
+          <option value="{{$perfil->id}}">
+            {{$perfil->descricao}}            
+          </option>  
         @endforeach      
       </select>
-    </div>  
+    </div>      
 
   	<button type="submit" class="btn btn-primary">Salvar</button>
   </form>  
   <script type="text/javascript" src="/js/mascaras/telefone.js"></script>
-  <script type="text/javascript" src="/js/validacoes/admin/usuario.js"></script> 
-  <script type="text/javascript">
-    function validaLogin(){
-      event.preventDefault();  
-      var nome = document.getElementById('usuario');      
-      window.location.href="/usuario/novo/validaLogin/"+nome.value;      
-      
-    }
-  </script>
-
+  <script type="text/javascript" src="/js/validacoes/admin/usuario.js"></script>   
 @stop()

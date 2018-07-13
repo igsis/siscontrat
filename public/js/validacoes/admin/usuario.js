@@ -93,3 +93,32 @@
       };
    });    
 })();
+
+function validaUsuario(){
+  event.preventDefault();       
+      
+  var form = setForm(getForm(), setInput());
+  form.submit();    
+
+  function setInput(){
+    var input = document.createElement('input');
+        input.setAttribute('type', 'number');
+        input.setAttribute('value', '1');
+        input.setAttribute('name', 'checkUser');  
+
+    return input;
+  }
+
+  function getForm(){
+    var form = document.querySelector('form');
+    return form;
+  }
+
+  function setForm(form, input){
+    form.appendChild(input);            
+    form.action = "/usuario/novo/validar";
+    form.method = "post";      
+
+    return form;
+  }      
+}
