@@ -47,6 +47,11 @@ class UsuarioController extends Controller
 
     return redirect()            
         ->action('UsuarioController@criar')           
-        ->withInput(Request::except('checkUser'));            
+        ->withInput(Request::except('checkUser'));
+
+    /*echo "<pre>";
+    print_r(Request::all());
+    echo "</pre>";*/
+                    
   }  
 }

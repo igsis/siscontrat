@@ -60,14 +60,15 @@
 
     <div class="form-group">
       <label for="">Perfil</label>
-      <select name="perfil_id" class="form-control">
-        @foreach($perfils as $perfil)
-          <option value="{{$perfil->id}}">
+      <select name="perfil_id" class="form-control">            
+        @foreach($perfils as $perfil)                  
+          {{$selected = $perfil->id == old('perfil_id') ? 'selected="selected"' : ''}}        
+          <option value="{{$perfil->id}}" {{$selected}}?>  
             {{$perfil->descricao}}            
           </option>  
         @endforeach      
       </select>
-    </div>      
+    </div>         
 
   	<button type="submit" class="btn btn-primary">Salvar</button>
   </form>  
