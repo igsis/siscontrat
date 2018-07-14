@@ -6,6 +6,7 @@ use Request;
 use siscontrat\Http\Controllers\Controller;
 use siscontrat\Models\admin\Usuario;
 use siscontrat\Models\admin\Perfil;
+use siscontrat\Http\Requests\UsuarioRequest;
 
 class UsuarioController extends Controller
 {  
@@ -20,9 +21,9 @@ class UsuarioController extends Controller
       ->with('perfils', Perfil::orderBy('descricao')->get()); 
   }    
 
-  public function salvar()
+  public function salvar(UsuarioRequest $ur)
   {      
-    Usuario::create(Request::all());    
+    Usuario::create($ur->all());    
   }  
 
   public function validaUsuario()

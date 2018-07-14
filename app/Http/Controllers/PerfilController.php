@@ -22,9 +22,9 @@ class PerfilController extends Controller
     return view("admin.perfil.form");      
   }
 
-  public function salvar(PerfilRequest $request)
+  public function salvar(PerfilRequest $pr)
   {      
-    Perfil::create($request->all());
+    Perfil::create($pr->all());
 
     return redirect()
       ->action('PerfilController@criar')

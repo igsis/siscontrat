@@ -21,7 +21,7 @@ class PerfilRequest extends FormRequest
     public function messages()
     {
       return [        
-        'required' => "O campo :attribute não pode ficar em branco",
+        'required' => "O campo :attribute é obrigatório",
         'min' => "O campo :attribute deve ter ao menos 3 caracteres",
         'max' => "O campo :attribute tem um limite de 30 caracteres",
         'descricao.unique' => 'Já existe um perfil com esta descrição'

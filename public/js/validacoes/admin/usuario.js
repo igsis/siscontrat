@@ -102,7 +102,7 @@ function validaUsuario(){
 
   function setInput(){
     var input = document.createElement('input');
-        input.setAttribute('type', 'number');
+        input.setAttribute('type', 'hidden');
         input.setAttribute('value', '1');
         input.setAttribute('name', 'checkUser');  
 
