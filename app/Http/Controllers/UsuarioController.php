@@ -6,8 +6,6 @@ use Request;
 use siscontrat\Http\Controllers\Controller;
 use siscontrat\Models\admin\Usuario;
 use siscontrat\Models\admin\Perfil;
-use DB;
-
 
 class UsuarioController extends Controller
 {  
@@ -28,8 +26,7 @@ class UsuarioController extends Controller
   }  
 
   public function validaUsuario()
-  { 
-    
+  {     
     $usuario = Request::input('usuario');
 
     $resultado = 

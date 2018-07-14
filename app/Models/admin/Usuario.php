@@ -8,7 +8,8 @@ class Usuario extends Model
 {
   protected $table = "usuarios";
   protected $fillable = 
-    ['nome_completo', 'usuario', 'senha', 'email', 'telefone', 'perfil_id'];
+    ['nome_completo', 'usuario', 'senha', 'email', 'telefone', 
+      'perfil_id'];
   protected $guarded = '[id]';
   public $timestamps = false;
 
