@@ -71,7 +71,13 @@
     </div>         
 
   	<button type="submit" class="btn btn-primary">Salvar</button>
-  </form>  
-  <script type="text/javascript" src="/js/mascaras/telefone.js"></script>
-  <script type="text/javascript" src="/js/validacoes/admin/usuario.js"></script>   
+  </form>    
+  <script type="text/javascript" 
+          src="{{asset('/js/mascaras/telefone.js')}}">
+  </script>
+  <script type="text/javascript" 
+          src="{{asset('/js/validacoes/admin/usuario.js')}}">
+  </script>   
+
+  
 @stop()

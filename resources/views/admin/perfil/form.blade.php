@@ -24,6 +24,7 @@
     </div>
     <button type="submit" class="btn btn-primary">Salvar</button>
   </form>
-  <script type="text/javascript" src="{{asset('js/validacoes/admin/perfil.js')}}"></script>
-  
+  <script type="text/javascript" 
+          src="{{asset('js/validacoes/admin/perfil.js')}}">
+  </script>  
 @stop()

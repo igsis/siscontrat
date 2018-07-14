@@ -116,7 +116,7 @@ function validaUsuario(){
 
   function setForm(form, input){
     form.appendChild(input);            
-    form.action = "/usuario/novo/validar";
+    form.action = "/usuario/novo/validar";    
     form.method = "post";      
 
     return form;
