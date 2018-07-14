@@ -18,10 +18,12 @@
 
       <input type="text" name="descricao" class="form-control"
              minlength="3" maxlength="35"
-             placeholder="Informe uma descrição para o perfil do usuário" id="descricao" required
-             value="{{isset($perfil) ? $perfil->descricao : ''}}">
+             placeholder="Informe uma descrição para o perfil do usuário" id="descricao" required  
+             value="{{isset($perfil) ? $perfil->descricao 
+                                     : old('descricao')}}">
     </div>
     <button type="submit" class="btn btn-primary">Salvar</button>
   </form>
   <script type="text/javascript" src="{{asset('js/validacoes/admin/perfil.js')}}"></script>
+  
 @stop()

@@ -13,18 +13,18 @@ class PerfilRequest extends FormRequest
 
     public function rules()
     {
-        return [
-          'descricao' => 'required|max:30|min:3'          
-        ];
+      return [
+        'descricao' => 'required|max:30|min:3|unique:perfis'        
+      ];
     }
 
     public function messages()
     {
-      return 
-        [
-          'descricao.required' => "O campo :attribute não pode ficar em branco",
-          'descricao.min' => "O campo :attribute deve ter ao menos 3 caracteres",
-          'descricao.max' => "O campo :attribute tem um limite de 30 caracteres"
-        ];      
+      return [        
+        'required' => "O campo :attribute não pode ficar em branco",
+        'min' => "O campo :attribute deve ter ao menos 3 caracteres",
+        'max' => "O campo :attribute tem um limite de 30 caracteres",
+        'descricao.unique' => 'Já existe um perfil com esta descrição'
+      ];      
     }
 }
