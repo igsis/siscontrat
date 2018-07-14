@@ -6,16 +6,16 @@
 
 @section('conteudo')        
   @include('admin.usuario.mensagens')
+  @include('../validacoes/msgErro')
   <form action="{!!route('usuario.salvar')!!}" method="POST" id="cadastroUsuario">  	
     {{csrf_field()}}
 
     <div class="form-group">
   	  <label for="nome_completo">Nome Completo</label>	
   	  <input type="text" name="nome_completo" class="form-control" 
-             minlength="3" maxlength="70" id="nome_completo"     
-  	         required
-             placeholder="Informe o nome completo do usuário"
-             value="{{old('nome_completo')}}">
+             minlength="3" maxlength="70" id="nome_completo" 
+             required value="{{old('nome_completo')}}"                
+             placeholder="Informe o nome completo do usuário">
   	</div>
   	
     <div class="form-group">
@@ -38,6 +38,7 @@
   	  <label for="senha2">Confirme a Senha</label>	
   	  <input type="password" name="senhaConf" class="form-control"  
              minlength="6" maxlength="8" id="senhaConf" required 
+             onblur="compararSenhas()" 
              placeholder="Confirme a senha para o usuário">
   	</div>
     
@@ -82,6 +83,13 @@
           src="{{asset('/js/mascaras/telefone.js')}}">
   </script>  
   <script type="text/javascript">
-    
+    function compararSenhas(){
+      var senha = document.getElementById('senha');
+      var senhaConf = document.getElementById('senhaConf');
+
+      console.log(senha.value);
+      console.log(senhaConf.value);
+
+    }  
   </script>
 @stop()

@@ -28,12 +28,9 @@ class UsuarioController extends Controller
 
   public function validaUsuario()
   {     
-    $usuario = Request::input('usuario');
-
-    $resultado = 
-      Usuario::where('usuario', '=', $usuario)->get();  
-
-    if(sizeof($resultado) > 0):
+    $comparaUsuarios = 
+     Usuario::where('usuario', '=', Request::input('usuario'))->get();  
+    if(sizeof($comparaUsuarios) > 0):
       return redirect()            
         ->action('UsuarioController@criar')           
         ->withInput(Request::all());        
@@ -41,6 +38,6 @@ class UsuarioController extends Controller
 
     return redirect()            
         ->action('UsuarioController@criar')           
-        ->withInput(Request::except('checkUser'));
+        ->withInput(Request::except('verificaUsuario'));
   }  
 }

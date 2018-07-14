@@ -104,7 +104,7 @@ function validaUsuario(){
     var input = document.createElement('input');
         input.setAttribute('type', 'hidden');
         input.setAttribute('value', '1');
-        input.setAttribute('name', 'checkUser');  
+        input.setAttribute('name', 'verificaUsuario');  
 
     return input;
   }
