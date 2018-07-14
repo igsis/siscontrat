@@ -117,10 +117,10 @@ function validaUsuario(){
   function setForm(form, input){
     form.appendChild(input);            
     form.action = "/usuario/novo/validar";    
-    form.method = "post";      
+    form.method = "post";     
 
     return form;
-  }      
+  }    
 }
 
 function compararSenhas(){
@@ -134,7 +134,7 @@ function compararSenhas(){
       var ul = document.getElementById('msg');
           ul.classList.add('oucutarElemento');
           ul.style="list-style-type: none";          
-          limpaLi();           
+          limpaLi();
       
       if(senha.value != senhaConf.value){
         btnSalvar.classList.add('oucutarElemento');                
@@ -160,3 +160,13 @@ function compararSenhas(){
             ul.appendChild(li);
       }  
     }  
+
+/*Foco no campo ao carregar a pagina*/
+window.onload = function(){
+  var nome_completo = 
+    document.querySelector("form").nome_completo.value;     
+
+    nome_completo == "" 
+     ? document.querySelector("form").nome_completo.focus()
+     : document.querySelector("form").senha.focus();                  
+}    

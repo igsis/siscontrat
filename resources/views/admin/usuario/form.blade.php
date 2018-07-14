@@ -11,6 +11,7 @@
         id="cadastroUsuario">  	
     {{csrf_field()}}
     
+    <!--Não apagar uso do js-->
     <div>
       <ul id="msg"></ul>
     </div>

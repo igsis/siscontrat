@@ -13,3 +13,8 @@
      };
       });    
    })();
+
+/*Foco no campo ao carregar a pagina*/
+window.onload = function(){
+  document.querySelector("form").descricao.focus();
+}       
