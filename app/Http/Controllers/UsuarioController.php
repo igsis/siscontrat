@@ -32,12 +32,8 @@ class UsuarioController extends Controller
     
     $usuario = Request::input('usuario');
 
-    $resultado = DB::select(
-      "SELECT 
-        usuario 
-      FROM 
-        usuarios AS u
-      WHERE usuario = ?", array($usuario));
+    $resultado = 
+      Usuario::where('usuario', '=', $usuario)->get();  
 
     if(sizeof($resultado) > 0):
       return redirect()            
@@ -48,10 +44,5 @@ class UsuarioController extends Controller
     return redirect()            
         ->action('UsuarioController@criar')           
         ->withInput(Request::except('checkUser'));
-
-    /*echo "<pre>";
-    print_r(Request::all());
-    echo "</pre>";*/
-                    
   }  
 }
