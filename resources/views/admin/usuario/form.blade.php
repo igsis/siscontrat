@@ -7,9 +7,14 @@
 @section('conteudo')        
   @include('admin.usuario.mensagens')
   @include('../validacoes/msgErro')
-  <form action="{!!route('usuario.salvar')!!}" method="POST" id="cadastroUsuario">  	
+  <form action="{!!route('usuario.salvar')!!}" method="POST" 
+        id="cadastroUsuario">  	
     {{csrf_field()}}
-
+    
+    <div>
+      <ul id="msg"></ul>
+    </div>
+    
     <div class="form-group">
   	  <label for="nome_completo">Nome Completo</label>	
   	  <input type="text" name="nome_completo" class="form-control" 
@@ -44,7 +49,8 @@
     
   	<div class="form-group">
   	  <label for="email">Email</label>	
-  	  <input type="email" name="email" class="form-control" minlength="13" maxlength="60"    
+  	  <input type="email" name="email" class="form-control" 
+             minlength="13" maxlength="60"    
   	         placeholder="Informe um email do usuário" id="email" 
              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required
              value="{{old('email')}}">  	         
@@ -73,7 +79,9 @@
       </select>
     </div>         
 
-  	<button type="submit" class="btn btn-primary">Salvar</button>
+  	<button type="submit" class="btn btn-primary" id="btnSalvar">  
+      Salvar
+    </button>
   </form>    
   <script type="text/javascript" 
           src="{{asset('/js/validacoes/admin/usuario.js')}}">
@@ -81,15 +89,5 @@
   
   <script type="text/javascript" 
           src="{{asset('/js/mascaras/telefone.js')}}">
-  </script>  
-  <script type="text/javascript">
-    function compararSenhas(){
-      var senha = document.getElementById('senha');
-      var senhaConf = document.getElementById('senhaConf');
-
-      console.log(senha.value);
-      console.log(senhaConf.value);
-
-    }  
-  </script>
+  </script>    
 @stop()

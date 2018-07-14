@@ -35,3 +35,7 @@ table th, td
   bottom: 40px;
   margin-left: 650px;  
 }
+
+.oucutarElemento{
+  display: none;
+}

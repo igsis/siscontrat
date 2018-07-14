@@ -122,3 +122,41 @@ function validaUsuario(){
     return form;
   }      
 }
+
+function compararSenhas(){
+      
+      var senha = document.getElementById('senha');
+      var senhaConf = document.getElementById('senhaConf');      
+      
+      var btnSalvar = document.getElementById('btnSalvar');
+          btnSalvar.classList.remove('oucutarElemento');  
+
+      var ul = document.getElementById('msg');
+          ul.classList.add('oucutarElemento');
+          ul.style="list-style-type: none";          
+          limpaLi();           
+      
+      if(senha.value != senhaConf.value){
+        btnSalvar.classList.add('oucutarElemento');                
+        impressaoMsgErro();        
+      }    
+
+      function limpaLi(){
+        var lis = document.querySelectorAll('.msgTempSenha');
+        for (var i = 0; i < lis.length; i++){
+          ul.removeChild(lis[i]);  
+        }
+      }          
+
+      function impressaoMsgErro(){
+        
+        var li = document.createElement('li');
+            li.classList.add('msgTempSenha');
+            li.textContent = "As senhas são diferentes"; 
+            
+            ul.classList.remove('oucutarElemento'); 
+            ul.classList.add('alert');
+            ul.classList.add('alert-danger');
+            ul.appendChild(li);
+      }  
+    }  
