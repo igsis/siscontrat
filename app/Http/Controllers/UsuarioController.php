@@ -7,6 +7,7 @@ use siscontrat\Http\Controllers\Controller;
 use siscontrat\Models\admin\Usuario;
 use siscontrat\Models\admin\Perfil;
 use siscontrat\Http\Requests\UsuarioRequest;
+use Hash;
 
 class UsuarioController extends Controller
 {  
@@ -19,10 +20,12 @@ class UsuarioController extends Controller
   {
     return view("admin.usuario.form")      
       ->with('perfils', Perfil::orderBy('descricao')->get()); 
-  }    
+  }
 
   public function salvar(UsuarioRequest $ur)
   {      
+    
+    $ur['senha'] = Hash::make($ur['senha']);
     Usuario::create($ur->all());    
   }  
 
