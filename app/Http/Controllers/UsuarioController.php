@@ -40,4 +40,20 @@ class UsuarioController extends Controller
         ->action('UsuarioController@criar')           
         ->withInput(Request::except('verificaUsuario'));
   }  
+
+  public function validaEmail()
+  {     
+    $procuraEmail = 
+     Usuario::where('email', '=', Request::input('email'))->get();  
+    
+    if(sizeof($procuraEmail) > 0):
+      return redirect()            
+        ->action('UsuarioController@criar')           
+        ->withInput(Request::all());        
+    endif;    
+
+    return redirect()            
+        ->action('UsuarioController@criar')           
+        ->withInput(Request::except('verificaEmail'));
+  }  
 }

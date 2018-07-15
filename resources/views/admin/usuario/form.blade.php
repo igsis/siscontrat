@@ -35,6 +35,17 @@
              
   	</div>
 
+    <div class="form-group">
+      <label for="email">Email</label>  
+      <input type="email" name="email" class="form-control" 
+             id="email" 
+             minlength="16" maxlength="60" required 
+             onblur="validaEmail()"   
+             placeholder="Informe um email do usuário" 
+             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" 
+             value="{{old('email')}}">                         
+    </div>    
+
   	<div class="form-group">
   	  <label for="senha">Senha</label>	
   	  <input type="password" name="senha" class="form-control"       
@@ -48,19 +59,9 @@
   	  <input type="password" name="senhaConf" class="form-control"  
              id="senhaConf"  
              minlength="6" maxlength="8" required 
-             onblur="compararSenhas()" 
+             onblur="comparaSenha()" 
              placeholder="Confirme a senha para o usuário">
   	</div>
-    
-  	<div class="form-group">
-  	  <label for="email">Email</label>	
-  	  <input type="email" name="email" class="form-control" 
-             id="email" 
-             minlength="16" maxlength="60" required    
-             placeholder="Informe um email do usuário" 
-             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" 
-             value="{{old('email')}}">  	           	         
-  	</div>    
 
   	<div class="form-group">
   	  <label for="telefone">Telefone</label>	

@@ -123,50 +123,92 @@ function validaUsuario(){
   }    
 }
 
-function compararSenhas(){
+function validaEmail(){
+  event.preventDefault();       
       
-      var senha = document.getElementById('senha');
-      var senhaConf = document.getElementById('senhaConf');      
+  var form = setForm(getForm(), setInput());
+  form.submit();    
+
+  function setInput(){
+    var input = document.createElement('input');
+        input.setAttribute('type', 'hidden');
+        input.setAttribute('value', '1');
+        input.setAttribute('name', 'verificaEmail');  
+
+    return input;
+  }
+
+  function getForm(){
+    var form = document.querySelector('form');
+    return form;
+  }
+
+  function setForm(form, input){
+    form.appendChild(input);            
+    form.action = "/usuario/novo/validarEmail";    
+    form.method = "post";     
+
+    return form;
+  }    
+}
+
+function comparaSenha(){
       
-      var btnSalvar = document.getElementById('btnSalvar');
-          btnSalvar.classList.remove('oucutarElemento');  
-
-      var ul = document.getElementById('msg');
-          ul.classList.add('oucutarElemento');
-          ul.style="list-style-type: none";          
-          limpaLi();
+  var senha = document.getElementById('senha');
+  var senhaConf = document.getElementById('senhaConf');      
       
-      if(senha.value != senhaConf.value){
-        btnSalvar.classList.add('oucutarElemento');                
-        impressaoMsgErro();        
-      }    
+  var btnSalvar = document.getElementById('btnSalvar');
+      btnSalvar.classList.remove('oucutarElemento');  
 
-      function limpaLi(){
-        var lis = document.querySelectorAll('.msgTempSenha');
-        for (var i = 0; i < lis.length; i++){
-          ul.removeChild(lis[i]);  
-        }
-      }          
+  var ul = document.getElementById('msg');
+      ul.classList.add('oucutarElemento');
+      ul.style="list-style-type: none";          
+      limpaLi();
+      
+  if(senha.value != senhaConf.value){
+    btnSalvar.classList.add('oucutarElemento');                
+    impressaoMsgErro();        
+  }    
 
-      function impressaoMsgErro(){
+  function limpaLi(){
+    var lis = document.querySelectorAll('.msgTempSenha');
+    for (var i = 0; i < lis.length; i++){
+      ul.removeChild(lis[i]);  
+    }
+  }          
+
+  function impressaoMsgErro(){
         
-        var li = document.createElement('li');
-            li.classList.add('msgTempSenha');
-            li.textContent = "As senhas são diferentes"; 
-            
-            ul.classList.remove('oucutarElemento'); 
-            ul.classList.add('alert');
-            ul.classList.add('alert-danger');
-            ul.appendChild(li);
-      }  
-    }  
+    var li = document.createElement('li');
+        li.classList.add('msgTempSenha');
+        li.textContent = "As senhas são diferentes"; 
+           
+        ul.classList.remove('oucutarElemento'); 
+        ul.classList.add('alert');
+        ul.classList.add('alert-danger');
+        ul.appendChild(li);
+  }  
+}  
 
-/*Foco no campo ao carregar a pagina*/
+/*Foco no campo após request*/
 window.onload = function(){
   var nome_completo = 
-    document.querySelector("form").nome_completo.value;     
+    document.querySelector("form").nome_completo.value;       
 
-    nome_completo == "" 
-     ? document.querySelector("form").nome_completo.focus()
-     : document.querySelector("form").senha.focus();                  
+  var usuario = 
+    document.querySelector("form").usuario.value;         
+
+  var email = 
+    document.querySelector("form").email.value;               
+
+  if(nome_completo == ""){
+    document.querySelector("form").nome_completo.focus();  
+  }else if(usuario == ""){
+    document.querySelector("form").usuario.focus();      
+  }else if(email == ""){
+    document.querySelector("form").email.focus();      
+  }else{
+    document.querySelector("form").senha.focus();       
+  }   
+  
 }    

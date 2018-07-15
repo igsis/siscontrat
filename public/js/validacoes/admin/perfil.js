@@ -14,7 +14,7 @@
       });    
    })();
 
-/*Foco no campo ao carregar a pagina*/
+/*Foco no campo apos request*/
 window.onload = function(){
   document.querySelector("form").descricao.focus();
 }       
