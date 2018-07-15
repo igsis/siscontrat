@@ -18,16 +18,18 @@
     
     <div class="form-group">
   	  <label for="nome_completo">Nome Completo</label>	
-  	  <input type="text" name="nome_completo" class="form-control" 
-             minlength="3" maxlength="70" id="nome_completo" 
-             required value="{{old('nome_completo')}}"                
+  	  <input type="text" name="nome_completo" class="form-control"
+             id="nome_completo" 
+             required minlength="3" maxlength="70"  
+             value="{{old('nome_completo')}}"                 
              placeholder="Informe o nome completo do usuário">
   	</div>
   	
     <div class="form-group">
   	  <label for="usuario">Usuário</label>	
   	  <input type="text" name="usuario" class="form-control" 
-             minlength="7" maxlength="7" id="usuario" required    
+             id="usuario"   
+             minlength="7" maxlength="7" required  
   	         onblur="validaUsuario()" value="{{old('usuario')}}"
              placeholder="Informe o login de acesso para o usuário">
              
@@ -36,14 +38,16 @@
   	<div class="form-group">
   	  <label for="senha">Senha</label>	
   	  <input type="password" name="senha" class="form-control"       
-             minlength="6" maxlength="8" id="senha" required   
+             id="senha"    
+             minlength="6" maxlength="8" required 
   	         placeholder="Informe uma senha para o usuário">
   	</div>
 
   	<div class="form-group">
   	  <label for="senha2">Confirme a Senha</label>	
   	  <input type="password" name="senhaConf" class="form-control"  
-             minlength="6" maxlength="8" id="senhaConf" required 
+             id="senhaConf"  
+             minlength="6" maxlength="8" required 
              onblur="compararSenhas()" 
              placeholder="Confirme a senha para o usuário">
   	</div>
@@ -51,19 +55,20 @@
   	<div class="form-group">
   	  <label for="email">Email</label>	
   	  <input type="email" name="email" class="form-control" 
-             minlength="13" maxlength="60"    
-  	         placeholder="Informe um email do usuário" id="email" 
-             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required
-             value="{{old('email')}}">  	         
-  	         
+             id="email" 
+             minlength="16" maxlength="60" required    
+             placeholder="Informe um email do usuário" 
+             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" 
+             value="{{old('email')}}">  	           	         
   	</div>    
 
   	<div class="form-group">
   	  <label for="telefone">Telefone</label>	
   	  <input type="tel" name="telefone" class="form-control" 
-             id="telefone"  placeholder="(99)99999-9999"   	         
-             maxlength="15" required
-             pattern="\([0-9]{2}\)[\s][0-9]{4,5}-[0-9]{4}"  
+             id="telefone"  
+             minlength="14" maxlength="15" required 
+             placeholder="(99)99999-9999"          
+             pattern="\([0-9]{2}\)[\s][0-9]{4,5}-[0-9]{4}"      
              onkeyup="setMascara( this, getMascara );"
              value="{{old('telefone')}}">
   	</div>

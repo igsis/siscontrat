@@ -16,13 +16,16 @@ class UsuarioRequest extends FormRequest
       return [        
         'nome_completo' => 'required|min:3|max:70',
         'usuario' => 'required|min:7|max:7|unique:usuarios',
-        'senha' => 'required|min:6|max:8'      
+        'senha' => 'required|min:6|max:8',
+        'email' => 'required|max:60|unique:usuarios',
+        'telefone' => 'required|min:14|max:15'      
       ];
     }
 
     public function messages()
     {
        return [
+         
          'required' => "O campo :attribute é obrigatório",         
          
          'nome_completo.min' => 
@@ -43,7 +46,18 @@ class UsuarioRequest extends FormRequest
            "O campo :attribute deve ter ao menos 6 caracteres",
          
          'senha.max' => 
-           "O campo :attribute tem um limite de 8 caracteres"
+          "O campo :attribute tem um limite de 8 caracteres",         
+         
+         'email.max' => 
+           "O campo :attribute tem um limite de 60 caracteres",
+
+         'email.unique' =>'Já existe um usuário com este email',      
+
+         'telefone.min' => 
+           "O campo :attribute deve ter ao menos 14 caracteres",
+         
+         'telefone.max' => 
+           "O campo :attribute tem um limite de 15 caracteres"       
        ];
     }
 }
