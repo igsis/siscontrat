@@ -17,7 +17,7 @@ class PerfilController extends Controller
       ->with("perfis", Perfil::paginate($this->totalPagina));
   }
 
-  public function criar()
+  public function form()
   {
     return view("admin.perfil.form");      
   }
@@ -27,7 +27,7 @@ class PerfilController extends Controller
     Perfil::create($pr->all());
 
     return redirect()
-      ->action('PerfilController@criar')
+      ->action('PerfilController@form')
       ->withInput(Request::only('descricao'));
   }
 

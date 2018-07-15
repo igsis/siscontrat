@@ -16,7 +16,7 @@ class UsuarioController extends Controller
     return view("admin.usuario.index");
   }
 
-  public function criar()
+  public function form()
   {
     return view("admin.usuario.form")      
       ->with('perfils', Perfil::orderBy('descricao')->get()); 
@@ -24,7 +24,6 @@ class UsuarioController extends Controller
 
   public function salvar(UsuarioRequest $ur)
   {      
-    
     $ur['senha'] = Hash::make($ur['senha']);
     Usuario::create($ur->all());    
   }  
@@ -35,12 +34,12 @@ class UsuarioController extends Controller
      Usuario::where('usuario', '=', Request::input('usuario'))->get();  
     if(sizeof($comparaUsuarios) > 0):
       return redirect()            
-        ->action('UsuarioController@criar')           
+        ->action('UsuarioController@form')           
         ->withInput(Request::all());        
     endif;    
 
     return redirect()            
-        ->action('UsuarioController@criar')           
+        ->action('UsuarioController@form')           
         ->withInput(Request::except('verificaUsuario'));
   }  
 
@@ -51,12 +50,12 @@ class UsuarioController extends Controller
     
     if(sizeof($procuraEmail) > 0):
       return redirect()            
-        ->action('UsuarioController@criar')           
+        ->action('UsuarioController@form')           
         ->withInput(Request::all());        
     endif;    
 
     return redirect()            
-        ->action('UsuarioController@criar')           
+        ->action('UsuarioController@form')           
         ->withInput(Request::except('verificaEmail'));
   }  
 }

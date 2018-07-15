@@ -10,7 +10,7 @@ Route::group(['as' => 'menu.', 'prefix' => 'menu'], function(){
 Route::group(['as' => 'perfil.', 'prefix' => 'perfil'], function(){	  
   Route::get('/lista',       ['as' => 'index',  'uses' => 'PerfilController@index']);
   
-  Route::get('/novo',        ['as' => 'criar',  'uses' => 'PerfilController@criar']);
+  Route::get('/novo',        ['as' => 'form',  'uses' => 'PerfilController@form']);
   
   Route::post('/salvar',     ['as' => 'salvar', 'uses' => 'PerfilController@salvar']);
   
@@ -22,7 +22,7 @@ Route::group(['as' => 'perfil.', 'prefix' => 'perfil'], function(){
 Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){	  
   Route::get('/lista',   ['as' => 'index',  'uses' => 'UsuarioController@index']);
   
-  Route::get('/novo',    ['as' => 'criar',  'uses' => 'UsuarioController@criar']);  
+  Route::get('/novo',    ['as' => 'form',  'uses' => 'UsuarioController@form']);  
   
   Route::post('/salvar', ['as' => 'salvar', 'uses' => 'UsuarioController@salvar']);    
   
