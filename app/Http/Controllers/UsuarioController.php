@@ -17,42 +17,48 @@ class UsuarioController extends Controller
   }
 
   public function form()
-  {
+  {    
     return view("admin.usuario.form")      
       ->with('perfils', Perfil::orderBy('descricao')->get()); 
   }
 
   public function salvar(UsuarioRequest $ur)
   {      
-    $ur['senha'] = Hash::make($ur['senha']);
-    Usuario::create($ur->all());    
+    
+    $ur['senha'] = Hash::make($ur['senha']);    
+    Usuario::create($ur->all());           
+    
+    return view("admin.usuario.form")      
+      ->with('perfils', Perfil::orderBy('descricao')->get())
+      ->with('recordSuccess', true);   
   }  
 
   public function validaUsuario()
   {     
     $comparaUsuarios = 
-     Usuario::where('usuario', '=', Request::input('usuario'))->get();  
+      Usuario::where('usuario', '=', Request::input('usuario'))->get();      
+
     if(sizeof($comparaUsuarios) > 0):
       return redirect()            
         ->action('UsuarioController@form')           
         ->withInput(Request::all());        
-    endif;    
-
+    endif;        
+    
     return redirect()            
         ->action('UsuarioController@form')           
-        ->withInput(Request::except('verificaUsuario'));
+        ->withInput(Request::except('verificaUsuario'));   
   }  
 
   public function validaEmail()
   {     
     $procuraEmail = 
-     Usuario::where('email', '=', Request::input('email'))->get();  
+      Usuario::where('email', '=', Request::input('email'))->get();  
     
     if(sizeof($procuraEmail) > 0):
       return redirect()            
         ->action('UsuarioController@form')           
         ->withInput(Request::all());        
-    endif;    
+    endif;        
 
     return redirect()            
         ->action('UsuarioController@form')           

@@ -28,7 +28,9 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
   
   Route::post('novo/validar',
     ['as' => 'validar', 'uses' => 'UsuarioController@validaUsuario']);   
-  Route::post('novo/validarEmail', ['as' => 'validarEmail', 'uses' =>   'UsuarioController@validaEmail']);
+  
+  Route::post('novo/validarEmail', ['as' => 'validarEmail', 'uses' =>   
+    'UsuarioController@validaEmail']);
 
 });
 
