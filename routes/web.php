@@ -40,5 +40,10 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
 });
 
 
+/*
+  Template adminLTE
+*/
 
+Auth::routes();
 
+Route::get('/home', 'HomeController@index')->name('home');
