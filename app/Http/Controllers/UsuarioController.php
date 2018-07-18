@@ -25,7 +25,7 @@ class UsuarioController extends Controller
   public function salvar(UsuarioRequest $ur)
   {      
     
-    $ur['senha'] = Hash::make($ur['senha']);    
+    //$ur['senha'] = Hash::make($ur['senha']);    
     Usuario::create($ur->all());           
     
     return view("admin.usuario.form")      
