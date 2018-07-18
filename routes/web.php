@@ -39,7 +39,6 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
   Route::get('/editar/{id}', ['as' => 'editar', 'uses' => 
     'UsuarioController@editar'])->where('id', '[0-9]+');
 
-
 });
 
 
