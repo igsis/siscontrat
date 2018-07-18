@@ -14,7 +14,7 @@ Route::group(['as' => 'perfil.', 'prefix' => 'perfil'], function(){
   
   Route::post('/salvar',     ['as' => 'salvar', 'uses' => 'PerfilController@salvar']);
   
-  Route::get('/editar/{id}', ['as' => 'editar', 'uses' => 'PerfilController@editar']);
+  Route::get('/editar/{id}', ['as' => 'editar', 'uses' => 'PerfilController@editar'])->where('id', '[0-9]+');
   
   Route::post('/atualizar',   ['as' => 'atualizar', 'uses' => 'PerfilController@atualizar']);
 });
@@ -35,6 +35,9 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
 
   Route::get('/detalhe/{id}', ['as' => 'detalhe', 'uses' => 
     'UsuarioController@detalhe'])->where('id', '[0-9]+');
+
+  Route::get('/editar/{id}', ['as' => 'editar', 'uses' => 
+    'UsuarioController@editar'])->where('id', '[0-9]+');
 
 
 });

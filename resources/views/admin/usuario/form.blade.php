@@ -4,6 +4,8 @@
   Cadastro de usuário
 @stop()  
 
+<?php $path = isset($perfil) ? 'usuario.atualizar' : 'usuario.salvar'; ?>
+
 @section('conteudo')        
   @include('admin.usuario.mensagens')
   @include('../validacoes/msgErro')
@@ -20,9 +22,10 @@
   	  <label for="nome_completo">Nome Completo</label>	
   	  <input type="text" name="nome_completo" class="form-control"
              id="nome_completo" 
-             required minlength="3" maxlength="70"  
-             value="{{old('nome_completo')}}"                 
-             placeholder="Informe o nome completo do usuário">
+             required minlength="3" maxlength="70"               
+             placeholder="Informe o nome completo do usuário"
+             value="{{isset($usuario) ? $usuario->nome_completo 
+                                     : old('nome_completo')}}">
   	</div>
   	
     <div class="form-group">
@@ -30,8 +33,10 @@
   	  <input type="text" name="usuario" class="form-control" 
              id="usuario"   
              minlength="7" maxlength="7" required  
-  	         onblur="validaUsuario()" value="{{old('usuario')}}"
-             placeholder="Informe o login de acesso para o usuário">
+  	         onblur="validaUsuario()" 
+             placeholder="Informe o login de acesso para o usuário"
+             value="{{isset($usuario) ? $usuario->usuario 
+                                     : old('usuario')}}">
              
   	</div>
 
@@ -43,7 +48,8 @@
              onblur="validaEmail()"   
              placeholder="Informe um email do usuário" 
              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" 
-             value="{{old('email')}}">                         
+             value="{{isset($usuario) ? $usuario->email 
+                                     : old('email')}}">
     </div>    
 
   	<div class="form-group">
@@ -71,14 +77,23 @@
              placeholder="(99)99999-9999"          
              pattern="\([0-9]{2}\)[\s][0-9]{4,5}-[0-9]{4}"      
              onkeyup="setMascara( this, getMascara );"
-             value="{{old('telefone')}}">
+             value="{{isset($usuario) ? $usuario->telefone 
+                                      : old('telefone')}}">
   	</div>
 
     <div class="form-group">
       <label for="">Perfil</label>
       <select name="perfil_id" class="form-control">            
         @foreach($perfils as $perfil)                  
-          {{$selected = $perfil->id == old('perfil_id') ? 'selected="selected"' : ''}}        
+          @if(isset($usuario))
+            {{$selected = 
+              $perfil->id == $usuario->perfil_id 
+                ?'selected="selected"' :''}}                   
+          @else
+            {{$selected = 
+              $perfil->id == old('perfil_id') 
+              ? 'selected="selected"' : ''}}        
+          @endif    
           <option value="{{$perfil->id}}" {{$selected}}?>  
             {{$perfil->descricao}}            
           </option>  

@@ -16,7 +16,6 @@
       <li>Data Cadastro: {{$usuario->data_cadastro}}</li>
       <li>Últimpo Acesso: {{$usuario->ultimo_acesso}}</li>
       <li>Publicado: {{$usuario->publicado == 1 ? "Sim" : "Não"}}</li>
-      
     <hr>
   </ul>	
 @stop()

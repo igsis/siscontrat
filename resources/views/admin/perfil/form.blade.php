@@ -4,8 +4,7 @@
   Cadastro de perfil
 @stop()
 
-<?php  
-  $path = isset($perfil) ? 'perfil.atualizar' : 'perfil.salvar'; ?>
+<?php $path = isset($perfil) ? 'perfil.atualizar' : 'perfil.salvar'; ?>
 
 @section('conteudo')
   @include('admin.perfil.mensagens')

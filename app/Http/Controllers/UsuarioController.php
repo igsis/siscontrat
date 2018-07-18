@@ -52,6 +52,13 @@ class UsuarioController extends Controller
            -> with('usuario', $usuario[0]);  
   }
 
+  public function editar($id)
+  {
+     return view('admin.usuario.form')
+       ->with('usuario', Usuario::find($id))
+       ->with('perfils', Perfil::orderBy('descricao')->get());
+  }
+
   public function validaUsuario()
   {     
     $comparaUsuarios = 
