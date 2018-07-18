@@ -5,8 +5,7 @@ namespace siscontrat\Models\admin;
 use Illuminate\Database\Eloquent\Model;
 
 class Usuario extends Model
-{
-   
+{   
   protected $table = "usuarios";
   
   protected $fillable = [
@@ -25,7 +24,6 @@ class Usuario extends Model
   public function setSenhaAttribute($senha) {
     $this->attributes['senha'] = bcrypt($senha);
   }
-
   
 
 }

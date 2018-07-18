@@ -7,13 +7,19 @@ use siscontrat\Http\Controllers\Controller;
 use siscontrat\Models\admin\Usuario;
 use siscontrat\Models\admin\Perfil;
 use siscontrat\Http\Requests\UsuarioRequest;
-use Hash;
+use DB;
 
 class UsuarioController extends Controller
 {  
   public function index()
   {
-    return view("admin.usuario.index");
+    $usuarios = DB::table('usuarios')
+      ->join('perfis', 'perfis.id', '=', 'usuarios.perfil_id')  
+      ->select('usuarios.*','perfis.descricao as perfil_nome')
+      ->get();
+
+    return view("admin.usuario.index")
+      ->with("usuarios", $usuarios);      
   }
 
   public function form()
@@ -31,6 +37,20 @@ class UsuarioController extends Controller
       ->with('perfils', Perfil::orderBy('descricao')->get())
       ->with('recordSuccess', true);   
   }  
+
+  public function detalhe($id)
+  {
+    $usuario = 
+      DB::select("
+        SELECT a.*, p.descricao as nome_perfil 
+        FROM usuarios AS a
+        INNER JOIN perfis AS p
+        ON p.id = a.perfil_id
+        WHERE a.id = ?", [$id]);
+
+    return view('admin.usuario.detalhes')
+           -> with('usuario', $usuario[0]);  
+  }
 
   public function validaUsuario()
   {     
@@ -63,4 +83,6 @@ class UsuarioController extends Controller
         ->action('UsuarioController@form')           
         ->withInput(Request::except('verificaEmail'));
   }  
+
+
 }

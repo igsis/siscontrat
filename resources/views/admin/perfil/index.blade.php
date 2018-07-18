@@ -6,8 +6,9 @@
 
 @section('conteudo')
 @include('admin.perfil.mensagens', ['msg' => old('id')])
-<a href="{!! route('perfil.criar') !!}" class="btn btn-primary">+Novo</a>
-<table align="center" class=" table table-stripped table-hover tabela-perfil " >
+<a href="{!! route('perfil.form') !!}" class="btn btn-primary">+Novo</a>
+<table align="center" 
+       class=" table table-stripped table-hover tabela-perfil">
   <thead>
     <tr>    
       <th>Descrição</th>      
