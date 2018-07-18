@@ -56,9 +56,9 @@
 
   	<div class="form-group">
   	  <label for="senha2">Confirme a Senha</label>	
-  	  <input type="password" name="senhaConf" class="form-control"  
-             id="senhaConf"  
-             minlength="6" maxlength="8" required 
+  	  <input type="password" name="senha_confirmation" class="form-control"
+             id="senha_confirmation"     
+             minlength="6" maxlength="8" required           
              onblur="comparaSenha()" 
              placeholder="Confirme a senha para o usuário">
   	</div>

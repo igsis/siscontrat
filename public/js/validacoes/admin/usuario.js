@@ -48,9 +48,9 @@
 
 (function (){      
    'Valida confirmação de senha';
-   var senhaConf = document.querySelector('#senhaConf');  
+   var senha_confirmation = document.querySelector('#senha_confirmation');  
 
-   senhaConf.addEventListener('invalid', function () {
+   senha_confirmation.addEventListener('invalid', function () {
       var $this = this;
       var errorsMessage = 'Confirme a senha informada';
 
@@ -155,7 +155,7 @@ function validaEmail(){
 function comparaSenha(){
       
   var senha = document.getElementById('senha');
-  var senhaConf = document.getElementById('senhaConf');      
+  var senha_confirmation = document.getElementById('senha_confirmation');      
       
   var btnSalvar = document.getElementById('btnSalvar');
       btnSalvar.classList.remove('oucutarElemento');  
@@ -165,7 +165,7 @@ function comparaSenha(){
       ul.style="list-style-type: none";          
       limpaLi();
       
-  if(senha.value != senhaConf.value){
+  if(senha.value != senha_confirmation.value){
     btnSalvar.classList.add('oucutarElemento');                
     impressaoMsgErro();        
   }    
@@ -181,7 +181,7 @@ function comparaSenha(){
         
     var li = document.createElement('li');
         li.classList.add('msgTempSenha');
-        li.textContent = "As senhas são diferentes"; 
+        li.textContent = "As senhas devem ser iguais"; 
            
         ul.classList.remove('oucutarElemento'); 
         ul.classList.add('alert');
