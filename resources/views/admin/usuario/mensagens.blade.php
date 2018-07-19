@@ -22,6 +22,12 @@
       <p>O Usuário {{old('nome_completo')}} foi atualizado com sucesso!</p>  
     </div>   
   @break
+
+  @case (isset($msgUpdate))
+    <div class="alert alert-danger">
+      <p>Já existe outro usuário com o e-mail informado!</p>  
+    </div>   
+  @break  
 @endswitch
 
 

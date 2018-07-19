@@ -104,6 +104,10 @@
     </button>
   </form>    
   <script type="text/javascript" 
+          src="{{asset('/js/validacoes/admin/usuarioCampos.js')}}">
+  </script>     
+
+  <script type="text/javascript" 
           src="{{asset('/js/validacoes/admin/usuario.js')}}">
   </script>     
   

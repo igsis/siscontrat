@@ -17,6 +17,7 @@
     </div>
 
     <input type="hidden" name="id" value="{{$usuario->id}}">
+    <input type="hidden" name="usuario" value="{{$usuario->usuario}}">
     
     <div class="form-group">
   	  <label for="nome_completo">Nome Completo</label>	
@@ -77,10 +78,10 @@
     </button>
   </form>    
   <script type="text/javascript" 
-          src="{{asset('/js/validacoes/admin/usuario.js')}}">
+          src="{{asset('/js/validacoes/admin/usuarioCampos.js')}}">
   </script>     
   
   <script type="text/javascript" 
           src="{{asset('/js/mascaras/telefone.js')}}">
-  </script>    
+  </script>  
 @stop()

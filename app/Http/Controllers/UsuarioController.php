@@ -45,8 +45,31 @@ class UsuarioController extends Controller
        ->with('perfils', Perfil::orderBy('descricao')->get());
   }
 
-  public function atualizar()
-  {
+  public function procuraEmail(Request $r)
+  {    
+    $validaEmail = $r::only(['email', 'usuario']);
+
+    $achouEmail = DB::select("
+                    SELECT email FROM usuarios AS a
+                    WHERE a.email =  ?
+                    AND a.usuario != ?", array_values($validaEmail)); 
+    
+    if(sizeof($achouEmail) > 0):
+      return true;
+    endif;  
+
+    return false;
+  }
+  
+  public function atualizar(Request $r)
+  {    
+    if($this->procuraEmail($r)):      
+      return view('admin.usuario.form_edit')
+        ->with('msgUpdate', true)        
+        ->with('usuario', Usuario::find(implode($r::only('id'))))
+        ->with('perfils', Perfil::orderBy('descricao')->get());        
+    endif;  
+    
     $campos = Request::only([
       'nome_completo',       
       'email',
@@ -98,6 +121,5 @@ class UsuarioController extends Controller
         ->action('UsuarioController@form')           
         ->withInput(Request::except('verificaEmail'));
   }  
-
 
 }

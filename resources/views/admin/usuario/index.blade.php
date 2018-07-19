@@ -24,16 +24,15 @@
       @foreach($usuarios as $u)
         <tr scope="row" class="{{$u->publicado == 0 ? 'alert-danger' : ''}}">
           <td>{{$u->nome_completo}}</td>                
-          <td>{{$u->usuario}}</td>
+          <td>
+            <a href="/usuario/editar/{{$u->id}}">{{$u->usuario}}</a>
+          </td>
           <td>{{$u->email}}</td>          
           <td>{{$u->perfil->descricao}}</td>                    
           <td>{{$u->publicado == 1 ? "Sim" : "Não"}}</td>  
           <td>
             <a href="/usuario/detalhe/{{$u->id}}">Detalhes</a>
-          </td>                
-          <td>
-            <a href="/usuario/editar/{{$u->id}}">Alterar</a>
-          </td>                
+          </td>                          
           <td>
             <a href="/usuario/delete/{{$u->id}}">
               {{$u->publicado == 1 ? "Despublicar" : "Publicar"}}
