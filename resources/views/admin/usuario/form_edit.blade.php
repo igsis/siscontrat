@@ -8,7 +8,7 @@
   @include('admin.usuario.mensagens')
   @include('../validacoes/msgErro')
   <form action="{!!route('usuario.atualizar')!!}" method="POST" 
-        id="cadastroUsuario">  	
+        id="alteracaoUsuario">  	
     {{csrf_field()}}
     
     <!--Não apagar uso do js-->

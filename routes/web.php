@@ -45,6 +45,8 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
   Route::post('/atualizar', ['as' => 'atualizar', 
     'uses' => 'UsuarioController@atualizar']);
 
+  Route::post('/delete', ['as' => 'delete', 
+    'uses' => 'UsuarioController@delete']);
 
 });
 

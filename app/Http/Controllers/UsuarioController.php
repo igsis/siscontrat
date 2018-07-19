@@ -122,4 +122,21 @@ class UsuarioController extends Controller
         ->withInput(Request::except('verificaEmail'));
   }  
 
+  public function delete(Request $r)
+  { 
+    if(implode($r::only('publicado')) == "Sim"):
+      DB::update("
+        UPDATE usuarios SET 
+          publicado = 0                
+        WHERE usuario = ?", array_values($r::only('usuario')));     
+    else:
+      DB::update("
+        UPDATE usuarios SET 
+          publicado = 1                
+        WHERE usuario = ?", array_values($r::only('usuario')));
+    endif;  
+
+    return redirect()
+        ->action('UsuarioController@index');     
+  }
 }
