@@ -11,9 +11,15 @@
     </div>  
   @break
 
-  @case (isset($recordSuccess))
+  @case (isset($msgInsert))
     <div class="alert alert-success">
-      <p>O usuário cadastro com sucesso!</p>  
+      <p>Usuário cadastrado com sucesso!</p>  
+    </div>   
+  @break  
+
+  @case (old('id'))
+    <div class="alert alert-success">
+      <p>O Usuário {{old('usuario')}} foi atualizado com sucesso!</p>  
     </div>   
   @break
 @endswitch

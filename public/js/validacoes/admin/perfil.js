@@ -16,5 +16,5 @@
 
 /*Foco no campo apos request*/
 window.onload = function(){
-  document.querySelector("form").descricao.focus();
+  document.querySelector("form").descricao.focus();  
 }       

@@ -12,14 +12,9 @@ use DB;
 class UsuarioController extends Controller
 {  
   public function index()
-  {
-    $usuarios = DB::table('usuarios')
-      ->join('perfis', 'perfis.id', '=', 'usuarios.perfil_id')  
-      ->select('usuarios.*','perfis.descricao as perfil_nome')
-      ->get();
-
+  {   
     return view("admin.usuario.index")
-      ->with("usuarios", $usuarios);      
+      ->with("usuarios", Usuario::all());      
   }
 
   public function form()
@@ -29,40 +24,55 @@ class UsuarioController extends Controller
   }
 
   public function salvar(UsuarioRequest $ur)
-  {          
-    
+  { 
     Usuario::create($ur->all());           
     
     return view("admin.usuario.form")      
       ->with('perfils', Perfil::orderBy('descricao')->get())
-      ->with('recordSuccess', true);   
+      ->with('msgInsert', true);   
   }  
 
   public function detalhe($id)
   {
-    $usuario = 
-      DB::select("
-        SELECT a.*, p.descricao as nome_perfil 
-        FROM usuarios AS a
-        INNER JOIN perfis AS p
-        ON p.id = a.perfil_id
-        WHERE a.id = ?", [$id]);
-
     return view('admin.usuario.detalhes')
-           -> with('usuario', $usuario[0]);  
+           -> with('usuario', Usuario::find($id));  
   }
 
   public function editar($id)
   {
-     return view('admin.usuario.form')
+     return view('admin.usuario.form_edit')
        ->with('usuario', Usuario::find($id))
        ->with('perfils', Perfil::orderBy('descricao')->get());
+  }
+
+  public function atualizar()
+  {
+    $campos = Request::only([
+      'nome_completo', 
+      'usuario', 
+      'email',
+      'telefone',
+      'perfil_id',
+      'id']);
+
+    DB::update("
+      UPDATE usuarios SET 
+        nome_completo = ?,
+        usuario = ?,
+        email = ?,
+        telefone = ?,
+        perfil_id = ?
+      WHERE id = ?", array_values($campos));     
+     
+     return redirect()        
+        ->action('UsuarioController@index')
+        ->withInput(Request::only(['id', 'usuario']));
   }
 
   public function validaUsuario()
   {     
     $comparaUsuarios = 
-      Usuario::where('usuario', '=', Request::input('usuario'))->get();      
+      Usuario::where('usuario', '=', Request::input('usuario'))->get();
 
     if(sizeof($comparaUsuarios) > 0):
       return redirect()            

@@ -5,7 +5,10 @@
 @stop()  
 
 @section('conteudo')  
-  <a href="{!! route('usuario.form') !!}" class="btn btn-primary">+Novo</a>
+  <a href="{!! route('usuario.form') !!}" class="btn btn-primary">
+    +Novo
+  </a><br/>
+  @include('admin.usuario.mensagens')
   <table align="center" 
          class="table table-stripped table-hover">
     <thead>
@@ -23,7 +26,7 @@
           <td>{{$u->nome_completo}}</td>                
           <td>{{$u->usuario}}</td>
           <td>{{$u->email}}</td>          
-          <td>{{$u->perfil_nome}}</td>                    
+          <td>{{$u->perfil->descricao}}</td>                    
           <td>{{$u->publicado == 1 ? "Sim" : "Não"}}</td>  
           <td>
             <a href="/usuario/detalhe/{{$u->id}}">Detalhes</a>

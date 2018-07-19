@@ -9,7 +9,12 @@ class perfil extends Model
   protected $table = "perfis";  
   protected $fillable = ['descricao'];
   protected $guarded = '[id]';  
-  public $timestamps = false;     
+  public $timestamps = false;   
+
+  public function usuarios()
+  {
+    return $this->hasMany(Usuario::class);
+  }  
   
 
 }

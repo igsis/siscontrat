@@ -3,10 +3,12 @@ Route::get('/', function () {
     return view('layout.menu.principal');
 });
 
+/**MENU**/
 Route::group(['as' => 'menu.', 'prefix' => 'menu'], function(){	    
   Route::get('/menu/admin',   ['as' => 'admin',  'uses' => 'MenuController@admin']); 
 });
 
+/**PERFIL**/
 Route::group(['as' => 'perfil.', 'prefix' => 'perfil'], function(){	  
   Route::get('/lista',       ['as' => 'index',  'uses' => 'PerfilController@index']);
   
@@ -19,6 +21,7 @@ Route::group(['as' => 'perfil.', 'prefix' => 'perfil'], function(){
   Route::post('/atualizar',   ['as' => 'atualizar', 'uses' => 'PerfilController@atualizar']);
 });
 
+/**USUARIO**/
 Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){	  
   Route::get('/lista',   
     ['as' => 'index',  'uses' => 'UsuarioController@index']);
@@ -38,6 +41,10 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
 
   Route::get('/editar/{id}', ['as' => 'editar', 'uses' => 
     'UsuarioController@editar'])->where('id', '[0-9]+');
+
+  Route::post('/atualizar', ['as' => 'atualizar', 
+    'uses' => 'UsuarioController@atualizar']);
+
 
 });
 

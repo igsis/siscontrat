@@ -7,7 +7,7 @@
 @section('conteudo')        
   @include('admin.usuario.mensagens')
   @include('../validacoes/msgErro')
-  <form action="{!!route('usuario.salvar')!!}" method="POST" 
+  <form action="{!!route('usuario.atualizar')!!}" method="POST" 
         id="cadastroUsuario">  	
     {{csrf_field()}}
     
@@ -15,6 +15,8 @@
     <div>
       <ul id="msg"></ul>
     </div>
+
+    <input type="number" name="id" value="{{$usuario->id}}">
     
     <div class="form-group">
   	  <label for="nome_completo">Nome Completo</label>	
@@ -48,24 +50,7 @@
              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" 
              value="{{isset($usuario) ? $usuario->email 
                                      : old('email')}}">
-    </div>    
-
-  	<div class="form-group">
-  	  <label for="senha">Senha</label>	
-  	  <input type="password" name="senha" class="form-control"       
-             id="senha"    
-             minlength="6" maxlength="8" required 
-  	         placeholder="Informe uma senha para o usuário">
-  	</div>
-
-  	<div class="form-group">
-  	  <label for="senha2">Confirme a Senha</label>	
-  	  <input type="password" name="senha_confirmation" class="form-control"
-             id="senha_confirmation"     
-             minlength="6" maxlength="8" required           
-             onblur="comparaSenha()" 
-             placeholder="Confirme a senha para o usuário">
-  	</div>
+    </div>      	
 
   	<div class="form-group">
   	  <label for="telefone">Telefone</label>	
@@ -99,8 +84,8 @@
       </select>
     </div>         
 
-  	<button type="submit" class="btn btn-primary" id="btnSalvar">  
-      Salvar
+  	<button type="submit" class="btn btn-success" id="btnSalvar">  
+      Atualizar
     </button>
   </form>    
   <script type="text/javascript" 

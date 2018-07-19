@@ -24,6 +24,11 @@ class Usuario extends Model
   public function setSenhaAttribute($senha) {
     $this->attributes['senha'] = bcrypt($senha);
   }
+
+  public function perfil()
+  {
+    return $this->belongsTo(Perfil::class);
+  }
   
 
 }
