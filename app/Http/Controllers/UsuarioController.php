@@ -48,8 +48,7 @@ class UsuarioController extends Controller
   public function atualizar()
   {
     $campos = Request::only([
-      'nome_completo', 
-      'usuario', 
+      'nome_completo',       
       'email',
       'telefone',
       'perfil_id',
@@ -57,8 +56,7 @@ class UsuarioController extends Controller
 
     DB::update("
       UPDATE usuarios SET 
-        nome_completo = ?,
-        usuario = ?,
+        nome_completo = ?,        
         email = ?,
         telefone = ?,
         perfil_id = ?
@@ -66,7 +64,7 @@ class UsuarioController extends Controller
      
      return redirect()        
         ->action('UsuarioController@index')
-        ->withInput(Request::only(['id', 'usuario']));
+        ->withInput(Request::only(['id', 'nome_completo']));
   }
 
   public function validaUsuario()

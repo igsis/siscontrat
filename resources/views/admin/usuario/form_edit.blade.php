@@ -16,7 +16,7 @@
       <ul id="msg"></ul>
     </div>
 
-    <input type="number" name="id" value="{{$usuario->id}}">
+    <input type="hidden" name="id" value="{{$usuario->id}}">
     
     <div class="form-group">
   	  <label for="nome_completo">Nome Completo</label>	
@@ -26,18 +26,6 @@
              placeholder="Informe o nome completo do usuário"
              value="{{isset($usuario) ? $usuario->nome_completo 
                                      : old('nome_completo')}}">
-  	</div>
-  	
-    <div class="form-group">
-  	  <label for="usuario">Usuário</label>	
-  	  <input type="text" name="usuario" class="form-control" 
-             id="usuario"   
-             minlength="7" maxlength="7" required  
-  	         onblur="validaUsuario()" 
-             placeholder="Informe o login de acesso para o usuário"
-             value="{{isset($usuario) ? $usuario->usuario 
-                                     : old('usuario')}}">
-             
   	</div>
 
     <div class="form-group">

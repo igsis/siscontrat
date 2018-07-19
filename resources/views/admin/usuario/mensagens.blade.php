@@ -19,7 +19,7 @@
 
   @case (old('id'))
     <div class="alert alert-success">
-      <p>O Usuário {{old('usuario')}} foi atualizado com sucesso!</p>  
+      <p>O Usuário {{old('nome_completo')}} foi atualizado com sucesso!</p>  
     </div>   
   @break
 @endswitch
