@@ -10,6 +10,7 @@
   </a><br/>
   @include('admin.usuario.mensagens')
   
+  <!--Uso js-->
   <form action="/usuario/delete" method="post" 
           id="frm_usuario_delete"> 
     {{csrf_field()}}  
@@ -48,9 +49,6 @@
   <script type="text/javascript" 
           src="{{asset('js/validacoes/admin/usuarioPublica.js')}}">
   </script>  
-    
-    
-  
 @stop      
 
   
