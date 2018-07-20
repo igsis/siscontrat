@@ -39,3 +39,7 @@ table th, td
 .oucutarElemento{
   display: none;
 }
+
+select.form-control:not([size]):not([multiple]) {
+    height: calc(2.70rem + 2px);
+}

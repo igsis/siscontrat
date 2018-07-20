@@ -7,7 +7,7 @@
 @section('conteudo')  
   <a href="{!!route('usuario.form')!!}" class="btn btn-primary">
     +Novo
-  </a><br/>
+  </a><br/>    
   @include('admin.usuario.mensagens')
   
   <!--Uso js-->
@@ -27,28 +27,32 @@
         <th>Email</th>        
         <th>Perfil</th>                
         <th>Publicado</th>
-      </tr>	
-    </thead>	
+      </tr> 
+    </thead>  
     <tbody>
       @foreach($usuarios as $u)
-        <tr scope="row" class="{{$u->publicado == 0 ? 'alert-danger' : ''}}">
+        <tr scope="row" 
+            class="{{$u->publicado == 0 ? 'alert-danger' : ''}}">
           <td>
             <a href="/usuario/editar/{{$u->id}}">{{$u->nome_completo}}</a>
           </td>                
-          <td id="usuario">{{$u->usuario}}</td>
+          <td id="usuario">            
+               {{$u->usuario}}            
+          </td>
           <td>{{$u->email}}</td>          
           <td>{{$u->perfil->descricao}}</td>                    
           <td id="publicado">{{$u->publicado == 1 ? "Sim" : "Não"}}</td>  
           <td>
-            <a href="/usuario/detalhe/{{$u->id}}">Detalhes</a>
-          </td>                                    
-        </tr>	
+            <a href="/usuario/detalhe/{{$u->id}}">
+              <span class="glyphicon glyphicon-search" aria-hidden="true">
+              </span>
+            </a>           
+          </td>    
+        </tr> 
       @endforeach        
     </tbody>
-  </table>        
+  </table>      
   <script type="text/javascript" 
           src="{{asset('js/validacoes/admin/usuarioPublica.js')}}">
-  </script>  
-@stop      
-
-  
+  </script>      
+@stop       
