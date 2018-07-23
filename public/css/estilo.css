@@ -43,3 +43,17 @@ table th, td
 select.form-control:not([size]):not([multiple]) {
     height: calc(2.70rem + 2px);
 }
+
+.sub-menu-usuario{  
+  display: inline-flex;     
+  justify-content: center;  
+}
+
+.btnNovo{
+  margin-right: 55em;
+}
+
+.ocultar{
+  display: none;
+}
+
