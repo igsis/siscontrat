@@ -11,12 +11,14 @@ use DB;
 
 class UsuarioController extends Controller
 {  
-  private $totalPaginas = 10;
+  private $numPag = 10;
 
-  public function index()
-  {   
+  public function index($ordenar = 'usuario', $ultimoFiltro = '')
+  { 
     return view("admin.usuario.index")
-      ->with("usuarios", Usuario::paginate($this->totalPaginas));      
+      ->with("usuarios", 
+        Usuario::orderBy($ordenar, 'asc')->paginate($this->numPag))
+      ->with('ultimoFiltro', $ultimoFiltro);
   }
 
   public function form()
@@ -140,5 +142,11 @@ class UsuarioController extends Controller
 
     return redirect()
         ->action('UsuarioController@index');     
+  }
+
+  public function filtro()
+  {    
+    $filtro = implode(Request::only('filtro'));
+    return $this->index($filtro, $filtro);
   }
 }

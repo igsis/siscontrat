@@ -5,18 +5,29 @@
 @stop()  
 
 @section('conteudo')  
-  <div class="sub-menu-usuario">
+  <div class="sub-menu-usuario">    
     <div class="btnNovo">
       <a href="{!!route('usuario.form')!!}" class="btn btn-primary">
         +Novo
       </a>
-    </div>
-    <label>Nome completo</label>
-    <div>      
+    </div>    
+    <div class="selectFiltro">      
+      <label for="filtro">Filtro</label>      
+      <select class="form-control" id="filtro" onchange="pegaFiltro()">
+        <option></option>        
+        <option value="nome_completo" {{$ultimoFiltro == 'nome_completo' ? 'selected' : ''}}>Nome</option>                
+        <option value="usuario" {{$ultimoFiltro == 'usuario' ? 'selected' : ''}}>Usuário</option>        
+        <option value="email" {{$ultimoFiltro == 'email' ? 'selected' : ''}}>Email</option>        
+        <option value="perfil_id" {{$ultimoFiltro == 'perfil_id' ? 'selected' : ''}}>Perfil</option>
+      </select>  
+    </div>      
+
+    <div class="inpNome">      
+      <label for="nomeUsuario">Nome completo</label>    
       <input type="text" name="nomeUsuario" 
              class="form-control" 
              id="nomeUsuario">  
-    </div>         
+    </div>   
   </div>
   @include('admin.usuario.mensagens')
   
@@ -66,6 +77,23 @@
   </script>      
   <script type="text/javascript" 
           src="{{asset('js/validacoes/admin/usuarioBusca.js')}}">
-  </script>      
-  
+  </script>     
+  <script type="text/javascript">
+    function pegaFiltro()
+    {
+      var filtro = document.getElementById('filtro');
+      
+      var form = document.getElementById('frm_usuario_delete');      
+          form.action = "/usuario/filtro";
+
+      var input = document.createElement('input');
+          input.setAttribute('type', 'hidden');
+          input.setAttribute('name', 'filtro');
+          input.setAttribute('value', filtro.value);
+
+      form.appendChild(input);    
+      form.submit();
+    }
+    
+  </script>   
 @stop       

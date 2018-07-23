@@ -50,7 +50,16 @@ select.form-control:not([size]):not([multiple]) {
 }
 
 .btnNovo{
-  margin-right: 55em;
+  margin-right: 15em;
+}
+
+.selectFiltro{
+  width: 30%;  
+}
+
+.inpNome{  
+  margin-left: 40em;
+  width: 50%;
 }
 
 .ocultar{
