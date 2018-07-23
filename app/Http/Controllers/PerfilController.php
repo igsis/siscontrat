@@ -9,7 +9,7 @@ use siscontrat\Http\Requests\PerfilRequest;
 
 class PerfilController extends Controller
 {
-  private $totalPagina = 8;  
+  private $totalPagina = 10;  
   
   public function index()
   {
@@ -47,5 +47,4 @@ class PerfilController extends Controller
       ->action('PerfilController@index')
       ->withInput(Request::only(['id', 'descricao']));
   }
-
 }
