@@ -11,10 +11,12 @@ use DB;
 
 class UsuarioController extends Controller
 {  
+  private $totalPaginas = 10;
+
   public function index()
   {   
     return view("admin.usuario.index")
-      ->with("usuarios", Usuario::all());      
+      ->with("usuarios", Usuario::paginate($this->totalPaginas));      
   }
 
   public function form()

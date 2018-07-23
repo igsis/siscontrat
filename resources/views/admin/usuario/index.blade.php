@@ -52,6 +52,9 @@
       @endforeach        
     </tbody>
   </table>      
+  <div class="paginacao">
+    {!! $usuarios->links() !!}  
+  </div>  
   <script type="text/javascript" 
           src="{{asset('js/validacoes/admin/usuarioPublica.js')}}">
   </script>      
