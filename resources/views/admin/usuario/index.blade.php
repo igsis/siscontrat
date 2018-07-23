@@ -32,12 +32,11 @@
   @include('admin.usuario.mensagens')
   
   <!--Uso js-->
-  <form action="/usuario/delete" method="post" 
-          id="frm_usuario_delete"> 
-    {{csrf_field()}}  
-    <input type="hidden" name="usuario" id="user"> 
-    <input type="hidden" name="publicado" id="user_pub">
+  <form action="#" method="post" 
+          id="frm_index_usuario"> 
+    {{csrf_field()}}      
   </form>
+  
   <table align="center" 
          class="table table-stripped table-hover" id="tb_usuarios">
     <thead>
@@ -78,22 +77,7 @@
   <script type="text/javascript" 
           src="{{asset('js/validacoes/admin/usuarioBusca.js')}}">
   </script>     
-  <script type="text/javascript">
-    function pegaFiltro()
-    {
-      var filtro = document.getElementById('filtro');
-      
-      var form = document.getElementById('frm_usuario_delete');      
-          form.action = "/usuario/filtro";
-
-      var input = document.createElement('input');
-          input.setAttribute('type', 'hidden');
-          input.setAttribute('name', 'filtro');
-          input.setAttribute('value', filtro.value);
-
-      form.appendChild(input);    
-      form.submit();
-    }
-    
-  </script>   
+  <script type="text/javascript" 
+          src="{{asset('js/validacoes/admin/usuarioFiltro.js')}}">
+  </script>     
 @stop       

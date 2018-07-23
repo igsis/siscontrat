@@ -10,14 +10,21 @@ var tabela = document.getElementById('tb_usuarios');
 
   function alteraStatus(msg){
     if(msg){
-      var form = document.getElementById('frm_usuario_delete');
-            
-      var input = document.getElementById('user');            
-          input.setAttribute('value', getUsuario());                        
-      
-      var input_public = document.getElementById('user_pub');
-          input_public.setAttribute('value', getPublicado());  
+      var form = document.getElementById('frm_index_usuario');
+          form.action = "/usuario/delete";
 
+      var inputUsuario = document.createElement('input');
+          inputUsuario.setAttribute('type', 'hidden');
+          inputUsuario.setAttribute('name', 'usuario');
+          inputUsuario.setAttribute('value', getUsuario());    
+
+      var inputPublicado = document.createElement('input');
+          inputPublicado.setAttribute('type', 'hidden');
+          inputPublicado.setAttribute('name', 'publicado');
+          inputPublicado.setAttribute('value', getPublicado()); 
+
+      form.appendChild(inputUsuario);
+      form.appendChild(inputPublicado);
       form.submit();        
     }
   }  

@@ -23,6 +23,7 @@ Route::group(['as' => 'perfil.', 'prefix' => 'perfil'], function(){
 
 /**USUARIO**/
 Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){	  
+  
   Route::get('/lista',   
     ['as' => 'index',  'uses' => 'UsuarioController@index']);
   
@@ -47,9 +48,10 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
 
   Route::post('/delete', ['as' => 'delete', 
     'uses' => 'UsuarioController@delete']);
+
+  Route::post("usuario/filtro", "UsuarioController@filtro");
 });
 
-Route::post("usuario/filtro", "UsuarioController@filtro");
 
 /*
   Template adminLTE
