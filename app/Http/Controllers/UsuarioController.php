@@ -34,13 +34,7 @@ class UsuarioController extends Controller
     return view("admin.usuario.form")      
       ->with('perfils', Perfil::orderBy('descricao')->get())
       ->with('msgInsert', true);   
-  }  
-
-  public function detalhe($id)
-  {
-    return view('admin.usuario.detalhes')
-           -> with('usuario', Usuario::find($id));  
-  }
+  }    
 
   public function editar($id)
   {
@@ -149,4 +143,5 @@ class UsuarioController extends Controller
     $filtro = implode(Request::only('filtro'));
     return $this->index($filtro, $filtro);
   }
+  
 }

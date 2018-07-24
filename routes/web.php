@@ -36,10 +36,7 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
   
   Route::post('novo/validarEmail', ['as' => 'validarEmail', 'uses' =>   
     'UsuarioController@validaEmail']);
-
-  Route::get('/detalhe/{id}', ['as' => 'detalhe', 'uses' => 
-    'UsuarioController@detalhe'])->where('id', '[0-9]+');
-
+  
   Route::get('/editar/{id}', ['as' => 'editar', 'uses' => 
     'UsuarioController@editar'])->where('id', '[0-9]+');
 
@@ -51,7 +48,6 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
 
   Route::post("usuario/filtro", "UsuarioController@filtro");
 });
-
 
 /*
   Template adminLTE

@@ -1,21 +1,51 @@
-@extends('layout.menu.admin')
+<div class="modal fade" id="detalhes" tabindex="-1" role="dialog" 
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Detalhes do Usuário</h5>
+        <button type="button" class="close" 
+                data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">        
+        <div class="form-group">
+          <label>id</label>  
+          <input type="text" name="id" disabled="true" 
+                 class="form-control">          
+        </div>        
+        
+        <div class="form-group">
+          <label>Nome completo</label>  
+          <input type="text" name="nome_completo" disabled="true" 
+                 class="form-control">          
+        </div>        
 
-@section('titulo')
-  Detalhes do usuário
-@stop()  
+        <div class="form-group">
+          <label>Telefone</label>  
+          <input type="text" name="telefone" disabled="true" 
+                 class="form-control">          
+        </div>        
 
-@section('conteudo')        
-  <h1>Detalhes do Usuário: <b>{{$usuario->usuario}}</b>
-  <ul>
-    <hr>
-      <li>ID: {{$usuario->id}}</li>	    
-      <li>Nome Completo: {{$usuario->nome_completo}}</li>	
-      <li>Email: {{$usuario->email}}</li>	
-      <li>Telefone: {{$usuario->telefone}}</li>
-      <li>Perfil: {{$usuario->perfil->descricao}}</li>
-      <li>Data Cadastro: {{$usuario->data_cadastro}}</li>
-      <li>Últimpo Acesso: {{$usuario->ultimo_acesso}}</li>
-      <li>Publicado: {{$usuario->publicado == 1 ? "Sim" : "Não"}}</li>
-    <hr>
-  </ul>	
-@stop()
+        <div class="form-group">
+          <label>Perfil</label>  
+          <input type="text" name="perfil" disabled="true" 
+                 class="form-control">          
+        </div>        
+
+        <div class="form-group">
+          <label>Data Cadastro</label>  
+          <input type="text" name="dt_cadastro" disabled="true" 
+                 class="form-control">          
+        </div>        
+
+        <div class="form-group">
+          <label>Último Acesso</label>  
+          <input type="text" name="dt_acesso" disabled="true" 
+                 class="form-control">          
+        </div>        
+      </div>
+    </div>
+  </div>
+</div>    
