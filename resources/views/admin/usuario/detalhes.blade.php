@@ -15,12 +15,6 @@
           <input type="text" name="id" disabled="true" 
                  class="form-control">          
         </div>        
-        
-        <div class="form-group">
-          <label>Nome completo</label>  
-          <input type="text" name="nome_completo" disabled="true" 
-                 class="form-control">          
-        </div>        
 
         <div class="form-group">
           <label>Telefone</label>  

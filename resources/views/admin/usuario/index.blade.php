@@ -51,6 +51,8 @@
         <th>Email</th>        
         <th>Perfil</th>                
         <th>Publicado</th>
+        <th>Contratos</th>
+        <th>Financeiro</th>
       </tr> 
     </thead>  
     <tbody>
@@ -59,10 +61,7 @@
           <td>
             <a href="/usuario/editar/{{$u->id}}" class="info-nome">{{$u->nome_completo}}</a></td>                
 
-          <td id="usuario">
-            <a href="#" data-toggle="modal" class="info-usuario" 
-                        data-target="#detalhes">{{$u->usuario}}
-            </a>            
+          <td id="usuario"><a href="#" data-toggle="modal" class="info-usuario" data-target="#detalhes">{{$u->usuario}}</a>
           </td>
           <td>{{$u->email}}</td>          
           <td>{{$u->perfil->descricao}}</td>                    
@@ -74,6 +73,14 @@
           <td class="ocultar" id="perfil">{{$u->perfil->descricao}}</td>
           <td class="ocultar" id="dt_cadastro">{{$u->data_cadastro}}</td>
           <td class="ocultar" id="dt_acesso">{{$u->ultimo_acesso}}</td>
+          <td>
+            <input type="checkbox" name="usuarioContrato" 
+                   id="usuarioContrato">
+          </td>
+          <td>
+            <input type="checkbox" name="usuarioFinanceiro" 
+                   id="usuarioFinanceiro">
+          </td>
         </tr> 
       @endforeach        
     </tbody>
@@ -96,7 +103,44 @@
   </script>   
   <script type="text/javascript" 
           src="{{asset('js/validacoes/admin/usuarioDetalhes.js')}}">
-  </script>   
+  </script>  
+  <script type="text/javascript">
+    getUsuarios().forEach(function(usuario){
+      var usuarioCont = usuario.querySelector('#usuarioContrato');
+      
+      usuarioCont.addEventListener('click', function(event){        
+        gravaUsuarioContratos(usuario);  
+      });
+    });
+
+    function gravaUsuarioContratos(usuario)
+    {
+      var form = document.getElementById('frm_index_usuario');
+          form.action = "/usuario/contrato";
+
+      var inputUsuario = document.createElement('input');
+          inputUsuario.setAttribute('type', 'hidden');
+          inputUsuario.setAttribute('name', 'usuario_id');
+          inputUsuario.setAttribute('value', getUsuario(usuario));    
+
+      var inputAcesso = document.createElement('input');
+          inputAcesso.setAttribute('type', 'hidden');
+          inputAcesso.setAttribute('name', 'nivel_acesso');
+          inputAcesso.setAttribute('value', '1');        
+
+          form.appendChild(inputUsuario);      
+          form.appendChild(inputAcesso);                        
+          //console.log(form);
+          form.submit();
+    }
+    
+    function getUsuario(usuario)
+    {
+      var user = usuario.querySelector('#id').textContent;          
+      return user;
+    }
+  
+  </script> 
 @stop     
 <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 

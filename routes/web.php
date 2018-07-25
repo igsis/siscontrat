@@ -46,8 +46,13 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
   Route::post('/delete', ['as' => 'delete', 
     'uses' => 'UsuarioController@delete']);
 
-  Route::post("usuario/filtro", "UsuarioController@filtro");
+  Route::post("usuario/filtro", "UsuarioController@filtro");    
 });
+
+Route::post("usuario/contrato", "UsuarioContratoController@salvar");
+Route::post("usuarioContrato/lista", "UsuarioContratoController@index");
+
+
 
 /*
   Template adminLTE

@@ -13,10 +13,25 @@
       <ul class="nav navbar-nav">
         <li class="dropdown dropdown-submenu"><a href="#" 
             class="dropdown-toggle" 
-            data-toggle="dropdown">Usuário</a>
+            data-toggle="dropdown">Cadastro</a>
             <ul class="dropdown-menu">
-              <li><a href="{{action('PerfilController@form')}}">Perfil</a></li>
-              <li><a href="{{action('UsuarioController@form')}}">Novo</a></li>
+              <li>
+                <a href="{{action('PerfilController@form')}}">Perfil</a>
+              </li>
+              <li>
+                <a href="{{action('UsuarioController@form')}}">Usuário</a>
+              </li>               
+            </ul>
+        </li>             
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="dropdown dropdown-submenu"><a href="#" 
+            class="dropdown-toggle" 
+            data-toggle="dropdown">Manutenção</a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#">Senha</a>
+              </li>              
             </ul>
         </li>             
       </ul>

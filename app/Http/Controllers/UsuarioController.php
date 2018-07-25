@@ -142,6 +142,6 @@ class UsuarioController extends Controller
   {    
     $filtro = implode(Request::only('filtro'));
     return $this->index($filtro, $filtro);
-  }
+  }  
   
 }

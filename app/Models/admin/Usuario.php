@@ -29,6 +29,9 @@ class Usuario extends Model
   {
     return $this->belongsTo(Perfil::class);
   }
-  
 
+  public function usuarioContrato()
+  {
+    return $this->hasMany(UsuarioContratos::class);
+  }  
 }
