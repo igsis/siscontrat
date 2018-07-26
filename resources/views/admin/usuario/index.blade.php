@@ -50,9 +50,7 @@
         <th>Usuário</th>
         <th>Email</th>        
         <th>Perfil</th>                
-        <th>Publicado</th>
-        <th>Contratos</th>
-        <th>Financeiro</th>
+        <th>Publicado</th>        
       </tr> 
     </thead>  
     <tbody>

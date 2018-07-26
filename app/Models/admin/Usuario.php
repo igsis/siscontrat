@@ -28,10 +28,5 @@ class Usuario extends Model
   public function perfil()
   {
     return $this->belongsTo(Perfil::class);
-  }
-
-  public function usuarioContrato()
-  {
-    return $this->hasMany(UsuarioContratos::class);
   }  
 }
