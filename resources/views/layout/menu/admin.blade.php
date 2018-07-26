@@ -32,6 +32,9 @@
               <li>
                 <a href="#">Senha</a>
               </li>              
+              <li>
+                <a href="{{action('UsuarioContratoController@index')}}">Usuário</a>
+              </li>              
             </ul>
         </li>             
       </ul>
