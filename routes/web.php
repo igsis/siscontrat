@@ -49,9 +49,34 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
   Route::post("usuario/filtro", "UsuarioController@filtro");    
 });
 
-Route::post("usuario/contrato", "UsuarioContratoController@salvar");
-Route::post("usuarioContrato/lista", "UsuarioContratoController@index");
+/**USUARIOCONTRATO**/
+Route::group(['as' => 'usuarioCnt.', 'prefix' => 'usuarioCnt'], 
+  function(){   
+  
+    Route::get('/lista', ['as' => 'index',  'uses' => 
+      'UsuarioContratoController@index']);
+  
+  /*Route::get('/novo',  ['as' => 'form',  'uses' => 'UsuarioController@form']);    
+  Route::post('/salvar', 
+    ['as' => 'salvar', 'uses' => 'UsuarioController@salvar']);    
+  
+  Route::post('novo/validar',
+    ['as' => 'validar', 'uses' => 'UsuarioController@validaUsuario']);   
+  
+  Route::post('novo/validarEmail', ['as' => 'validarEmail', 'uses' =>   
+    'UsuarioController@validaEmail']);
+  
+  Route::get('/editar/{id}', ['as' => 'editar', 'uses' => 
+    'UsuarioController@editar'])->where('id', '[0-9]+');
 
+  Route::post('/atualizar', ['as' => 'atualizar', 
+    'uses' => 'UsuarioController@atualizar']);
+
+  Route::post('/delete', ['as' => 'delete', 
+    'uses' => 'UsuarioController@delete']);
+
+  Route::post("usuario/filtro", "UsuarioController@filtro");*/    
+  });
 
 
 /*

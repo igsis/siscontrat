@@ -10,14 +10,8 @@ use siscontrat\Http\Controllers\UsuarioController;
 
 class UsuarioContratoController extends Controller
 {
-  private $numPag = 10;
-  public $usuario = new UsuarioController();
-
-
-  public function salvar()
+  public function index()
   {
-    UsuarioContrato::create(Request::all());
-
-    return $this->usuario->index();
+    return "index";
   }
 }
