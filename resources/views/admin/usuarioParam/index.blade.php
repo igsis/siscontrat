@@ -11,6 +11,21 @@
 
 @section('conteudo') 
   @include('admin.usuarioParam.mensagens')
+  <!--Novo Registro-->
+  <div class="btnNovo">
+    <a href="{!!route('usuario.form')!!}" class="btn btn-primary">
+      +Novo
+    </a>
+  </div>    
+
+  <!--Busca por nome-->
+  <div class="inpNome">      
+    <label for="nomeUsuario">Nome completo</label>    
+    <input type="text" name="nomeUsuario" 
+           class="form-control" 
+           id="nomeUsuario">  
+  </div>
+
   <table align="center" class="table table-stripped table-hover" 
   		 id="tb_usuarios">
     <thead>
@@ -29,7 +44,7 @@
           <td class="ocultar" id="id">{{$u->id}}</td>          
           <td class="ocultar" id="nivel_c">{{$u->nivel_c}}</td>
           <td class="ocultar" id="nivel_p">{{$u->nivel_p}}</td>
-          <td>{{$u->nome_completo}}</td>
+          <td class="info-nome">{{$u->nome_completo}}</td>
           <td>{{$u->usuario}}</td>
           <td>{{$u->email}}</td>          
           <td>{{$u->publicado == 1 ? "Sim" : "Não"}}</td>          
@@ -50,5 +65,8 @@
   </script>     
   <script type="text/javascript" 
           src="{{asset('/js/cadastro/admin/usuarioPgto.js')}}">
-  </script>     
+  </script>    
+  <script type="text/javascript" 
+          src="{{asset('js/validacoes/admin/usuarioBusca.js')}}">
+  </script>      
 @stop()
