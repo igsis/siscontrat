@@ -44,10 +44,10 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
     'uses' => 'UsuarioController@atualizar']);
 
   Route::post('/delete', ['as' => 'delete', 
-    'uses' => 'UsuarioController@delete']);
+    'uses' => 'UsuarioController@delete']);  
 
-  Route::post("usuario/filtro", "UsuarioController@filtro");    
-
+  Route::post('/filtro', ['as' => 'filtro',  'uses' => 
+      'UsuarioController@filtro']);
 });
 
 /**USUARIO-CONTRATO**/
