@@ -12,13 +12,14 @@ use DB;
 class UsuarioController extends Controller
 {  
   private $numPag = 10;
+  private $senhaDefault = "siscontrat2018";
 
   public function index($ordenar = 'usuario', $ultimoFiltro = '')
   { 
     return view("admin.usuario.index")
       ->with("usuarios", 
         Usuario::orderBy($ordenar, 'asc')->paginate($this->numPag))
-      ->with('ultimoFiltro', $ultimoFiltro);
+      ->with('ultimoFiltro', $ultimoFiltro);      
   }
 
   public function form()
@@ -144,4 +145,16 @@ class UsuarioController extends Controller
     return $this->index($filtro, $filtro);
   }  
   
+  public function resetSenha($id)
+  {
+    $usuario = Usuario::find($id);
+    $usuario->senha = bcrypt($this->senhaDefault);
+    $usuario->save();     
+
+    return view("admin.usuario.index")
+      ->with("usuarios", 
+        Usuario::orderBy('usuario', 'asc')->paginate($this->numPag))
+      ->with('ultimoFiltro', $ultimoFiltro = '')  
+      ->with('resetSenha', true);
+  }
 }

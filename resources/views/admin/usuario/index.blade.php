@@ -71,6 +71,8 @@
           <td class="ocultar" id="perfil">{{$u->perfil->descricao}}</td>
           <td class="ocultar" id="dt_cadastro">{{$u->data_cadastro}}</td>
           <td class="ocultar" id="dt_acesso">{{$u->ultimo_acesso}}</td>
+          <td>
+            <a href="/usuario/resetSenha/{{$u->id}}" class="info-senha">Reset Senha</a></td>                
         </tr> 
       @endforeach        
     </tbody>

@@ -39,6 +39,9 @@
           <input type="text" name="dt_acesso" disabled="true" 
                  class="form-control">          
         </div>        
+        <div class="form-group">          
+          <a href="#" id="resetSenha">ResetSenha</a>
+        </div>        
       </div>
     </div>
   </div>

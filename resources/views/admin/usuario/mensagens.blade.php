@@ -28,6 +28,12 @@
       <p>Já existe outro usuário com o e-mail informado!</p>  
     </div>   
   @break  
+
+  @case (isset($resetSenha))
+    <div class="alert alert-success">
+      <p>Reset de senha aplicado com sucesso!</p>  
+    </div>   
+  @break  
 @endswitch
 
 

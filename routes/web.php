@@ -47,8 +47,12 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
     'uses' => 'UsuarioController@delete']);  
 
   Route::post('/filtro', ['as' => 'filtro',  'uses' => 
-      'UsuarioController@filtro']);
+      'UsuarioController@filtro']);  
+
+  Route::get('/resetSenha/{id}', ['as' => 'editar', 'uses' => 
+    'UsuarioController@resetSenha'])->where('id', '[0-9]+');
 });
+
 
 /**USUARIO-CONTRATO**/
 Route::group(['as' => 'usuarioCnt.', 'prefix' => 'usuarioCnt'], 

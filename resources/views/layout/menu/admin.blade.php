@@ -28,10 +28,7 @@
         <li class="dropdown dropdown-submenu"><a href="#" 
             class="dropdown-toggle" 
             data-toggle="dropdown">Manutenção</a>
-            <ul class="dropdown-menu">
-              <li>
-                <a href="#">Senha</a>
-              </li>              
+            <ul class="dropdown-menu">              
               <li>
                 <a href="{{action('UsuarioContratoController@index')}}">Usuário</a>
               </li>              
