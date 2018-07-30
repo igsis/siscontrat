@@ -56,19 +56,14 @@ Route::group(['as' => 'usuarioCnt.', 'prefix' => 'usuarioCnt'],
   
     Route::get('/lista', ['as' => 'index',  'uses' => 
       'UsuarioContratoController@index']);   
+
+    Route::post('/salvar', ['as' => 'salvar',  'uses' => 
+      'UsuarioContratoController@salvar']);   
   });
-
-Route::post("/usuariocontrato/salvar", 
-      "UsuarioContratoController@salvar");     
-  
-
-
-
 
 /*
   Template adminLTE
 */
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

@@ -51,6 +51,7 @@ class UsuarioContratoController extends Controller
     endif;	
 
     return redirect()
-      ->action('UsuarioContratoController@index');    
+      ->action('UsuarioContratoController@index') 
+      ->withInput(Request::only('usuario_id'));   
   }    
 }
