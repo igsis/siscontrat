@@ -50,7 +50,7 @@ Route::group(['as' => 'usuario.', 'prefix' => 'usuario'], function(){
 
 });
 
-/**USUARIOCONTRATO**/
+/**USUARIO-CONTRATO**/
 Route::group(['as' => 'usuarioCnt.', 'prefix' => 'usuarioCnt'], 
   function(){   
   
@@ -59,7 +59,17 @@ Route::group(['as' => 'usuarioCnt.', 'prefix' => 'usuarioCnt'],
 
     Route::post('/salvar', ['as' => 'salvar',  'uses' => 
       'UsuarioContratoController@salvar']);   
-  });
+  }
+);
+
+/**USUARIO-PAGAMENTO**/
+Route::group(['as' => 'usuarioPgto.', 'prefix' => 'usuarioPgto'], 
+  function(){   
+
+    Route::post('/salvar', ['as' => 'salvar',  'uses' => 
+      'UsuarioPagamentoController@salvar']);   
+  }
+);
 
 /*
   Template adminLTE

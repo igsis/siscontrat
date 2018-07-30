@@ -34,4 +34,9 @@ class Usuario extends Model
   {
     return $this->hasMany(UsuarioContrato::class);
   }  
+
+  public function usuarioPagamentos()
+  {
+    return $this->hasMany(UsuarioPagamento::class);
+  }  
 }

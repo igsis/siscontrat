@@ -19,16 +19,16 @@ function gravaUsuarioContratos(usuario)
   var inputAcesso = document.createElement('input');
       inputAcesso.setAttribute('type', 'hidden');
       inputAcesso.setAttribute('name', 'nivel_acesso');
-      inputAcesso.setAttribute('value', setNivelAcesso(usuario));
+      inputAcesso.setAttribute('value', setNivelAcesso(usuario, "#nivel_c"));
 
       form.appendChild(inputUsuario);      
       form.appendChild(inputAcesso);          
       form.submit();
 } 
-    
-function setNivelAcesso(usuario)
+
+function setNivelAcesso(usuario, id)
 {
-  var nivel_acesso = usuario.querySelector('#nivel').textContent;
+  var nivel_acesso = usuario.querySelector(id).textContent;
   return nivel_acesso == 1 ? 0 : 1;         
 }
 

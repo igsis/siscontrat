@@ -2,10 +2,10 @@
 
 namespace siscontrat\Http\Controllers;
 
-use Request;
 use siscontrat\Http\Controllers\Controller;
-use siscontrat\Models\admin\UsuarioContrato;
 use siscontrat\Models\admin\Usuario;
+use siscontrat\Models\admin\UsuarioContrato;
+use Request;
 use DB;
 
 class UsuarioContratoController extends Controller
@@ -20,13 +20,17 @@ class UsuarioContratoController extends Controller
         u.email, 
         u.publicado, 
         uc.usuario_id, 
-        uc.nivel_acesso as nivel_acesso
+        uc.nivel_acesso as nivel_c,
+        up.nivel_acesso as nivel_p
 
        FROM usuarios AS u
-	   LEFT JOIN usuario_contratos AS uc
-	   ON uc.usuario_id = u.id");
+	     LEFT JOIN usuario_contratos AS uc
+	     ON uc.usuario_id = u.id
 
-    return view("admin.usuarioContrato.index")
+       LEFT JOIN usuario_pagamentos AS up
+       ON up.usuario_id = u.id");
+
+    return view("admin.usuarioParam.index")
       ->with("usuarios", $usuarios);
   }
 
