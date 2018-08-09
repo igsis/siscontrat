@@ -35,8 +35,8 @@
              id="email" 
              minlength="16" maxlength="60" required 
              onblur="validaEmail()"   
-             placeholder="Informe um email do usuário" 
-             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" 
+             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{1,2}$" 
+             placeholder="Informe um email do usuário"              
              value="{{isset($usuario) ? $usuario->email 
                                      : old('email')}}">
     </div>      	

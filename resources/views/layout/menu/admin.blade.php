@@ -21,13 +21,16 @@
               <li>
                 <a href="{{action('UsuarioController@form')}}">Usuário</a>
               </li>               
+              <li>
+                <a href="#">Instituição</a>
+              </li>               
             </ul>
         </li>             
       </ul>
       <ul class="nav navbar-nav">
         <li class="dropdown dropdown-submenu"><a href="#" 
             class="dropdown-toggle" 
-            data-toggle="dropdown">Manutenção</a>
+            data-toggle="dropdown">Parâmetros</a>
             <ul class="dropdown-menu">              
               <li>
                 <a href="{{action('UsuarioContratoController@index')}}">Usuário</a>
@@ -41,7 +44,7 @@
             data-toggle="dropdown">Lista</a>
             <ul class="dropdown-menu">
               <li><a href="{{action('PerfilController@index')}}">Perfil</a></li>
-              <li><a href="{{action('UsuarioController@index')}}">Usuário</a></li>
+              <li><a href="{{action('UsuarioController@index')}}">Usuário</a></li>              
             </ul>
         </li>             
       </ul>          

@@ -54,7 +54,7 @@
       </tr> 
     </thead>  
     <tbody>
-      @foreach($usuarios as $u)
+      @foreach($usuarios as $u)        
         <tr scope="row" class="{{$u->publicado == 0 ? 'alert-danger' :''}} usuarios">
           <td>
             <a href="/usuario/editar/{{$u->id}}" class="info-nome">{{$u->nome_completo}}</a></td>                
@@ -73,7 +73,7 @@
           <td class="ocultar" id="dt_acesso">{{$u->ultimo_acesso}}</td>
           <td>
             <a href="/usuario/resetSenha/{{$u->id}}" class="info-senha">Reset Senha</a></td>                
-        </tr> 
+        </tr>       
       @endforeach        
     </tbody>
   </table>  
