@@ -22,7 +22,7 @@
                 <a href="{{action('UsuarioController@form')}}">Usuário</a>
               </li>               
               <li>
-                <a href="#">Instituição</a>
+                <a href="{{action('InstituicaoController@form')}}">Instituição</a>
               </li>               
             </ul>
         </li>             

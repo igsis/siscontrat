@@ -75,6 +75,23 @@ Route::group(['as' => 'usuarioPgto.', 'prefix' => 'usuarioPgto'],
   }
 );
 
+/**INSTITUICAO**/
+Route::group(['as' => 'instituicao.', 'prefix' => 'instituicao'], 
+  function(){   
+    /*Route::get('/lista',       ['as' => 'index',  'uses' => 'PerfilController@index']);*/
+  
+    Route::get('/novo',        ['as' => 'form',  'uses' => 
+      'InstituicaoController@form']);
+  
+  Route::post('/salvar',     ['as' => 'salvar', 'uses' => 
+    'InstituicaoController@salvar']);
+  
+  /*Route::get('/editar/{id}', ['as' => 'editar', 'uses' => 'PerfilController@editar'])->where('id', '[0-9]+');
+  
+  Route::post('/atualizar',   ['as' => 'atualizar', 'uses' => 'PerfilController@atualizar']);*/
+});
+
+
 /*
   Template adminLTE
 */

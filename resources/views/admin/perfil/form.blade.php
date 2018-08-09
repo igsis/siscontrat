@@ -7,7 +7,7 @@
 <?php $path = isset($perfil) ? 'perfil.atualizar' : 'perfil.salvar'; ?>
 
 @section('conteudo')
-  @include('admin.perfil.mensagens')
+  @include('admin.perfil.mensagens')  
   @include('../validacoes.msgErro')
   <form action="{{route($path)}}" method="POST">
     {{csrf_field()}}
@@ -27,6 +27,5 @@
   </form>
   <script type="text/javascript" 
           src="{{asset('js/validacoes/admin/perfil.js')}}">
-  </script>  
-  
+  </script>    
 @stop()

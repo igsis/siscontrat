@@ -66,3 +66,6 @@ select.form-control:not([size]):not([multiple]) {
   display: none;
 }
 
+#sigla{
+   width: 25%; 
+}
