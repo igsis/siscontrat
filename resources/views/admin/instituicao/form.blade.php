@@ -13,6 +13,8 @@
   <form action="{{route($path)}}" method="POST">
     {{csrf_field()}}    
 
+    <input type="hidden" name="id" value="{{isset($instituicao) ? $instituicao->id : ''}}">
+
     <div class="form-group">
       <label for="nome">Nome</label>
       <input type="text" name="nome" class="form-control"

@@ -32,9 +32,20 @@ class InstituicaoController extends Controller
   }
 
   public function editar($id)
+  {     
+    return view('admin.instituicao.form')
+      ->with('instituicao', Instituicao::find($id));
+  }
+
+  public function atualizar()
   {
-     return "oi";
-     /*return view('admin.perfil.form')
-       ->with('perfil', Perfil::find($id));*/
+    $instituicao = Instituicao::find(Request::input('id'));    
+    $instituicao->nome = Request::input('nome');
+    $instituicao->sigla = Request::input('sigla');
+    $instituicao->save();
+
+    return redirect()
+      ->action('InstituicaoController@index')
+      ->withInput(Request::only(['id', 'nome']));
   }
 }

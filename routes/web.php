@@ -90,7 +90,8 @@ Route::group(['as' => 'instituicao.', 'prefix' => 'instituicao'],
     Route::get('/editar/{id}', ['as' => 'editar', 'uses' => 
       'InstituicaoController@editar'])->where('id', '[0-9]+');
   
-  /*Route::post('/atualizar',   ['as' => 'atualizar', 'uses' => 'PerfilController@atualizar']);*/
+    Route::post('/atualizar',   ['as' => 'atualizar', 'uses' => 
+      'InstituicaoController@atualizar']);
 });
 
 
