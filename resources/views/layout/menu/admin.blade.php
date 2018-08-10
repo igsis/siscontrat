@@ -44,7 +44,8 @@
             data-toggle="dropdown">Lista</a>
             <ul class="dropdown-menu">
               <li><a href="{{action('PerfilController@index')}}">Perfil</a></li>
-              <li><a href="{{action('UsuarioController@index')}}">Usuário</a></li>              
+              <li><a href="{{action('UsuarioController@index')}}">Usuário</a></li>                            
+              <li><a href="{{action('InstituicaoController@index')}}">Instituição</a></li>
             </ul>
         </li>             
       </ul>          
