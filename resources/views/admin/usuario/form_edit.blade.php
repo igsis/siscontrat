@@ -1,10 +1,12 @@
-@extends('layout.menu.admin')
+@extends('adminlte::page')
 
-@section('titulo')
-  Cadastro de usuário
-@stop()  
+@section('title', 'Edição de usuário')
 
-@section('conteudo')        
+@section('content_header')
+    <h1>Editar Usuário</h1>
+@stop
+
+@section('content')     
   @include('admin.usuario.mensagens')
   @include('../validacoes/msgErro')
   <form action="{!!route('usuario.atualizar')!!}" method="POST" 

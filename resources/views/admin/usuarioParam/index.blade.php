@@ -1,15 +1,17 @@
-@extends('layout.menu.admin')
+@extends('adminlte::page')
 
-@section('titulo')
-  Relação de usuarios
-@stop()  
+@section('title', 'Relação de usuarios')
+
+@section('content_header')
+    <h1>Relação de usuarios</h1>
+@stop
 
 <!--Uso js-->
 <form action="#" method="post" id="frm_index_usuario"> 
   {{csrf_field()}}      
 </form>
 
-@section('conteudo') 
+@section('content')
   @include('admin.usuarioParam.mensagens')
   <!--Novo Registro-->
   <div class="btnNovo">

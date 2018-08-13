@@ -3,9 +3,9 @@
 @section('title', 'AdminLTE')
 
 @section('content_header')
-    <h1>Tela de login</h1>
+    <h1>Bem vindo ao Siscontrat</h1>
 @stop
 
 @section('content')
-    
+	<p>Olá</p>
 @stop
