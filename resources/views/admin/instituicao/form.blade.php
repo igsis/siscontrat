@@ -1,15 +1,13 @@
-@extends('adminlte::page')
+@extends('layout.menu.admin')
 
-@section('title', 'Cadastro de Instituição')
+@section('titulo')
+  Cadastro de Instituição
+@stop()
 
-@section('content_header')
-    <h1>Bem vindo ao Siscontrat</h1>
-@stop
-  
 <?php $path = isset($instituicao) ? 'instituicao.atualizar' 
                                   : 'instituicao.salvar'; ?>
-                                  
-@section('content')
+
+@section('conteudo')
   @include('../validacoes.msgErro')   
   @include('admin.instituicao.mensagens')  
   <form action="{{route($path)}}" method="POST">
