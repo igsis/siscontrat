@@ -1,14 +1,12 @@
-@extends('adminlte::page')
+@extends('layout.menu.admin')
 
-@section('title', 'Cadastro de perfil')
+@section('titulo')
+  Cadastro de perfil
+@stop()
 
 <?php $path = isset($perfil) ? 'perfil.atualizar' : 'perfil.salvar'; ?>
 
-@section('content_header')
-    <h1>Cadastro de Perfil</h1>
-@stop
-
-@section('content')
+@section('conteudo')
   @include('admin.perfil.mensagens')  
   @include('../validacoes.msgErro')
   <form action="{{route($path)}}" method="POST">
@@ -29,5 +27,5 @@
   </form>
   <script type="text/javascript" 
           src="{{asset('js/validacoes/admin/perfil.js')}}">
-  </script>  
-@stop
+  </script>    
+@stop()
