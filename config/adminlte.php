@@ -108,7 +108,7 @@ return [
     */
 
     'menu' => [
-        'Menu do Sistema',
+        'Teste',
         [
             'text' => 'Blog',
             'url'  => 'admin/blog',
@@ -116,107 +116,73 @@ return [
         ],
         [
             'text'        => 'Home',
-            'url'         => '/home',
+            'url'         => 'admin/pages',
             'icon'        => 'home',
-            // 'label'       => 4,
+            'label'       => 4,
             'label_color' => 'info',
         ],
-        'Administrador',
+        'ACCOUNT SETTINGS',
         [
-            'text' => 'Perfil',
-            'icon' => 'cogs',
-            'submenu' => [
-                [
-                    'text'    => 'Cadastrar',
-                    'icon' => '',
-                    'url'  => '/perfil/novo',
-                ],
-
-                [
-                    'text' => 'Listar',
-                    'icon' => '',
-                    'url'  => '/perfil/lista',
-                ],
-            ],
-        ],
-        [
-            'text' => 'Usuário',
+            'text' => 'Profile',
+            'url'  => 'admin/settings',
             'icon' => 'user',
-            'submenu' => [
-                [
-                    'text'    => 'Cadastrar',
-                    'icon' => 'user-plus',
-                    'url'  => '/usuario/novo',
-                ],
-
-                [
-                    'text' => 'Listar',
-                    'icon' => 'user',
-                    'url'  => '/usuario/lista',
-                ],
-            ],
         ],
         [
-            'text' => 'Instituição',
-            'icon' => 'cogs',
+            'text' => 'Change Password',
+            'url'  => 'admin/settings',
+            'icon' => 'lock',
+        ],
+        [
+            'text'    => 'Multilevel',
+            'icon'    => 'share',
             'submenu' => [
                 [
-                    'text'    => 'Cadastrar',
-                    'icon' => '',
-                    'url'  => '/instituicao/novo',
+                    'text' => 'Level One',
+                    'url'  => '#',
                 ],
-
                 [
-                    'text' => 'Listar',
-                    'icon' => '',
-                    'url'  => '/instituicao/lista',
+                    'text'    => 'Level One',
+                    'url'     => '#',
+                    'submenu' => [
+                        [
+                            'text' => 'Level Two',
+                            'url'  => '#',
+                        ],
+                        [
+                            'text'    => 'Level Two',
+                            'url'     => '#',
+                            'submenu' => [
+                                [
+                                    'text' => 'Level Three',
+                                    'url'  => '#',
+                                ],
+                                [
+                                    'text' => 'Level Three',
+                                    'url'  => '#',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'text' => 'Level One',
+                    'url'  => '#',
                 ],
             ],
         ],
-                [
-            'text' => 'Parâmetros',
-            'icon' => 'cogs',
-            'submenu' => [
-                [
-                    'text'    => 'Usuário',
-                    'icon' => '',
-                    'url'  => '/usuarioCnt/lista',
-                ],
-            ],
+        'LABELS',
+        [
+            'text'       => 'Important',
+            'icon_color' => 'red',
         ],
-        // [
-        //     'text' => 'Change Password',
-        //     'url'  => 'admin/settings',
-        //     'icon' => 'lock',
-        // ],
-        // [
-        //     'text'    => 'Multilevel',
-        //     'icon'    => 'share',
-        //     'submenu' => [
-        //         [
-        //             'text' => 'Level One',
-        //             'url'  => '#',
-        //         ],
-                
-        //         [
-        //             'text' => 'Level One',
-        //             'url'  => '#',
-        //         ],
-        //     ],
-        // ],
-        // 'LABELS',
-        // [
-        //     'text'       => 'Important',
-        //     'icon_color' => 'red',
-        // ],
-        // [
-        //     'text'       => 'Warning',
-        //     'icon_color' => 'yellow',
-        // ],
-        // [
-        //     'text'       => 'Information',
-        //     'icon_color' => 'aqua',
-        // ],
+        [
+            'text'       => 'Warning',
+            'icon_color' => 'yellow',
+        ],
+        [
+            'text'       => 'Information',
+            'icon_color' => 'aqua',
+        ],
     ],
 
     /*

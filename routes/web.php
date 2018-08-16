@@ -1,15 +1,11 @@
 <?php
-Route::get('/home', function () {
-    return view('layouts.home');
-});
-
 Route::get('/', function () {
-    return view('welcome');
+    return view('layout.menu.principal');
 });
 
 /**MENU**/
 Route::group(['as' => 'menu.', 'prefix' => 'menu'], function(){	    
-  Route::get('/admin',   ['as' => 'admin',  'uses' => 'MenuController@admin']); 
+  Route::get('/menu/admin',   ['as' => 'admin',  'uses' => 'MenuController@admin']); 
 });
 
 /**PERFIL**/
@@ -104,4 +100,4 @@ Route::group(['as' => 'instituicao.', 'prefix' => 'instituicao'],
 */
 Auth::routes();
 
-// Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
