@@ -74,7 +74,7 @@
              minlength="14" maxlength="15" required 
              placeholder="(99)99999-9999"          
              pattern="\([0-9]{2}\)[\s][0-9]{4,5}-[0-9]{4}"      
-             onkeyup="setMascara( this, getMascara );"
+             onkeyup="mascaraTelefone();"
              value="{{isset($usuario) ? $usuario->telefone 
                                       : old('telefone')}}">
   	</div>

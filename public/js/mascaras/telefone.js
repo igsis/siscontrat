@@ -1,21 +1,21 @@
-function setMascara(phone, getMascara){
-      
-  telefone = phone
-  mascara = getMascara
+var $ = document.getElementById.bind(document);
 
-  setTimeout("aplicaMascara()",1)
+function mascaraTelefone()
+{ 
+  setTimeout("aplicaTelefone()",1)
 }
     
-function aplicaMascara(){
-  telefone.value=mascara(telefone.value)
+function aplicaTelefone()
+{
+  $('telefone').value = setMaskPhone($('telefone').value);
 }
 
-function getMascara(telefone){      
-      
-  telefone=telefone.replace(/\D/g,"");             
-  telefone=telefone.replace(/^(\d{2})(\d)/g,"($1) $2"); 
-  telefone=telefone.replace(/(\d)(\d{4})$/,"$1-$2");    
-      
+function setMaskPhone(telefone)
+{            
+  telefone = telefone.replace(/\D/g,"");             
+  telefone = telefone.replace(/^(\d{2})/g,"($1) "); 
+  telefone = telefone.replace(/(\d{4,5})(\d{4})$/,"$1-$2");
+        
   return telefone;
 }
     
