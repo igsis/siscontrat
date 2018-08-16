@@ -1,10 +1,12 @@
-@extends('layout.menu.admin')
+@extends('adminlte::page')
 
-@section('titulo')
-  Relação de instituições
-@stop()
+@section('title', 'Relação de instituições')
 
-@section('conteudo')
+@section('content_header')
+    <h1>Bem vindo ao Siscontrat</h1>
+@stop
+
+@section('content')
 @include('admin.instituicao.mensagens', ['msg' => old('id')])
 <a href="{!!route('instituicao.form')!!}" class="btn btn-primary">+Novo</a>
 <table align="center" class=" table table-stripped table-hover tabela-perfil">

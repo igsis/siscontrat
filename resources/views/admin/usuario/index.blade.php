@@ -1,10 +1,12 @@
-@extends('layout.menu.admin')
+@extends('adminlte::page')
 
-@section('titulo')
-  Relação de usuarios
-@stop()  
+@section('title', 'Relação de usuarios')
 
-@section('conteudo')  
+@section('content_header')
+    <h1>Todos os Usuários</h1>
+@stop
+
+@section('content')
   <div class="sub-menu-usuario">    
     
     <!--Novo Registro-->
