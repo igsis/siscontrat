@@ -97,21 +97,21 @@
 /*Foco no campo após request*/
 window.onload = function(){
   var nome_completo = 
-    document.querySelector("form").nome_completo.value;       
+    document.querySelector("input[name='nome_completo']").value;       
 
   var usuario = 
-    document.querySelector("form").usuario.value;         
+    document.querySelector("input[name='usuario']").value;         
 
   var email = 
-    document.querySelector("form").email.value;               
+    document.querySelector("input[name='email']").value;               
 
   if(nome_completo == ""){
-    document.querySelector("form").nome_completo.focus();  
+    document.querySelector("input[name='nome_completo']").focus();  
   }else if(usuario == ""){
-    document.querySelector("form").usuario.focus();      
+    document.querySelector("input[name='usuario']").focus();      
   }else if(email == ""){
-    document.querySelector("form").email.focus();      
+    document.querySelector("input[name='email']").focus();      
   }else{
-    document.querySelector("form").senha.focus();       
+    document.querySelector("input[name='senha']").focus();       
   }     
 }    

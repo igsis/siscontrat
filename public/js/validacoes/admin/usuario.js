@@ -14,7 +14,7 @@ function validaUsuario(){
   }
 
   function getForm(){
-    var form = document.querySelector('form');
+    var form = document.querySelector('#form');
     return form;
   }
 
@@ -43,7 +43,7 @@ function validaEmail(){
   }
 
   function getForm(){
-    var form = document.querySelector('form');
+    var form = document.querySelector('#form');
     return form;
   }
 

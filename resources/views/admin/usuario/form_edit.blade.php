@@ -1,13 +1,15 @@
-@extends('layout.menu.admin')
+@extends('adminlte::page')
 
-@section('titulo')
-  Cadastro de usuário
-@stop()  
+@section('title', 'Edição de usuário')
 
-@section('conteudo')        
+@section('content_header')
+    <h1>Editar Usuário</h1>
+@stop
+
+@section('content')     
   @include('admin.usuario.mensagens')
   @include('../validacoes/msgErro')
-  <form action="{!!route('usuario.atualizar')!!}" method="POST" 
+  <form action="{!!route('usuario.atualizar')!!}" id="#form" method="POST" 
         id="alteracaoUsuario">  	
     {{csrf_field()}}
     
@@ -35,7 +37,7 @@
              id="email" 
              minlength="16" maxlength="60" required 
              onblur="validaEmail()"   
-             pattern="[\w._%+-]+@[a-z0-9.]+\.[a-z]{1,2}$" 
+             pattern="[\w._%+-]+@[a-z0-9.]+\.[a-z]{1,3}$" 
              placeholder="Informe um email do usuário"              
              value="{{isset($usuario) ? $usuario->email 
                                      : old('email')}}">

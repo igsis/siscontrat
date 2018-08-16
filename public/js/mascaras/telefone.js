@@ -1,5 +1,3 @@
-var $ = document.getElementById.bind(document);
-
 function mascaraTelefone()
 { 
   setTimeout("aplicaTelefone()",1)
@@ -7,7 +5,8 @@ function mascaraTelefone()
     
 function aplicaTelefone()
 {
-  $('telefone').value = setMaskPhone($('telefone').value);
+	telefone = document.querySelector("input[name='telefone']");
+ 	telefone.value = setMaskPhone(telefone.value);
 }
 
 function setMaskPhone(telefone)
