@@ -21,13 +21,20 @@
 
       <input type="text" name="descricao" class="form-control"
              minlength="3" maxlength="35" required 
-             placeholder="Informe uma descrição para o perfil do usuário" id="descricao" 
+             placeholder="Informe uma descrição para o perfil do usuário"
+             id="descricao" 
+             onkeyup="mascaraNome(this)" 
              value="{{isset($perfil) ? $perfil->descricao 
                                      : old('descricao')}}">
     </div>
     <button type="submit" class="btn btn-primary">Salvar</button>
   </form>
+  
   <script type="text/javascript" 
           src="{{asset('js/validacoes/admin/perfil.js')}}">
   </script>  
+
+  <script type="text/javascript" 
+          src="{{asset('/js/mascaras/nome.js')}}">
+  </script>    
 @stop

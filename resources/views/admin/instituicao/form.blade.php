@@ -23,6 +23,7 @@
              minlength="3" maxlength="60" required 
              placeholder="Informe um nome para a Instituição" 
              id="nome"
+             onkeyup="mascaraNome(this)" 
              value="{{isset($instituicao) ? $instituicao->nome 
                                           : old('nome')}}">
     </div>
@@ -37,8 +38,13 @@
     </div>
     <button type="submit" class="btn btn-primary">Salvar</button>
   </form>
+  
   <script type="text/javascript" 
           src="{{asset('js/validacoes/admin/instituicao.js')}}">
   </script>  
+
+  <script type="text/javascript" 
+          src="{{asset('/js/mascaras/nome.js')}}">
+  </script>    
   
 @stop()

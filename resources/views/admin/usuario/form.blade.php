@@ -24,6 +24,7 @@
              id="nome_completo" 
              required minlength="3" maxlength="70"               
              placeholder="Informe o nome completo do usuário"
+             onkeyup="mascaraNome(this)" 
              value="{{isset($usuario) ? $usuario->nome_completo 
                                      : old('nome_completo')}}">
     </div>
@@ -115,6 +116,10 @@
   
   <script type="text/javascript" 
           src="{{asset('/js/mascaras/telefone.js')}}">
+  </script>    
+
+  <script type="text/javascript" 
+          src="{{asset('/js/mascaras/nome.js')}}">
   </script>    
 @stop
 

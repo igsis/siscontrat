@@ -32,5 +32,5 @@
 
 /*Foco no campo apos request*/
 window.onload = function(){
-  document.querySelector("form").nome.focus();  
+  document.getElementById("nome").focus();
 }       
