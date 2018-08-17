@@ -22,7 +22,7 @@
       <input type="text" name="descricao" class="form-control"
              minlength="3" maxlength="35" required 
              placeholder="Informe uma descrição para o perfil do usuário"
-             id="descricao" 
+             id="Descricao" 
              onkeyup="mascaraNome(this)" 
              value="{{isset($perfil) ? $perfil->descricao 
                                      : old('descricao')}}">
