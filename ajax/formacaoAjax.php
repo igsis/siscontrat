@@ -3,7 +3,7 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 
 if (isset($_POST['_method'])) {
-    session_start(['name' => 'cpc']);
+    session_start(['name' => 'sis']);
     $idPf = $_SESSION['origem_id_c'];
     require_once "../controllers/FormacaoController.php";
     $insForm = new FormacaoController();

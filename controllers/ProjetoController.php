@@ -20,7 +20,7 @@ class ProjetoController extends ProjetoModel
     }
 
     public function insereProjeto($post){
-        session_start(['name' => 'cpc']);
+        session_start(['name' => 'sis']);
         /* executa limpeza nos campos */
         unset($post['_method']);
         unset($post['modulo']);
@@ -101,7 +101,7 @@ class ProjetoController extends ProjetoModel
 
     public function inserePjProjeto()
     {
-        session_start(['name' => 'cpc']);
+        session_start(['name' => 'sis']);
         if (!isset($_SESSION['origem_id_c'])){
             if (isset($_POST['id'])) {
                 $idPj = $_POST['id'];
@@ -175,7 +175,7 @@ class ProjetoController extends ProjetoModel
 
     public function removePjProjeto()
     {
-        session_start(['name' => 'cpc']);
+        session_start(['name' => 'sis']);
         $id = MainModel::decryption($_SESSION['projeto_c']);
         $dados = [
             'pessoa_juridica_id' => NULL
@@ -238,7 +238,7 @@ class ProjetoController extends ProjetoModel
     }
 
     public function finalizarProjeto($id){
-        session_start(['name' => 'cpc']);
+        session_start(['name' => 'sis']);
 
         $projetoId = MainModel::encryption($id);
         $projeto = $this->recuperaProjeto($projetoId);

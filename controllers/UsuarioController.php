@@ -27,7 +27,7 @@ class UsuarioController extends UsuarioModel
             if ($consultaUsuario->rowCount() == 1) {
                 $usuario = $consultaUsuario->fetch();
 
-                session_start(['name' => 'cpc']);
+                session_start(['name' => 'sis']);
                 $_SESSION['usuario_id_c'] = $usuario['id'];
                 $_SESSION['nome_c'] = $usuario['nome'];
 

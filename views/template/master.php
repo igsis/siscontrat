@@ -49,7 +49,7 @@ elseif ($view == 'cadastro'):
 elseif ($view == 'fomento_edital'):
     require_once "./views/modulos/inicio/fomento_edital.php";
 else:
-    session_start(['name' => 'cpc']);
+    session_start(['name' => 'sis']);
     require_once "./controllers/UsuarioController.php";
     $usuario = new UsuarioController();
 
