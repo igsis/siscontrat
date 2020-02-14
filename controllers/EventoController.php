@@ -37,7 +37,7 @@ class EventoController extends EventoModel
                 unset($post[$campo]);
             }
         }
-        $dadosEvento['usuario_id'] = $_SESSION['usuario_id_c'];
+        $dadosEvento['usuario_id'] = $_SESSION['usuario_id_s'];
         $dadosEvento['data_cadastro'] = date('Y-m-d H:i:s');
         /* /.limpeza */
 
@@ -45,7 +45,7 @@ class EventoController extends EventoModel
         $insere = DbModel::insert('eventos', $dadosEvento);
         if ($insere->rowCount() >= 1) {
             $evento_id = DbModel::connection()->lastInsertId();
-            $_SESSION['origem_id_c'] = MainModel::encryption($evento_id);
+            $_SESSION['origem_id_s'] = MainModel::encryption($evento_id);
             $atualizaRelacionamentoPublicos = MainModel::atualizaRelacionamento('evento_publico', 'evento_id', $evento_id, 'publico_id', $post['publicos']);
 
             if ($atualizaRelacionamentoPublicos) {

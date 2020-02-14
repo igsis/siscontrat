@@ -28,8 +28,8 @@ class UsuarioController extends UsuarioModel
                 $usuario = $consultaUsuario->fetch();
 
                 session_start(['name' => 'sis']);
-                $_SESSION['usuario_id_c'] = $usuario['id'];
-                $_SESSION['nome_c'] = $usuario['nome'];
+                $_SESSION['usuario_id_s'] = $usuario['id'];
+                $_SESSION['nome_s'] = $usuario['nome'];
 
                 MainModel::gravarLog('Fez Login');
 
@@ -37,7 +37,7 @@ class UsuarioController extends UsuarioModel
                     return $urlLocation = "<script> window.location='inicio/inicio' </script>";
                 } else {
                     if ($modulo == 8) {
-                        $_SESSION['edital_c'] = $edital;
+                        $_SESSION['edital_s'] = $edital;
                         return $urlLocation = "<script> window.location='fomentos/inicio&modulo=$modulo' </script>";
                     }
                 }
@@ -48,19 +48,16 @@ class UsuarioController extends UsuarioModel
                     'texto' => 'Usuário / Senha incorreto',
                     'tipo' => 'error'
                 ];
-
-                return MainModel::sweetAlert($alerta);
             }
-        }
-        else{
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Erro!',
                 'texto' => 'Usuário não existe',
                 'tipo' => 'error'
             ];
-            return MainModel::sweetAlert($alerta);
         }
+        return MainModel::sweetAlert($alerta);
     }
 
     public function forcarFimSessao() {
@@ -182,7 +179,6 @@ class UsuarioController extends UsuarioModel
     }
 
     public function recuperaUsuario($id) {
-        $usuario = DbModel::getInfo('usuarios',$id);
-        return $usuario;
+        return DbModel::getInfo('usuarios',$id);
     }
 }

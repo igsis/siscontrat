@@ -13,7 +13,7 @@ $pjObj = new PessoaJuridicaController();
 $repObj = new RepresentanteController();
 
 //Projeto
-$idProj = $_SESSION['projeto_c'];
+$idProj = $_SESSION['projeto_s'];
 $projeto = $projetoObj->recuperaProjeto($idProj);
 
 //Pessoa Juridica
@@ -27,7 +27,7 @@ if ($projeto['data_inscricao']) {
     $dataEnvio = MainModel::dataHora($projeto['data_inscricao']);
 }
 
-$validacaoArquivos = $projetoObj->validaProjeto($idProj, $_SESSION['edital_c']);
+$validacaoArquivos = $projetoObj->validaProjeto($idProj, $_SESSION['edital_s']);
 ?>
 
 <!-- Content Header (Page header) -->
@@ -95,7 +95,7 @@ $validacaoArquivos = $projetoObj->validaProjeto($idProj, $_SESSION['edital_c']);
                                     class="subtitulos mr-2">Instituição responsável: </span> <?= $projeto['instituicao'] ?>
                         </li>
                         <li class="my-2"><span
-                                    class="subtitulos mr-2">Responsável pela inscrição: </span> <?= $_SESSION['nome_c'] ?>
+                                    class="subtitulos mr-2">Responsável pela inscrição: </span> <?= $_SESSION['nome_s'] ?>
                         </li>
                         <li class="my-2"><span
                                     class="subtitulos mr-2">Razão social: </span><?= $pj['razao_social'] ?>

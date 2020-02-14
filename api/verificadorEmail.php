@@ -1,8 +1,9 @@
 <?php
 require_once "../config/configGeral.php";
 require_once "../config/configAPP.php";
-$pedidoAjax = true;
 require_once "../models/MainModel.php";
+
+$pedidoAjax = true;
 $db = new MainModel();
 
 header('Access-Control-Allow-Origin: *');

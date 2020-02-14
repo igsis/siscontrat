@@ -1,14 +1,14 @@
 <?php
-    $tipoContratacao = $_SESSION['modulo_c'];
+    $tipoContratacao = $_SESSION['modulo_s'];
 
     if (isset($_GET['key'])) {
-        $_SESSION['origem_id_c'] = $id = $_GET['key'];
+        $_SESSION['origem_id_s'] = $id = $_GET['key'];
         require_once "./controllers/PedidoController.php";
         $pedidoObj = new PedidoController();
         $pedidoObj->startPedido();
 
-    } elseif (isset($_SESSION['origem_id_c'])) {
-        $id = $_SESSION['origem_id_c'];
+    } elseif (isset($_SESSION['origem_id_s'])) {
+        $id = $_SESSION['origem_id_s'];
     } else {
         $id = null;
     }

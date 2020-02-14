@@ -3,17 +3,17 @@ require_once "./controllers/ArquivoController.php";
 require_once "./controllers/PedidoController.php";
 $arquivosObj = new ArquivoController();
 
-$pedido_id = $_SESSION['pedido_id_c'];
+$pedido_id = $_SESSION['pedido_id_s'];
 $tipo_documento_id = 3;
 
 $pedidoObj = new PedidoController();
 $proponente = $pedidoObj->recuperaProponente($pedido_id);
 if ($proponente->pessoa_tipo_id == 1) {
-    $url_pf = SERVERURL."pdf/declaracao_exclusividade_pf.php?id=".$_SESSION['origem_id_c'];
+    $url_pf = SERVERURL."pdf/declaracao_exclusividade_pf.php?id=".$_SESSION['origem_id_s'];
     $botoes="<div class=\"offset-3 col-md-6\"><a href=\"$url_pf\" class=\"btn btn-primary btn-block\" target=\"_blank\">Modelo Único - Grupo</a></div>";
 } else {
-    $url_pj_g = SERVERURL."pdf/declaracao_exclusividade_grupo_pj.php?id=".$_SESSION['origem_id_c'];
-    $url_pj_s = SERVERURL."pdf/declaracao_exclusividade_1pessoa_pj.php?id=".$_SESSION['origem_id_c'];
+    $url_pj_g = SERVERURL."pdf/declaracao_exclusividade_grupo_pj.php?id=".$_SESSION['origem_id_s'];
+    $url_pj_s = SERVERURL."pdf/declaracao_exclusividade_1pessoa_pj.php?id=".$_SESSION['origem_id_s'];
     $botoes="<div class=\"offset-1 col-md-5\"><a href=\"$url_pj_g\" class=\"btn btn-primary btn-block\" target=\"_blank\">Grupo</a></div><div class=\"col-md-5\"><a href=\"$url_pj_s\" class=\"ml-md-2 btn btn-primary btn-block\" target=\"_blank\">Artista Solo</a></div>";
 }
 

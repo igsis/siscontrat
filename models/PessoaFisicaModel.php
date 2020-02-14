@@ -15,8 +15,8 @@ class PessoaFisicaModel extends ValidacaoModel
             unset($dados['atracao_id']);
         }
 
-        if (isset($dados['pedido_id_c'])){
-            unset($dados['pedido_id_c']);
+        if (isset($dados['pedido_id_s'])){
+            unset($dados['pedido_id_s']);
         }
 
         /* executa limpeza nos campos */

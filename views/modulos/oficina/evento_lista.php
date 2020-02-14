@@ -1,11 +1,11 @@
 <?php
 require_once "./controllers/EventoController.php";
-if (isset($_SESSION['origem_id_c'])) {
-    unset($_SESSION['origem_id_c']);
-    unset($_SESSION['atracao_id_c']);
+if (isset($_SESSION['origem_id_s'])) {
+    unset($_SESSION['origem_id_s']);
+    unset($_SESSION['atracao_id_s']);
 }
-if(isset($_SESSION['pedido_id_c'])){
-    unset($_SESSION['pedido_id_c']);
+if(isset($_SESSION['pedido_id_s'])){
+    unset($_SESSION['pedido_id_s']);
 }
 
 $oficinaObj = new EventoController();
@@ -48,7 +48,7 @@ $oficinaObj = new EventoController();
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($oficinaObj->listaEvento($_SESSION['usuario_id_c'], $_SESSION['modulo_c']) as $oficina): ?>
+                                <?php foreach ($oficinaObj->listaEvento($_SESSION['usuario_id_s'], $_SESSION['modulo_s']) as $oficina): ?>
                                 <tr>
                                     <td><?=$oficina->publicado == 2 ? $oficina->id : "Envie para obter o código"?></td>
                                     <td><?=$oficina->nome_evento?></td>

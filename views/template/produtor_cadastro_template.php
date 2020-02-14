@@ -1,8 +1,8 @@
 <?php
-if (isset($_SESSION['atracao_id_c'])) {
-    $atracao_id = $_SESSION['atracao_id_c'];
+if (isset($_SESSION['atracao_id_s'])) {
+    $atracao_id = $_SESSION['atracao_id_s'];
 } elseif (isset($_POST['atracao_id'])) {
-    $atracao_id = $_SESSION['atracao_id_c'] = $_POST['atracao_id'];
+    $atracao_id = $_SESSION['atracao_id_s'] = $_POST['atracao_id'];
 } else {
     $atracao_id = null;
 }

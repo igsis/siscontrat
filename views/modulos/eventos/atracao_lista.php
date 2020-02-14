@@ -1,10 +1,10 @@
 <?php
 require_once "./controllers/AtracaoController.php";
-if (isset($_SESSION['atracao_id_c'])) {
-    unset($_SESSION['atracao_id_c']);
+if (isset($_SESSION['atracao_id_s'])) {
+    unset($_SESSION['atracao_id_s']);
 }
 
-$evento_id = $_SESSION['origem_id_c'];
+$evento_id = $_SESSION['origem_id_s'];
 
 $atracaoObj = new AtracaoController();
 ?>

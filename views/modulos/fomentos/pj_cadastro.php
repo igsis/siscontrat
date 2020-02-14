@@ -3,9 +3,9 @@ require_once "./controllers/PessoaJuridicaController.php";
 require_once "./controllers/PessoaJuridicaController.php";
 
 if (isset($_GET['id'])) {
-    $_SESSION['origem_id_c'] = $id = $_GET['id'];
-} elseif (isset($_SESSION['origem_id_c'])){
-    $id = $_SESSION['origem_id_c'];
+    $_SESSION['origem_id_s'] = $id = $_GET['id'];
+} elseif (isset($_SESSION['origem_id_s'])){
+    $id = $_SESSION['origem_id_s'];
 } else {
     $id = null;
 }

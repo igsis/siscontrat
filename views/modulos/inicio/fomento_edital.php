@@ -1,9 +1,9 @@
 <?php
 if (isset($_SESSION)) {
-    unset($_SESSION['origem_id_c']);
-    unset($_SESSION['pedido_id_c']);
-    unset($_SESSION['modulo_c']);
-    unset($_SESSION['edital_c']);
+    unset($_SESSION['origem_id_s']);
+    unset($_SESSION['pedido_id_s']);
+    unset($_SESSION['modulo_s']);
+    unset($_SESSION['edital_s']);
 }
 require_once "./controllers/FomentoController.php";
 $fomentoObj = new FomentoController();

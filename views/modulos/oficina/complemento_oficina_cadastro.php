@@ -1,5 +1,5 @@
 <?php
-$atracao_id = $_SESSION['atracao_id_c'];
+$atracao_id = $_SESSION['atracao_id_s'];
 
 //$atracao_id = $_POST['atracao_id'];
 require_once "./controllers/OficinaController.php";

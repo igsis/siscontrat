@@ -2,7 +2,7 @@
 require_once "./controllers/ArquivoController.php";
 require_once "./controllers/PedidoController.php";
 
-$pedido_id = $_SESSION['pedido_id_c'];
+$pedido_id = $_SESSION['pedido_id_s'];
 
 $pedidoObj = new PedidoController();
 $arquivosObj = new ArquivoController();

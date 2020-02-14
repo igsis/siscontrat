@@ -13,7 +13,7 @@ class LiderController extends LiderModel
     {
         $idPf = PessoaFisicaController::inserePessoaFisica($pagina, true);
         $idAtracao = $_POST['atracao_id'];
-        $idPedido = MainModel::decryption($_SESSION['pedido_id_c']);
+        $idPedido = MainModel::decryption($_SESSION['pedido_id_s']);
         $insere = LiderModel::insere($idPedido,$idAtracao,$idPf);
         if ($insere){
             $alerta = [
@@ -38,7 +38,7 @@ class LiderController extends LiderModel
     public function editaLider($idPf, $pagina)
     {
         $idPf = MainModel::decryption($idPf);
-        $idPedido = MainModel::decryption($_SESSION['pedido_id_c']);
+        $idPedido = MainModel::decryption($_SESSION['pedido_id_s']);
         PessoaFisicaController::editaPessoaFisica($idPf, $pagina, true);
         $idAtracao = $_POST['atracao_id'];
         $insere = LiderModel::insere($idPedido,$idAtracao,$idPf);
@@ -64,7 +64,7 @@ class LiderController extends LiderModel
 
     public function listaAtracaoLider()
     {
-        $idEvento = MainModel::decryption($_SESSION['origem_id_c']);
+        $idEvento = MainModel::decryption($_SESSION['origem_id_s']);
         $atracao = DbModel::consultaSimples("
             SELECT atr.id as atracao_id, atr.evento_id, atr.nome_atracao, pf.nome, lid.pessoa_fisica_id 
             FROM atracoes AS atr
@@ -77,7 +77,7 @@ class LiderController extends LiderModel
 
     public function getLider($idAtracao)
     {
-        $idPedido = MainModel::decryption($_SESSION['pedido_id_c']);
+        $idPedido = MainModel::decryption($_SESSION['pedido_id_s']);
         $pf = DbModel::consultaSimples("
             SELECT l.atracao_id, l.pessoa_fisica_id, pf.nome, pf.nome_artistico, pf.rg, pf.cpf, pf.passaporte, pf.email,d.drt
             FROM lideres AS l

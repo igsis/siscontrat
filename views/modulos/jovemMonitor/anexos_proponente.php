@@ -3,7 +3,7 @@ require_once "./controllers/ArquivoController.php";
 $arquivosObj = new ArquivoController();
 
 $tipo_documento_id = 7;
-$proponente_id = $_SESSION['origem_id_c'];
+$proponente_id = $_SESSION['origem_id_s'];
 
 $lista_documento_ids = $arquivosObj->recuperaIdListaDocumento($tipo_documento_id)->fetchAll(PDO::FETCH_COLUMN);
 ?>

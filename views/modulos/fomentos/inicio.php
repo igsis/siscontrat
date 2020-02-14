@@ -1,13 +1,13 @@
 <?php
 require_once "./controllers/ProjetoController.php";
 require_once "./controllers/FomentoController.php";
-unset($_SESSION['projeto_c']);
-unset($_SESSION['origem_id_c']);
+unset($_SESSION['projeto_s']);
+unset($_SESSION['origem_id_s']);
 
 $fomentoObj = new FomentoController();
 $projetoObj = new ProjetoController();
 
-$nomeEdital = $fomentoObj->recuperaNomeEdital($_SESSION['edital_c']);
+$nomeEdital = $fomentoObj->recuperaNomeEdital($_SESSION['edital_s']);
 $projetos = $projetoObj->listaProjetos();
 ?>
 <!-- Content Header (Page header) -->

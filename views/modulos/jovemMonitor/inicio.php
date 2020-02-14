@@ -1,7 +1,7 @@
 <?php
-unset($_SESSION['origem_id_c']);
+unset($_SESSION['origem_id_s']);
 if (isset($_GET['modulo'])) {
-    $_SESSION['modulo_c'] = $_GET['modulo'];
+    $_SESSION['modulo_s'] = $_GET['modulo'];
 }
 ?>
 <!-- Content Header (Page header) -->

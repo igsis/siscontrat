@@ -1,7 +1,7 @@
 <?php
 require_once "./controllers/EventoController.php";
 $eventoObj = new EventoController();
-$idEvento = $_SESSION['origem_id_c'];
+$idEvento = $_SESSION['origem_id_s'];
 $evento = $eventoObj->recuperaEvento($idEvento);
 
 require_once "./controllers/AtracaoController.php";
@@ -15,8 +15,8 @@ $pedido = $pedidoObj->recuperaPedido(1);
 
 
 $erro = "<span style=\"color: red; \"><b>Preenchimento obrigatório</b></span>";
-$validacoesEvento = $eventoObj->validaEvento($_SESSION['origem_id_c'], $_SESSION['pedido_id_c']);
-$validacoesAtracoes = $atracaoObj->validaAtracao($_SESSION['origem_id_c']);
+$validacoesEvento = $eventoObj->validaEvento($_SESSION['origem_id_s'], $_SESSION['pedido_id_s']);
+$validacoesAtracoes = $atracaoObj->validaAtracao($_SESSION['origem_id_s']);
 
 $modulo = explode("/", $_GET['views'])[0];
 ?>
@@ -245,7 +245,7 @@ $modulo = explode("/", $_GET['views'])[0];
                                 </div>
                             </div>
                             <?php
-                            if ($_SESSION['modulo_c']!=2){
+                            if ($_SESSION['modulo_s']!=2){
                             ?>
                                 <div class="row">
                                     <div class="col-md-4"><b>Banco:</b> <?= $pf['banco'] ?></div>

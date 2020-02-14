@@ -10,7 +10,7 @@
         <p>Eventos</p>
     </a>
 </li>
-<?php if (isset($_SESSION['origem_id_c'])): ?>
+<?php if (isset($_SESSION['origem_id_s'])): ?>
     <li class="nav-item">
         <a href="<?= SERVERURL ?>eventos/evento_cadastro" class="nav-link" id="evento_cc_cadastro">
             <i class="far fa-circle nav-icon"></i>
@@ -31,7 +31,7 @@
     </li>
 
     <?php
-    if (isset($_SESSION['pedido_id_c'])) {
+    if (isset($_SESSION['pedido_id_s'])) {
         ?>
         <li class="nav-item has-treeview menu-open" id="itens-proponente">
             <a href="#" class="nav-link"><i class="far fa-circle nav-icon"></i>
@@ -75,11 +75,11 @@
     }
     ?>
     <?php
-    if (isset($_SESSION['pedido_id_c'])):
+    if (isset($_SESSION['pedido_id_s'])):
         require_once "./controllers/PedidoController.php";
         $pedidoObj = new PedidoController();
 
-        $idPedido = $pedidoObj->getPedido($_SESSION['pedido_id_c']);
+        $idPedido = $pedidoObj->getPedido($_SESSION['pedido_id_s']);
 
         $pedido = $pedidoObj->consultaSimples("SELECT * FROM pedidos WHERE id = $idPedido AND pessoa_juridica_id IS NOT NULL");
         if ($pedido->rowCount() > 0):

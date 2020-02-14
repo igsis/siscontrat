@@ -3,7 +3,7 @@ $id = isset($_GET['idC']) ? $_GET['idC'] : null;
 require_once "./controllers/FormacaoController.php";
 $formObj = new FormacaoController();
 
-$idPf = $_SESSION['origem_id_c'];
+$idPf = $_SESSION['origem_id_s'];
 $form = $formObj->recuperaFormacao($idPf)->fetch();
 ?>
 
@@ -33,7 +33,7 @@ $form = $formObj->recuperaFormacao($idPf)->fetch();
                     <!-- form start -->
                     <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/formacaoAjax.php" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
                         <input type="hidden" name="_method" value="<?= ($id) ? "editar" : "cadastrar" ?>">
-                        <input type="hidden" name="usuario_id" value="<?= $_SESSION['usuario_id_c'] ?>">
+                        <input type="hidden" name="usuario_id" value="<?= $_SESSION['usuario_id_s'] ?>">
                         <input type="hidden" name="pagina" value="formacao/programa">
                         <?php if ($id): ?>
                             <input type="hidden" name="id" value="<?= $id ?>">

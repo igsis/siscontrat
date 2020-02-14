@@ -1,9 +1,9 @@
 <?php
-if (isset($_SESSION['origem_id_c'])) {
-    unset($_SESSION['origem_id_c']);
+if (isset($_SESSION['origem_id_s'])) {
+    unset($_SESSION['origem_id_s']);
 }
-if (isset($_SESSION['pedido_id_c'])) {
-    unset($_SESSION['pedido_id_c']);
+if (isset($_SESSION['pedido_id_s'])) {
+    unset($_SESSION['pedido_id_s']);
 }
 ?>
 <!-- Content Header (Page header) -->

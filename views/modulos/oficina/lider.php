@@ -7,11 +7,11 @@ $atracaoObj = new LiderController();
 $pedidoObj = new PedidoController();
 $proponenteObj = new PessoaJuridicaController();
 
-$proponente_id = $pedidoObj->recuperaProponente($_SESSION['pedido_id_c'])->pessoa_juridica_id;
+$proponente_id = $pedidoObj->recuperaProponente($_SESSION['pedido_id_s'])->pessoa_juridica_id;
 
 $proponente = $proponenteObj->recuperaPessoaJuridica($proponenteObj->encryption($proponente_id));
 
-$evento_id = $_SESSION['origem_id_c'];
+$evento_id = $_SESSION['origem_id_s'];
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">

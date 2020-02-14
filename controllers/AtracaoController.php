@@ -44,7 +44,7 @@ class AtracaoController extends AtracaoModel
                 unset($post[$campo]);
             }
         }
-        $dadosAtracao['evento_id'] = MainModel::decryption($_SESSION['origem_id_c']);
+        $dadosAtracao['evento_id'] = MainModel::decryption($_SESSION['origem_id_s']);
         $dadosAtracao['valor_individual'] = MainModel::dinheiroDeBr($dadosAtracao['valor_individual']);
         /* /.limpeza */
 
@@ -52,7 +52,7 @@ class AtracaoController extends AtracaoModel
         $insere = DbModel::insert('atracoes', $dadosAtracao);
         if ($insere->rowCount() >= 1) {
             $atracao_id = DbModel::connection()->lastInsertId();
-            $_SESSION['atracao_id_c'] = MainModel::encryption($atracao_id);
+            $_SESSION['atracao_id_s'] = MainModel::encryption($atracao_id);
             $atualizaRelacionamentoAcoes = MainModel::atualizaRelacionamento('acao_atracao', 'atracao_id', $atracao_id, 'acao_id', $post['acoes']);
 
             if ($atualizaRelacionamentoAcoes) {

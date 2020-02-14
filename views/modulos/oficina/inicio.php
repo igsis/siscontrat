@@ -1,6 +1,6 @@
 <?php
 if (isset($_GET['modulo'])) {
-    $_SESSION['modulo_c'] = $_GET['modulo'];
+    $_SESSION['modulo_s'] = $_GET['modulo'];
 }
 ?>
 <!-- Content Header (Page header) -->

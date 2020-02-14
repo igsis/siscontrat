@@ -10,8 +10,8 @@ if ($pedidoAjax) {
 class ProjetoController extends ProjetoModel
 {
     public function listaProjetos(){
-        $usuario_id = $_SESSION['usuario_id_c'];
-        $edital_id = MainModel::decryption($_SESSION['edital_c']);
+        $usuario_id = $_SESSION['usuario_id_s'];
+        $edital_id = MainModel::decryption($_SESSION['edital_s']);
         $sql = "SELECT fe.titulo, fp.* FROM fom_projetos AS fp
                 INNER JOIN  fom_editais AS fe ON fp.fom_edital_id = fe.id
                 WHERE fom_edital_id = '$edital_id' AND usuario_id = '$usuario_id' AND fp.publicado = 1";
@@ -25,8 +25,8 @@ class ProjetoController extends ProjetoModel
         unset($post['_method']);
         unset($post['modulo']);
         unset($post['pagina']);
-        $dados['fom_edital_id'] = MainModel::decryption($_SESSION['edital_c']);
-        //$dados['pessoa_juridica_id'] = MainModel::decryption($_SESSION['origem_id_c']);
+        $dados['fom_edital_id'] = MainModel::decryption($_SESSION['edital_s']);
+        //$dados['pessoa_juridica_id'] = MainModel::decryption($_SESSION['origem_id_s']);
         $dados['fom_status_id'] = 1;
         foreach ($post as $campo => $valor) {
             if ($campo != "modulo") {
@@ -41,7 +41,7 @@ class ProjetoController extends ProjetoModel
         $insere = DbModel::insert('fom_projetos', $dados);
         if ($insere->rowCount() >= 1) {
             $projeto_id = DbModel::connection()->lastInsertId();
-            $_SESSION['projeto_c'] = MainModel::encryption($projeto_id);
+            $_SESSION['projeto_s'] = MainModel::encryption($projeto_id);
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Projeto Cadastrado!',
@@ -102,7 +102,7 @@ class ProjetoController extends ProjetoModel
     public function inserePjProjeto()
     {
         session_start(['name' => 'sis']);
-        if (!isset($_SESSION['origem_id_c'])){
+        if (!isset($_SESSION['origem_id_s'])){
             if (isset($_POST['id'])) {
                 $idPj = $_POST['id'];
                 $idPj = (new PessoaJuridicaController)->editaPessoaJuridica($idPj,"",true);
@@ -110,7 +110,7 @@ class ProjetoController extends ProjetoModel
                 $idPj = (new PessoaJuridicaController)->inserePessoaJuridica("", true);
             }
             if ($idPj) {
-                $_SESSION['origem_id_c'] = MainModel::encryption($idPj);
+                $_SESSION['origem_id_s'] = MainModel::encryption($idPj);
                 $projeto = ProjetoModel::updatePjProjeto();
                 if ($projeto) {
                     $alerta = [
@@ -118,7 +118,7 @@ class ProjetoController extends ProjetoModel
                         'titulo' => 'Pessoa Jurídica',
                         'texto' => 'Cadastrada com sucesso!',
                         'tipo' => 'success',
-                        'location' => SERVERURL . "fomentos/pj_cadastro&id={$_SESSION['origem_id_c']}"
+                        'location' => SERVERURL . "fomentos/pj_cadastro&id={$_SESSION['origem_id_s']}"
                     ];
                 } else {
                     $alerta = [
@@ -139,7 +139,7 @@ class ProjetoController extends ProjetoModel
                 ];
             }
         } else {
-            $idPj = MainModel::decryption($_SESSION['origem_id_c']);
+            $idPj = MainModel::decryption($_SESSION['origem_id_s']);
             (new PessoaJuridicaController)->editaPessoaJuridica($idPj,"",true);
             if ($idPj) {
                 $projeto = ProjetoModel::updatePjProjeto();
@@ -149,7 +149,7 @@ class ProjetoController extends ProjetoModel
                         'titulo' => 'Pessoa Jurídica',
                         'texto' => 'Cadastrada com sucesso!',
                         'tipo' => 'success',
-                        'location' => SERVERURL . "fomentos/pj_cadastro&id={$_SESSION['origem_id_c']}"
+                        'location' => SERVERURL . "fomentos/pj_cadastro&id={$_SESSION['origem_id_s']}"
                     ];
                 } else {
                     $alerta = [
@@ -176,13 +176,13 @@ class ProjetoController extends ProjetoModel
     public function removePjProjeto()
     {
         session_start(['name' => 'sis']);
-        $id = MainModel::decryption($_SESSION['projeto_c']);
+        $id = MainModel::decryption($_SESSION['projeto_s']);
         $dados = [
             'pessoa_juridica_id' => NULL
         ];
         $projeto = DbModel::update("fom_projetos",$dados,$id);
         if ($projeto) {
-            unset($_SESSION['origem_id_c']);
+            unset($_SESSION['origem_id_s']);
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Pessoa Jurídica',
@@ -208,11 +208,11 @@ class ProjetoController extends ProjetoModel
         $projeto = DbModel::getInfo('fom_projetos',$id)->fetch(PDO::FETCH_ASSOC);
         if ($projeto['pessoa_tipo_id'] == 1) {
             if ($projeto['pessoa_fisica_id'] != null) {
-                $_SESSION['origem_id_c'] = MainModel::encryption($projeto['pessoa_fisica_id']);
+                $_SESSION['origem_id_s'] = MainModel::encryption($projeto['pessoa_fisica_id']);
             }
         } elseif ($projeto['pessoa_tipo_id'] == 2) {
             if ($projeto['pessoa_juridica_id'] != null) {
-                $_SESSION['origem_id_c'] = MainModel::encryption($projeto['pessoa_juridica_id']);
+                $_SESSION['origem_id_s'] = MainModel::encryption($projeto['pessoa_juridica_id']);
             }
         }
         return $projeto;
@@ -242,7 +242,7 @@ class ProjetoController extends ProjetoModel
 
         $projetoId = MainModel::encryption($id);
         $projeto = $this->recuperaProjeto($projetoId);
-        $projeto['protocolo'] = MainModel::gerarProtocolo($id,$_SESSION['edital_c']);
+        $projeto['protocolo'] = MainModel::gerarProtocolo($id,$_SESSION['edital_s']);
         $projeto['data_inscricao'] = date("Y-m-d h:i:sa");
         $projeto['fom_status_id'] = 2;
 

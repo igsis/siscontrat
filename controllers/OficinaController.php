@@ -29,8 +29,8 @@ class OficinaController extends OficinaModel
         $atracaoOficina = DbModel::insert('atracoes', $dadosOficina['at']);
 
         if ($atracaoOficina->rowCount() > 0) {
-            $_SESSION['origem_id_c'] = $evento_id;
-            $_SESSION['atracao_id_c'] = $atracao_id = DbModel::connection()->lastInsertId();
+            $_SESSION['origem_id_s'] = $evento_id;
+            $_SESSION['atracao_id_s'] = $atracao_id = DbModel::connection()->lastInsertId();
 
             $acaoAtracao = [
                 'acao_id' => 8,
@@ -135,7 +135,7 @@ class OficinaController extends OficinaModel
         $dadosComplemento['data_inicio'] = MainModel::dataParaSQL($datas[0]);
         $dadosComplemento['data_fim'] = MainModel::dataParaSQL($datas[1]);
 
-        $dadosComplemento['atracao_id'] = MainModel::decryption($_SESSION['atracao_id_c']);
+        $dadosComplemento['atracao_id'] = MainModel::decryption($_SESSION['atracao_id_s']);
 
         $complemento = DbModel::insert('oficinas', $dadosComplemento);
         if ($complemento->rowCount() > 0) {

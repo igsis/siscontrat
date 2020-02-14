@@ -1,8 +1,8 @@
 <?php
 if (isset($_GET['id'])) {
-    $_SESSION['projeto_c'] = $id = $_GET['id'];
-} elseif (isset($_SESSION['projeto_c'])){
-    $id = $_SESSION['projeto_c'];
+    $_SESSION['projeto_s'] = $id = $_GET['id'];
+} elseif (isset($_SESSION['projeto_s'])){
+    $id = $_SESSION['projeto_s'];
 } else {
     $id = null;
 }
@@ -42,7 +42,7 @@ if ($id) {
                     <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/projetoAjax.php" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
                         <input type="hidden" name="_method" value="<?= ($id) ? "editar" : "cadastrar" ?>">
                         <input type="hidden" name="pagina" value="fomentos">
-                        <input type="hidden" name="usuario_id" value="<?= $_SESSION['usuario_id_c'] ?>">
+                        <input type="hidden" name="usuario_id" value="<?= $_SESSION['usuario_id_s'] ?>">
                         <input type="hidden" name="pessoa_tipo_id" value="2">
                         <?php if ($id): ?>
                             <input type="hidden" name="id" value="<?= $id ?>">
@@ -55,7 +55,7 @@ if ($id) {
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="usuario_nome">Responsável pela inscrição: *</label>
-                                    <input type="text" class="form-control" id="usuario_nome" name="usuario_nome" value="<?= $_SESSION['nome_c'] ?>" disabled>
+                                    <input type="text" class="form-control" id="usuario_nome" name="usuario_nome" value="<?= $_SESSION['nome_s'] ?>" disabled>
                                 </div>
                             </div>
 

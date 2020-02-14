@@ -1,12 +1,11 @@
 <?php
     $view = new ViewsController();
 
-    $nomeUser = explode(' ', $_SESSION['nome_c'])[0];
+    $nomeUser = explode(' ', $_SESSION['nome_s'])[0];
 
 ?>
 <!-- Brand Logo -->
-<!-- TODO: Encontrar forma para que o link abaixo retorne ao módulo correto -->
-<a href="<?= SERVERURL ?>fomentos" class="brand-link">
+<a href="<?= SERVERURL ?>" class="brand-link">
     <img src="<?= SERVERURL ?>views/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light"><?= NOMESIS ?></span>
 </a>

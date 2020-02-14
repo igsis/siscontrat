@@ -33,7 +33,7 @@ if (isset($_POST['pf_passaporte'])){
     }
 }
 
-$cenica = $insAtracao->verificaCenica($_SESSION['origem_id_c']);
+$cenica = $insAtracao->verificaCenica($_SESSION['origem_id_s']);
 ?>
 
 <div class="content-header">
@@ -222,7 +222,7 @@ $cenica = $insAtracao->verificaCenica($_SESSION['origem_id_c']);
                                 </div>
                             </div>
                             <?php
-                            if ($_SESSION['modulo_c']!=2) {
+                            if ($_SESSION['modulo_s']!=2) {
                             ?>
                                 <hr/>
                                 <div class="alert alert-warning alert-dismissible">

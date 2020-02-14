@@ -2,7 +2,7 @@
 /* ************** Pessoa Física ************** */
 require_once "./controllers/PessoaFisicaController.php";
 $pfObj = new PessoaFisicaController();
-$idPf = $_SESSION['origem_id_c'];
+$idPf = $_SESSION['origem_id_s'];
 $pf = $pfObj->recuperaPessoaFisica($idPf);
 $erros = $pfObj->validaPf($idPf, 3);
 $validacoesForm = $erros ? $pfObj->existeErro($erros) : false;

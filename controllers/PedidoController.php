@@ -117,7 +117,7 @@ class PedidoController extends PedidoModel
 
     public function recuperaPedido($origem_tipo, $oficina = false)
     {
-        $origem_id = MainModel::decryption($_SESSION['origem_id_c']);
+        $origem_id = MainModel::decryption($_SESSION['origem_id_s']);
         $pedido = DbModel::consultaSimples(
             "SELECT * FROM pedidos WHERE origem_tipo_id = '$origem_tipo' AND origem_id = '$origem_id'"
         )->fetchObject();
@@ -125,7 +125,7 @@ class PedidoController extends PedidoModel
         if ($pedido->pessoa_tipo_id == 1) {
             $pedido->proponente = PedidoModel::buscaProponente(1, $pedido->pessoa_fisica_id);
             if ($oficina) {
-                $atracao = (new AtracaoController)->recuperaAtracao($_SESSION['atracao_id_c']);
+                $atracao = (new AtracaoController)->recuperaAtracao($_SESSION['atracao_id_s']);
                 if ($atracao->produtor_id == null) {
                     $dadosProdutor = [
                         'nome' => $pedido->proponente->nome,
@@ -133,17 +133,17 @@ class PedidoController extends PedidoModel
                         'telefone1' => $pedido->proponente->telefone1,
                         'telefone2' => $pedido->proponente->telefone2 ?? ""
                     ];
-                    (new ProdutorController)->insereProdutor($dadosProdutor, $_SESSION['atracao_id_c'], "", true);
+                    (new ProdutorController)->insereProdutor($dadosProdutor, $_SESSION['atracao_id_s'], "", true);
                 }
             }
         } else {
             $pedido->proponente = PedidoModel::buscaProponente(2, $pedido->pessoa_juridica_id);
 
             if ($oficina) {
-                $atracao = (new AtracaoController)->recuperaAtracao($_SESSION['atracao_id_c']);
+                $atracao = (new AtracaoController)->recuperaAtracao($_SESSION['atracao_id_s']);
                 $liderCadastrado = DbModel::consultaSimples("SELECT * FROM lideres WHERE pedido_id = '$pedido->id' AND atracao_id = '$atracao->id'");
                 if ($liderCadastrado->rowCount() > 0) {
-                    $lider = (new LiderController)->recuperaLider($_SESSION['pedido_id_c'], $_SESSION['atracao_id_c']);
+                    $lider = (new LiderController)->recuperaLider($_SESSION['pedido_id_s'], $_SESSION['atracao_id_s']);
                     if ($atracao->produtor_id == null) {
                         $dadosProdutor = [
                             'nome' => $lider->nome,
@@ -151,7 +151,7 @@ class PedidoController extends PedidoModel
                             'telefone1' => $lider->telefone1,
                             'telefone2' => $lider->telefone2 ?? ""
                         ];
-                        (new ProdutorController)->insereProdutor($dadosProdutor, $_SESSION['atracao_id_c'], "", true);
+                        (new ProdutorController)->insereProdutor($dadosProdutor, $_SESSION['atracao_id_s'], "", true);
                     }
                     $dadosRepresentante = [
                         'nome' => $lider->nome,
@@ -174,14 +174,14 @@ class PedidoController extends PedidoModel
 
     public function startPedido()
     {
-        $idEvento = $_SESSION['origem_id_c'];
+        $idEvento = $_SESSION['origem_id_s'];
         $idEvento = MainModel::decryption($idEvento);
         $consulta = DbModel::consultaSimples("SELECT id FROM pedidos WHERE origem_tipo_id = 1 AND origem_id = $idEvento AND publicado = 1");
         if ($consulta->rowCount() > 0) {
             $consulta = $consulta->fetch(PDO::FETCH_ASSOC);
             $resultado = $consulta['id'];
             if ($resultado != null) {
-                $_SESSION['pedido_id_c'] = MainModel::encryption($resultado);
+                $_SESSION['pedido_id_s'] = MainModel::encryption($resultado);
             } else {
                 return false;
             }

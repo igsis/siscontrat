@@ -2,8 +2,8 @@
 require_once "./controllers/FormacaoController.php";
 $formObj = new FormacaoController();
 
-if (isset($_SESSION['origem_id_c'])){
-    $idPf = $_SESSION['origem_id_c'];
+if (isset($_SESSION['origem_id_s'])){
+    $idPf = $_SESSION['origem_id_s'];
     $form = $formObj->recuperaFormacao($idPf)->fetch();
     if ($form){
         $id = MainModel::encryption($form['id']);
@@ -22,7 +22,7 @@ if (isset($_SESSION['origem_id_c'])){
         <p>Cadastro</p>
     </a>
 </li>
-<?php if (isset($_SESSION['origem_id_c'])){ ?>
+<?php if (isset($_SESSION['origem_id_s'])){ ?>
     <li class="nav-item">
         <a href="<?= SERVERURL ?>formacao/pf_cadastro<?= $idPf ? '&id='.$idPf : NULL ?>" class="nav-link" id="dados_cadastrais">
             <i class="far fa-circle nav-icon"></i>

@@ -1,6 +1,6 @@
 <?php
-unset($_SESSION['origem_id_c']);
-unset($_SESSION['pedido_id_c']);
+unset($_SESSION['origem_id_s']);
+unset($_SESSION['pedido_id_s']);
 unset($_SESSION['modulo']);
 ?>
 <!-- Content Header (Page header) -->

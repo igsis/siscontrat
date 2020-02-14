@@ -9,7 +9,7 @@ if ($pedidoAjax) {
 class PedidoModel extends MainModel
 {
     public function inserePedido($origem_tipo,$pessoa_tipo,$pessoa_id){
-        $origem_id = MainModel::decryption($_SESSION['origem_id_c']);
+        $origem_id = MainModel::decryption($_SESSION['origem_id_s']);
 
         $dados = [
             'origem_tipo_id' => $origem_tipo,
@@ -30,7 +30,7 @@ class PedidoModel extends MainModel
         if ($consulta ->rowCount()<1){
             $pedido = DbModel::insert("pedidos",$dados);
             if($pedido->rowCount()>0){
-                $_SESSION['pedido_id_c'] = MainModel::encryption(DbModel::connection()->lastInsertId());
+                $_SESSION['pedido_id_s'] = MainModel::encryption(DbModel::connection()->lastInsertId());
                 return true;
             } else{
                 return false;
@@ -40,7 +40,7 @@ class PedidoModel extends MainModel
             $idPedido = $consulta->fetch()['id'];
             $pedido = DbModel::update("pedidos",$dados,$idPedido);
             if($pedido->rowCount() >= 1 || DbModel::connection()->errorCode() == 0){
-                $_SESSION['pedido_id_c'] = MainModel::encryption($idPedido);
+                $_SESSION['pedido_id_s'] = MainModel::encryption($idPedido);
                 return true;
             } else{
                 return false;

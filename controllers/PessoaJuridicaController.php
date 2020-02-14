@@ -44,8 +44,8 @@ class PessoaJuridicaController extends PessoaJuridicaModel
                 }
             }
 
-            /*if ($_SESSION['modulo_c'] >= 8){ //fomento
-                $_SESSION['origem_id_c'] = MainModel::encryption($id);
+            /*if ($_SESSION['modulo_s'] >= 8){ //fomento
+                $_SESSION['origem_id_s'] = MainModel::encryption($id);
             }*/
 
             if($retornaId){
@@ -120,8 +120,8 @@ class PessoaJuridicaController extends PessoaJuridicaModel
                 }
             }
 
-            /*if ($_SESSION['modulo_c'] == 8 || $_SESSION['modulo_c'] == 9){ //fomento
-                $_SESSION['origem_id_c'] = $id;
+            /*if ($_SESSION['modulo_s'] == 8 || $_SESSION['modulo_s'] == 9){ //fomento
+                $_SESSION['origem_id_s'] = $id;
             }*/
 
             if($retornaId){

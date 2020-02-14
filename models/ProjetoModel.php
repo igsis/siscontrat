@@ -12,8 +12,8 @@ class ProjetoModel extends ValidacaoModel
 {
     public function updatePjProjeto()
     {
-        $idProjeto = MainModel::decryption($_SESSION['projeto_c']);
-        $idPj = MainModel::decryption($_SESSION['origem_id_c']);
+        $idProjeto = MainModel::decryption($_SESSION['projeto_s']);
+        $idPj = MainModel::decryption($_SESSION['origem_id_s']);
         $dados = [
             "pessoa_juridica_id" => $idPj
         ];

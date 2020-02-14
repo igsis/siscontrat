@@ -15,7 +15,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>CAPAC | SMC</title>
+    <title>SisContrat | SMC</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="<?= SERVERURL ?>views/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
@@ -41,19 +41,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 $view = $template->exibirViewController();
 if ($view == 'index'):
-    require_once "./views/modulos/inicio/index.php";
+    require_once "./views/modulos/inicio/login.php";
 elseif ($view == 'login'):
     require_once "./views/modulos/inicio/login.php";
 elseif ($view == 'cadastro'):
     require_once "./views/modulos/inicio/cadastro.php";
-elseif ($view == 'fomento_edital'):
-    require_once "./views/modulos/inicio/fomento_edital.php";
 else:
     session_start(['name' => 'sis']);
     require_once "./controllers/UsuarioController.php";
     $usuario = new UsuarioController();
 
-    if (!isset($_SESSION['usuario_id_c'])) {
+    if (!isset($_SESSION['usuario_id_s'])) {
         $usuario->forcarFimSessao();
     }
     ?>

@@ -4,7 +4,7 @@ require_once "../config/configGeral.php";
 
 if (isset($_POST['_method'])) {
     session_start(['name' => 'sis']);
-    $idPf = $_SESSION['origem_id_c'];
+    $idPf = $_SESSION['origem_id_s'];
     require_once "../controllers/FormacaoController.php";
     $insForm = new FormacaoController();
 

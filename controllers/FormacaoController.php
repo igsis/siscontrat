@@ -16,7 +16,7 @@ class FormacaoController extends ValidacaoModel
         $pagina = $_POST['pagina'];
         unset($_POST['_method']);
         unset($_POST['pagina']);
-        $pessoa_fisica_id = MainModel::decryption($_SESSION['origem_id_c']);
+        $pessoa_fisica_id = MainModel::decryption($_SESSION['origem_id_s']);
         $dados['pessoa_fisica_id'] = $pessoa_fisica_id;
         foreach ($_POST as $campo => $post) {
             $dados[$campo] = MainModel::limparString($post);

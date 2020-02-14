@@ -4,8 +4,8 @@ require_once "./controllers/FomentoController.php";
 $arquivosObj = new ArquivoController();
 $fomentoObj = new FomentoController();
 
-$edital_id = $_SESSION['edital_c'];
-$projeto_id = $_SESSION['projeto_c'];
+$edital_id = $_SESSION['edital_s'];
+$projeto_id = $_SESSION['projeto_s'];
 
 $tipo_contratacao_id = $fomentoObj->recuperaTipoContratacao((string) $edital_id);
 

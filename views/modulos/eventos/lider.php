@@ -2,7 +2,7 @@
 require_once "./controllers/LiderController.php";
 $atracaoObj = new LiderController();
 
-$evento_id = $_SESSION['origem_id_c'];
+$evento_id = $_SESSION['origem_id_s'];
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
