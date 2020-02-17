@@ -1,5 +1,6 @@
 <?php
 $url = SERVERURL.'api/verificadorEmail.php';
+$url_local = SERVERURL.'api/locais_espacos.php';
 ?>
 <div class="login-page">
     <div class="card">
@@ -242,7 +243,7 @@ $url = SERVERURL.'api/verificadorEmail.php';
         });
     });
 
-    const url_local = '<?= $url_local ?>'
+    const url_local = '<?= $url_local ?>';
 
     let instituicao = document.querySelector('#instituicao');
 
