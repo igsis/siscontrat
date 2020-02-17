@@ -1,6 +1,9 @@
 <?php
 $url = SERVERURL.'api/verificadorEmail.php';
 $url_local = SERVERURL.'api/locais_espacos.php';
+
+require_once "./controllers/UsuarioController.php";
+$objUsuario = new UsuarioController();
 ?>
 <div class="login-page">
     <div class="card">
@@ -41,7 +44,7 @@ $url_local = SERVERURL.'api/locais_espacos.php';
                         <select class="form-control" name="instituicao" id="instituicao" required>
                             <option value="">Selecione uma opção...</option>
                             <?php
-                            //geraOpcao("instituicoes");
+                            $objUsuario->geraOpcao("instituicoes");
                             ?>
                         </select>
                     </div>
@@ -101,7 +104,7 @@ $url_local = SERVERURL.'api/locais_espacos.php';
             </form>
 
             <div class="mb-0 text-center">
-                <a href="<?= SERVERURL ?>" class="text-center">Já possuo Cadastro</a>
+                <a href="<?= SERVERURL ?>" class="text-center">Já possuo cadastro</a>
             </div>
         </div>
         <div class="card-footer bg-light-gradient text-center">
@@ -134,9 +137,6 @@ $url_local = SERVERURL.'api/locais_espacos.php';
             }
         })
     })
-</script>
-
-<script>
 
     function geraUsuarioRf() {
 
@@ -212,13 +212,10 @@ $url_local = SERVERURL.'api/locais_espacos.php';
                 }
             }
         }
-    })
+    });
 
-    const url = `<?=$url?>`;
+    var email = $('#email');
 
-    var email = $("#email");
-
-    // adiciona o evento de onblur no campo de email
     email.blur(function () {
         $.ajax({
             url: url,
@@ -226,22 +223,18 @@ $url_local = SERVERURL.'api/locais_espacos.php';
             data: {"email": email.val()},
 
             success: function (data) {
+                let emailCampo = document.querySelector('#email');
 
-                let divEmail = document.querySelector('#divEmail');
-
-                // verifica se o que esta sendo retornado é 1 ou 0
                 if (data.ok) {
-                    divEmail.classList.remove("has-error");
-                    document.getElementById("spanHelp").innerHTML = '';
-                    $('#cadastra').attr('disabled', false);
+                    emailCampo.classList.remove("is-invalid");
+                    $("#cadastra").attr('disabled', false);
                 } else {
-                    divEmail.classList.add("has-error");
-                    document.getElementById("spanHelp").innerHTML = "Email em uso!";
-                    $('#cadastra').attr('disabled', true);
+                    emailCampo.classList.add("is-invalid");
+                    $("#cadastra").attr('disabled', true);
                 }
             }
-        });
-    });
+        })
+    })
 
     const url_local = '<?= $url_local ?>';
 
@@ -257,13 +250,15 @@ $url_local = SERVERURL.'api/locais_espacos.php';
 
                 for (const local of locais) {
                     $('#local').append(`<option value='${local.id}'>${local.local}</option>`).focus();
-                    ;
+
                 }
 
                 if (idInstituicao == 1){
                     let locais = document.querySelector('#local');
                     locais.value = 2;
                     document.querySelector('#local').disabled = true;
+                } else {
+                    document.querySelector('#local').disabled = false;
                 }
             })
     });
