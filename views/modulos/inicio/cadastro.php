@@ -61,7 +61,7 @@ $objUsuario = new UsuarioController();
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-4" id="divEmail">
+                    <div class="form-group col-md-4">
                         <label for="email">E-mail *</label>
                         <input type="email" class="form-control" name="email" placeholder="Email" required id="email">
                         <div class="invalid-feedback">
@@ -81,14 +81,14 @@ $objUsuario = new UsuarioController();
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label>Insira sua senha *</label>
-                        <input type="password" class="form-control" name="senha" placeholder="Senha" required>
+                        <input type="password" class="form-control" id="senha" name="senha" placeholder="Senha" required>
                         <div class="invalid-feedback">
                             <strong>Insira sua Senha</strong>
                         </div>
                     </div>
                     <div class="form-group col-md-6">
                         <label>Confirme sua senha *</label>
-                        <input type="password" class="form-control" name="senha2" placeholder="Confirme sua Senha" required>
+                        <input type="password" class="form-control" id="senha2" name="senha2" placeholder="Confirme sua Senha" required>
                         <div class="invalid-feedback">
                             <strong>Confirme sua Senha</strong>
                         </div>
@@ -124,7 +124,6 @@ $objUsuario = new UsuarioController();
             data: {"email": email.val()},
 
             success: function (data) {
-                let divEmail = document.querySelector('#divEmail');
                 let emailCampo = document.querySelector('#email');
 
                 if (data.ok) {
@@ -214,28 +213,6 @@ $objUsuario = new UsuarioController();
         }
     });
 
-    var email = $('#email');
-
-    email.blur(function () {
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: {"email": email.val()},
-
-            success: function (data) {
-                let emailCampo = document.querySelector('#email');
-
-                if (data.ok) {
-                    emailCampo.classList.remove("is-invalid");
-                    $("#cadastra").attr('disabled', false);
-                } else {
-                    emailCampo.classList.add("is-invalid");
-                    $("#cadastra").attr('disabled', true);
-                }
-            }
-        })
-    })
-
     const url_local = '<?= $url_local ?>';
 
     let instituicao = document.querySelector('#instituicao');
@@ -262,5 +239,4 @@ $objUsuario = new UsuarioController();
                 }
             })
     });
-
 </script>
