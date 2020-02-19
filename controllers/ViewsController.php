@@ -54,4 +54,8 @@ class ViewsController extends ViewsModel
     public function listaModulos($perfil_id){
         return parent::recuperaModulos($perfil_id);
     }
+
+    public function getCor($cor_id){
+        return (new DbModel)->consultaSimples("SELECT `text-color` FROM cores WHERE id = '$cor_id'")->fetch(PDO::FETCH_ASSOC)['text-color'];
+    }
 }
