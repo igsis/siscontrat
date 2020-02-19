@@ -9,9 +9,13 @@ class DbModel
 {
     public static $conn;
 
-    protected function connection() {
+    protected function connection($capac = false) {
         if(!isset(self::$conn)) {
-            self::$conn = new PDO(SGDB, USER, PASS, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+            if (!$capac) {
+                self::$conn = new PDO(SGDB1, USER1, PASS1, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+            } else {
+                self::$conn = new PDO(SGDB2, USER2, PASS2, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+            }
             self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
         return self::$conn;
@@ -25,8 +29,8 @@ class DbModel
      * <p>Dados a serem inseridos</p>
      * @return bool|PDOStatement
      */
-    protected function insert($table, $data) {
-        $pdo = self::connection();
+    protected function insert($table, $data, $capac = false) {
+        $pdo = self::connection($capac);
         $fields = implode(", ", array_keys($data));
         $values = ":".implode(", :", array_keys($data));
         $sql = "INSERT INTO $table ($fields) VALUES ($values)";
@@ -40,8 +44,8 @@ class DbModel
     }
 
     // Método para update
-    protected function update($table, $data, $id){
-        $pdo = self::connection();
+    protected function update($table, $data, $id, $capac = false){
+        $pdo = self::connection($capac);
         $new_values = "";
         foreach($data as $key => $value) {
             $new_values .= "$key=:$key, ";
@@ -59,8 +63,8 @@ class DbModel
     }
 
     // Método para update especial
-    protected function updateEspecial($table, $data, $campo, $campo_id){
-        $pdo = self::connection();
+    protected function updateEspecial($table, $data, $campo, $campo_id, $capac = false){
+        $pdo = self::connection($capac);
         $new_values = "";
         foreach($data as $key => $value) {
             $new_values .= "$key=:$key, ";
@@ -78,8 +82,8 @@ class DbModel
     }
 
     // Método para apagar (despublicar)
-    protected function apaga($table, $id){
-        $pdo = self::connection();
+    protected function apaga($table, $id, $capac = false){
+        $pdo = self::connection($capac);
         $sql = "UPDATE $table SET publicado = 0 WHERE id = :id";
         $statement = $pdo->prepare($sql);
         $statement->bindValue(":id", $id);
@@ -88,8 +92,8 @@ class DbModel
         return $statement;
     }
 
-    protected function deleteEspecial($table, $campo, $campo_id){
-        $pdo = self::connection();
+    protected function deleteEspecial($table, $campo, $campo_id, $capac = false){
+        $pdo = self::connection($capac);
         $sql = "DELETE FROM $table WHERE $campo = :$campo";
         $statement = $pdo->prepare($sql);
         $statement->bindValue(":$campo", $campo_id, PDO::PARAM_STR);
@@ -98,8 +102,8 @@ class DbModel
         return $statement;
     }
 
-    public function consultaSimples($consulta) {
-        $pdo = self::connection();
+    public function consultaSimples($consulta, $capac = false) {
+        $pdo = self::connection($capac);
         $statement = $pdo->prepare($consulta);
         $statement->execute();
 
@@ -107,8 +111,8 @@ class DbModel
     }
 
     // Método para pegar a informação
-    protected function getInfo($table, $id){
-        $pdo = self::connection();
+    protected function getInfo($table, $id, $capac = false){
+        $pdo = self::connection($capac);
         $sql = "SELECT * FROM $table WHERE id = :id";
         $statement = $pdo->prepare($sql);
         $statement->bindValue(":id", $id);
@@ -118,14 +122,14 @@ class DbModel
     }
 
     // Lista publicados
-    protected function listaPublicado($table,$id = null) {
+    protected function listaPublicado($table,$id = null, $capac = false) {
         if(!empty($id)){
             $filtro_id = "AND id = :id";
         }
         else{
             $filtro_id = "";
         }
-        $pdo = self::connection();
+        $pdo = self::connection($capac);
         $sql = "SELECT * FROM $table WHERE publicado = 1 $filtro_id ORDER BY 2";
         $statement = $pdo->query($sql);
         $statement->execute();
