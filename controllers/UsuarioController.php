@@ -27,8 +27,9 @@ class UsuarioController extends UsuarioModel
             $usuario = $consultaUsuario->fetch();
 
             session_start(['name' => 'sis']);
-            $_SESSION['usuario_id_s'] = $usuario['id'];
-            $_SESSION['nome_s'] = $usuario['nome_completo'];
+            $_SESSION['login'] = $usuario['usuario'];
+            $_SESSION['idUser'] = $usuario['id'];
+            $_SESSION['nome'] = $usuario['nome_completo'];
             $_SESSION['perfil_s'] = MainModel::encryption($usuario['perfil_id']);
 
             MainModel::gravarLog('Fez Login');

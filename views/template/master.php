@@ -51,7 +51,7 @@ else:
     require_once "./controllers/UsuarioController.php";
     $usuario = new UsuarioController();
 
-    if (!isset($_SESSION['usuario_id_s'])) {
+    if (!isset($_SESSION['idUser'])) {
         $usuario->forcarFimSessao();
     }
     ?>

@@ -27,7 +27,10 @@
         <p>
             Início
         </p>
-    </a><a href="<?= SIS2URL ?>" class="nav-link">
+    </a>
+</li>
+<li class="nav-item">
+    <a href="<?= SIS2URL ?>" class="nav-link">
         <i class="nav-icon fas fa-home"></i>
         <p>
             Siscontrat 2
