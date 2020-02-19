@@ -129,13 +129,17 @@ class MainModel extends DbModel
         return $output;
     }
 
+    public function gravarLog($descricao) {
+        self::log($descricao);
+    }
+
     /**
      * Insere registro na tabela "log" do banco de dados
      * @param string $descricao
      * <p>Registramos o comando SQL de <strong>UPDATE</strong> ou <strong>INSERT</strong>,
      * se o usuário <strong>FEZ LOGIN</strong>, ou <strong>FEZ LOGOUT</strong></p>
      */
-    protected function gravarLog($descricao) {
+    protected function log($descricao) {
         $dadosLog = [
             'usuario_id' => $_SESSION['usuario_id_s'],
             'ip' => $_SERVER['REMOTE_ADDR'],

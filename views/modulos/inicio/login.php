@@ -2,9 +2,7 @@
 if (isset($_POST['email']) && (isset($_POST['senha']))) {
     require_once "./controllers/UsuarioController.php";
     $login = new UsuarioController();
-    $modulo = $_GET['modulo'] ?? false;
-    $edital = $_GET['edital'] ?? null;
-    echo $login->iniciaSessao($modulo, $edital);
+    echo $login->iniciaSessao();
 }
 ?>
 <div class="login-page">

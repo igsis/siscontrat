@@ -171,6 +171,3 @@ unset($_SESSION['modulo']);
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-<?php
-include "fomento_edital.php";
-?>
