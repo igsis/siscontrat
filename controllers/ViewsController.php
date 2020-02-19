@@ -58,4 +58,8 @@ class ViewsController extends ViewsModel
     public function getCor($cor_id){
         return (new DbModel)->consultaSimples("SELECT `text-color` FROM cores WHERE id = '$cor_id'")->fetch(PDO::FETCH_ASSOC)['text-color'];
     }
+
+    public function listaAvisos(){
+        return (new DbModel)->consultaSimples("SELECT * FROM avisos WHERE publicado = '1'")->fetchAll(PDO::FETCH_OBJ);
+    }
 }
