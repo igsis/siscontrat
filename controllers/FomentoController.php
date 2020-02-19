@@ -9,7 +9,7 @@ class FomentoController extends MainModel
 {
     public function listaFomentos()
     {
-        return DbModel::listaPublicado("fom_editais");
+        return DbModel::listaPublicado("fom_editais", null,true);
     }
 
     public function recuperaTipoContratacao($edital_id) {
