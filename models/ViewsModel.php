@@ -99,7 +99,7 @@ class ViewsModel
     }
 
     protected function recuperaModulos($perfil_id) {
-        $sqlModulos = "SELECT m.sigla, m.descricao, m.cor_id FROM modulo_perfis AS mp
+        $sqlModulos = "SELECT m.sigla, m.descricao, m.cor_id, m.sistema FROM modulo_perfis AS mp
                         INNER JOIN modulos AS m ON m.id = mp.modulo_id
                         WHERE mp.perfil_id = '$perfil_id'
                         ORDER BY 1";
