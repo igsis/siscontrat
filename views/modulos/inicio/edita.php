@@ -36,7 +36,7 @@ $usuario = $insUsuario->recuperaUsuario($id)->fetch();
                             <div class="row">
                                 <div class="form-group col-md-12">
                                     <label for="nome">Nome: *</label>
-                                    <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite o nome completo" maxlength="120" value="<?=$usuario['nome']?>" required>
+                                    <input type="text" class="form-control" id="nome" name="nome_completo" placeholder="Digite o nome completo" maxlength="120" value="<?=$usuario['nome_completo']?>" required>
                                 </div>
                             </div>
                             <div class="row">

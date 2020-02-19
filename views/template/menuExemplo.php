@@ -24,16 +24,6 @@
 <li class="nav-item">
     <a href="<?= SERVERURL ?>inicio" class="nav-link">
         <i class="nav-icon fas fa-home"></i>
-        <p>
-            Início
-        </p>
-    </a>
-</li>
-<li class="nav-item">
-    <a href="<?= SIS2URL ?>" class="nav-link">
-        <i class="nav-icon fas fa-home"></i>
-        <p>
-            Siscontrat 2
-        </p>
+        <p>Início</p>
     </a>
 </li>

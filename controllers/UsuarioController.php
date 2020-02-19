@@ -30,7 +30,7 @@ class UsuarioController extends UsuarioModel
             $_SESSION['login_s'] = $usuario['usuario'];
             $_SESSION['usuario_id_s'] = $usuario['id'];
             $_SESSION['nome_s'] = $usuario['nome_completo'];
-            $_SESSION['perfil_s'] = MainModel::encryption($usuario['perfil_id']);
+            $_SESSION['perfil_s'] = $usuario['perfil_id'];
 
             MainModel::gravarLog('Fez Login');
 

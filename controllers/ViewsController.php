@@ -50,4 +50,8 @@ class ViewsController extends ViewsModel
         }
         return $resposta;
     }
+
+    public function listaModulos($perfil_id){
+        return parent::recuperaModulos($perfil_id);
+    }
 }

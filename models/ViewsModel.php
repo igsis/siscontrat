@@ -1,6 +1,5 @@
 <?php
 
-
 class ViewsModel
 {
     protected function verificaModulo ($mod) {
@@ -97,5 +96,13 @@ class ViewsModel
         }
 
         return $menu;
+    }
+
+    protected function recuperaModulos($perfil_id) {
+        $sqlModulos = "SELECT m.descricao FROM modulo_perfis AS mp
+                        INNER JOIN modulos AS m ON m.id = mp.modulo_id
+                        WHERE mp.perfil_id = '$perfil_id'
+                        ORDER BY 1";
+        return (new DbModel)->consultaSimples($sqlModulos)->fetchAll(PDO::FETCH_OBJ);
     }
 }
