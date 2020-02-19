@@ -10,51 +10,42 @@ class UsuarioController extends UsuarioModel
 {
 
     public function iniciaSessao($modulo = false, $edital = null) {
-        $email = MainModel::limparString($_POST['email']);
+        $email = MainModel::limparString($_POST['usuario']);
         $senha = MainModel::limparString($_POST['senha']);
         $senha = MainModel::encryption($senha);
 
         $dadosLogin = [
-            'email' => $email,
+            'usuario' => $email,
             'senha' => $senha
         ];
 
         $consultaEmail = UsuarioModel::getEmail($dadosLogin);
 
-        if ($consultaEmail->rowCount() == 1){
-            $consultaUsuario = UsuarioModel::getUsuario($dadosLogin);
+        $consultaUsuario = UsuarioModel::getUsuario($dadosLogin);
 
-            if ($consultaUsuario->rowCount() == 1) {
-                $usuario = $consultaUsuario->fetch();
+        if ($consultaUsuario->rowCount() == 1) {
+            $usuario = $consultaUsuario->fetch();
 
-                session_start(['name' => 'sis']);
-                $_SESSION['usuario_id_s'] = $usuario['id'];
-                $_SESSION['nome_s'] = $usuario['nome_completo'];
-                $_SESSION['perfil_s'] = MainModel::encryption($usuario['perfil_id']);
+            session_start(['name' => 'sis']);
+            $_SESSION['usuario_id_s'] = $usuario['id'];
+            $_SESSION['nome_s'] = $usuario['nome_completo'];
+            $_SESSION['perfil_s'] = MainModel::encryption($usuario['perfil_id']);
 
-                MainModel::gravarLog('Fez Login');
+            MainModel::gravarLog('Fez Login');
 
-                if (!$modulo) {
-                    return $urlLocation = "<script> window.location='inicio/inicio' </script>";
-                } else {
-                    if ($modulo == 8) {
-                        $_SESSION['edital_s'] = $edital;
-                        return $urlLocation = "<script> window.location='fomentos/inicio&modulo=$modulo' </script>";
-                    }
-                }
+            if (!$modulo) {
+                return $urlLocation = "<script> window.location='inicio/inicio' </script>";
             } else {
-                $alerta = [
-                    'alerta' => 'simples',
-                    'titulo' => 'Erro!',
-                    'texto' => 'Usuário / Senha incorreto',
-                    'tipo' => 'error'
-                ];
+                if ($modulo == 8) {
+                    $_SESSION['edital_s'] = $edital;
+                    return $urlLocation = "<script> window.location='fomentos/inicio&modulo=$modulo' </script>";
+                }
             }
         } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Erro!',
-                'texto' => 'Usuário não existe',
+                'texto' => 'Usuário / Senha incorreto',
                 'tipo' => 'error'
             ];
         }

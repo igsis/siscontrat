@@ -1,5 +1,5 @@
 <?php
-if (isset($_POST['email']) && (isset($_POST['senha']))) {
+if (isset($_POST['usuario']) && (isset($_POST['senha']))) {
     require_once "./controllers/UsuarioController.php";
     $login = new UsuarioController();
     echo $login->iniciaSessao();
@@ -16,18 +16,18 @@ if (isset($_POST['email']) && (isset($_POST['senha']))) {
         <div class="card-body register-card-body">
             <p class="card-text"><span style="text-align: justify; display:block;"> Para iniciar sua sessão, faça login utilizando e-mail e senha cadastrados</span></p>
             <form action="" method="POST">
-                <label>E-mail</label>
+                <label>Usuário</label>
                 <div class="input-group mb-3">
-                    <input name="email" type="email" class="form-control" placeholder="Email">
+                    <input name="usuario" type="text" class="form-control" placeholder="Usuário" maxlength="7" required>
                     <div class="input-group-append">
                         <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
+                            <span class="fas fa-user"></span>
                         </div>
                     </div>
                 </div>
                 <label>Senha</label>
                 <div class="input-group mb-3">
-                    <input name="senha" type="password" class="form-control" placeholder="Senha">
+                    <input name="senha" type="password" class="form-control" placeholder="Senha" required>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>

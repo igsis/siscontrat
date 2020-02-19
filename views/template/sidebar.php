@@ -5,7 +5,7 @@
 
 ?>
 <!-- Brand Logo -->
-<a href="<?= SERVERURL ?>" class="brand-link">
+<a href="<?= SERVERURL ?>inicio" class="brand-link">
     <img src="<?= SERVERURL ?>views/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light"><?= NOMESIS ?></span>
 </a>
