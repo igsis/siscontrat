@@ -21,7 +21,7 @@ $objUsuario = new UsuarioController();
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label for="nome">Nome Completo* </label>
-                        <input type="text" id="nome" name="nome" class="form-control" required>
+                        <input type="text" id="nome" name="nome_completo" class="form-control" required>
                         <div class="invalid-feedback">
                             <strong>Insira seu Nome Completo</strong>
                         </div>
@@ -35,7 +35,7 @@ $objUsuario = new UsuarioController();
 
                     <div class="form-group col-md-4">
                         <label for="rf_usuario">RF/RG* </label>
-                        <input type="text" id="rgrf_usuario" name="rgrf_usuario" class="form-control" required>
+                        <input type="text" id="rgrf_usuario" name="rf_rg" class="form-control" required>
                     </div>
                 </div>
                 <div class="row">
@@ -58,6 +58,9 @@ $objUsuario = new UsuarioController();
                         <label for="rf_usuario">Usuário* </label>
                         <div id='resposta'></div>
                         <input type="text" id="usuario" name="usuario" class="form-control" maxlength="7" required readonly>
+                        <div class="invalid-feedback">
+                            <strong>Usuário já cadastrado</strong>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -70,7 +73,7 @@ $objUsuario = new UsuarioController();
                     </div>
                     <div class="form-group col-md-4">
                         <label for="tel_usuario">Telefone* </label>
-                        <input type="text" id="tel_usuario" name="tel_usuario" class="form-control" onkeyup="mascara( this, mtel );" required maxlength="15">
+                        <input type="text" id="tel_usuario" name="telefone" class="form-control" onkeyup="mascara( this, mtel );" required maxlength="15">
                     </div>
                     <div class="form-group col-md-4">
                         <label for="perfil">Código* </label> <br>
@@ -116,6 +119,8 @@ $objUsuario = new UsuarioController();
 <script>
     const url = `<?= $url ?>`;
     var email = $('#email');
+    var usuario = $('#usuario');
+    var rf_rg = $('#rgrf_usuario');
 
     email.blur(function () {
         $.ajax({
@@ -135,7 +140,27 @@ $objUsuario = new UsuarioController();
                 }
             }
         })
-    })
+    });
+
+    rf_rg.blur(function () {
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {"usuario": usuario.val()},
+
+            success: function (data) {
+                let usuarioCampo = document.querySelector('#usuario');
+
+                if (data.ok) {
+                    usuarioCampo.classList.remove("is-invalid");
+                    $("#cadastra").attr('disabled', false);
+                } else {
+                    usuarioCampo.classList.add("is-invalid");
+                    $("#cadastra").attr('disabled', true);
+                }
+            }
+        })
+    });
 
     function geraUsuarioRf() {
 
@@ -233,9 +258,13 @@ $objUsuario = new UsuarioController();
                 if (idInstituicao == 1){
                     let locais = document.querySelector('#local');
                     locais.value = 2;
-                    document.querySelector('#local').disabled = true;
+                    $('#local').attr('readonly', true);
+                    $('#local').on('mousedown', function(e) {
+                        e.preventDefault();
+                    });
                 } else {
-                    document.querySelector('#local').disabled = false;
+                    $('#local').unbind('mousedown');
+                    $('#local').removeAttr('readonly');
                 }
             })
     });

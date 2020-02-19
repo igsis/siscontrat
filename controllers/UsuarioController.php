@@ -65,13 +65,29 @@ class UsuarioController extends UsuarioModel
         return header("Location: ".SERVERURL);
     }
 
-    public function insereUsuario($dados) {
+    public function insereUsuario() {
         $erro = false;
         $dados = [];
+        $camposIgnorados = ["senha2", "_method", "instituicao", "local"];
         foreach ($_POST as $campo => $post) {
-            if (($campo != "senha2") && ($campo != "_method")) {
+            if (!in_array($campo, $camposIgnorados)) {
                 $dados[$campo] = MainModel::limparString($post);
             }
+        }
+
+        $perfil_id = parent::getPerfil($dados['perfil']);
+        unset($dados['perfil']);
+
+        if ($perfil_id) {
+            $dados['perfil_id'] = $perfil_id;
+        } else {
+            $erro = true;
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => "Erro!",
+                'texto' => "Código informado não existe no sistema",
+                'tipo' => "error"
+            ];
         }
 
         // Valida Senha
@@ -99,15 +115,31 @@ class UsuarioController extends UsuarioModel
 
         if (!$erro) {
             $dados['senha'] = MainModel::encryption($dados['senha']);
-            $insere = DbModel::insert('usuarios', $dados);
-            if ($insere) {
-                $alerta = [
-                    'alerta' => 'sucesso',
-                    'titulo' => 'Usuário Cadastrado!',
-                    'texto' => 'Usuário cadastrado com Sucesso!',
-                    'tipo' => 'success',
-                    'location' => SERVERURL
+            $insereUsuario = DbModel::insert('usuarios', $dados);
+            if ($insereUsuario) {
+                $usuario_id = DbModel::connection()->lastInsertId();
+                $dadosLocal = [
+                    'local_id' => $_POST['local'],
+                    'usuario_id' => $usuario_id
                 ];
+                $insereLocalUsuario = DbModel::insert('local_usuarios', $dadosLocal);
+                if ($insereLocalUsuario) {
+                    $alerta = [
+                        'alerta' => 'sucesso',
+                        'titulo' => 'Usuário Cadastrado!',
+                        'texto' => 'Usuário cadastrado com Sucesso!',
+                        'tipo' => 'success',
+                        'location' => SERVERURL
+                    ];
+                } else {
+                    DbModel::deleteEspecial('usuarios', 'id', $usuario_id);
+                    $alerta = [
+                        'alerta' => 'simples',
+                        'titulo' => "Erro!",
+                        'texto' => "Erro ao inserir os dados no sistema. Tente novamente",
+                        'tipo' => "error"
+                    ];
+                }
             }
         }
         return MainModel::sweetAlert($alerta);

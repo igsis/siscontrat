@@ -25,4 +25,14 @@ class UsuarioModel extends MainModel
         $statement->execute();
         return $statement;
     }
+
+    protected function getPerfil($codigo) {
+        $consultaPerfil = parent::consultaSimples("SELECT id FROM perfis WHERE token = '$codigo' AND publicado = 1");
+
+        if ($consultaPerfil->rowCount() > 0) {
+            return $consultaPerfil->fetchObject()->id;
+        } else {
+            return false;
+        }
+    }
 }

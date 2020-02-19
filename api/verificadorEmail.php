@@ -24,4 +24,17 @@ if (isset($_POST['email'])){
         $email = json_encode(array('email' => 'Email ok', 'ok' => 1));
 
     print_r($email);
+} elseif (isset($_POST['usuario'])){
+    $usuarioGerado = $_POST['usuario'];
+
+    $sql = "SELECT * FROM usuarios WHERE usuario = '$usuarioGerado'";
+
+    $res = $db->consultaSimples($sql)->rowCount();
+
+    if($res > 0)
+        $usuario = json_encode(array('usuario' => 'Usuário em uso!', 'ok' => 0));
+    else
+        $usuario = json_encode(array('usuario' => 'Usuario ok', 'ok' => 1));
+
+    print_r($usuario);
 }
