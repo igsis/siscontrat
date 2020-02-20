@@ -31,6 +31,7 @@ $fomentoObj = new FomentoController();
                     <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/fomentoAjax.php" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
                         <input type="hidden" name="_method" value="<?= ($id) ? "editar" : "cadastrar" ?>">
                         <input type="hidden" name="pagina" value="fomentos">
+                        <input type="hidden" name="data_publicacao" value="<?= date('Y-m-d H:i:s') ?>">
                         <?php if ($id): ?>
                             <input type="hidden" name="id" value="<?= $id ?>">
                         <?php endif; ?>
@@ -38,7 +39,7 @@ $fomentoObj = new FomentoController();
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="tipo_contratacao_id">Tipo: *</label>
-                                    <select class="form-control" name="tipo_contratacao_id" id="tipo_contratacao_id">
+                                    <select class="form-control" name="tipo_contratacao_id" id="tipo_contratacao_id" required>
                                         <option value="">Selecione uma opção...</option>
                                         <?php //$eventoObj->geraOpcao('fomentos', $evento->fomento_id ?? ""); ?>
                                     </select>
@@ -53,19 +54,19 @@ $fomentoObj = new FomentoController();
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="valor_max_projeto">Valor máximo do projeto: *</label>
-                                    <input type="text" class="form-control" id="valor_max_projeto" name="valor_max_projeto" value="<?= $fomento->valor_max_projeto ?? "" ?>">
+                                    <input type="text" class="form-control" id="valor_max_projeto" name="valor_max_projeto" value="<?= $fomento->valor_max_projeto ?? "" ?>" required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="valor_edital">Valor edital: *</label>
-                                    <input type="text" class="form-control" id="valor_edital" name="valor_edital" value="<?= $fomento->valor_max_projeto ?? "" ?>">
+                                    <input type="text" class="form-control" id="valor_edital" name="valor_edital" value="<?= $fomento->valor_max_projeto ?? "" ?>" required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="data_abertura">Data de abertura: *</label>
-                                    <input type="datetime-local" class="form-control" id="data_abertura" name="data_abertura" value="<?= $fomento->data_abertura ?? "" ?>">
+                                    <input type="datetime-local" class="form-control" id="data_abertura" name="data_abertura" value="<?= $fomento->data_abertura ?? "" ?>" required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="data_encerramento">Data de encerramento: *</label>
-                                    <input type="datetime-local" class="form-control" id="data_encerramento" name="data_encerramento" value="<?= $fomento->data_encerramento ?? "" ?>">
+                                    <input type="datetime-local" class="form-control" id="data_encerramento" name="data_encerramento" value="<?= $fomento->data_encerramento ?? "" ?>" required>
                                 </div>
                             </div>
                         </div>
