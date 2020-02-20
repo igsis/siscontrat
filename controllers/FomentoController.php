@@ -9,7 +9,12 @@ class FomentoController extends MainModel
 {
     public function listaFomentos()
     {
-        return DbModel::listaPublicado("fom_editais");
+        $fomentos = DbModel::listaPublicado("fom_editais", null,true);
+        foreach ($fomentos as $key => $fomento) {
+            $tipo_contratacao = DbModel::getInfo('tipos_contratacoes', $fomento->tipo_contratacao_id, true)->fetchObject();
+            $fomentos[$key]->tipo_contratacao = $tipo_contratacao->tipo_contratacao;
+        }
+        return $fomentos;
     }
 
     public function recuperaTipoContratacao($edital_id) {
