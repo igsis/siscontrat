@@ -1,6 +1,8 @@
 <?php
 require_once "./controllers/FomentoController.php";
 $fomentoObj = new FomentoController();
+
+$fomentos = $fomentoObj->listaFomentos();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -40,10 +42,15 @@ $fomentoObj = new FomentoController();
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php
-                            $lista = $fomentoObj->listaFomentos();
-                            var_dump($lista);
-                            ?>
+                            <?php foreach ($fomentos as $fomento): ?>
+                                <tr>
+                                    <td><?=$fomento->titulo?></td>
+                                    <td><?=$fomento->tipo_contratacao?></td>
+                                    <td><?=$fomentoObj->dataParaBR($fomento->data_abertura)?></td>
+                                    <td><?=$fomentoObj->dataParaBR($fomento->data_encerramento)?></td>
+                                    <td></td>
+                                </tr>
+                            <?php endforeach; ?>
                             </tbody>
                             <tfoot>
                                 <tr>
