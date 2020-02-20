@@ -44,16 +44,16 @@ $fomentos = $fomentoObj->listaFomentos();
                             </thead>
                             <tbody>
                             <?php foreach ($fomentos as $fomento):
-                                $ativo = $fomentoObj->verificaFomentoAtivo($fomento->data_abertura, $fomento->data_encerramento) ? "bg-teal" : "";
+                                $ativo = $fomentoObj->verificaFomentoAtivo($fomento->data_abertura, $fomento->data_encerramento) ? "bg-teal disabled" : "";
                                 ?>
-                                <tr class="<?=$ativo?>">
+                                <tr>
                                     <td><?=$fomento->titulo?></td>
                                     <td><?=$fomento->tipo_contratacao?></td>
                                     <td><?=$fomentoObj->dataParaBR($fomento->data_abertura)?></td>
                                     <td><?=$fomentoObj->dataParaBR($fomento->data_encerramento)?></td>
                                     <td><?=$fomentoObj->verificaFomentoAtivo($fomento->data_abertura, $fomento->data_encerramento) ? "Abertas" : "Encerradas"?></td>
                                     <td>
-                                        <a href="<?= SERVERURL . "fomentos/edital_cadastro&key=" . $fomentoObj->encryption($fomento->id) ?>"
+                                        <a href="<?= SERVERURL . "fomentos/edital_cadastro&id=" . $fomentoObj->encryption($fomento->id) ?>"
                                            class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
                                     </td>
                                 </tr>

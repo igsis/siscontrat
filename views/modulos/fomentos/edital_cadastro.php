@@ -1,7 +1,15 @@
 <?php
-$id = isset($_GET['id']) ? $_GET['id'] : null;
 require_once "./controllers/FomentoController.php";
+
+$id = isset($_GET['id']) ? $_GET['id'] : null;
 $fomentoObj = new FomentoController();
+
+$fomento = $fomentoObj->recuperaFomento($id);
+
+if ($fomento) {
+    $abertura = $fomentoObj->dataHora($fomento->data_abertura);
+    $encerramento = $fomentoObj->dataHora($fomento->data_encerramento);
+}
 
 ?>
 <!-- Content Header (Page header) -->
@@ -37,14 +45,20 @@ $fomentoObj = new FomentoController();
                         <?php endif; ?>
                         <div class="card-body">
                             <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="tipo_contratacao_id">Tipo: *</label>
-                                    <select class="form-control" name="tipo_contratacao_id" id="tipo_contratacao_id" required>
-                                        <option value="">Selecione uma opção...</option>
-                                        <?php //$eventoObj->geraOpcao('fomentos', $evento->fomento_id ?? ""); ?>
-                                    </select>
-                                    <label for="titulo">Título: *</label>
-                                    <input type="text" class="form-control" id="titulo" name="titulo" maxlength="20" value="<?= $fomento->titulo ?? "" ?>" required>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="tipo_contratacao_id">Tipo: *</label>
+                                        <select class="form-control" name="tipo_contratacao_id" id="tipo_contratacao_id"
+                                                required>
+                                            <option value="">Selecione uma opção...</option>
+                                            <?php $fomentoObj->geraOpcao('tipos_contratacoes', $fomento->tipo_contratacao_id ?? "", false, false, true); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="titulo">Título: *</label>
+                                        <input type="text" class="form-control" id="titulo" name="titulo" maxlength="20"
+                                               value="<?= $fomento->titulo ?? "" ?>" required>
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="descricao">Descrição: *</label>
@@ -54,19 +68,27 @@ $fomentoObj = new FomentoController();
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="valor_max_projeto">Valor máximo do projeto: *</label>
-                                    <input type="text" class="form-control" id="valor_max_projeto" name="valor_max_projeto" value="<?= $fomento->valor_max_projeto ?? "" ?>" required>
+                                    <input type="text" class="form-control" id="valor_max_projeto"
+                                           name="valor_max_projeto"
+                                           value="<?= isset($fomento->valor_max_projeto) ? $fomentoObj->dinheiroParaBr($fomento->valor_max_projeto) : "" ?>"
+                                           required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="valor_edital">Valor edital: *</label>
-                                    <input type="text" class="form-control" id="valor_edital" name="valor_edital" value="<?= $fomento->valor_max_projeto ?? "" ?>" required>
+                                    <input type="text" class="form-control" id="valor_edital" name="valor_edital"
+                                           value="<?= isset($fomento->valor_edital) ? $fomentoObj->dinheiroParaBr($fomento->valor_edital) : "" ?>" required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="data_abertura">Data de abertura: *</label>
-                                    <input type="datetime-local" class="form-control" id="data_abertura" name="data_abertura" value="<?= $fomento->data_abertura ?? "" ?>" required>
+                                    <input type="text" class="form-control" id="data_abertura" name="data_abertura"
+                                           value="<?= isset($fomento->data_abertura) ? $fomentoObj->dataHora($fomento->data_abertura) : "" ?>"
+                                           required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="data_encerramento">Data de encerramento: *</label>
-                                    <input type="datetime-local" class="form-control" id="data_encerramento" name="data_encerramento" value="<?= $fomento->data_encerramento ?? "" ?>" required>
+                                    <input type="text" class="form-control" id="data_encerramento" name="data_encerramento"
+                                           value="<?= isset($fomento->data_encerramento) ? $fomentoObj->dataHora($fomento->data_encerramento) : "" ?>"
+                                           required>
                                 </div>
                             </div>
                         </div>
@@ -85,3 +107,44 @@ $fomentoObj = new FomentoController();
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+<script>
+    $(function () {
+        $('#data_abertura').daterangepicker({
+            "locale": {
+                "format": "DD/MM/YYYY HH:mm:ss",
+                "separator": " - ",
+                "applyLabel": "Selecionar",
+                "cancelLabel": "Cancelar",
+                "daysOfWeek": [
+                    "Dom",
+                    "Seg",
+                    "Ter",
+                    "Qua",
+                    "Qui",
+                    "Sex",
+                    "Sab"
+                ],
+                "monthNames": [
+                    "Janeiro",
+                    "Fevereiro",
+                    "Março",
+                    "Abril",
+                    "Maio",
+                    "Junho",
+                    "Julho",
+                    "Agosto",
+                    "Setembro",
+                    "Outubro",
+                    "Novembro",
+                    "Dezembro"
+                ],
+                "firstDay": 1
+            },
+            "singleDatePicker": true,
+            "timePicker": true,
+            "timePicker24Hour": true,
+            "timePickerSeconds": true,
+
+        })
+    })
+</script>

@@ -17,6 +17,11 @@ class FomentoController extends MainModel
         return $fomentos;
     }
 
+    public function recuperaFomento($fomento_id) {
+        $fomento_id = MainModel::decryption($fomento_id);
+        return DbModel::getInfo('fom_editais', $fomento_id, true)->fetchObject();
+    }
+
     public function recuperaTipoContratacao($edital_id) {
         $tipo = gettype($edital_id);
         if ($tipo == "string") {

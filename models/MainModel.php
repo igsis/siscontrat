@@ -57,7 +57,7 @@ class MainModel extends DbModel
 
     public function dataHora($data) {
         $novaData = new DateTime($data);
-        return $novaData->format('d/m/Y H:m:s');
+        return $novaData->format('d/m/Y H:i:s');
     }
 
     public function dataParaSQL($data) {
@@ -199,12 +199,16 @@ class MainModel extends DbModel
      * <p>Valor a qual deve vir selecionado</p>
      * @param bool $publicado [opcional]
      * <p><strong>FALSE</strong> por padrão. Quando <strong>TRUE</strong>, busca valores onde a coluna <i>publicado</i> seja 1</p>
+     * @param bool $orderPorId [opcional]
+     * <p><strong>FALSE</strong> por padrão. Quando <strong>TRUE</strong>, ordena a lista por ordem de ID</p>
+     * @param bool $capac [opcional]
+     * <p><strong>FALSE</strong> por padrão. Quando <strong>TRUE</strong>, faz a consulta no banco de dados do sistema CAPAC</p>
      */
-    public function geraOpcao($tabela, $selected = "", $publicado = false, $orderPorId = false) {
+    public function geraOpcao($tabela, $selected = "", $publicado = false, $orderPorId = false, $capac = false) {
         $publicado = $publicado ? 'WHERE publicado = 1' : '';
         $order = $orderPorId ? 1 : 2;
         $sql = "SELECT * FROM $tabela $publicado ORDER BY $order";
-        $consulta = DbModel::consultaSimples($sql);
+        $consulta = DbModel::consultaSimples($sql, $capac);
         if ($consulta->rowCount() >= 1) {
             foreach ($consulta->fetchAll() as $option) {
                 if ($option[0] == $selected) {
@@ -217,8 +221,7 @@ class MainModel extends DbModel
     }
 
     /**
-     * <p>Transforma os registros de uma tabela em inputs tipo checkbox,
-     * ajustados em duas colunas</p>
+     * <p>Transforma os registros de uma tabela em inputs tipo checkbox, ajustados em duas colunas</p>
      * @param string $tabela
      * <p>Tabela para qual os registros deve ser os checkboxes.
      * <strong>Importante:</strong> o valor desta variável será

@@ -111,6 +111,16 @@ class DbModel
     }
 
     // Método para pegar a informação
+
+    /**
+     * @param string $table
+     * <p>tabela a ser consultada no banco</p>
+     * @param int $id
+     * <p>ID que deve ser procurado</p>
+     * @param bool $capac [opcional]
+     * <p><strong>FALSE</strong> por padrão. Quando <strong>TRUE</strong>, faz a consulta no banco de dados do sistema CAPAC</p>
+     * @return bool|PDOStatement
+     */
     protected function getInfo($table, $id, $capac = false){
         $pdo = self::connection($capac);
         $sql = "SELECT * FROM $table WHERE id = :id";
