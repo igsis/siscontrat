@@ -31,4 +31,25 @@ class FomentoController extends MainModel
         $edital = DbModel::getInfo('fom_editais', $edital_id)->fetchObject();
         return $edital->titulo;
     }
+
+    /**
+     * @param string $dataAbertura
+     * <p>Recebe a data de abertura do edital no padrão <strong><i>SQL</strong> - AAAA-MM-DD</i></p>
+     * @param string $dataEncerramento
+     * <p>Recebe a data de encerramento do edital no padrão <strong><i>SQL</strong> - AAAA-MM-DD</i></p>
+     * @return bool
+     * <p>Caso o edital esteja ativo, retorna <i>TRUE</i>. Caso não, retorna <i>FALSE</i></p>
+     * @throws Exception
+     */
+    public function verificaFomentoAtivo($dataAbertura, $dataEncerramento) {
+        $dataAtual = new DateTime();
+        $dataAbertura = new DateTime($dataAbertura);
+        $dataEncerramento = new DateTime($dataEncerramento);
+
+        if (($dataAtual >= $dataAbertura) && ($dataAtual <= $dataEncerramento)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

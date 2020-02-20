@@ -38,17 +38,24 @@ $fomentos = $fomentoObj->listaFomentos();
                                     <th>Tipo</th>
                                     <th>Data da abertura</th>
                                     <th>Data de encerramento</th>
+                                    <th>Status das Inscrições</th>
                                     <th>Ação</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($fomentos as $fomento): ?>
-                                <tr>
+                            <?php foreach ($fomentos as $fomento):
+                                $ativo = $fomentoObj->verificaFomentoAtivo($fomento->data_abertura, $fomento->data_encerramento) ? "bg-teal" : "";
+                                ?>
+                                <tr class="<?=$ativo?>">
                                     <td><?=$fomento->titulo?></td>
                                     <td><?=$fomento->tipo_contratacao?></td>
                                     <td><?=$fomentoObj->dataParaBR($fomento->data_abertura)?></td>
                                     <td><?=$fomentoObj->dataParaBR($fomento->data_encerramento)?></td>
-                                    <td></td>
+                                    <td><?=$fomentoObj->verificaFomentoAtivo($fomento->data_abertura, $fomento->data_encerramento) ? "Abertas" : "Encerradas"?></td>
+                                    <td>
+                                        <a href="<?= SERVERURL . "fomentos/edital_cadastro&key=" . $fomentoObj->encryption($fomento->id) ?>"
+                                           class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
@@ -58,6 +65,7 @@ $fomentos = $fomentoObj->listaFomentos();
                                     <th>Tipo</th>
                                     <th>Data da abertura</th>
                                     <th>Data de encerramento</th>
+                                    <th>Status das Inscrições</th>
                                     <th>Ação</th>
                                 </tr>
                             </tfoot>
@@ -73,10 +81,3 @@ $fomentos = $fomentoObj->listaFomentos();
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-
-<script type="application/javascript">
-    $(document).ready(function () {
-        $('.nav-link').removeClass('active');
-        $('#lista_editais').addClass('active');
-    })
-</script>
