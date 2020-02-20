@@ -81,10 +81,3 @@ $fomentos = $fomentoObj->listaFomentos();
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-
-<script type="application/javascript">
-    $(document).ready(function () {
-        $('.nav-link').removeClass('active');
-        $('#lista_editais').addClass('active');
-    })
-</script>

@@ -3,6 +3,17 @@ require_once "./models/ViewsModel.php";
 
 class ViewsController extends ViewsModel
 {
+    private function recuperaViewAtiva(){
+        $url = explode("/", $_GET['views']);
+
+        $rota = [
+            "view" => $url[1] ?? "",
+            "modulo" => $url[0] ?? ""
+        ];
+
+        return $rota;
+    }
+
     public function exibirTemplate() {
         include "views/template/master.php";
     }
@@ -49,6 +60,24 @@ class ViewsController extends ViewsModel
             $resposta = "menuPadrao";
         }
         return $resposta;
+    }
+
+    public function retornaMenuAtivo() {
+        $rota = self::recuperaViewAtiva();
+        if ($rota['view'] == "") {
+            $ativo = "inicio";
+        } else {
+            $ativo = $rota['view'];
+        }
+
+        $script = "<script type='application/javascript'>
+                        $(document).ready(function () {
+                        $('.nav-link').removeClass('active');
+                        $('#$ativo').addClass('active');
+                    });
+                    </script>";
+
+        return $script;
     }
 
     public function listaModulos($perfil_id){

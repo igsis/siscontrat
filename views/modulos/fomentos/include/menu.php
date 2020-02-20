@@ -1,17 +1,17 @@
 <li class="nav-item">
-    <a href="<?= SERVERURL ?>fomentos/inicio" class="nav-link" id="fomentos_inicio">
+    <a href="<?= SERVERURL ?>fomentos/inicio" class="nav-link" id="inicio">
         <i class="fa fa-info nav-icon"></i>
         <p>Home</p>
     </a>
 </li>
 <li class="nav-item">
-    <a href="<?= SERVERURL ?>fomentos/edital_lista" class="nav-link" id="lista_editais">
+    <a href="<?= SERVERURL ?>fomentos/edital_lista" class="nav-link" id="edital_lista">
         <i class="fa fa-info nav-icon"></i>
         <p>Lista editais</p>
     </a>
 </li>
 <li class="nav-item">
-    <a href="<?= SERVERURL ?>fomentos/edital_arquivado_lista" class="nav-link" id="arquivado_edital">
+    <a href="<?= SERVERURL ?>fomentos/edital_arquivado_lista" class="nav-link" id="edital_arquivado_lista">
         <i class="fa fa-info nav-icon"></i>
         <p>Editais arquivados</p>
     </a>
