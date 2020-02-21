@@ -34,7 +34,7 @@ $fomento = $fomentoObj->recuperaEdital($id);
                         <input type="hidden" name="_method" value="<?= ($id) ? "editar" : "cadastrar" ?>">
                         <input type="hidden" name="data_publicacao" value="<?= date('Y-m-d H:i:s') ?>">
                         <?php if ($id): ?>
-                            <input type="hidden" name="id" value="<?= $id ?>">
+                            <input type="hidden" name="id" id="edital_id" value="<?= $id ?>">
                         <?php endif; ?>
                         <div class="card-body">
                             <div class="row">
@@ -92,6 +92,7 @@ $fomento = $fomentoObj->recuperaEdital($id);
                             <button type="submit" class="btn btn-info float-right">Gravar</button>
                         </div>
                         <!-- /.card-footer -->
+                        <div class="resposta-ajax"></div>
                     </form>
                 </div>
                 <!-- /.card -->
@@ -141,7 +142,9 @@ $fomento = $fomentoObj->recuperaEdital($id);
             "timePickerSeconds": true,
         });
 
-        datePicker.val('');
-        datePicker.attr("placeholder","Selecione o Dia / hora");
+        if (!$('#edital_id').length) {
+            datePicker.val('');
+            datePicker.attr("placeholder", "Selecione o Dia / hora");
+        }
     });
 </script>

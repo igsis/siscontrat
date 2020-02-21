@@ -22,6 +22,21 @@ class FomentoController extends MainModel
     }
 
     /**
+     * <p>Retorna todos os editais cadastrados no sistema CAPAC ique estão arquivados</p>
+     * @return array
+     */
+    public function listaEditaisArquivados()
+    {
+        $fomentos = DbModel::consultaSimples("SELECT * FROM fom_editais WHERE publicado = 0",true)->fetchAll(PDO::FETCH_OBJ);
+        //$fomentos = DbModel::listaPublicado("fom_editais", null,true);
+        foreach ($fomentos as $key => $fomento) {
+            $tipo_contratacao = DbModel::getInfo('tipos_contratacoes', $fomento->tipo_contratacao_id, true)->fetchObject();
+            $fomentos[$key]->tipo_contratacao = $tipo_contratacao->tipo_contratacao;
+        }
+        return $fomentos;
+    }
+
+    /**
      * @param $fomento_id <p>ID do edital a ser consultado no sistema CAPAC</p>
      * @return mixed
      */
@@ -52,8 +67,77 @@ class FomentoController extends MainModel
         }
     }
 
+    public function contadorFomento($tabela, $where)
+    {
+        return DbModel::consultaSimples("SELECT id FROM $tabela WHERE $where",true)->rowCount();
+    }
+
+    /**
+     * <p>Insere um novo edital no sistema CAPAC</p>
+     * @param array $post
+     * @return string
+     */
     public function insereEdital($post) {
-        //
+        unset ($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $dados['valor_max_projeto'] = MainModel::dinheiroDeBr($dados['valor_max_projeto']);
+        $dados['valor_edital'] = MainModel::dinheiroDeBr($dados['valor_edital']);
+        $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
+        $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
+
+        $insert = DbModel::insert('fom_editais', $dados, true);
+        if ($insert->rowCount() >= 1) {
+            $edital_id = DbModel::connection(true)->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Edital Cadastrado!',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_cadastro&id=' . MainModel::encryption($edital_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editaEdital($post) {
+        $edital_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        unset ($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $dados['valor_max_projeto'] = MainModel::dinheiroDeBr($dados['valor_max_projeto']);
+        $dados['valor_edital'] = MainModel::dinheiroDeBr($dados['valor_edital']);
+        $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
+        $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
+
+        $update = DbModel::update('fom_editais', $dados, $edital_id, true);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Edital Atualizado!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_cadastro&id=' . MainModel::encryption($edital_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
     }
 
     /** @TODO: Verificar se esta função é realmente necessária
