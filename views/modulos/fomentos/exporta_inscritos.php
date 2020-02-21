@@ -1,9 +1,3 @@
-<?php
-require_once "./controllers/FomentoController.php";
-$fomentoObj = new FomentoController();
-
-$fomentos = $fomentoObj->listaFomentos();
-?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -34,7 +28,8 @@ $fomentos = $fomentoObj->listaFomentos();
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" id="pesquisaEdit">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-info btn-flat rounded-right"><i class="fas fa-search"></i></button>
+                                <button type="button" class="btn btn-info btn-flat rounded-right"><i
+                                            class="fas fa-search"></i></button>
                             </div>
                         </div>
                         <div class="row">
@@ -52,25 +47,41 @@ $fomentos = $fomentoObj->listaFomentos();
                                     <td scope="row">PROGRAMA MUNICIPAL DE FOMENTO À DANÇA - 28ª Edição</td>
                                     <td>2020-02-14 00:01:00</td>
                                     <td>2020-02-14 00:01:00</td>
-                                    <td><button type="button" class="btn btn-block btn-success"><i class="fas fa-file-export mr-1"></i> Exportar</button></td>
+                                    <td>
+                                        <button type="button" class="btn btn-block btn-success"><i
+                                                    class="fas fa-file-export mr-1"></i> Exportar
+                                        </button>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td scope="row">PROGRAMA MUNICIPAL DE FOMENTO À DANÇA - 28ª Edição</td>
                                     <td>2020-02-14 00:01:00</td>
                                     <td>2020-02-14 00:01:00</td>
-                                    <td><button type="button" class="btn btn-block btn-success"><i class="fas fa-file-export mr-1"></i> Exportar</button></td>
+                                    <td>
+                                        <button type="button" class="btn btn-block btn-success"><i
+                                                    class="fas fa-file-export mr-1"></i> Exportar
+                                        </button>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td scope="row">PROGRAMA MUNICIPAL DE FOMENTO À DANÇA - 28ª Edição</td>
                                     <td>2020-02-14 00:01:00</td>
                                     <td>2020-02-14 00:01:00</td>
-                                    <td><button type="button" class="btn btn-block btn-success"><i class="fas fa-file-export mr-1"></i> Exportar</button></td>
+                                    <td>
+                                        <button type="button" class="btn btn-block btn-success"><i
+                                                    class="fas fa-file-export mr-1"></i> Exportar
+                                        </button>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td scope="row">PROGRAMA MUNICIPAL DE FOMENTO À DANÇA - 28ª Edição</td>
                                     <td>2020-02-14 00:01:00</td>
                                     <td>2020-02-14 00:01:00</td>
-                                    <td><button type="button" class="btn btn-block btn-success"><i class="fas fa-file-export mr-1"></i> Exportar</button></td>
+                                    <td>
+                                        <button type="button" class="btn btn-block btn-success"><i
+                                                    class="fas fa-file-export mr-1"></i> Exportar
+                                        </button>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -88,66 +99,80 @@ $fomentos = $fomentoObj->listaFomentos();
 <!-- /.content -->
 
 <script>
-
-    tbody = document.querySelector('tbody');
     let pesquisa = document.querySelector('#pesquisaEdit');
-    let tr = document.querySelectorAll('tbody > tr');
+    let tbody = document.querySelector('tbody');
 
-    pesquisa.addEventListener("input", ()=>{
-        tr.forEach((linha)=>{
-            linha.remove();
-        });
+    pesquisa.addEventListener("input", () => {
+        limparTabela(false)
+        if (pesquisa.value == '') {
+            limparTabela();
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "<?= SERVERURL ?>ajax/fomentoAjax.php",
+                data: {
+                    _method: 'pesquisa',
+                    search: `${pesquisa.value}`,
+                },
+                success: function (data, text) {
+                    limparTabela(false);
+                    if (text == 'success' && data != 0) {
+                        const resultado = JSON.parse(data)[0];
+                        limparTabela(false);
+                        resultado.forEach((result) =>{
+                           console.log(result);
+                           criarLinha(result);
+                        })
 
-        $.ajax({
-           type: GET,
-           url: "",
-           success: function (data, text) {
-               console.log(data);
-               console.log(text);
-
-           },
-           error: function (response,status,error) {
-
-           }
-        })
-
-        let x = tbody.childElementCount;
-        if (x == 0){
-            mensagemSemEdital(tbody)
+                    }else if (data == 0) {
+                        limparTabela()
+                    }
+                },
+                error: function (response, status, error) {
+                    throw new Error(`Status: ${status} não possivel conectar com arquivo AJAX.\n Erro: ${error} `);
+                }
+            })
         }
-    })
+    });
 
-    function addTabela(edital) {
-        let editalTr = criarLinhaTabela(edital);
-        let tabela = document.querySelector('#tbEdital');
-        tabela.appendChild(editalTr)
+    function criarLinha(dados) {
+        let tbody = document.querySelector('tbody');
+        let tr =  document.createElement('tr');
+        tr.appendChild(criarColuna(dados.titulo));
+        tr.appendChild(criarColuna(dados.data_abertura));
+        tr.appendChild(criarColuna(dados.data_encerramento));
+        tr.appendChild(criarColuna('Aqui vai um botão'));
+
+        tbody.appendChild(tr);
     }
 
-    function criarLinhaTabela(edital) {
-        let tr = document.createElement("tr");
-        tr.appendChild(criarTd(edital.titulo));
-        tr.appendChild(criarTd(edital.data_abertura));
-        tr.appendChild(criarTd(edital.data_encerramento));
-        tr.appendChild(criarTd('teste'));
-
-        return tr;
-    }
-
-    function criarTd(dado) {
-        let td = document.createElement("td");
-        td.textContent = dado;
+    function criarColuna(dado) {
+        let td = document.createElement('td');
+        if (typeof dado != "object")
+            td.textContent = dado;
+        else
+            td.appendChild(dado);
         return td;
     }
 
     function mensagemSemEdital(tbody) {
-
         let tr = document.createElement('tr');
-        let td = criarTd('Nenhum Edital Encontrado');
+        let td = criarColuna('Nenhum Edital Encontrado');
         td.classList.add('text-center');
-        td.colSpan = 4;
+        td.colSpan = '4';
         tr.appendChild(td);
 
         tbody.appendChild(tr);
+    }
+
+    function limparTabela(nada = true) {
+       let trs = document.querySelectorAll('tbody tr');
+       trs.forEach((tr)=>{
+           tr.remove();
+       });
+        if (nada) {
+            mensagemSemEdital(tbody)
+        }
     }
 
 

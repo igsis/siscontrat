@@ -152,4 +152,14 @@ class FomentoController extends MainModel
         $sql = "SELECT tipo_contratacao_id FROM fom_editais WHERE id = '$edital_id'";
         return DbModel::consultaSimples($sql)->fetchColumn();
     }
+
+    public  function pesquisaEdital($pesquisa){
+        $query = "SELECT id,titulo, data_abertura, data_encerramento FROM fom_editais WHERE titulo LIKE '%$pesquisa%';";
+        $result = DbModel::consultaSimples($query,true)->fetchAll(PDO::FETCH_ASSOC);
+        if (count($result) > 0){
+            return json_encode(array($result));
+        }
+
+        return '0';
+    }
 }
