@@ -52,4 +52,9 @@ class FomentoController extends MainModel
             return false;
         }
     }
+
+    public function contadorFomento($tabela, $where)
+    {
+        return DbModel::consultaSimples("SELECT id FROM $tabela WHERE $where",true)->rowCount();
+    }
 }
