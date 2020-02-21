@@ -27,6 +27,8 @@ class DbModel
      * <p>Tabela do banco de dados</p>
      * @param array $data
      * <p>Dados a serem inseridos</p>
+     * @param bool $capac
+     * <p><strong>FALSE</strong> por padrão. Quando <strong>TRUE</strong>, faz a consulta no banco de dados do sistema CAPAC</p>
      * @return bool|PDOStatement
      */
     protected function insert($table, $data, $capac = false) {
@@ -44,6 +46,19 @@ class DbModel
     }
 
     // Método para update
+
+    /**
+     * <p>Atualiza os dados do registro especificado</p>
+     * @param string $table
+     * <p>Tabela do banco de dados</p>
+     * @param array $data
+     * <p>Dados a serem inseridos</p>
+     * @param int $id
+     * <p>ID do registro a ser atualizado</p>
+     * @param bool $capac
+     * * <p><strong>FALSE</strong> por padrão. Quando <strong>TRUE</strong>, faz a consulta no banco de dados do sistema CAPAC</p>
+     * @return bool|PDOStatement
+     */
     protected function update($table, $data, $id, $capac = false){
         $pdo = self::connection($capac);
         $new_values = "";

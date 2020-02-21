@@ -2,26 +2,14 @@
 require_once "./controllers/FomentoController.php";
 $fomentoObj = new FomentoController();
 
-$fomentos = $fomentoObj->listaEditais();
+$fomentos = $fomentoObj->listaEditaisArquivados();
 ?>
-<style>
-    .quadr{
-        width: 50px;
-        height: 15px;
-        margin-right: 10px;
-        border-radius: 2px;
-        text-align: center;
-    }
-</style>
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-9">
                 <h1 class="m-0 text-dark">Editais</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-3">
-                <a href="<?= SERVERURL ?>fomentos/edital_cadastro"><button class="btn btn-success btn-block">Adicionar</button></a>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -36,7 +24,7 @@ $fomentos = $fomentoObj->listaEditais();
                 <!-- Horizontal Form -->
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Editais Ativos</h3>
+                        <h3 class="card-title">Editais Arquivados</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -45,9 +33,7 @@ $fomentos = $fomentoObj->listaEditais();
                                 <tr>
                                     <th>Título</th>
                                     <th>Tipo</th>
-                                    <th>Data da abertura</th>
                                     <th>Data de encerramento</th>
-                                    <th>Status das Inscrições</th>
                                     <th>Ação</th>
                                 </tr>
                             </thead>
@@ -56,16 +42,9 @@ $fomentos = $fomentoObj->listaEditais();
                                 <tr>
                                     <td><?=$fomento->titulo?></td>
                                     <td><?=$fomento->tipo_contratacao?></td>
-                                    <td><?=$fomentoObj->dataParaBR($fomento->data_abertura)?></td>
                                     <td><?=$fomentoObj->dataParaBR($fomento->data_encerramento)?></td>
-                                    <td align="center">
-                                        <?=$fomentoObj->verificaEditalAtivo($fomento->data_abertura, $fomento->data_encerramento) ?
-                                            "<div class=\"quadr bg-green\" data-toggle=\"popover\" data-trigger=\"hover\" data-content=\"Abertas\"></div>" :
-                                            "<div class=\"quadr bg-red\" data-toggle=\"popover\" data-trigger=\"hover\" data-content=\"Encerradas\"></div>"?>
-                                    </td>
                                     <td>
-                                        <a href="<?= SERVERURL . "fomentos/edital_cadastro&id=" . $fomentoObj->encryption($fomento->id) ?>"
-                                           class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
+<!--                                        <a href="--><?//= SERVERURL . "fomentos/edital_cadastro&id=" . $fomentoObj->encryption($fomento->id) ?><!--" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>-->
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -74,9 +53,7 @@ $fomentos = $fomentoObj->listaEditais();
                                 <tr>
                                     <th>Título</th>
                                     <th>Tipo</th>
-                                    <th>Data da abertura</th>
                                     <th>Data de encerramento</th>
-                                    <th>Status das Inscrições</th>
                                     <th>Ação</th>
                                 </tr>
                             </tfoot>
@@ -92,8 +69,3 @@ $fomentos = $fomentoObj->listaEditais();
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('[data-toggle="popover"]').popover();
-    });
-</script>

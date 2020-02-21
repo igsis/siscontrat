@@ -96,8 +96,8 @@ $(function () {
 
 /* /telefone */
 function mascara(o, f) {
-    v_obj = o
-    v_fun = f
+    v_obj = o;
+    v_fun = f;
     setTimeout("execmascara()", 1)
 }
 
@@ -284,4 +284,4 @@ $('#dinheiro').ready(function () {
 
      $('#dinheiro').text(dinheiroBr)
 
-})
+});
