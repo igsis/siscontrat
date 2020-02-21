@@ -12,6 +12,11 @@ if (isset($_POST['_method'])) {
     } elseif ($_POST['_method'] == "editar") {
         echo $fomentoObj->editaEdital($_POST);
     }
+
+    if ($_POST['_method'] == 'pesquisa' && $_POST['search'] != ''){
+        echo $fomentoObj->pesquisaEdital($_POST['search']);
+
+    }
 } else {
     include_once "../config/destroySession.php";
 }
