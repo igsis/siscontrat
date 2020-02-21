@@ -62,8 +62,12 @@ class MainModel extends DbModel
 
     public function dataParaSQL($data) {
         $data = DateTime::createFromFormat('d/m/Y', $data);
-        $novadata = $data->format('Y-m-d');
-        return $novadata;
+        return $data->format('Y-m-d');
+    }
+
+    public function dataHoraParaSQL($data) {
+        $data = DateTime::createFromFormat('d/m/Y H:i:s', $data);
+        return $data->format('Y-m-d H:i:s');
     }
 
     public function dinheiroParaBr($valor)

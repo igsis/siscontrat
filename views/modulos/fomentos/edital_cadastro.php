@@ -4,13 +4,7 @@ require_once "./controllers/FomentoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $fomentoObj = new FomentoController();
 
-$fomento = $fomentoObj->recuperaFomento($id);
-
-if ($fomento) {
-    $abertura = $fomentoObj->dataHora($fomento->data_abertura);
-    $encerramento = $fomentoObj->dataHora($fomento->data_encerramento);
-}
-
+$fomento = $fomentoObj->recuperaEdital($id);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -38,7 +32,6 @@ if ($fomento) {
                     <!-- form start -->
                     <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/fomentoAjax.php" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
                         <input type="hidden" name="_method" value="<?= ($id) ? "editar" : "cadastrar" ?>">
-                        <input type="hidden" name="pagina" value="fomentos">
                         <input type="hidden" name="data_publicacao" value="<?= date('Y-m-d H:i:s') ?>">
                         <?php if ($id): ?>
                             <input type="hidden" name="id" value="<?= $id ?>">
@@ -67,26 +60,27 @@ if ($fomento) {
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-3">
-                                    <label for="valor_max_projeto">Valor máximo do projeto: *</label>
+                                    <label for="valor_max_projeto">Valor máximo por projeto: *</label>
                                     <input type="text" class="form-control" id="valor_max_projeto"
-                                           name="valor_max_projeto"
+                                           name="valor_max_projeto" onKeyPress="return(moeda(this,'.',',',event))"
                                            value="<?= isset($fomento->valor_max_projeto) ? $fomentoObj->dinheiroParaBr($fomento->valor_max_projeto) : "" ?>"
                                            required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="valor_edital">Valor edital: *</label>
-                                    <input type="text" class="form-control" id="valor_edital" name="valor_edital"
+                                    <input type="text" class="form-control" id="dinheiro" name="valor_edital"
+                                           onKeyPress="return(moeda(this,'.',',',event))"
                                            value="<?= isset($fomento->valor_edital) ? $fomentoObj->dinheiroParaBr($fomento->valor_edital) : "" ?>" required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="data_abertura">Data de abertura: *</label>
-                                    <input type="text" class="form-control" id="data_abertura" name="data_abertura"
+                                    <input type="text" class="form-control date-picker" id="data_abertura" name="data_abertura"
                                            value="<?= isset($fomento->data_abertura) ? $fomentoObj->dataHora($fomento->data_abertura) : "" ?>"
                                            required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="data_encerramento">Data de encerramento: *</label>
-                                    <input type="text" class="form-control" id="data_encerramento" name="data_encerramento"
+                                    <input type="text" class="form-control date-picker" id="data_encerramento" name="data_encerramento"
                                            value="<?= isset($fomento->data_encerramento) ? $fomentoObj->dataHora($fomento->data_encerramento) : "" ?>"
                                            required>
                                 </div>
@@ -107,9 +101,11 @@ if ($fomento) {
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
 <script>
     $(function () {
-        $('#data_abertura').daterangepicker({
+        let datePicker = $('.date-picker');
+        datePicker.daterangepicker({
             "locale": {
                 "format": "DD/MM/YYYY HH:mm:ss",
                 "separator": " - ",
@@ -138,13 +134,14 @@ if ($fomento) {
                     "Novembro",
                     "Dezembro"
                 ],
-                "firstDay": 1
             },
             "singleDatePicker": true,
             "timePicker": true,
             "timePicker24Hour": true,
             "timePickerSeconds": true,
+        });
 
-        })
-    })
+        datePicker.val('');
+        datePicker.attr("placeholder","Selecione o Dia / hora");
+    });
 </script>
