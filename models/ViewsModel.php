@@ -60,7 +60,8 @@ class ViewsModel
             'representante_cadastro',
             'edital_lista',
             'edital_cadastro',
-            'edital_arquivado_lista'
+            'edital_arquivado_lista',
+            'exporta_inscritos',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
