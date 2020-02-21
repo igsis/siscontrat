@@ -7,7 +7,11 @@ if ($pedidoAjax) {
 
 class FomentoController extends MainModel
 {
-    public function listaFomentos()
+    /**
+     * <p>Retorna todos os editais cadastrados no sistema CAPAC</p>
+     * @return array
+     */
+    public function listaEditais()
     {
         $fomentos = DbModel::listaPublicado("fom_editais", null,true);
         foreach ($fomentos as $key => $fomento) {
@@ -17,22 +21,17 @@ class FomentoController extends MainModel
         return $fomentos;
     }
 
-    public function recuperaTipoContratacao($edital_id) {
-        $tipo = gettype($edital_id);
-        if ($tipo == "string") {
-            $edital_id = MainModel::decryption($edital_id);
-        }
-        $sql = "SELECT tipo_contratacao_id FROM fom_editais WHERE id = '$edital_id'";
-        return DbModel::consultaSimples($sql)->fetchColumn();
-    }
-
-    public function recuperaNomeEdital($edital_id) {
-        $edital_id = MainModel::decryption($edital_id);
-        $edital = DbModel::getInfo('fom_editais', $edital_id)->fetchObject();
-        return $edital->titulo;
+    /**
+     * @param $fomento_id <p>ID do edital a ser consultado no sistema CAPAC</p>
+     * @return mixed
+     */
+    public function recuperaEdital($fomento_id) {
+        $fomento_id = MainModel::decryption($fomento_id);
+        return DbModel::getInfo('fom_editais', $fomento_id, true)->fetchObject();
     }
 
     /**
+     * <p>Verifica se o edital está com inscrições abertas</p>
      * @param string $dataAbertura
      * <p>Recebe a data de abertura do edital no padrão <strong><i>SQL</strong> - AAAA-MM-DD</i></p>
      * @param string $dataEncerramento
@@ -41,7 +40,7 @@ class FomentoController extends MainModel
      * <p>Caso o edital esteja ativo, retorna <i>TRUE</i>. Caso não, retorna <i>FALSE</i></p>
      * @throws Exception
      */
-    public function verificaFomentoAtivo($dataAbertura, $dataEncerramento) {
+    public function verificaEditalAtivo($dataAbertura, $dataEncerramento) {
         $dataAtual = new DateTime();
         $dataAbertura = new DateTime($dataAbertura);
         $dataEncerramento = new DateTime($dataEncerramento);
@@ -56,5 +55,22 @@ class FomentoController extends MainModel
     public function contadorFomento($tabela, $where)
     {
         return DbModel::consultaSimples("SELECT id FROM $tabela WHERE $where",true)->rowCount();
+    }
+
+    public function insereEdital($post) {
+        //
+    }
+
+    /** @TODO: Verificar se esta função é realmente necessária
+     * @param int $edital_id
+     * @return mixed
+     */
+    public function recuperaTipoContratacao($edital_id) {
+        $tipo = gettype($edital_id);
+        if ($tipo == "string") {
+            $edital_id = MainModel::decryption($edital_id);
+        }
+        $sql = "SELECT tipo_contratacao_id FROM fom_editais WHERE id = '$edital_id'";
+        return DbModel::consultaSimples($sql)->fetchColumn();
     }
 }
