@@ -22,6 +22,21 @@ class FomentoController extends MainModel
     }
 
     /**
+     * <p>Retorna todos os editais cadastrados no sistema CAPAC ique estão arquivados</p>
+     * @return array
+     */
+    public function listaEditaisArquivados()
+    {
+        $fomentos = DbModel::consultaSimples("SELECT * FROM fom_editais WHERE publicado = 0",true)->fetchAll(PDO::FETCH_OBJ);
+        //$fomentos = DbModel::listaPublicado("fom_editais", null,true);
+        foreach ($fomentos as $key => $fomento) {
+            $tipo_contratacao = DbModel::getInfo('tipos_contratacoes', $fomento->tipo_contratacao_id, true)->fetchObject();
+            $fomentos[$key]->tipo_contratacao = $tipo_contratacao->tipo_contratacao;
+        }
+        return $fomentos;
+    }
+
+    /**
      * @param $fomento_id <p>ID do edital a ser consultado no sistema CAPAC</p>
      * @return mixed
      */
