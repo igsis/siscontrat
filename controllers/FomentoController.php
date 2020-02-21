@@ -53,7 +53,7 @@ class FomentoController extends MainModel
     }
 
     public function insereEdital($post) {
-        unset 
+        //
     }
 
     /** @TODO: Verificar se esta função é realmente necessária
