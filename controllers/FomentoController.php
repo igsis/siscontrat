@@ -162,4 +162,10 @@ class FomentoController extends MainModel
 
         return '0';
     }
+
+    public function listaInscritos($edital_id) {
+        $edital_id = MainModel::decryption($edital_id);
+
+
+    }
 }

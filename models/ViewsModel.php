@@ -62,6 +62,7 @@ class ViewsModel
             'proponente_lista',
             'representante',
             'representante_cadastro',
+            'listar_inscritos',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
