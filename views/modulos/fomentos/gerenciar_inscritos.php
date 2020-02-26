@@ -43,46 +43,9 @@
                                 </tr>
                                 </thead>
                                 <tbody id="tb-effect">
-                                <tr>
-                                    <td scope="row">PROGRAMA MUNICIPAL DE FOMENTO À DANÇA - 28ª Edição</td>
-                                    <td>2020-02-14 00:01:00</td>
-                                    <td>2020-02-14 00:01:00</td>
-                                    <td>
-                                        <button type="button" class="btn btn-block btn-success"><i
-                                                    class="fas fa-file-export mr-1"></i> Exportar
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">PROGRAMA MUNICIPAL DE FOMENTO À DANÇA - 28ª Edição</td>
-                                    <td>2020-02-14 00:01:00</td>
-                                    <td>2020-02-14 00:01:00</td>
-                                    <td>
-                                        <button type="button" class="btn btn-block btn-success"><i
-                                                    class="fas fa-file-export mr-1"></i> Exportar
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">PROGRAMA MUNICIPAL DE FOMENTO À DANÇA - 28ª Edição</td>
-                                    <td>2020-02-14 00:01:00</td>
-                                    <td>2020-02-14 00:01:00</td>
-                                    <td>
-                                        <button type="button" class="btn btn-block btn-success"><i
-                                                    class="fas fa-file-export mr-1"></i> Exportar
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">PROGRAMA MUNICIPAL DE FOMENTO À DANÇA - 28ª Edição</td>
-                                    <td>2020-02-14 00:01:00</td>
-                                    <td>2020-02-14 00:01:00</td>
-                                    <td>
-                                        <button type="button" class="btn btn-block btn-success"><i
-                                                    class="fas fa-file-export mr-1"></i> Exportar
-                                        </button>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-center">Digite o Edital para ver os resultados</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -119,12 +82,12 @@
                     if (text == 'success' && data != 0) {
                         const resultado = JSON.parse(data)[0];
                         limparTabela(false);
-                        resultado.forEach((result) =>{
-                           console.log(result);
-                           criarLinha(result);
+                        resultado.forEach((result) => {
+                            console.log(result);
+                            criarLinha(result);
                         })
 
-                    }else if (data == 0) {
+                    } else if (data == 0) {
                         limparTabela()
                     }
                 },
@@ -137,10 +100,10 @@
 
     function criarLinha(dados) {
         let tbody = document.querySelector('tbody');
-        let tr =  document.createElement('tr');
+        let tr = document.createElement('tr');
         tr.appendChild(criarColuna(dados.titulo));
-        tr.appendChild(criarColuna(dados.data_abertura));
-        tr.appendChild(criarColuna(dados.data_encerramento));
+        tr.appendChild(criarColuna(ConverteData(dados.data_abertura)));
+        tr.appendChild(criarColuna(ConverteData(dados.data_encerramento)));
         tr.appendChild(criarColuna('Aqui vai um botão'));
 
         tbody.appendChild(tr);
@@ -166,13 +129,21 @@
     }
 
     function limparTabela(nada = true) {
-       let trs = document.querySelectorAll('tbody tr');
-       trs.forEach((tr)=>{
-           tr.remove();
-       });
+        let trs = document.querySelectorAll('tbody tr');
+        trs.forEach((tr) => {
+            tr.remove();
+        });
         if (nada) {
             mensagemSemEdital(tbody)
         }
+    }
+
+    function ConverteData(dt) {
+        dataHora = dt.split(' ');
+        data = new Date(dataHora[0]);
+        mesCerto = ('00' + (data.getMonth() + 1)).slice(-2);
+
+        return `${data.getDate()}/${mesCerto}/${data.getFullYear()} ${dataHora[1]}`;
     }
 
 
