@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-9">
-                <h1 class="m-0 text-dark">Exportar inscritos</h1>
+                <h1 class="m-0 text-dark">Gerenciar inscritos</h1>
             </div><!-- /.col -->
             <div class="col-sm-3">
             </div><!-- /.col -->
@@ -26,7 +26,7 @@
                     <div class="card-body">
 
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="pesquisaEdit">
+                            <input type="text" class="form-control" id="pesquisaEdit" placeholder="Nome do Edital">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-info btn-flat rounded-right"><i
                                             class="fas fa-search"></i></button>
