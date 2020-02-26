@@ -56,8 +56,8 @@ $fomentos = $fomentoObj->listaEditais();
                                 <tr>
                                     <td><?=$fomento->titulo?></td>
                                     <td><?=$fomento->tipo_contratacao?></td>
-                                    <td><?=$fomentoObj->dataParaBR($fomento->data_abertura)?></td>
-                                    <td><?=$fomentoObj->dataParaBR($fomento->data_encerramento)?></td>
+                                    <td><?=$fomentoObj->dataHora($fomento->data_abertura)?></td>
+                                    <td><?=$fomentoObj->dataHora($fomento->data_encerramento)?></td>
                                     <td align="center">
                                         <?=$fomentoObj->verificaEditalAtivo($fomento->data_abertura, $fomento->data_encerramento) ?
                                             "<div class=\"quadr bg-green\" data-toggle=\"popover\" data-trigger=\"hover\" data-content=\"Abertas\"></div>" :
