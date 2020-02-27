@@ -33,12 +33,14 @@ $strArquivos = '';
                 <h1 class="m-0 text-dark">Detalhes do Inscrito</h1>
             </div><!-- /.col -->
             <div class="col-sm-3">
-                <form class="formulario-ajax" action="">
+                <form class="formulario-ajax">
                     <div class="btn-group">
-                        <button type="button" id="reprovar" class="btn btn-danger"><i class="fas fa-times"></i> &nbsp;Reprovar
+                        <button type="button" type="submit" id="reprovar" class="btn btn-danger"><i class="fas fa-times"></i> &nbsp;Reprovar
                         </button>
-                        <button type="button" id="aprovar" class="btn btn-success"><i class="fas fa-check"></i> &nbsp;Aprovar
+                        <button type="button" type="submit" id="aprovar" class="btn btn-success"><i class="fas fa-check"></i> &nbsp;Aprovar
                         </button>
+                    </div>
+                    <div class="resposta-ajax">
                     </div>
                 </form>
             </div><!-- /.col -->
@@ -208,7 +210,9 @@ $strArquivos = '';
                 edital_id: <?= $projeto['fom_edital_id'] ?>
             },
             success: (data, text) => {
-
+                console.log(data);
+                document.querySelector('.btn-group').style.display = "none";
+                document.querySelector('')
             },
             error: (response, status, error) => {
 
