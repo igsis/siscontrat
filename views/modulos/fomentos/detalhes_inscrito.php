@@ -16,10 +16,12 @@ $arqObj = new ArquivoController();
 $projeto = $fomentoObj->recuperaProjeto($id);
 $pj = $pessoaJuridicaObj->recuperaPessoaJuridica(MainModel::encryption($projeto['pessoa_juridica_id']), true);
 $repre = $repObj->recuperaRepresentante(MainModel::encryption($pj['representante_legal1_id']))->fetch(PDO::FETCH_ASSOC);
-$tipo_contratacao_id = $fomentoObj->recuperaTipoContratacao((string) MainModel::encryption($projeto['fom_edital_id']));
+$tipo_contratacao_id = $fomentoObj->recuperaTipoContratacao((string)MainModel::encryption($projeto['fom_edital_id']));
 $lista_documento_ids = $arqObj->recuperaIdListaDocumento(MainModel::encryption($projeto['fom_edital_id']), true)->fetchAll(PDO::FETCH_COLUMN);
 
 $arqEnviados = $arqObj->listarArquivosEnviados(MainModel::encryption($projeto['id']), $lista_documento_ids, $tipo_contratacao_id)->fetchAll(PDO::FETCH_OBJ);
+
+$strArquivos = '';
 
 ?>
 
@@ -31,10 +33,14 @@ $arqEnviados = $arqObj->listarArquivosEnviados(MainModel::encryption($projeto['i
                 <h1 class="m-0 text-dark">Detalhes do Inscrito</h1>
             </div><!-- /.col -->
             <div class="col-sm-3">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-danger"><i class="fas fa-times"></i> &nbsp;Reprovar</button>
-                    <button type="button" class="btn btn-success"><i class="fas fa-check"></i> &nbsp;Aprovar</button>
-                </div>
+                <form class="formulario-ajax" action="">
+                    <div class="btn-group">
+                        <button type="button" id="reprovar" class="btn btn-danger"><i class="fas fa-times"></i> &nbsp;Reprovar
+                        </button>
+                        <button type="button" id="aprovar" class="btn btn-success"><i class="fas fa-check"></i> &nbsp;Aprovar
+                        </button>
+                    </div>
+                </form>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -117,11 +123,11 @@ $arqEnviados = $arqObj->listarArquivosEnviados(MainModel::encryption($projeto['i
                                     <p>
                                         <span class="font-weight-bold">Telefone #1:</span> <?= $pj['telefones']['tel_0'] ?>
                                         <?php if (isset($pj['telefones']['tel_1'])): ?>
-                                        <span class="font-weight-bold ml-5">Telefone #2:</span> <?= $pj['telefones']['tel_1'] ?>
+                                            <span class="font-weight-bold ml-5">Telefone #2:</span> <?= $pj['telefones']['tel_1'] ?>
                                         <?php endif;
                                         if (isset($pj['telefones']['tel_2'])): ?>
-                                        <span class="font-weight-bold ml-5">Telefone #3:</span> <?= $pj['telefones']['tel_2'] ?>
-                                        <?php  endif; ?>
+                                            <span class="font-weight-bold ml-5">Telefone #3:</span> <?= $pj['telefones']['tel_2'] ?>
+                                        <?php endif; ?>
                                     </p>
                                     <p>
                                         <span class="font-weight-bold mr-2"> Endereço: </span> <?= "{$pj['logradouro']}, {$pj['numero']}  {$pj['complemento']} - {$pj['bairro']}, {$pj['cidade']} - {$pj['uf']}, {$pj['cep']}" ?>
@@ -135,7 +141,7 @@ $arqEnviados = $arqObj->listarArquivosEnviados(MainModel::encryption($projeto['i
                                 <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel"
                                      aria-labelledby="custom-tabs-one-messages-tab">
                                     <div class="row justify-content-center align-items-center">
-                                        <div class="col-6">
+                                        <div class="col-5">
                                             <div class="card card-gray">
                                                 <div class="card-header  text-center">
                                                     <h3 class="card-title">Lista de arquivos</h3>
@@ -143,27 +149,34 @@ $arqEnviados = $arqObj->listarArquivosEnviados(MainModel::encryption($projeto['i
                                                 <div class="card-body p-0">
                                                     <table class="table table-bordered">
                                                         <tbody>
-                                                        <?php foreach ($arqEnviados as $arquivo){?>
-                                                        <tr>
-                                                            <td class="text-justify">
-                                                               <?= "{$arquivo->anexo} - {$arquivo->documento}" ?>
-                                                            </td>
-                                                            <td>
-                                                                <a href="<?= "http://localhost/capac/uploads/" . $arquivo->arquivo ?>" target="_blank" class="btn btn-sm bg-purple text-light"><i
-                                                                        class="fas fa-file-download"></i> Baixar
-                                                                    Arquivo
-                                                                </a>
-                                                            </td>
-                                                        </tr>
+                                                        <?php foreach ($arqEnviados as $arquivo) {
+                                                            $strArquivos .= "{$arquivo->arquivo}:";
+                                                            ?>
+
+                                                            <tr>
+                                                                <td class="text-justify">
+                                                                    <?= "{$arquivo->anexo} - {$arquivo->documento}" ?>
+                                                                </td>
+                                                                <td>
+                                                                    <a href="<?= "http://localhost/capac/uploads/" . $arquivo->arquivo ?>"
+                                                                       target="_blank"
+                                                                       class="btn btn-sm bg-purple text-light"><i
+                                                                                class="fas fa-file-download"></i> Baixar
+                                                                        Arquivo
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
                                                         <?php } ?>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                                 <div class="card-footer p-0">
-                                                    <button class="btn bg-gradient-purple btn-lg btn-block"><i
+                                                    <a href="<?= SERVERURL . "api/baixarArquivos.php?arquivos=$strArquivos" ?>"
+                                                       target="_blank"
+                                                       class="btn bg-gradient-purple btn-lg btn-block rounded-bottom"><i
                                                                 class="fas fa-file-archive"></i> Baixar todos os
                                                         arquivos
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -180,6 +193,26 @@ $arqEnviados = $arqObj->listarArquivosEnviados(MainModel::encryption($projeto['i
         <!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
-<table class="table">
 
-</table>
+
+<script>
+    document.querySelector('#aprovar').addEventListener('click', (event) => {
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "<?= SERVERURL ?>ajax/fomentoAjax.php",
+            data: {
+                _method: 'aprovar',
+                id: <?= $projeto['id'] ?>,
+                valor_projeto: <?= $projeto['valor_projeto'] ?>,
+                edital_id: <?= $projeto['fom_edital_id'] ?>
+            },
+            success: (data, text) => {
+
+            },
+            error: (response, status, error) => {
+
+            }
+        })
+    });
+</script>

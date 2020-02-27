@@ -46,7 +46,7 @@ $inscritos = $fomentoObj->listaInscritos($id);
 
                     <div class="info-box-content">
                         <span class="info-box-text">Valor ainda disponível</span>
-                        <span class="info-box-number"><?=$statusEdital->valor_disponivel?></span>
+                        <span class="info-box-number dinheiro"><?=$statusEdital->valor_disponivel?></span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -60,7 +60,7 @@ $inscritos = $fomentoObj->listaInscritos($id);
 
                     <div class="info-box-content">
                         <span class="info-box-text">Valor Total do Edital</span>
-                        <span class="info-box-number"><?=$statusEdital->valor_total?></span>
+                        <span class="info-box-number dinheiro"><?=$statusEdital->valor_total?></span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -92,7 +92,7 @@ $inscritos = $fomentoObj->listaInscritos($id);
                                 foreach ($inscritos as $inscrito): ?>
                                     <tr>
                                         <td><?=$inscrito->protocolo?></td>
-                                        <td><?=$fomentoObj->dinheiroParaBr($inscrito->valor_projeto)?></td>
+                                        <td class="dinheiro"><?=$inscrito->valor_projeto?></td>
                                         <td><?=$inscrito->instituicao?></td>
                                         <td>
                                             <a href="<?= SERVERURL . "fomentos/detalhes_inscrito&id=" . $fomentoObj->encryption($inscrito->id) ?>"
@@ -127,3 +127,18 @@ $inscritos = $fomentoObj->listaInscritos($id);
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
+<script>
+    window.addEventListener("load",() =>{
+        let dinheiros = document.querySelectorAll(".dinheiro");
+
+        dinheiros.forEach((item) =>{
+            let valor = item.textContent;
+            valor = parseFloat(valor);
+            let dinheiroBr = valor.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+
+            item.textContent = dinheiroBr;
+        })
+    })
+
+</script>

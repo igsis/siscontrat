@@ -189,10 +189,34 @@ class FomentoController extends FomentoModel
         $statusEdital = new stdClass();
 
         $statusEdital->aprovados = DbModel::consultaSimples("SELECT id FROM fom_projetos WHERE fom_edital_id = '$edital_id' AND publicado = 2")->rowCount();
-        $statusEdital->valor_disponivel = MainModel::dinheiroParaBr(parent::valorDisponivel($edital_id));
+        $statusEdital->valor_disponivel = parent::valorDisponivel($edital_id);
         $valorTotal = DbModel::getInfo("fom_editais", $edital_id, true)->fetchObject()->valor_edital;
-        $statusEdital->valor_total = MainModel::dinheiroParaBr($valorTotal);
+        $statusEdital->valor_total = $valorTotal;
 
         return $statusEdital;
+    }
+
+    public function aprovarProjeto($id,$valor,$edital_id){
+        $valorDisponivel = parent::valorDisponivel($edital_id);
+        if ($valorDisponivel > $valor){
+            DbModel::update('fom_projetos',['publicado' =>'2'],$id,true);
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Aprovado!',
+                'texto' => 'Projeto Aprovado com sucesso',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/detalhes_inscrito&id=' . MainModel::encryption($id)
+            ];
+        }else{
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Dinheiro indisponivel!',
+                'texto' => 'Falha ao aprovar projeto o valor disponivel é menor que o valor do projeto',
+                'tipo' => 'error',
+            ];
+        }
+
+        MainModel::sweetAlert($alerta);
+
     }
 }
