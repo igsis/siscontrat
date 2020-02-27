@@ -1,11 +1,11 @@
 <?php
 if ($pedidoAjax) {
-    require_once "../models/MainModel.php";
+    require_once "../models/FomentoModel.php";
 } else {
-    require_once "./models/MainModel.php";
+    require_once "./models/FomentoModel.php";
 }
 
-class FomentoController extends MainModel
+class FomentoController extends FomentoModel
 {
     /**
      * <p>Retorna todos os editais cadastrados no sistema CAPAC</p>
@@ -37,12 +37,12 @@ class FomentoController extends MainModel
     }
 
     /**
-     * @param $fomento_id <p>ID do edital a ser consultado no sistema CAPAC</p>
+     * @param $edital_id <p>ID do edital a ser consultado no sistema CAPAC</p>
      * @return mixed
      */
-    public function recuperaEdital($fomento_id) {
-        $fomento_id = MainModel::decryption($fomento_id);
-        return DbModel::getInfo('fom_editais', $fomento_id, true)->fetchObject();
+    public function recuperaEdital($edital_id) {
+        $edital_id = MainModel::decryption($edital_id);
+        return DbModel::getInfo('fom_editais', $edital_id, true)->fetchObject();
     }
 
     /**
@@ -163,9 +163,26 @@ class FomentoController extends MainModel
         return '0';
     }
 
+    /**
+     * <p>Retorna todos os projetos inscritos no edital especificado</p>
+     * @param string $edital_id <p>Recebe o ID do edital criptografado</p>
+     * @return array|bool
+     */
     public function listaInscritos($edital_id) {
         $edital_id = MainModel::decryption($edital_id);
 
+        return parent::recuperaInscritos($edital_id);
+    }
 
+    public function statusEdital($edital_id) {
+        $edital_id = MainModel::decryption($edital_id);
+        $statusEdital = new stdClass();
+
+        $statusEdital->aprovados = DbModel::consultaSimples("SELECT id FROM fom_projetos WHERE fom_edital_id = '$edital_id' AND publicado = 2")->rowCount();
+        $statusEdital->valor_disponivel = MainModel::dinheiroParaBr(parent::valorDisponivel($edital_id));
+        $valorTotal = DbModel::getInfo("fom_editais", $edital_id, true)->fetchObject()->valor_edital;
+        $statusEdital->valor_total = MainModel::dinheiroParaBr($valorTotal);
+
+        return $statusEdital;
     }
 }

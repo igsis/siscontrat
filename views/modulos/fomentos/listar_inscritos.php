@@ -1,27 +1,22 @@
 <?php
 require_once "./controllers/FomentoController.php";
+$id = $_GET['id'];
+
 $fomentoObj = new FomentoController();
 
-$fomentos = $fomentoObj->listaEditais();
+$nomeEdital = $fomentoObj->recuperaEdital($id)->titulo;
+$statusEdital = $fomentoObj->statusEdital($id);
+
+$projetosAprovados = $fomentoObj;
+
+$inscritos = $fomentoObj->listaInscritos($id);
 ?>
-<style>
-    .quadr{
-        width: 50px;
-        height: 15px;
-        margin-right: 10px;
-        border-radius: 2px;
-        text-align: center;
-    }
-</style>
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-9">
-                <h1 class="m-0 text-dark">Editais</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-3">
-                <a href="<?= SERVERURL ?>fomentos/edital_cadastro"><button class="btn btn-success btn-block">Adicionar</button></a>
+                <h1 class="m-0 text-dark">Projetos Inscritos</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -32,51 +27,91 @@ $fomentos = $fomentoObj->listaEditais();
 <div class="content">
     <div class="container-fluid">
         <div class="row">
+            <div class="col-sm-6 col-md-3 offset-md-1">
+                <div class="info-box">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-thumbs-up"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Projetos Aprovados</span>
+                        <span class="info-box-number"><?=$statusEdital->aprovados?></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6 col-md-4">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-hand-holding-usd"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Valor ainda disponível</span>
+                        <span class="info-box-number"><?=$statusEdital->valor_disponivel?></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+
+            <div class="col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-coins"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Valor Total do Edital</span>
+                        <span class="info-box-number"><?=$statusEdital->valor_total?></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <div class="row">
             <div class="col-md-12">
                 <!-- Horizontal Form -->
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Editais Ativos</h3>
+                        <h3 class="card-title"><?=$nomeEdital?></h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <table id="tabela" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Título</th>
-                                    <th>Tipo</th>
-                                    <th>Data da abertura</th>
-                                    <th>Data de encerramento</th>
-                                    <th>Status das Inscrições</th>
+                                    <th>Protocolo</th>
+                                    <th>Valor</th>
+                                    <th>Instituição</th>
                                     <th>Ação</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($fomentos as $fomento): ?>
+                            <?php
+                            if ($inscritos):
+                                foreach ($inscritos as $inscrito): ?>
+                                    <tr>
+                                        <td><?=$inscrito->protocolo?></td>
+                                        <td><?=$fomentoObj->dinheiroParaBr($inscrito->valor_projeto)?></td>
+                                        <td><?=$inscrito->instituicao?></td>
+                                        <td>
+                                            <a href="<?= SERVERURL . "fomentos/detalhes_inscrito&id=" . $fomentoObj->encryption($inscrito->id) ?>"
+                                               class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Mais Detalhes</a>
+                                        </td>
+                                    </tr>
+                                <?php
+                                endforeach;
+                            else: ?>
                                 <tr>
-                                    <td><?=$fomento->titulo?></td>
-                                    <td><?=$fomento->tipo_contratacao?></td>
-                                    <td><?=$fomentoObj->dataHora($fomento->data_abertura)?></td>
-                                    <td><?=$fomentoObj->dataHora($fomento->data_encerramento)?></td>
-                                    <td align="center">
-                                        <?=$fomentoObj->verificaEditalAtivo($fomento->data_abertura, $fomento->data_encerramento) ?
-                                            "<div class=\"quadr bg-green\" data-toggle=\"popover\" data-trigger=\"hover\" data-content=\"Abertas\"></div>" :
-                                            "<div class=\"quadr bg-red\" data-toggle=\"popover\" data-trigger=\"hover\" data-content=\"Encerradas\"></div>"?>
-                                    </td>
-                                    <td>
-                                        <a href="<?= SERVERURL . "fomentos/edital_cadastro&id=" . $fomentoObj->encryption($fomento->id) ?>"
-                                           class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
-                                    </td>
+                                    <td colspan="4" class="text-center">Este edital ainda não possui projetos inscritos</td>
                                 </tr>
-                            <?php endforeach; ?>
+                            <?php endif; ?>
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Título</th>
-                                    <th>Tipo</th>
-                                    <th>Data da abertura</th>
-                                    <th>Data de encerramento</th>
-                                    <th>Status das Inscrições</th>
+                                    <th>Protocolo</th>
+                                    <th>Valor</th>
+                                    <th>Responsável</th>
                                     <th>Ação</th>
                                 </tr>
                             </tfoot>
@@ -92,8 +127,3 @@ $fomentos = $fomentoObj->listaEditais();
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('[data-toggle="popover"]').popover();
-    });
-</script>
