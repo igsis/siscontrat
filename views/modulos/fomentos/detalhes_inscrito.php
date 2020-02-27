@@ -3,17 +3,23 @@
 require_once "./controllers/FomentoController.php";
 require_once "./controllers/PessoaJuridicaController.php";
 require_once "./controllers/RepresentanteController.php";
+require_once "./controllers/ArquivoController.php";
+
 $id = $_GET['id'];
 
 $fomentoObj = new FomentoController();
 $pessoaJuridicaObj = new PessoaJuridicaController();
 $repObj = new RepresentanteController();
+$arqObj = new ArquivoController();
+
 
 $projeto = $fomentoObj->recuperaProjeto($id);
-
 $pj = $pessoaJuridicaObj->recuperaPessoaJuridica(MainModel::encryption($projeto['pessoa_juridica_id']), true);
-
 $repre = $repObj->recuperaRepresentante(MainModel::encryption($pj['representante_legal1_id']))->fetch(PDO::FETCH_ASSOC);
+$tipo_contratacao_id = $fomentoObj->recuperaTipoContratacao((string) MainModel::encryption($projeto['fom_edital_id']));
+$lista_documento_ids = $arqObj->recuperaIdListaDocumento(MainModel::encryption($projeto['fom_edital_id']), true)->fetchAll(PDO::FETCH_COLUMN);
+
+$arqEnviados = $arqObj->listarArquivosEnviados(MainModel::encryption($projeto['id']), $lista_documento_ids, $tipo_contratacao_id)->fetchAll(PDO::FETCH_OBJ);
 
 ?>
 
@@ -137,118 +143,19 @@ $repre = $repObj->recuperaRepresentante(MainModel::encryption($pj['representante
                                                 <div class="card-body p-0">
                                                     <table class="table table-bordered">
                                                         <tbody>
+                                                        <?php foreach ($arqEnviados as $arquivo){?>
                                                         <tr>
-                                                            <td class="text-justify text-center">
-                                                                Anexo 0 - Projeto
+                                                            <td class="text-justify">
+                                                               <?= "{$arquivo->anexo} - {$arquivo->documento}" ?>
                                                             </td>
                                                             <td>
-                                                                <button class="btn btn-sm bg-purple text-light"><i
-                                                                            class="fas fa-file-download"></i> Baixar
+                                                                <a href="<?= "http://localhost/capac/uploads/" . $arquivo->arquivo ?>" target="_blank" class="btn btn-sm bg-purple text-light"><i
+                                                                        class="fas fa-file-download"></i> Baixar
                                                                     Arquivo
-                                                                </button>
+                                                                </a>
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td class="text-justify text-center">
-                                                                Anexo I - Requerimento de Inscrição
-                                                            </td>
-                                                            <td>
-                                                                <button class="btn btn-sm bg-purple text-light"><i
-                                                                            class="fas fa-file-download"></i> Baixar
-                                                                    Arquivo
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-justify text-center">
-                                                                Anexo II - Declaração de Proponente Pessoa Jurídica
-                                                            </td>
-                                                            <td>
-                                                                <button class="btn btn-sm bg-purple text-light"><i
-                                                                            class="fas fa-file-download"></i> Baixar
-                                                                    Arquivo
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-justify text-center">
-                                                                Anexo III - Declaração da Não Ocorrência de Impedimentos
-                                                            </td>
-                                                            <td>
-                                                                <button class="btn btn-sm bg-purple text-light"><i
-                                                                            class="fas fa-file-download"></i> Baixar
-                                                                    Arquivo
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-justify text-center">
-                                                                Anexo IV - Declaração
-                                                            </td>
-                                                            <td>
-                                                                <button class="btn btn-sm bg-purple text-light"><i
-                                                                            class="fas fa-file-download"></i> Baixar
-                                                                    Arquivo
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-justify text-center">
-                                                                Anexo V - Declaração do Núcleo Artístico
-                                                            </td>
-                                                            <td>
-                                                                <button class="btn btn-sm bg-purple text-light"><i
-                                                                            class="fas fa-file-download"></i> Baixar
-                                                                    Arquivo
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-justify text-center">
-                                                                Anexo VI - Declaração dos Artistas Relevantes para a
-                                                                Realização
-                                                                do Projeto
-                                                            </td>
-                                                            <td>
-                                                                <button class="btn btn-sm bg-purple text-light"><i
-                                                                            class="fas fa-file-download"></i> Baixar
-                                                                    Arquivo
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-justify text-center">
-                                                                Anexo VII - Declaração de Proponente Pessoa Jurídica
-                                                            </td>
-                                                            <td>
-                                                                <button class="btn btn-sm bg-purple text-light"><i
-                                                                            class="fas fa-file-download"></i> Baixar
-                                                                    Arquivo
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-justify text-center">
-                                                                Anexo VIII - Declaração Sobre Trabalho de Menores
-                                                            </td>
-                                                            <td>
-                                                                <button class="btn btn-sm bg-purple text-light"><i
-                                                                            class="fas fa-file-download"></i> Baixar
-                                                                    Arquivo
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="text-justify text-center">
-                                                                Anexo IX - Portifólio / Clipping
-                                                            </td>
-                                                            <td>
-                                                                <button class="btn btn-sm bg-purple text-light"><i
-                                                                            class="fas fa-file-download"></i> Baixar
-                                                                    Arquivo
-                                                                </button>
-                                                            </td>
-                                                        </tr>
+                                                        <?php } ?>
                                                         </tbody>
                                                     </table>
                                                 </div>

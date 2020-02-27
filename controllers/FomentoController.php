@@ -150,7 +150,7 @@ class FomentoController extends FomentoModel
             $edital_id = MainModel::decryption($edital_id);
         }
         $sql = "SELECT tipo_contratacao_id FROM fom_editais WHERE id = '$edital_id'";
-        return DbModel::consultaSimples($sql)->fetchColumn();
+        return DbModel::consultaSimples($sql,true)->fetchColumn();
     }
 
     public  function pesquisaEdital($pesquisa){
