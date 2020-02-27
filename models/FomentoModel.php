@@ -20,6 +20,11 @@ class FomentoModel extends MainModel
         }
     }
 
+    protected function retornaInscrito($inscrito_id){
+        $query = DbModel::consultaSimples('SELECT');
+
+    }
+
     protected function valorDisponivel($edital_id) {
         $valorTotal = DbModel::getInfo("fom_editais", $edital_id, true)->fetchObject()->valor_edital;
 

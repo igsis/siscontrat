@@ -177,6 +177,13 @@ class FomentoController extends FomentoModel
         return parent::recuperaInscritos($edital_id);
     }
 
+    public function recuperaProjeto($idInscrito){
+        $id = MainModel::decryption($idInscrito);
+        $resultado = DbModel::getInfo('fom_projetos',$id,true)->fetch(PDO::FETCH_ASSOC);
+        $resultado['responsavel_inscricao'] = DbModel::consultaSimples("SELECT nome FROM usuarios WHERE id='{$resultado['usuario_id']}'")->fetchColumn();
+        return $resultado;
+    }
+
     public function statusEdital($edital_id) {
         $edital_id = MainModel::decryption($edital_id);
         $statusEdital = new stdClass();
