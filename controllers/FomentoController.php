@@ -157,6 +157,9 @@ class FomentoController extends FomentoModel
         $query = "SELECT id,titulo, data_abertura, data_encerramento FROM fom_editais WHERE titulo LIKE '%$pesquisa%';";
         $result = DbModel::consultaSimples($query,true)->fetchAll(PDO::FETCH_ASSOC);
         if (count($result) > 0){
+            for ($i = 0; $i < count($result); $i++) {
+                $result[$i]['id'] = MainModel::encryption($result[$i]['id']);
+            }
             return json_encode(array($result));
         }
 

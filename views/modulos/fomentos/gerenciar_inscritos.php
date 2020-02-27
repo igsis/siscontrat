@@ -104,7 +104,7 @@
         tr.appendChild(criarColuna(dados.titulo));
         tr.appendChild(criarColuna(ConverteData(dados.data_abertura)));
         tr.appendChild(criarColuna(ConverteData(dados.data_encerramento)));
-        tr.appendChild(criarColuna('Aqui vai um botão'));
+        tr.appendChild(criarColuna(criarBotao(dados.id)));
 
         tbody.appendChild(tr);
     }
@@ -116,6 +116,17 @@
         else
             td.appendChild(dado);
         return td;
+    }
+
+    function criarBotao(id) {
+        let a = document.createElement('a');
+        a.classList.add('btn');
+        a.classList.add('btn-primary');
+        a.classList.add('btn-sm');
+        a.classList.add('text-light');
+        a.href = `<?=SERVERURL?>/fomentos/listar_inscritos&id=${id}`;
+        a.textContent = 'Listar Inscritos';
+        return a;
     }
 
     function mensagemSemEdital(tbody) {
