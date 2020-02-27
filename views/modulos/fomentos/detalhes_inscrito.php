@@ -215,4 +215,22 @@ $strArquivos = '';
             }
         })
     });
+    document.querySelector('#reprovar').addEventListener('click', (event) => {
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "<?= SERVERURL ?>ajax/fomentoAjax.php",
+            data: {
+                _method: 'reprovar',
+                id: <?= $projeto['id'] ?>
+            },
+            success: (data, text) => {
+
+            },
+            error: (response, status, error) => {
+
+            }
+        })
+    });
+
 </script>

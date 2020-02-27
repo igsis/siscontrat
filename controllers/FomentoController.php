@@ -217,6 +217,9 @@ class FomentoController extends FomentoModel
         }
 
         MainModel::sweetAlert($alerta);
+    }
+
+    public function reprovarProjeto($id){
 
     }
 }
