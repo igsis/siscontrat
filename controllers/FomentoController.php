@@ -200,26 +200,16 @@ class FomentoController extends FomentoModel
         $valorDisponivel = parent::valorDisponivel($edital_id);
         if ($valorDisponivel > $valor){
             DbModel::update('fom_projetos',['publicado' =>'2'],$id,true);
-            $alerta = [
-                'alerta' => 'sucesso',
-                'titulo' => 'Aprovado!',
-                'texto' => 'Projeto Aprovado com sucesso',
-                'tipo' => 'success',
-                'location' => SERVERURL . 'fomentos/detalhes_inscrito&id=' . MainModel::encryption($id)
-            ];
+            $status =  1;
         }else{
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Dinheiro indisponivel!',
-                'texto' => 'Falha ao aprovar projeto o valor disponivel é menor que o valor do projeto',
-                'tipo' => 'error',
-            ];
+            $status = 0;
         }
 
-        MainModel::sweetAlert($alerta);
+        return $status;
     }
 
     public function reprovarProjeto($id){
-
+        DbModel::update('fom_projetos',['publicado' =>'3'],$id,true);
+        return 1;
     }
 }

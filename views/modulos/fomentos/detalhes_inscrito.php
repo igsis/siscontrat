@@ -32,17 +32,21 @@ $strArquivos = '';
             <div class="col-sm-9">
                 <h1 class="m-0 text-dark">Detalhes do Inscrito</h1>
             </div><!-- /.col -->
-            <div class="col-sm-3">
-                <form class="formulario-ajax">
+            <div class="col-sm-3 status-projeto">
+                <?php if ($projeto['publicado'] == 1): ?>
                     <div class="btn-group">
-                        <button type="button" type="submit" id="reprovar" class="btn btn-danger"><i class="fas fa-times"></i> &nbsp;Reprovar
+                        <button type="button" id="reprovar" class="btn btn-danger">
+                            <i class="fas fa-times"></i> &nbsp;Reprovar
                         </button>
-                        <button type="button" type="submit" id="aprovar" class="btn btn-success"><i class="fas fa-check"></i> &nbsp;Aprovar
+                        <button type="button" id="aprovar" class="btn btn-success">
+                            <i class="fas fa-check"></i> &nbsp;Aprovar
                         </button>
                     </div>
-                    <div class="resposta-ajax">
-                    </div>
-                </form>
+                <?php elseif ($projeto['publicado'] == 2): ?>
+                    <h3 class="text-success text-right mr-3">Aprovado</h3>
+                <?php elseif ($projeto['publicado'] == 3): ?>
+                    <h3 class="text-danger text-right mr-3">Reprovado</h3>
+                <?php endif; ?>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -200,41 +204,110 @@ $strArquivos = '';
 <script>
     document.querySelector('#aprovar').addEventListener('click', (event) => {
         event.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "<?= SERVERURL ?>ajax/fomentoAjax.php",
-            data: {
-                _method: 'aprovar',
-                id: <?= $projeto['id'] ?>,
-                valor_projeto: <?= $projeto['valor_projeto'] ?>,
-                edital_id: <?= $projeto['fom_edital_id'] ?>
-            },
-            success: (data, text) => {
-                console.log(data);
-                document.querySelector('.btn-group').style.display = "none";
-                document.querySelector('')
-            },
-            error: (response, status, error) => {
 
+        Swal.fire({
+            title: "Tem Certeza?",
+            text: "Você deseja realmente aprovar este projeto?",
+            type: "question",
+            showCancelButton: true,
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?= SERVERURL ?>ajax/fomentoAjax.php",
+                    data: {
+                        _method: 'aprovar',
+                        id: <?= $projeto['id'] ?>,
+                        valor_projeto: <?= $projeto['valor_projeto'] ?>,
+                        edital_id: <?= $projeto['fom_edital_id'] ?>
+                    },
+                    success: (data, text) => {
+                        if (data) {
+                            Swal.fire({
+                                title: "Projeto Aprovado!",
+                                text: "Projeto aprovado com sucesso!",
+                                type: text,
+                                button: "Fechar",
+                            });
+                            colocarStatus('Aprovado');
+                        } else {
+                            Swal.fire({
+                                title: "Não foi possível aprovar!",
+                                text: "Não foi possível aprovar o projeto, pois o valor disponível é menor que o valor do projeto.",
+                                type: "error",
+                                button: "Fechar",
+                            });
+                        }
+
+                    },
+                    error: () => {
+                        Swal.fire({
+                            title: "Erro!",
+                            text: "Ocorreu um erro, por favor tente novamente.",
+                            type: "error",
+                            button: "Fechar",
+                        });
+                    }
+                })
             }
         })
     });
     document.querySelector('#reprovar').addEventListener('click', (event) => {
         event.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "<?= SERVERURL ?>ajax/fomentoAjax.php",
-            data: {
-                _method: 'reprovar',
-                id: <?= $projeto['id'] ?>
-            },
-            success: (data, text) => {
 
-            },
-            error: (response, status, error) => {
+        Swal.fire({
+            title: "Tem Certeza?",
+            text: "Você deseja realmente aprovar este projeto?",
+            type: "question",
+            showCancelButton: true,
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?= SERVERURL ?>ajax/fomentoAjax.php",
+                    data: {
+                        _method: 'reprovar',
+                        id: <?= $projeto['id'] ?>
+                    },
+                    success: () => {
+                        Swal.fire({
+                            title: "Projeto Reprovado!",
+                            text: "Projeto reprovado com sucesso!",
+                            type: "success",
+                            button: "Fechar",
+                        });
+                        colocarStatus('Reprovado');
+                    },
+                    error: () => {
+                        Swal.fire({
+                            title: "Erro!",
+                            text: "Ocorreu um erro, por favor tente novamente.",
+                            type: "error",
+                            button: "Fechar",
+                        });
+                    }
+                })
 
             }
-        })
+        });
     });
 
+
+    function colocarStatus(status) {
+        document.querySelector(".btn-group").style.display = "none";
+        let h3 = document.createElement('h3');
+        h3.textContent = status;
+        h3.classList.add('text-right');
+        h3.classList.add('mr-3');
+        if (status == 'aprovado') {
+            h3.classList.add('text-success');
+        } else {
+            h3.classList.add('text-danger');
+        }
+        document.querySelector('.status-projeto').appendChild(h3);
+    }
 </script>
