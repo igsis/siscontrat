@@ -2,7 +2,9 @@
 
 $data = date('YmdHis');
 $nome_arquivo = $data . ".zip";
-$path = "http://localhost/capac/uploads/";
+$path = "../../capac/uploads/";
+
+
 
 if (isset($_GET['arquivos'])) {
     $arquivos = explode(":", $_GET['arquivos']);
@@ -10,18 +12,18 @@ if (isset($_GET['arquivos'])) {
 
 $zip = new ZipArchive();
 
+if( $zip->open( 'zips/arquivo.zip' , ZipArchive::CREATE )  === true) {
 
-if ($zip->open($nome_arquivo, ZipArchive::CREATE) === true) {
-    foreach ($arquivos as $arquivo) {
+    foreach ($arquivos as $arquivo){
         if ($arquivo != ""){
-            $file = $path . $arquivo;
-            $zip->addFile($file,"fom/".$arquivo);
+            $file = $path.$arquivo;
+            $file2 = "fom/".$arquivo;
+            $zip->addFile($file,$file2);
         }
     }
-
-    $zip->close();
 }
 
+$zip->close();
 
 header('Content-Description: File Transfer');
 header('Content-Disposition: attachment; filename="' . $nome_arquivo . '"');
@@ -33,11 +35,11 @@ header('Pragma: public');
 header('Expires: 0');
 
 
-ob_end_clean(); //essas duas linhas antes do readfile
-flush();
-
 readfile($nome_arquivo);
 
 unlink($data . ".zip");
+
+ob_end_clean(); //essas duas linhas antes do readfile
+flush();
 
 ?>
