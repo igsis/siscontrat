@@ -191,6 +191,9 @@ $strArquivos = '';
                             </div>
                         </div>
                         <!-- /.card -->
+                        <div class="card-footer">
+                            <button class="btn btn-primary" onclick="window.history.back();">Voltar</button>
+                        </div>
                     </div>
                 </div>
                 <!-- /.card -->
@@ -303,7 +306,7 @@ $strArquivos = '';
         h3.textContent = status;
         h3.classList.add('text-right');
         h3.classList.add('mr-3');
-        if (status == 'aprovado') {
+        if (status == 'Aprovado') {
             h3.classList.add('text-success');
         } else {
             h3.classList.add('text-danger');
