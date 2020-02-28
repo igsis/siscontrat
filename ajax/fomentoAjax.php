@@ -15,7 +15,12 @@ if (isset($_POST['_method'])) {
 
     if ($_POST['_method'] == 'pesquisa' && $_POST['search'] != ''){
         echo $fomentoObj->pesquisaEdital($_POST['search']);
-
+    }
+    if ($_POST['_method'] == 'aprovar'){
+        echo $fomentoObj->aprovarProjeto($_POST['id'],$_POST['valor_projeto'],$_POST['edital_id']);
+    }
+    if ($_POST['_method'] == 'reprovar'){
+        echo $fomentoObj->reprovarProjeto($_POST['id']);
     }
 } else {
     include_once "../config/destroySession.php";
