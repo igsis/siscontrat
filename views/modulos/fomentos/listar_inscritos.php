@@ -11,10 +11,11 @@ $projetosAprovados = $fomentoObj;
 
 $inscritos = $fomentoObj->listaInscritos($id);
 
+
 ?>
 
 <style>
-    .quadr{
+    .quadr {
         width: 50px;
         height: 15px;
         margin-right: 10px;
@@ -88,6 +89,12 @@ $inscritos = $fomentoObj->listaInscritos($id);
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
+                        <div class="row mb-5 d-flex justify-content-end ">
+                            <a href="<?= SERVERURL . "api/exportarExcel.php?id=".$id ?>" target="_blank"
+                               class="btn btn-success">
+                                <i class="fas fa-download mr-1"></i> Exportar inscritos
+                            </a>
+                        </div>
                         <table id="tabela" class="table table-bordered table-striped">
                             <thead>
                             <tr>
