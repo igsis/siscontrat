@@ -10,8 +10,6 @@ $statusEdital = $fomentoObj->statusEdital($id);
 $projetosAprovados = $fomentoObj;
 
 $inscritos = $fomentoObj->listaInscritos($id);
-
-
 ?>
 
 <style>
