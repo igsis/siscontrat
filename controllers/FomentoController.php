@@ -212,4 +212,9 @@ class FomentoController extends FomentoModel
         DbModel::update('fom_projetos',['publicado' =>'3'],$id,true);
         return 1;
     }
+
+    public function listaArquivosEdital($edital_id) {
+        $edital_id = MainModel::decryption($edital_id);
+        return parent::recuperaArquivosEdital($edital_id);
+    }
 }
