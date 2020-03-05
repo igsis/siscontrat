@@ -35,13 +35,15 @@
             }
             ?>
 
-            <li class="nav-header">SISCONTRAT2</li>
-            <li class="nav-item">
-                <a href="<?= SIS2URL ?>" class="nav-link">
-                    <i class="nav-icon fas fa-home"></i>
-                    <p>Acessar</p>
-                </a>
-            </li>
+            <?php if ($_SESSION['perfil_s'] == 1): ?>
+                <li class="nav-header">SISCONTRAT2</li>
+                <li class="nav-item">
+                    <a href="<?= SIS2URL ?>" class="nav-link">
+                        <i class="nav-icon fas fa-home"></i>
+                        <p>Acessar</p>
+                    </a>
+                </li>
+            <?php endif ?>
 
             <li class="nav-header">CONTA</li>
             <li class="nav-item">
