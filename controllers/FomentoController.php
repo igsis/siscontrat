@@ -150,13 +150,16 @@ class FomentoController extends FomentoModel
             $edital_id = MainModel::decryption($edital_id);
         }
         $sql = "SELECT tipo_contratacao_id FROM fom_editais WHERE id = '$edital_id'";
-        return DbModel::consultaSimples($sql)->fetchColumn();
+        return DbModel::consultaSimples($sql,true)->fetchColumn();
     }
 
     public  function pesquisaEdital($pesquisa){
         $query = "SELECT id,titulo, data_abertura, data_encerramento FROM fom_editais WHERE titulo LIKE '%$pesquisa%';";
         $result = DbModel::consultaSimples($query,true)->fetchAll(PDO::FETCH_ASSOC);
         if (count($result) > 0){
+            for ($i = 0; $i < count($result); $i++) {
+                $result[$i]['id'] = MainModel::encryption($result[$i]['id']);
+            }
             return json_encode(array($result));
         }
 
@@ -174,15 +177,44 @@ class FomentoController extends FomentoModel
         return parent::recuperaInscritos($edital_id);
     }
 
+    public function recuperaProjeto($idInscrito){
+        $id = MainModel::decryption($idInscrito);
+        $resultado = DbModel::getInfo('fom_projetos',$id,true)->fetch(PDO::FETCH_ASSOC);
+        $resultado['responsavel_inscricao'] = DbModel::consultaSimples("SELECT nome FROM usuarios WHERE id='{$resultado['usuario_id']}'")->fetchColumn();
+        return $resultado;
+    }
+
     public function statusEdital($edital_id) {
         $edital_id = MainModel::decryption($edital_id);
         $statusEdital = new stdClass();
 
         $statusEdital->aprovados = DbModel::consultaSimples("SELECT id FROM fom_projetos WHERE fom_edital_id = '$edital_id' AND publicado = 2")->rowCount();
-        $statusEdital->valor_disponivel = MainModel::dinheiroParaBr(parent::valorDisponivel($edital_id));
+        $statusEdital->valor_disponivel = parent::valorDisponivel($edital_id);
         $valorTotal = DbModel::getInfo("fom_editais", $edital_id, true)->fetchObject()->valor_edital;
-        $statusEdital->valor_total = MainModel::dinheiroParaBr($valorTotal);
+        $statusEdital->valor_total = $valorTotal;
 
         return $statusEdital;
+    }
+
+    public function aprovarProjeto($id,$valor,$edital_id){
+        $valorDisponivel = parent::valorDisponivel($edital_id);
+        if ($valorDisponivel > $valor){
+            DbModel::update('fom_projetos',['publicado' =>'2'],$id,true);
+            $status =  1;
+        }else{
+            $status = 0;
+        }
+
+        return $status;
+    }
+
+    public function reprovarProjeto($id){
+        DbModel::update('fom_projetos',['publicado' =>'3'],$id,true);
+        return 1;
+    }
+
+    public function listaArquivosEdital($edital_id) {
+        $edital_id = MainModel::decryption($edital_id);
+        return parent::recuperaArquivosEdital($edital_id);
     }
 }

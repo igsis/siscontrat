@@ -37,7 +37,9 @@ class ViewsModel
             'cadastro',
             'complemento_oficina_cadastro',
             'demais_anexos',
+            'detalhes_inscrito',
             'edita',
+            'edital_anexos',
             'edital_arquivado_lista',
             'edital_cadastro',
             'edital_lista',
@@ -50,6 +52,7 @@ class ViewsModel
             'inicio',
             'lider',
             'lider_cadastro',
+            'listar_inscritos',
             'login',
             'logout',
             'pf_cadastro',
@@ -62,7 +65,6 @@ class ViewsModel
             'proponente_lista',
             'representante',
             'representante_cadastro',
-            'listar_inscritos',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

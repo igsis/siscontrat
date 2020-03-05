@@ -11,6 +11,16 @@ $projetosAprovados = $fomentoObj;
 
 $inscritos = $fomentoObj->listaInscritos($id);
 ?>
+
+<style>
+    .quadr {
+        width: 50px;
+        height: 15px;
+        margin-right: 10px;
+        border-radius: 2px;
+        text-align: center;
+    }
+</style>
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -33,7 +43,7 @@ $inscritos = $fomentoObj->listaInscritos($id);
 
                     <div class="info-box-content">
                         <span class="info-box-text">Projetos Aprovados</span>
-                        <span class="info-box-number"><?=$statusEdital->aprovados?></span>
+                        <span class="info-box-number"><?= $statusEdital->aprovados ?></span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -46,7 +56,7 @@ $inscritos = $fomentoObj->listaInscritos($id);
 
                     <div class="info-box-content">
                         <span class="info-box-text">Valor ainda disponível</span>
-                        <span class="info-box-number"><?=$statusEdital->valor_disponivel?></span>
+                        <span class="info-box-number dinheiro"><?= $statusEdital->valor_disponivel ?></span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -60,7 +70,7 @@ $inscritos = $fomentoObj->listaInscritos($id);
 
                     <div class="info-box-content">
                         <span class="info-box-text">Valor Total do Edital</span>
-                        <span class="info-box-number"><?=$statusEdital->valor_total?></span>
+                        <span class="info-box-number dinheiro"><?= $statusEdital->valor_total ?></span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -73,27 +83,51 @@ $inscritos = $fomentoObj->listaInscritos($id);
                 <!-- Horizontal Form -->
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title"><?=$nomeEdital?></h3>
+                        <h3 class="card-title"><?= $nomeEdital ?></h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
+                        <div class="row mb-5 d-flex justify-content-end ">
+                            <a href="<?= SERVERURL . "api/exportarExcel.php?id=".$id ?>" target="_blank"
+                               class="btn btn-success">
+                                <i class="fas fa-download mr-1"></i> Exportar inscritos
+                            </a>
+                        </div>
                         <table id="tabela" class="table table-bordered table-striped">
                             <thead>
-                                <tr>
-                                    <th>Protocolo</th>
-                                    <th>Valor</th>
-                                    <th>Instituição</th>
-                                    <th>Ação</th>
-                                </tr>
+                            <tr>
+                                <th>Protocolo</th>
+                                <th>Valor</th>
+                                <th>Instituição</th>
+                                <th>Status</th>
+                                <th>Ação</th>
+                            </tr>
                             </thead>
                             <tbody>
                             <?php
                             if ($inscritos):
-                                foreach ($inscritos as $inscrito): ?>
+                                foreach ($inscritos
+
+                                         as $inscrito): ?>
                                     <tr>
-                                        <td><?=$inscrito->protocolo?></td>
-                                        <td><?=$fomentoObj->dinheiroParaBr($inscrito->valor_projeto)?></td>
-                                        <td><?=$inscrito->instituicao?></td>
+                                        <td><?= $inscrito->protocolo ?></td>
+                                        <td class="dinheiro"><?= $inscrito->valor_projeto ?></td>
+                                        <td><?= $inscrito->instituicao ?></td>
+                                        <td class="d-flex justify-content-center align-items-center">
+                                            <?php switch ($inscrito->publicado) {
+                                                case 2:
+                                                    echo "<div class=\"quadr bg-green\" data-toggle=\"popover\" data-trigger=\"hover\"
+                                             data-content=\"Aprovado\"></div>";
+                                                    break;
+                                                case 3:
+                                                    echo "<div class=\"quadr bg-danger\" data-toggle=\"popover\" data-trigger=\"hover\"
+                                         data-content=\"Reprovado\"></div>";
+                                                    break;
+                                                default:
+                                                    echo "Aguardando";
+                                                    break;
+                                            } ?>
+                                        </td>
                                         <td>
                                             <a href="<?= SERVERURL . "fomentos/detalhes_inscrito&id=" . $fomentoObj->encryption($inscrito->id) ?>"
                                                class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Mais Detalhes</a>
@@ -103,17 +137,20 @@ $inscritos = $fomentoObj->listaInscritos($id);
                                 endforeach;
                             else: ?>
                                 <tr>
-                                    <td colspan="4" class="text-center">Este edital ainda não possui projetos inscritos</td>
+                                    <td colspan="4" class="text-center">Este edital ainda não possui projetos
+                                        inscritos
+                                    </td>
                                 </tr>
                             <?php endif; ?>
                             </tbody>
                             <tfoot>
-                                <tr>
-                                    <th>Protocolo</th>
-                                    <th>Valor</th>
-                                    <th>Responsável</th>
-                                    <th>Ação</th>
-                                </tr>
+                            <tr>
+                                <th>Protocolo</th>
+                                <th>Valor</th>
+                                <th>Instituição</th>
+                                <th>Status</th>
+                                <th>Ação</th>
+                            </tr>
                             </tfoot>
                         </table>
                     </div>
@@ -127,3 +164,21 @@ $inscritos = $fomentoObj->listaInscritos($id);
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
+<script>
+    window.addEventListener("load", () => {
+        let dinheiros = document.querySelectorAll(".dinheiro");
+
+        dinheiros.forEach((item) => {
+            let valor = item.textContent;
+            valor = parseFloat(valor);
+            let dinheiroBr = valor.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+
+            item.textContent = dinheiroBr;
+        })
+    })
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+
+</script>

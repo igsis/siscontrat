@@ -22,7 +22,7 @@ class ArquivoController extends ArquivoModel
                 WHERE cd.tipo_contratacao_id = '$tipo_documento_id'";
         }
 
-        return DbModel::consultaSimples($sql);
+        return DbModel::consultaSimples($sql,true);
     }
 
     public function listarArquivos($tipo_documento_id) {
@@ -98,7 +98,7 @@ class ArquivoController extends ArquivoModel
                       AND cd.tipo_contratacao_id = '$fomentos'
                       ORDER BY ordem";
         }
-        return DbModel::consultaSimples($sql);
+        return DbModel::consultaSimples($sql,true);
     }
 
     public function enviarArquivo($origem_id, $pagina) {

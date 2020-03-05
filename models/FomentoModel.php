@@ -20,6 +20,11 @@ class FomentoModel extends MainModel
         }
     }
 
+    protected function retornaInscrito($inscrito_id){
+        $query = DbModel::consultaSimples('SELECT');
+
+    }
+
     protected function valorDisponivel($edital_id) {
         $valorTotal = DbModel::getInfo("fom_editais", $edital_id, true)->fetchObject()->valor_edital;
 
@@ -27,5 +32,15 @@ class FomentoModel extends MainModel
         $valorAprovados = DbModel::consultaSimples($sql)->fetchObject()->valor_aprovados;
 
         return $valorTotal - $valorAprovados;
+    }
+
+    protected function recuperaArquivosEdital($edital_id) {
+        $tipoContratacao = DbModel::getInfo('fom_editais', $edital_id, true)->fetchObject()->tipo_contratacao_id;
+        $queryArquivos = DbModel::consultaSimples("SELECT * FROM contratacao_documentos WHERE tipo_contratacao_id = '$tipoContratacao'");
+        if ($queryArquivos->rowCount() > 0) {
+            return $queryArquivos->fetchAll(PDO::FETCH_OBJ);
+        } else {
+            return false;
+        }
     }
 }

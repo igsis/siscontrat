@@ -148,7 +148,7 @@ class RepresentanteController extends MainModel
 
     public function recuperaRepresentante($id) {
         $id = MainModel::decryption($id);
-        $representante = DbModel::getInfo('representante_legais',$id);
+        $representante = DbModel::getInfo('representante_legais',$id,true);
         return $representante;
     }
 

@@ -148,7 +148,7 @@ class PessoaJuridicaController extends PessoaJuridicaModel
         }
     }
 
-    public function recuperaPessoaJuridica($id)
+    public function recuperaPessoaJuridica($id,$capac = false)
     {
         $id = MainModel::decryption($id);
         $pj = DbModel::consultaSimples(
@@ -160,7 +160,7 @@ class PessoaJuridicaController extends PessoaJuridicaModel
             WHERE pj.id = '$id'
         ");
         $pj = $pj->fetch(PDO::FETCH_ASSOC);
-        $telefones = DbModel::consultaSimples("SELECT * FROM pj_telefones WHERE pessoa_juridica_id = '$id'")->fetchAll(PDO::FETCH_ASSOC);
+        $telefones = DbModel::consultaSimples("SELECT * FROM pj_telefones WHERE pessoa_juridica_id = '$id'",$capac)->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($telefones as $key => $telefone) {
             $pj['telefones']['tel_' . $key] = $telefone['telefone'];
