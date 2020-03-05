@@ -61,7 +61,7 @@ $fomento = $fomentoObj->recuperaEdital($id);
                                     </div>
                                     <div class="form-group">
                                         <label for="titulo">Título: *</label>
-                                        <input type="text" class="form-control" id="titulo" name="titulo" maxlength="20"
+                                        <input type="text" class="form-control" id="titulo" name="titulo"
                                                value="<?= $fomento->titulo ?? "" ?>" required>
                                     </div>
                                 </div>
