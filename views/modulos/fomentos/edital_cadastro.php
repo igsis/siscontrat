@@ -179,6 +179,6 @@ $fomento = $fomentoObj->recuperaEdital($id);
 
     $(function () {
         // Summernote
-        $('.textarea').summernote()
+        $('.textarea').summernote({ lang: 'pt-BR' })
     });
 </script>

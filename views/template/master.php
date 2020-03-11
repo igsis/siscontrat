@@ -105,6 +105,7 @@ else:
 <script src="<?= SERVERURL ?>views/dist/js/adminlte.min.js"></script>
 <!-- Summernote -->
 <script src="<?= SERVERURL ?>views/plugins/summernote/summernote-bs4.min.js"></script>
+<script src="<?= SERVERURL ?>views/plugins/summernote/lang/summernote-pt-BR.js"></script>
 <!-- Outros Scripts -->
 <script src="<?= SERVERURL ?>views/dist/js/main.js"></script>
 <script src="<?= SERVERURL ?>views/plugins/jquery-mask/jquery.mask.js"></script>
