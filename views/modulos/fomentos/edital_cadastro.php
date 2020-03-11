@@ -103,11 +103,9 @@ $fomento = $fomentoObj->recuperaEdital($id);
                             <div class="row">
                                 <div class="form-group col">
                                     <label for="descricao">Descrição: *</label>
-                                    <textarea name="descricao" id="descricao" class="textarea" required>
+                                    <textarea name="descricao" id="descricao" class="form-control textarea" required>
                                         <?= $fomento->descricao ?? "" ?>
                                     </textarea>
-<!--                                    <textarea class="textarea" placeholder="Place some text here"-->
-<!--                                              style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>-->
                                 </div>
                             </div>
                         </div>
