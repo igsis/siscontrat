@@ -39,9 +39,10 @@ $fomento = $fomentoObj->recuperaEdital($id);
                             <input type="hidden" name="id" id="edital_id" value="<?= $id ?>">
                         <?php endif; ?>
                         <div class="card-body">
-                                <div class="row">
+                            <div class="row">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Tipo de Pessoa: *</label>
+                                        <label>Tipo de Cadastro: *</label>
                                         <select class="form-control" name="pessoa_tipos_id" id="pessoa_tipos_id"
                                                 required>
                                             <option value="">Selecione uma opção...</option>
@@ -49,26 +50,24 @@ $fomento = $fomentoObj->recuperaEdital($id);
                                         </select>
                                     </div>
                                 </div>
-                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="tipo_contratacao_id">Tipo: *</label>
+                                        <label for="tipo_contratacao_id">Tipo do Edital: *</label>
                                         <select class="form-control" name="tipo_contratacao_id" id="tipo_contratacao_id"
                                                 required>
                                             <option value="">Selecione uma opção...</option>
                                             <?php $fomentoObj->geraOpcao('tipos_contratacoes', $fomento->tipo_contratacao_id ?? "", false, false, true); ?>
                                         </select>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
                                     <div class="form-group">
                                         <label for="titulo">Título: *</label>
                                         <input type="text" class="form-control" id="titulo" name="titulo"
                                                value="<?= $fomento->titulo ?? "" ?>" required>
                                     </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="descricao">Descrição: *</label>
-                                    <textarea name="descricao" id="descricao" class="form-control" rows="5"
-                                              required><?= $fomento->descricao ?? "" ?></textarea>
                                 </div>
                             </div>
                             <div class="row">
@@ -99,6 +98,16 @@ $fomento = $fomentoObj->recuperaEdital($id);
                                            name="data_encerramento"
                                            value="<?= isset($fomento->data_encerramento) ? $fomentoObj->dataHora($fomento->data_encerramento) : "" ?>"
                                            required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col">
+                                    <label for="descricao">Descrição: *</label>
+                                    <textarea name="descricao" id="descricao" class="textarea" required>
+                                        <?= $fomento->descricao ?? "" ?>
+                                    </textarea>
+<!--                                    <textarea class="textarea" placeholder="Place some text here"-->
+<!--                                              style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>-->
                                 </div>
                             </div>
                         </div>
@@ -166,5 +175,10 @@ $fomento = $fomentoObj->recuperaEdital($id);
             datePicker.val('');
             datePicker.attr("placeholder", "Selecione o Dia / hora");
         }
+    });
+
+    $(function () {
+        // Summernote
+        $('.textarea').summernote()
     });
 </script>
