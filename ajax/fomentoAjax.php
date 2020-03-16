@@ -22,6 +22,9 @@ if (isset($_POST['_method'])) {
     if ($_POST['_method'] == 'reprovar'){
         echo $fomentoObj->reprovarProjeto($_POST['id']);
     }
+    if ($_POST['_method'] == 'adicionar_tipo'){
+        echo $fomentoObj->insereTipoContratacao($_POST);
+    }
 } else {
     include_once "../config/destroySession.php";
 }
