@@ -50,7 +50,7 @@ $fomento = $fomentoObj->recuperaEdital($id);
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="tipo_contratacao_id">Tipo do Edital: *</label>
                                         <select class="form-control" name="tipo_contratacao_id" id="tipo_contratacao_id"
@@ -58,6 +58,15 @@ $fomento = $fomentoObj->recuperaEdital($id);
                                             <option value="">Selecione uma opção...</option>
                                             <?php $fomentoObj->geraOpcao('tipos_contratacoes', $fomento->tipo_contratacao_id ?? "", false, false, true); ?>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="">Adicionar Tipo</label>
+                                        <button type="button" class="form-control btn btn-primary" data-toggle="modal"
+                                                data-target="#insereTipo">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -129,6 +138,41 @@ $fomento = $fomentoObj->recuperaEdital($id);
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
+<div class="modal fade" id="insereTipo" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Adicionar Tipo de Edital</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form class="form-horizontal formulario-ajax" method="POST"
+                  action="<?= SERVERURL ?>ajax/fomentoAjax.php" role="form"
+                  data-form="save">
+                <input type="hidden" name="_method" value="adicionar_tipo">
+                <?php if ($id): ?>
+                    <input type="hidden" name="id" id="edital_id" value="<?= $id ?>">
+                <?php endif; ?>
+                <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="tipo_contratacao">Tipo do Edital: *</label>
+                            <input type="text" class="form-control" id="tipo_contratacao" name="tipo_contratacao" required maxlength="35">
+                        </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Inserir</button>
+                </div>
+                <div class="resposta-ajax"></div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 
 <script>
     $(function () {
