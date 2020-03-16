@@ -46,7 +46,7 @@ $fomento = $fomentoObj->recuperaEdital($id);
                                         <select class="form-control" name="pessoa_tipos_id" id="pessoa_tipos_id"
                                                 required>
                                             <option value="">Selecione uma opção...</option>
-                                            <?php $fomentoObj->geraOpcao('pessoa_tipos', $fomento->pessoa_tipos_id ?? "", false, false, true); ?>
+                                            <?php $fomentoObj->geraOpcao('pessoa_tipos', $fomento->pessoa_tipos_id ?? "", false, true, true); ?>
                                         </select>
                                     </div>
                                 </div>
