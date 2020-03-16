@@ -46,7 +46,7 @@ $fomento = $fomentoObj->recuperaEdital($id);
                                         <select class="form-control" name="pessoa_tipos_id" id="pessoa_tipos_id"
                                                 required>
                                             <option value="">Selecione uma opção...</option>
-                                            <?php $fomentoObj->geraOpcao('pessoa_tipos', $fomento->pessoa_tipos_id ?? "", false, false, true); ?>
+                                            <?php $fomentoObj->geraOpcao('pessoa_tipos', $fomento->pessoa_tipos_id ?? "", false, true, true); ?>
                                         </select>
                                     </div>
                                 </div>
@@ -103,18 +103,16 @@ $fomento = $fomentoObj->recuperaEdital($id);
                             <div class="row">
                                 <div class="form-group col">
                                     <label for="descricao">Descrição: *</label>
-                                    <textarea name="descricao" id="descricao" class="textarea" required>
+                                    <textarea name="descricao" id="descricao" class="form-control textarea" required>
                                         <?= $fomento->descricao ?? "" ?>
                                     </textarea>
-<!--                                    <textarea class="textarea" placeholder="Place some text here"-->
-<!--                                              style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>-->
                                 </div>
                             </div>
                         </div>
                         <div class="resposta-ajax"></div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <?php if ($id): ?>
+                            <?php if ($id && $_SESSION['perfil_s'] == 1): ?>
                                 <a href="<?= SERVERURL ?>fomentos/edital_anexos&id=<?= $id ?>" class="btn btn-danger">Anexos
                                     Solicitados</a>
                             <?php endif ?>
