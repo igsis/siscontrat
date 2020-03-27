@@ -88,8 +88,11 @@ $inscritos = $fomentoObj->listaInscritos($id);
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row mb-5 d-flex justify-content-end ">
-                            <a href="<?= SERVERURL . "api/exportarExcel.php?id=".$id ?>" target="_blank"
+                            <!--<a href="<?/*= SERVERURL . "api/exportarExcel.php?id=".$id */?>" target="_blank"
                                class="btn btn-success">
+                                <i class="fas fa-download mr-1"></i> Exportar inscritos
+                            </a>-->
+                            <a href="<?=SERVERURL?>pdf/fomento_inscritos.php?id=<?=$id?>" target="_blank" class="btn btn-warning">
                                 <i class="fas fa-download mr-1"></i> Exportar inscritos
                             </a>
                         </div>
