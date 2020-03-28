@@ -178,7 +178,7 @@ class ArquivoController extends ArquivoModel
 
     public function downloadArquivos($fom_projeto_id)
     {
-        $path = "http://{$_SERVER['HTTP_HOST']}/capac/uploads/";
+        $path = "../capac/uploads/";
         $data = date('YmdHis');
         $nome_arquivo = $data . ".zip";
 
@@ -186,11 +186,15 @@ class ArquivoController extends ArquivoModel
 
         if ($zip->open($nome_arquivo, ZipArchive::CREATE) === true) {
 
-            $query = DbModel::consultaSimples(" SELECT * FROM fom_arquivos WHERE publicado = 1 AND fom_projeto_id = '$fom_projeto_id'",true);
+            $query = DbModel::consultaSimples(" SELECT * FROM fom_arquivos WHERE publicado = 1 AND fom_projeto_id = '$fom_projeto_id'",true)->fetchAll(PDO::FETCH_ASSOC);
             foreach ($query as $arquivo) {
                 $file = $path . $arquivo['arquivo'];
                 $file2 = $arquivo['arquivo'];
-                $zip->addFile($file, $file2);
+                if ($zip->addFile($file, $file2)) {
+                    $zipou = true;
+                } else {
+                    $zipou = false;
+                }
             }
 
             $zip->close();
