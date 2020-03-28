@@ -101,6 +101,9 @@ foreach ($inscritos as $inscrito){
         $nomeRep = $rep['nome'];
     }
 
+    $zip = $arqObj->downloadArquivos($inscrito->id);
+    //$zip = "AEOO";
+
     $objPHPExcel->getActiveSheet()->getStyle($c)->getAlignment()->setWrapText(true);
     $objPHPExcel->getActiveSheet()->getStyle($f)->getNumberFormat()->setFormatCode("#,##0.00");
 
@@ -112,7 +115,9 @@ foreach ($inscritos as $inscrito){
         ->setCellValue($e, $proponente)
         ->setCellValue($f, $inscrito->valor_projeto)
         ->setCellValue($g, $inscrito->duracao)
-        ->setCellValue($h, $inscrito->pessoa_juridica_id);
+        ->setCellValue($h, '=Hyperlink("$zip","zip")');
+    $this->phpExcelObj->getActiveSheet()->getCell("A1")->getHyperlink()->setUrl(strip_tags($link));
+
     $cont++;
 }
 
@@ -123,13 +128,12 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
 $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
-$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(40);
 $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
 
 $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(-1);
-//$objPHPExcel->getActiveSheet()->getStyle('E')->getAlignment()->setWrapText(true);
 
 $objPHPExcel->setActiveSheetIndex(0);
 ob_end_clean();

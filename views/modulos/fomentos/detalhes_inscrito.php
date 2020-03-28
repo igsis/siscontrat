@@ -177,12 +177,13 @@ $strArquivos = '';
                                                     </table>
                                                 </div>
                                                 <div class="card-footer p-0">
-                                                    <a href="<?= SERVERURL . "api/baixarArquivos.php?arquivos=$strArquivos" ?>"
+                                                    <!--<a href="<?/*= SERVERURL . "api/baixarArquivos.php?arquivos=$strArquivos" */?>"
                                                        target="_blank"
                                                        class="btn bg-gradient-purple btn-lg btn-block rounded-bottom"><i
                                                                 class="fas fa-file-archive"></i> Baixar todos os
                                                         arquivos
-                                                    </a>
+                                                    </a>-->
+                                                    <a href="<?= SERVERURL ?>fomentos/download&id=<?= $projeto['id'] ?>" target="_blank" class="btn bg-gradient-purple btn-lg btn-block rounded-bottom"><i class="fas fa-file-archive"></i> Baixar todos os arquivos</a>
                                                 </div>
                                             </div>
                                         </div>
