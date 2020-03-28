@@ -178,7 +178,7 @@ class ArquivoController extends ArquivoModel
 
     public function downloadArquivos($fom_projeto_id)
     {
-        $path = SERVERURL."pdf/";
+        $path = "http://{$_SERVER['HTTP_HOST']}/capac/uploads/";
         $data = date('YmdHis');
         $nome_arquivo = $data . ".zip";
 

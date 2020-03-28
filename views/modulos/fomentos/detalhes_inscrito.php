@@ -164,7 +164,7 @@ $strArquivos = '';
                                                                     <?= "{$arquivo->anexo} - {$arquivo->documento}" ?>
                                                                 </td>
                                                                 <td>
-                                                                    <a href="<?= "http://localhost/capac/uploads/" . $arquivo->arquivo ?>"
+                                                                    <a href="<?= "http://{$_SERVER['HTTP_HOST']}/capac/uploads/" . $arquivo->arquivo ?>"
                                                                        target="_blank"
                                                                        class="btn btn-sm bg-purple text-light"><i
                                                                                 class="fas fa-file-download"></i> Baixar
