@@ -46,6 +46,8 @@ elseif ($view == 'login'):
     require_once "./views/modulos/inicio/login.php";
 elseif ($view == 'cadastro'):
     require_once "./views/modulos/inicio/cadastro.php";
+elseif ($view == 'api/downloadInscritos'):
+    require_once "./api/downloadInscritos.php";
 else:
     session_start(['name' => 'sis']);
     require_once "./controllers/UsuarioController.php";

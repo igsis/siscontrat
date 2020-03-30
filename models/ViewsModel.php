@@ -65,7 +65,7 @@ class ViewsModel
             'proponente_lista',
             'representante',
             'representante_cadastro',
-            'download',
+            'downloadInscritos',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
