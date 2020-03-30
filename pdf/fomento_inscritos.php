@@ -101,8 +101,7 @@ foreach ($inscritos as $inscrito){
         $nomeRep = $rep['nome'];
     }
 
-    $zip = $arqObj->downloadArquivos($inscrito->id);
-    //$zip = "AEOO";
+    $zip = SERVERURL."/api/downloadInscritos&id=".$inscrito->id;
 
     $objPHPExcel->getActiveSheet()->getStyle($c)->getAlignment()->setWrapText(true);
     $objPHPExcel->getActiveSheet()->getStyle($f)->getNumberFormat()->setFormatCode("#,##0.00");
@@ -115,8 +114,8 @@ foreach ($inscritos as $inscrito){
         ->setCellValue($e, $proponente)
         ->setCellValue($f, $inscrito->valor_projeto)
         ->setCellValue($g, $inscrito->duracao)
-        ->setCellValue($h, '=Hyperlink("$zip","zip")');
-    $this->phpExcelObj->getActiveSheet()->getCell("A1")->getHyperlink()->setUrl(strip_tags($link));
+        ->setCellValue($h, 'download');
+    $objPHPExcel->getActiveSheet()->getCell($h)->getHyperlink()->setUrl($zip);
 
     $cont++;
 }
