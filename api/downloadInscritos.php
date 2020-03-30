@@ -1,6 +1,6 @@
 <?php
-
-require_once "./controllers/ArquivoController.php";
+$pedidoAjax = true;
+require_once "../controllers/ArquivoController.php";
 $arqObj = new ArquivoController();
 
 $id = $_GET['id'];
