@@ -16,6 +16,13 @@ $arqObj = new ArquivoController();
 $nomeEdital = $fomentoObj->recuperaEdital($id)->titulo;
 $inscritos = $fomentoObj->listaInscritos($id);
 
+$linkStyle = [
+    'font' => [
+        'underline' => PHPExcel_Style_Font::UNDERLINE_SINGLE,
+        'color' => ['rgb' => '17a2b8']
+        ]
+];
+
 // Podemos renomear o nome das planilha atual, lembrando que um único arquivo pode ter várias planilhas
 $objPHPExcel->getProperties()->setCreator("Sistema SisContrat");
 $objPHPExcel->getProperties()->setLastModifiedBy("Sistema SisContrat");
@@ -101,6 +108,8 @@ foreach ($inscritos as $inscrito){
         $nomeRep = $rep['nome'];
     }
 
+    $zip = SERVERURL."api/downloadInscritos.php?id=".$inscrito->id;
+
     $objPHPExcel->getActiveSheet()->getStyle($c)->getAlignment()->setWrapText(true);
     $objPHPExcel->getActiveSheet()->getStyle($f)->getNumberFormat()->setFormatCode("#,##0.00");
 
@@ -112,7 +121,10 @@ foreach ($inscritos as $inscrito){
         ->setCellValue($e, $proponente)
         ->setCellValue($f, $inscrito->valor_projeto)
         ->setCellValue($g, $inscrito->duracao)
-        ->setCellValue($h, $inscrito->pessoa_juridica_id);
+        ->setCellValue($h, 'download');
+    $objPHPExcel->getActiveSheet()->getCell($h)->getHyperlink()->setUrl($zip);
+    $objPHPExcel->getActiveSheet()->getCell($h)->getStyle()->applyFromArray($linkStyle);
+
     $cont++;
 }
 
@@ -123,13 +135,12 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
 $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
-$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(40);
 $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
 
 $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(-1);
-//$objPHPExcel->getActiveSheet()->getStyle('E')->getAlignment()->setWrapText(true);
 
 $objPHPExcel->setActiveSheetIndex(0);
 ob_end_clean();

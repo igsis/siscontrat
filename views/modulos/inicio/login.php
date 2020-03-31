@@ -14,7 +14,7 @@ if (isset($_POST['usuario']) && (isset($_POST['senha']))) {
             </a>
         </div>
         <div class="card-body register-card-body">
-            <p class="card-text"><span style="text-align: justify; display:block;"> Para iniciar sua sessão, faça login utilizando e-mail e senha cadastrados</span></p>
+            <p class="card-text"><span style="text-align: justify; display:block;"> Para iniciar sua sessão, faça login utilizando o usuário e senha cadastrados</span></p>
             <form action="" method="POST">
                 <label>Usuário</label>
                 <div class="input-group mb-3">
