@@ -8,7 +8,7 @@
 <li class="nav-item">
     <a href="<?= SERVERURL ?>administrativo/inicio" class="nav-link" id="inicio">
         <i class="fa fa-home nav-icon"></i>
-        <p>123456</p>
+        <p>123</p>
     </a>
 </li>
 <li class="nav-item">
