@@ -16,6 +16,13 @@ $arqObj = new ArquivoController();
 $nomeEdital = $fomentoObj->recuperaEdital($id)->titulo;
 $inscritos = $fomentoObj->listaInscritos($id);
 
+$linkStyle = [
+    'font' => [
+        'underline' => PHPExcel_Style_Font::UNDERLINE_SINGLE,
+        'color' => ['rgb' => '17a2b8']
+        ]
+];
+
 // Podemos renomear o nome das planilha atual, lembrando que um único arquivo pode ter várias planilhas
 $objPHPExcel->getProperties()->setCreator("Sistema SisContrat");
 $objPHPExcel->getProperties()->setLastModifiedBy("Sistema SisContrat");
@@ -101,7 +108,7 @@ foreach ($inscritos as $inscrito){
         $nomeRep = $rep['nome'];
     }
 
-    $zip = SERVERURL."/api/downloadInscritos&id=".$inscrito->id;
+    $zip = SERVERURL."api/downloadInscritos.php?id=".$inscrito->id;
 
     $objPHPExcel->getActiveSheet()->getStyle($c)->getAlignment()->setWrapText(true);
     $objPHPExcel->getActiveSheet()->getStyle($f)->getNumberFormat()->setFormatCode("#,##0.00");
@@ -116,6 +123,7 @@ foreach ($inscritos as $inscrito){
         ->setCellValue($g, $inscrito->duracao)
         ->setCellValue($h, 'download');
     $objPHPExcel->getActiveSheet()->getCell($h)->getHyperlink()->setUrl($zip);
+    $objPHPExcel->getActiveSheet()->getCell($h)->getStyle()->applyFromArray($linkStyle);
 
     $cont++;
 }
