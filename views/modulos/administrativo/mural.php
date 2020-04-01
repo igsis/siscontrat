@@ -21,7 +21,7 @@
                 <div class="card card-info">
                     <!-- /.card-header -->
                     <div class="card-body">
-                        Mural
+                        Mural 
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -35,6 +35,6 @@
 <script type="application/javascript">
     $(document).ready(function () {
         $('.nav-link').removeClass('active');
-        $('#administrativo_inicio').addClass('active');
+        $('#mural').addClass('active');
     })
 </script>

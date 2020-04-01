@@ -6,7 +6,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a href="administrativo/mural" class="nav-link" id="aprovar">
+    <a href="<?= SERVERURL ?>administrativo/mural" class="nav-link" id="mural">
         <i class="far fa-circle nav-icon"></i>
         <p>Mural</p>
     </a>
