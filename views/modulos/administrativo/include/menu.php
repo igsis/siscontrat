@@ -4,3 +4,10 @@
         <p>Home</p>
     </a>
 </li>
+
+<li class="nav-item">
+    <a href="#" class="nav-link" id="aprovar">
+        <i class="fa fa-circle nav-icon"></i>
+        <p>Aprovar solicitações</p>
+    </a>
+</li>
