@@ -15,5 +15,3 @@
     define('METHOD', 'AES-256-CBC', true);
     define('SECRET_KEY', 'S3cr3t', true);
     define('SECRET_IV', '123456', true);
-
-    $_GET['views'];
