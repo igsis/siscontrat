@@ -217,4 +217,28 @@ class FomentoController extends FomentoModel
         $edital_id = MainModel::decryption($edital_id);
         return parent::recuperaArquivosEdital($edital_id);
     }
+
+    public function insereTipoContratacao($post) {
+        $edital_id = isset($post['id']) ? "&id=".$post['id'] : "";
+        $dados['tipo_contratacao'] = MainModel::limparString($post['tipo_contratacao']);
+        $insert = DbModel::insert('tipos_contratacoes', $dados, true);
+        if ($insert) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Tipo de Edital Inserido!',
+                'texto' => 'Dados inseridos com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_cadastro' . $edital_id
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
 }

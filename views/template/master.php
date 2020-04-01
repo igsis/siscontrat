@@ -14,6 +14,8 @@ $pedidoAjax = false;
     <title>SisContrat | SMC</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="<?= SERVERURL ?>views/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= SERVERURL ?>views/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="<?= SERVERURL ?>views/dist/css/custom.min.css">
@@ -24,6 +26,8 @@ $pedidoAjax = false;
     <!-- Sweet Alert 2 -->
     <script src="<?= SERVERURL ?>views/plugins/sweetalert2/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="<?= SERVERURL ?>views/plugins/sweetalert2/sweetalert2.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="<?= SERVERURL ?>views/plugins/summernote/summernote-bs4.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- jQuery -->
@@ -92,11 +96,17 @@ else:
 <?php if(isset($sectionJS))
         echo $sectionJS;
 ?>
+<!-- jQuery -->
+<script src="<?= SERVERURL ?>views/plugins/jquery/jquery.min.js"></script>
 <script src="<?= SERVERURL ?>views/plugins/moment/moment.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="<?= SERVERURL ?>views/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="<?= SERVERURL ?>views/dist/js/adminlte.min.js"></script>
+<!-- Summernote -->
+<script src="<?= SERVERURL ?>views/plugins/summernote/summernote-bs4.min.js"></script>
+<script src="<?= SERVERURL ?>views/plugins/summernote/lang/summernote-pt-BR.js"></script>
+<script src="<?= SERVERURL ?>views/plugins/summernote/summernote-cleaner.js"></script>
 <!-- Outros Scripts -->
 <script src="<?= SERVERURL ?>views/dist/js/main.js"></script>
 <script src="<?= SERVERURL ?>views/plugins/jquery-mask/jquery.mask.js"></script>

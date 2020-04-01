@@ -164,7 +164,7 @@ $strArquivos = '';
                                                                     <?= "{$arquivo->anexo} - {$arquivo->documento}" ?>
                                                                 </td>
                                                                 <td>
-                                                                    <a href="<?= "http://localhost/capac/uploads/" . $arquivo->arquivo ?>"
+                                                                    <a href="<?= "http://{$_SERVER['HTTP_HOST']}/capac/uploads/" . $arquivo->arquivo ?>"
                                                                        target="_blank"
                                                                        class="btn btn-sm bg-purple text-light"><i
                                                                                 class="fas fa-file-download"></i> Baixar
@@ -177,12 +177,7 @@ $strArquivos = '';
                                                     </table>
                                                 </div>
                                                 <div class="card-footer p-0">
-                                                    <a href="<?= SERVERURL . "api/baixarArquivos.php?arquivos=$strArquivos" ?>"
-                                                       target="_blank"
-                                                       class="btn bg-gradient-purple btn-lg btn-block rounded-bottom"><i
-                                                                class="fas fa-file-archive"></i> Baixar todos os
-                                                        arquivos
-                                                    </a>
+                                                    <a href="<?= SERVERURL ?>api/downloadInscritos.php?id=<?= $projeto['id'] ?>" target="_blank" class="btn bg-gradient-purple btn-lg btn-block rounded-bottom"><i class="fas fa-file-archive"></i> Baixar todos os arquivos</a>
                                                 </div>
                                             </div>
                                         </div>
