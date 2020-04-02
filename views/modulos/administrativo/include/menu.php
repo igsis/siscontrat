@@ -30,3 +30,9 @@
         <p>Gerenciar Módulos</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="<?= SERVERURL ?>administrativo/perfil" class="nav-link" id="perfil">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Perfil</p>
+    </a>
+</li>
