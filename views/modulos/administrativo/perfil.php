@@ -1,8 +1,8 @@
 <?php
-require_once "./controllers/AdministradorController.php";
-$AdmObj = new AdministradorController();
+require_once "./controllers/AdministrativoController.php";
+$AdmObj = new AdministrativoController();
 
-$Adms = $AdmObj->listaPerfis();
+$perfis = $AdmObj->listaPerfil();
 
 ?>
 <!-- Content Header (Page header) -->
@@ -43,13 +43,13 @@ $Adms = $AdmObj->listaPerfis();
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach ($Adms as $Adm): ?>
+                                <?php foreach ($perfis as $Adm): ?>
                                     <tr>
                                         <td><?= $Adm->descricao ?></td>
                                         <td></td>
                                         <td><?= $Adm->token ?></td>
                                         <td>
-                                            <a href="<?= SERVERURL . "administrativo/perfil_cadastro&id=" . $AdmObj->encryption($Adm->id) ?>""
+                                            <a href="<?= SERVERURL . "administrativo/perfil_cadastro&id=" . $AdmObj->encryption($Adm->id) ?>"
                                                class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
                                         </td>
                                         </td>
@@ -79,21 +79,4 @@ $Adms = $AdmObj->listaPerfis();
             <!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
-
-
 </div>
-<!-- /.card-body -->
-</div>
-<!-- /.card -->
-</div>
-</div>
-<!-- /.row -->
-</div><!-- /.container-fluid -->
-</div>
-<!-- /.content -->
-<script type="application/javascript">
-    $(document).ready(function () {
-        $('.nav-link').removeClass('active');
-        $('#perfil').addClass('active');
-    })
-</script>

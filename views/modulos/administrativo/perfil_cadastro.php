@@ -1,11 +1,11 @@
 <?php
-require_once "./controllers/AdministradorController.php";
+require_once "./controllers/AdministrativoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$perfilObj = new AdministradorController();
+$perfilObj = new AdministrativoController();
 
 
-
+$perfil = $perfilObj->recuperaPerfil($id)
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -30,23 +30,30 @@ $perfilObj = new AdministradorController();
                         <h3 class="card-title">Dados</h3>
                     </div>
                     <form class="form-horizontal formulario-ajax" method="POST"
-                          action="<?= SERVERURL ?>ajax/AdministradorAjax.php" role="form"
+                          action="<?= SERVERURL ?>ajax/administrativoAjax.php" role="form"
                           data-form="<?= ($id) ? "update" : "save" ?>">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="form-group col-md-9">
-                                <label for="titulo">Título: *</label>
-                                <input type="text" class="form-control" id="titulo" name="titulo" value="#" >
+                        <input type="hidden" name="_method" value="<?= ($id) ? "editaPerfil" : "cadastraPerfil" ?>">
+                        <?php if ($id): ?>
+                            <input type="hidden" name="id" id="id" value="<?= $id ?>">
+                        <?php endif; ?>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-group col-md-9">
+                                    <label for="titulo">Descrição do perfil :</label>
+                                    <input type="text" class="form-control" id="descricao" name="descricao"
+                                           value="<?= $perfil->descricao ?? "" ?>" required>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="titulo">Token: *</label>
+                                    <input type="text" class="form-control" id="token" name="token"
+                                           value="<?= $perfil->token ?? "" ?>" required>
+                                </div>
                             </div>
-                        <div class="form-group col-md-3">
-                            <label for="titulo">Token: *</label>
-                            <input type="text" class="form-control" id="token" name="token" value="#" >
                         </div>
-                        </div>
-                    </div>
                         <div class="card-footer">
                             <button type="submit" class="btn btn-info float-right">Gravar</button>
                         </div>
+                        <div class="resposta-ajax"></div>
                     </form>
                     <!-- /.card -->
                 </div>
