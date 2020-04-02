@@ -67,6 +67,8 @@ class ViewsModel
             'representante',
             'representante_cadastro',
             'mural',
+            'instituicoes',
+            'instituicao_cadastro',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
