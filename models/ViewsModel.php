@@ -69,6 +69,7 @@ class ViewsModel
             'mural',
             'perfil',
             'perfil_cadastro',
+            'aviso_cadastro',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
