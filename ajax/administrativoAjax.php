@@ -14,6 +14,12 @@ if (isset($_POST['_method'])) {
         case "editaAviso":
             echo $adminObj->editaAviso($_POST);
             break;
+        case "cadastraInstituicao":
+            echo $adminObj->insereInstituicao($_POST);
+            break;
+        case "editaInstituicao":
+            echo $adminObj->editaInstituicao($_POST);
+            break;
     }
 } else {
     include_once "../config/destroySession.php";

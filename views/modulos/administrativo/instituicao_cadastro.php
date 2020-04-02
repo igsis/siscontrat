@@ -1,8 +1,8 @@
 <?php
-require_once "./controllers/InstituicaoController.php";
+require_once "./controllers/AdministrativoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$instituicaoObj = new InstituicaoController();
+$instituicaoObj = new AdministrativoController();
 
 $instituicao = $instituicaoObj->recuperaInstituicao($id);
 ?>
@@ -30,9 +30,9 @@ $instituicao = $instituicaoObj->recuperaInstituicao($id);
                     <!-- /.card-header -->
                     <!-- form start -->
                     <form class="form-horizontal formulario-ajax" method="POST"
-                    action="<?= SERVERURL ?>ajax/instituicaoAjax.php" role="form"
+                    action="<?= SERVERURL ?>ajax/administrativoAjax.php" role="form"
                     data-form="<?= ($id) ? "update" : "save" ?>">
-                    <input type="hidden" name="_method" value="<?= ($id) ? "editar" : "cadastrar" ?>">
+                    <input type="hidden" name="_method" value="<?= ($id) ? "editaInstituicao" : "cadastraInstituicao" ?>">
                     <?php if ($id): ?>
                         <input type="hidden" name="id" id="instituicao_id" value="<?= $id ?>">
                     <?php endif; ?>

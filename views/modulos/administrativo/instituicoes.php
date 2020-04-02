@@ -1,6 +1,6 @@
 <?php
-require_once "./controllers/InstituicaoController.php";
-$instituicaoObj = new InstituicaoController();
+require_once "./controllers/AdministrativoController.php";
+$instituicaoObj = new AdministrativoController();
 
 $instituicoes = $instituicaoObj->listaInstituicoes();
 ?>
@@ -8,8 +8,11 @@ $instituicoes = $instituicaoObj->listaInstituicoes();
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-12">
+            <div class="col-9">
                 <h1 class="m-0 text-dark">Instituições</h1>
+            </div><!-- /.col -->
+            <div class="col-3">
+                <a href="<?= SERVERURL ?>administrativo/instituicao_cadastro"><button class="btn btn-success btn-block">Adicionar nova instituição</button></a>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -28,14 +31,6 @@ $instituicoes = $instituicaoObj->listaInstituicoes();
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <div class="row my-3 justify-content-end">
-                            <div class="col-md-2">
-                                <a href="<?= SERVERURL ?>administrativo/instituicao_cadastro" class="btn btn-success btn-block">
-                                    <i class="fas fa-plus"></i>
-                                    Adicionar
-                                </a>
-                            </div>
-                        </div>
                         <table id="tabela" class="table table-bordered table-striped">
                             <thead>
                             <tr>
