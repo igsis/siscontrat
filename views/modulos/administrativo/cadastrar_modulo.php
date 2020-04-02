@@ -36,7 +36,7 @@ $modulo = $moduloObj->recuperaModulo($id);
                         <div class="col-12">
                         <div class="row mx-2">
                             <div class="col-12">
-                                <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/moduloAjax" 
+                                <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/moduloAjax.php" 
                                 method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
                                     <input type="hidden" name="_method" value="<?= ($id) ? "editar" : "cadastra" ?>">
                                     <?php if ($id): ?>
