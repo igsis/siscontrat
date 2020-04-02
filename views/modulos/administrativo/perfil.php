@@ -13,7 +13,7 @@ $Adms = $AdmObj->listaPerfis();
                 <h1 class="m-0 text-dark">Lista de Perfis</h1>
             </div><!-- /.col -->
             <div class="col-sm-3">
-                <a href="<?= SERVERURL ?>fomentos/edital_cadastro">
+                <a href="<?= SERVERURL . "administrativo/perfil_cadastro"?>">
                     <button class="btn btn-success btn-block">Adicionar</button>
                 </a>
             </div><!-- /.col -->
@@ -48,7 +48,10 @@ $Adms = $AdmObj->listaPerfis();
                                         <td><?= $Adm->descricao ?></td>
                                         <td></td>
                                         <td><?= $Adm->token ?></td>
-                                        <td><a href="#" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i>Editar</a>
+                                        <td>
+                                            <a href="<?= SERVERURL . "administrativo/perfil_cadastro&id=" . $AdmObj->encryption($Adm->id) ?>""
+                                               class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                                        </td>
                                         </td>
                                         <td><a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>Excluir</a>
                                         </td>
