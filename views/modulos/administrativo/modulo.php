@@ -27,7 +27,7 @@
                     <div class="card-body">
                     <div class="row justify-content-center">
                         <div class="col mb-2">
-                            <a href="<?= SERVERURL ?>administrativo/cadastrar_modulo" class="btn btn-info btn-lg btn-block"> Cadastrar módulo </a>
+                            <a href="<?= SERVERURL ?>administrativo/cadastrar_modulo" class="btn btn-info  float-right mb-2"> Cadastrar módulo </a>
                         </div>
                     </div>
                     <div class="row" >
@@ -43,8 +43,8 @@
                                 <?php foreach ($modulos as $modulo): ?>
                                 <tr>
                                     <td><?=$modulo->sigla?></td>
-                                    <td><?=$modulo->descricao?></td>
-                                    <td>
+                                    <td ><?=$modulo->descricao?></td>
+                                    <td class="text-center">
                                         <a href="<?= SERVERURL . "administrativo/cadastrar_modulo&id=" . $moduloObj->encryption($modulo->id) ?>"
                                           class="btn btn-sm btn-primary"> Editar</a>
                                     </td>

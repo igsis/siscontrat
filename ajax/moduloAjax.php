@@ -8,14 +8,11 @@ if (isset($_POST['_method'])) {
     $moduloObj = new ModuloController();
 
     if ($_POST['_method'] == "cadastra") {
-        echo $fomentoObj->insereModulo($_POST);
+        echo $moduloObj->insereModulo($_POST);
     } elseif ($_POST['_method'] == "editar") {
-        echo $fomentoObj->editaModulo($_POST);
+        echo $moduloObj->editaModulo($_POST);
     }
 
-    if ($_POST['_method'] == 'pesquisa' && $_POST['search'] != ''){
-        echo $fomentoObj->pesquisaEdital($_POST['search']);
-    }
     
 } else {
     include_once "../config/destroySession.php";
