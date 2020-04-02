@@ -24,7 +24,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a href="<?= SERVERURL ?>administrativo/inicio" class="nav-link" id="inicio">
+    <a href="<?= SERVERURL ?>administrativo/modulo" class="nav-link" id="modulo">
         <i class="far fa-circle nav-icon"></i>
         <p>Gerenciar Módulos</p>
     </a>
