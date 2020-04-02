@@ -1,3 +1,10 @@
+<?php
+require_once "./controllers/CategoriaController.php";
+$categoriaObj = new CategoriaController();
+
+$categorias = $categoriaObj->listaCategorias();
+?>
+
 <div class="content">
     <div class="content-header">
         <h1>Lista de Categoria</h1>
@@ -5,7 +12,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12" style="text-align:right">
-                <a href="#">
+                <a href="cadastra_categoria">
                     <button class="btn btn-success">Adicionar categoria</button>
                 </a>
             </div>
@@ -22,19 +29,34 @@
                         <thead>
                             <tr>
                                 <th>Categoria</th>
-                                <th>Editar</th>
-                                <th>Excluir</th>
+                                <th width="5%">Editar</th>
+                                <th width="5%">Excluir</th>
                             </tr>
                         </thead>
 
                         <tbody>
+                        <?php foreach ($categorias as $categoria): ?>
+                            <tr>
+                                    <td><?=$categoria->categoria_atracao?></td>
+                                    <td align="center">
+                                        <a href="<?= SERVERURL . "administrativo/cadastra_categoria&id=" . $categoriaObj->encryption($categoria->id) ?>">
+                                           <button type="button" class="btn btn-sm btn-primary btn-block"><i class="fas fa-edit"></i></button>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="#">
+                                           <button type="button" class="btn btn-sm btn-danger btn-block"><i class="fas fa-trash"></i></button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                         
                         <tfoot>
                             <tr>
                                 <th>Categoria</th>
-                                <th>Editar</th>
-                                <th>Excluir</th>
+                                <th width="5%">Editar</th>
+                                <th width="5%">Excluir</th>
                             </tr>
                         </tfoot>
                         </table>

@@ -68,6 +68,8 @@ class ViewsModel
             'representante_cadastro',
             'mural',
             'categoria',
+            'cadastra_categoria',
+            'edita_categoria',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
