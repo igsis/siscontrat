@@ -66,7 +66,6 @@ $aviso = $adminObj->recuperaAviso($id);
                                 </div>
                             </div>
                         </div>
-                        <div class="resposta-ajax"></div>
                         <!-- /.card-body -->
                         <div class="card-footer">
                             <button type="submit" class="btn btn-info float-right">Gravar</button>

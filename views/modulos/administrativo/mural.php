@@ -8,10 +8,10 @@ $avisos = $adminObj->listaMural();
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-9">
+            <div class="col-9">
                 <h1 class="m-0 text-dark">Mural de Atualizações</h1>
             </div><!-- /.col -->
-            <div class="col-sm-3">
+            <div class="col-3">
                 <a href="<?= SERVERURL ?>administrativo/aviso_cadastro"><button class="btn btn-success btn-block">Adicionar Nova Atualização</button></a>
             </div><!-- /.col -->
         </div><!-- /.row -->
