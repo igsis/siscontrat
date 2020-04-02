@@ -1,7 +1,7 @@
 <?php
 
 if ($pedidoAjax) {
-    require_once "../models/CatergoriaModel.php";
+    require_once "../models/CategoriaModel.php";
 } else {
     require_once "./models/CategoriaModel.php";
 }
