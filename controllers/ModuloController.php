@@ -16,7 +16,7 @@ class ModuloController extends ModuloModel{
             $modulo_id = DbModel::connection(true)->lastInsertId();
             $alerta = [
                 'alerta' => 'sucesso',
-                'titulo' => 'Edital Cadastrado!',
+                'titulo' => 'Módulo Cadastrado!',
                 'texto' => 'Dados cadastrados com sucesso!',
                 'tipo' => 'success',
                 'location' => SERVERURL . 'administrativo/cadastrar_modulo&id=' . MainModel::encryption($modulo_id)
@@ -61,7 +61,7 @@ class ModuloController extends ModuloModel{
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
-                'titulo' => 'Edital Atualizado!',
+                'titulo' => 'Módulo Atualizado!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
                 'location' => SERVERURL . 'administrativo/cadastrar_modulo&id=' . MainModel::encryption($modulo_id)
