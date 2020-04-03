@@ -35,3 +35,9 @@
         <p>Perfil</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="<?= SERVERURL ?>administrativo/instituicoes" class="nav-link" id="instituicoes">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Instituições</p>
+    </a>
+</li>
