@@ -20,8 +20,10 @@ if (isset($_POST['_method'])) {
         case "editaPerfil":
             echo $adminObj->editaPerfil($_POST);
             break;
+        case "apagaPerfil":
+            echo $adminObj->apagaPerfil($_POST);
+            break;
     }
-
 } else {
     include_once "../config/destroySession.php";
 }

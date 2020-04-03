@@ -53,7 +53,13 @@ $perfis = $AdmObj->listaPerfil();
                                                class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
                                         </td>
                                         </td>
-                                        <td><a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>Excluir</a>
+                                        <td>
+                                            <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/administrativoAjax.php" role="form" data-form="update">
+                                                <input type="hidden" name="_method" value="apagaPerfil">
+                                                <input type="hidden" name="id" value="<?= $AdmObj->encryption($Adm->id)?>">
+                                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Excluir</button>
+                                                <div class="resposta-ajax"></div>
+                                            </form>
                                         </td>
                                         </td>
                                     </tr>

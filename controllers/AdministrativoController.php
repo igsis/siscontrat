@@ -128,4 +128,26 @@ class AdministrativoController extends AdministrativoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+    public function apagaPerfil($id){
+        $id = MainModel::decryption($id['id']);
+        $apaga = DbModel::apaga("perfis", $id);
+        if ($apaga){
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Perfi',
+                'texto' => 'Perfil apagado com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL.'administrativo/perfil'
+            ];
+        }else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
 }
