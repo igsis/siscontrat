@@ -20,6 +20,15 @@ if (isset($_POST['_method'])) {
         case "editaInstituicao":
             echo $adminObj->editaInstituicao($_POST);
             break;
+        case "cadastraPerfil":
+            echo $adminObj->inserePerfil($_POST);
+            break;
+        case "editaPerfil":
+            echo $adminObj->editaPerfil($_POST);
+            break;
+        case "apagaPerfil":
+            echo $adminObj->apagaPerfil($_POST);
+            break;
     }
 
     if ($_POST['_method'] == "cadastrar") {

@@ -301,4 +301,88 @@ class AdministrativoController extends AdministrativoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
+    // PERFIL
+    public function listaPerfil() {
+        return parent::getPerfil();
+    }
+
+    public function recuperaPerfil($id){
+        $id = MainModel::decryption($id);
+        return DbModel::getInfo('perfis', $id)->fetchObject();
+    }
+
+    public function inserePerfil($post) {
+        unset ($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $insert = DbModel::insert('perfis', $dados);
+        if ($insert->rowCount() >= 1) {
+            $perfil_id = DbModel::connection(true)->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Aviso Cadastrado!',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/perfil_cadastro&id=' . MainModel::encryption($perfil_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editaPerfil($post) {
+        $perfil_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        unset($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $update = DbModel::update('perfis', $dados, $perfil_id);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Aviso Editado!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/perfil_cadastro&id=' . MainModel::encryption($perfil_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+    public function apagaPerfil($id){
+        $id = MainModel::decryption($id['id']);
+        $apaga = DbModel::apaga("perfis", $id);
+        if ($apaga){
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Perfil',
+                'texto' => 'Perfil apagado com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL.'administrativo/perfil'
+            ];
+        }else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
 }

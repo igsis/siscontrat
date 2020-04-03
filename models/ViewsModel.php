@@ -74,6 +74,7 @@ class ViewsModel
             'modulo',
             'cadastrar_modulo',
             'perfil',
+            'perfil_cadastro',
             'aviso_cadastro',
         ];
         if (self::verificaModulo($modulo)) {
