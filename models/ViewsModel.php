@@ -70,6 +70,8 @@ class ViewsModel
             'categoria',
             'cadastra_categoria',
             'edita_categoria',
+            'instituicoes',
+            'instituicao_cadastro',
             'perfil',
             'aviso_cadastro',
         ];
