@@ -1,6 +1,10 @@
 <?php
-require_once "./controllers/CategoriaController.php";
-$categoriaObj = new CategoriaController();
+require_once "./controllers/AdministrativoController.php";
+$categoriaObj = new AdministrativoController();
+
+if (isset($_POST['deletar'])) {
+    $categoriaObj = $categoriaObj->deletaCategoria($id);
+}
 
 $categorias = $categoriaObj->listaCategorias();
 ?>
@@ -27,39 +31,47 @@ $categorias = $categoriaObj->listaCategorias();
                 <div class="card-body">
                     <table id="tabela" class="table table-bordered table-striped">
                         <thead>
-                            <tr>
-                                <th>Categoria</th>
-                                <th width="5%">Editar</th>
-                                <th width="5%">Excluir</th>
-                            </tr>
+                        <tr>
+                            <th>Categoria</th>
+                            <th width="5%">Editar</th>
+                            <th width="5%">Excluir</th>
+                        </tr>
                         </thead>
 
                         <tbody>
                         <?php foreach ($categorias as $categoria): ?>
                             <tr>
-                                    <td><?=$categoria->categoria_atracao?></td>
-                                    <td align="center">
-                                        <a href="<?= SERVERURL . "administrativo/cadastra_categoria&id=" . $categoriaObj->encryption($categoria->id) ?>">
-                                           <button type="button" class="btn btn-sm btn-primary btn-block"><i class="fas fa-edit"></i></button>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="#">
-                                           <button type="button" class="btn btn-sm btn-danger btn-block"><i class="fas fa-trash"></i></button>
-                                        </a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                        
-                        <tfoot>
-                            <tr>
-                                <th>Categoria</th>
-                                <th width="5%">Editar</th>
-                                <th width="5%">Excluir</th>
+                                <td><?= $categoria->categoria_atracao ?></td>
+                                <td align="center">
+                                    <a href="<?= SERVERURL . "administrativo/cadastra_categoria&id=" . $categoriaObj->encryption($categoria->id) ?>">
+                                        <button type="button" class="btn btn-sm btn-primary btn-block"><i
+                                                    class="fas fa-edit"></i></button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <form class="form-horizontal formulario-ajax" method="POST"
+                                          action="<?= SERVERURL ?>ajax/administrativoAjax.php" role="form"
+                                          data-form="update">
+                                        <input type="hidden" name="_method" value="deletar">
+                                        <input type="hidden" name="idCategoria"
+                                               value="<?= $categoriaObj->encryption($categoria->id) ?>">
+                                        <button type="submit" class="btn btn-sm btn-danger btn-block"><i
+                                                    class="fas fa-trash"></i></button>
+                                        <div class="resposta-ajax"></div>
+                                    </form>
+                                </td>
                             </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+
+                        <tfoot>
+                        <tr>
+                            <th>Categoria</th>
+                            <th width="5%">Editar</th>
+                            <th width="5%">Excluir</th>
+                        </tr>
                         </tfoot>
-                        </table>
+                    </table>
                 </div>
 
                 <div class="card-footer">
