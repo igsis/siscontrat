@@ -67,6 +67,9 @@ class ViewsModel
             'representante',
             'representante_cadastro',
             'mural',
+            'categoria',
+            'cadastra_categoria',
+            'edita_categoria',
             'perfil',
             'aviso_cadastro',
         ];
