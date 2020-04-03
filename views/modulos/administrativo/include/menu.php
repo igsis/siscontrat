@@ -18,7 +18,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a href="<?= SERVERURL ?>administrativo/inicio" class="nav-link" id="inicio">
+    <a href="<?= SERVERURL ?>administrativo/categoria" class="nav-link" id="categoria">
         <i class="far fa-circle nav-icon"></i>
         <p>Categoria</p>
     </a>
@@ -33,5 +33,11 @@
     <a href="<?= SERVERURL ?>administrativo/perfil" class="nav-link" id="perfil">
         <i class="far fa-circle nav-icon"></i>
         <p>Perfil</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="<?= SERVERURL ?>administrativo/instituicoes" class="nav-link" id="instituicoes">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Instituições</p>
     </a>
 </li>

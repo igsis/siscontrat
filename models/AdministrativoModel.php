@@ -37,4 +37,8 @@ class AdministrativoModel extends MainModel
         $statement->execute();
         return $statement;
     }
+
+    protected function getPerfil(){
+        return DbModel::consultaSimples("SELECT * FROM perfis where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
 }

@@ -67,9 +67,14 @@ class ViewsModel
             'representante',
             'representante_cadastro',
             'mural',
+            'categoria',
+            'cadastra_categoria',
+            'instituicoes',
+            'instituicao_cadastro',
             'modulo',
             'cadastrar_modulo',
             'perfil',
+            'perfil_cadastro',
             'aviso_cadastro',
         ];
         if (self::verificaModulo($modulo)) {

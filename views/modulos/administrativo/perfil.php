@@ -1,8 +1,8 @@
 <?php
-require_once "./controllers/AdministradorController.php";
-$AdmObj = new AdministradorController();
+require_once "./controllers/AdministrativoController.php";
+$AdmObj = new AdministrativoController();
 
-$Adms = $AdmObj->listaPerfis();
+$perfis = $AdmObj->listaPerfil();
 
 ?>
 <!-- Content Header (Page header) -->
@@ -13,7 +13,7 @@ $Adms = $AdmObj->listaPerfis();
                 <h1 class="m-0 text-dark">Lista de Perfis</h1>
             </div><!-- /.col -->
             <div class="col-sm-3">
-                <a href="<?= SERVERURL ?>fomentos/edital_cadastro">
+                <a href="<?= SERVERURL . "administrativo/perfil_cadastro"?>">
                     <button class="btn btn-success btn-block">Adicionar</button>
                 </a>
             </div><!-- /.col -->
@@ -43,14 +43,23 @@ $Adms = $AdmObj->listaPerfis();
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach ($Adms as $Adm): ?>
+                                <?php foreach ($perfis as $Adm): ?>
                                     <tr>
                                         <td><?= $Adm->descricao ?></td>
                                         <td></td>
                                         <td><?= $Adm->token ?></td>
-                                        <td><a href="#" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i>Editar</a>
+                                        <td>
+                                            <a href="<?= SERVERURL . "administrativo/perfil_cadastro&id=" . $AdmObj->encryption($Adm->id) ?>"
+                                               class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
                                         </td>
-                                        <td><a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i>Excluir</a>
+                                        </td>
+                                        <td>
+                                            <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/administrativoAjax.php" role="form" data-form="update">
+                                                <input type="hidden" name="_method" value="apagaPerfil">
+                                                <input type="hidden" name="id" value="<?= $AdmObj->encryption($Adm->id)?>">
+                                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Excluir</button>
+                                                <div class="resposta-ajax"></div>
+                                            </form>
                                         </td>
                                         </td>
                                     </tr>
@@ -76,21 +85,4 @@ $Adms = $AdmObj->listaPerfis();
             <!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
-
-
 </div>
-<!-- /.card-body -->
-</div>
-<!-- /.card -->
-</div>
-</div>
-<!-- /.row -->
-</div><!-- /.container-fluid -->
-</div>
-<!-- /.content -->
-<script type="application/javascript">
-    $(document).ready(function () {
-        $('.nav-link').removeClass('active');
-        $('#perfil').addClass('active');
-    })
-</script>
