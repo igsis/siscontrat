@@ -14,6 +14,15 @@ if (isset($_POST['_method'])) {
         case "editaAviso":
             echo $adminObj->editaAviso($_POST);
             break;
+        case "cadastraPerfil":
+            echo $adminObj->inserePerfil($_POST);
+            break;
+        case "editaPerfil":
+            echo $adminObj->editaPerfil($_POST);
+            break;
+        case "apagaPerfil":
+            echo $adminObj->apagaPerfil($_POST);
+            break;
     }
 } else {
     include_once "../config/destroySession.php";
