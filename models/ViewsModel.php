@@ -67,6 +67,8 @@ class ViewsModel
             'representante',
             'representante_cadastro',
             'mural',
+            'modulo',
+            'cadastrar_modulo',
             'perfil',
             'perfil_cadastro',
             'aviso_cadastro',
