@@ -14,21 +14,6 @@ if (isset($_POST['_method'])) {
         case "editaAviso":
             echo $adminObj->editaAviso($_POST);
             break;
-        case "cadastraInstituicao":
-            echo $adminObj->insereInstituicao($_POST);
-            break;
-        case "editaInstituicao":
-            echo $adminObj->editaInstituicao($_POST);
-            break;
-        case "cadastraPerfil":
-            echo $adminObj->inserePerfil($_POST);
-            break;
-        case "editaPerfil":
-            echo $adminObj->editaPerfil($_POST);
-            break;
-        case "apagaPerfil":
-            echo $adminObj->apagaPerfil($_POST);
-            break;
     }
 
     if ($_POST['_method'] == "cadastrarModulo") {
@@ -37,13 +22,6 @@ if (isset($_POST['_method'])) {
         echo $adminObj->editaModulo($_POST);
     }
 
-    if ($_POST['_method'] == "cadastrar") {
-        echo $adminObj->cadastrarCategoria($_POST);
-    } elseif ($_POST['_method'] == "editar") {
-        echo $adminObj->editarCategoria($_POST);
-    }elseif ($_POST['_method'] == "deletar"){
-        echo $adminObj->deletaCategoria($_POST);
-    }
 } else {
     include_once "../config/destroySession.php";
 }
