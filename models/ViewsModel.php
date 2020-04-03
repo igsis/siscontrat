@@ -70,6 +70,8 @@ class ViewsModel
             'categoria',
             'cadastra_categoria',
             'edita_categoria',
+            'perfil',
+            'aviso_cadastro',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
