@@ -75,7 +75,6 @@ class ViewsModel
             'instituicoes',
             'instituicao_cadastro',
             'perfil',
-            'perfil_cadastro',
             'aviso_cadastro',
         ];
         if (self::verificaModulo($modulo)) {
