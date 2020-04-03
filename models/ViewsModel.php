@@ -69,7 +69,6 @@ class ViewsModel
             'mural',
             'categoria',
             'cadastra_categoria',
-            'edita_categoria',
             'instituicoes',
             'instituicao_cadastro',
             'modulo',
