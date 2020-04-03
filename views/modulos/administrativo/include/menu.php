@@ -18,7 +18,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a href="<?= SERVERURL ?>administrativo/inicio" class="nav-link" id="inicio">
+    <a href="<?= SERVERURL ?>administrativo/categoria" class="nav-link" id="categoria">
         <i class="far fa-circle nav-icon"></i>
         <p>Categoria</p>
     </a>
