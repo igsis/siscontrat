@@ -1,6 +1,6 @@
 <?php
-    require_once "./controllers/ModuloController.php";
-    $moduloObj = new ModuloController();
+    require_once "./controllers/AdministrativoController.php";
+    $moduloObj = new AdministrativoController();
     
     $modulos = $moduloObj->listaModulo();
 ?>

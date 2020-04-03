@@ -15,6 +15,13 @@ if (isset($_POST['_method'])) {
             echo $adminObj->editaAviso($_POST);
             break;
     }
+
+    if ($_POST['_method'] == "cadastrarModulo") {
+        echo $adminObj->insereModulo($_POST);
+    } elseif ($_POST['_method'] == "editarModulo") {
+        echo $adminObj->editaModulo($_POST);
+    }
+
 } else {
     include_once "../config/destroySession.php";
 }

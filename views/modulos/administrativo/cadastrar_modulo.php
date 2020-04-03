@@ -1,9 +1,9 @@
 <?php
 
-require_once "./controllers/ModuloController.php";
+require_once "./controllers/AdministrativoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$moduloObj = new ModuloController();
+$moduloObj = new AdministrativoController();
 
 $modulo = $moduloObj->recuperaModulo($id);
 
@@ -36,9 +36,9 @@ $modulo = $moduloObj->recuperaModulo($id);
                         <div class="col-12">
                         <div class="row mx-2">
                             <div class="col-12">
-                                <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/moduloAjax.php" 
+                                <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/administrativoAjax.php" 
                                 method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
-                                    <input type="hidden" name="_method" value="<?= ($id) ? "editar" : "cadastra" ?>">
+                                    <input type="hidden" name="_method" value="<?= ($id) ? "editarModulo" : "cadastrarModulo" ?>">
                                     <?php if ($id): ?>
                                         <input type="hidden" name="id" id="modulo_id" value="<?= $id ?>">
                                     <?php endif; ?>
