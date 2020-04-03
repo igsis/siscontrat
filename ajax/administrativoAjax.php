@@ -22,6 +22,13 @@ if (isset($_POST['_method'])) {
         echo $adminObj->editaModulo($_POST);
     }
 
+    if ($_POST['_method'] == "cadastrar") {
+        echo $adminObj->cadastrarCategoria($_POST);
+    } elseif ($_POST['_method'] == "editar") {
+        echo $adminObj->editarCategoria($_POST);
+    }elseif ($_POST['_method'] == "deletar"){
+        echo $adminObj->deletaCategoria($_POST);
+    }
 } else {
     include_once "../config/destroySession.php";
 }

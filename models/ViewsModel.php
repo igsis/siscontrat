@@ -69,6 +69,9 @@ class ViewsModel
             'mural',
             'modulo',
             'cadastrar_modulo',
+            'categoria',
+            'cadastra_categoria',
+            'edita_categoria',
             'perfil',
             'aviso_cadastro',
         ];
