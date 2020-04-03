@@ -132,7 +132,6 @@ class AdministrativoController extends AdministrativoModel
                 'tipo' => 'error',
             ];
         }
-
         return MainModel::sweetAlert($alerta);
     }
 }
