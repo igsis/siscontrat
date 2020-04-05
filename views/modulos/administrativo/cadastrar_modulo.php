@@ -13,7 +13,7 @@ $modulo = $moduloObj->recuperaModulo($id);
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-12">
-                <h1 class="m-0 text-dark">Administrador</h1>
+                <h1 class="m-0 text-dark">Cadastrar Módulos</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -27,6 +27,9 @@ $modulo = $moduloObj->recuperaModulo($id);
             <div class="col-md-12">
                 <!-- Horizontal Form -->
                 <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Dados</h3>
+                    </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                     <div class="row justify-content-center"> 
