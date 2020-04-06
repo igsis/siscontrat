@@ -42,13 +42,15 @@ $avisos = $adminObj->listaMural();
                             </thead>
                             <tbody>
                             <?php foreach ($avisos as $aviso): ?>
-                                <td><?= $aviso->titulo ?></td>
-                                <td><?= mb_strimwidth($aviso->mensagem, 0, 50, "...") ?></td>
-                                <td><?= $adminObj->dataHora($aviso->data) ?></td>
-                                <td>
-                                    <a href="<?= SERVERURL . "administrativo/aviso_cadastro&id=" . $adminObj->encryption($aviso->id) ?>"
-                                       class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
-                                </td>
+                                <tr>
+                                    <td><?= $aviso->titulo ?></td>
+                                    <td><?= mb_strimwidth($aviso->mensagem, 0, 50, "...") ?></td>
+                                    <td><?= $adminObj->dataHora($aviso->data) ?></td>
+                                    <td>
+                                        <a href="<?= SERVERURL . "administrativo/aviso_cadastro&id=" . $adminObj->encryption($aviso->id) ?>"
+                                           class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                             </tbody>
                             <tfoot>
