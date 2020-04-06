@@ -41,4 +41,8 @@ class AdministrativoModel extends MainModel
     protected function getPerfil(){
         return DbModel::consultaSimples("SELECT * FROM perfis where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
     }
+
+    protected function getRelacoesJuridicas() {
+        return DbModel::consultaSimples("SELECT * FROM relacao_juridicas where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
 }

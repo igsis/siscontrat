@@ -47,3 +47,9 @@
         <p>Verbas</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="<?= SERVERURL ?>administrativo/relacoes_juridicas" class="nav-link" id="relacoes_juridicas">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Relações Jurídicas</p>
+    </a>
+</li>
