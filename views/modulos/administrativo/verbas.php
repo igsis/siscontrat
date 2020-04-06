@@ -1,19 +1,19 @@
 <?php
 require_once "./controllers/AdministrativoController.php";
-$categoriaObj = new AdministrativoController();
+$verbaObj = new AdministrativoController();
 
-$categorias = $categoriaObj->listaCategorias();
+$verbas = $verbaObj->listaVerbas();
 ?>
 
 <div class="content">
     <div class="content-header">
         <div class="row">
             <div class="col-md-9">
-                <h1>Lista de Categoria</h1>
+                <h1>Lista de Verbas</h1>
             </div>
             <div class="col-md-3">
-                <a href="cadastra_categoria">
-                    <button class="btn btn-success float-right">Adicionar categoria</button>
+                <a href="verbas_cadastro">
+                    <button class="btn btn-success float-right">Adicionar verba</button>
                 </a>
             </div>
         </div>
@@ -29,31 +29,31 @@ $categorias = $categoriaObj->listaCategorias();
                     <table id="tabela" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>Categoria</th>
+                            <th>Verba</th>
                             <th width="5%">Editar</th>
                             <th width="5%">Excluir</th>
                         </tr>
                         </thead>
 
                         <tbody>
-                        <?php foreach ($categorias as $categoria): ?>
+                        <?php foreach ($verbas as $verba): ?>
                             <tr>
-                                <td><?= $categoria->categoria_atracao ?></td>
+                                <td><?= $verba->verba ?></td>
                                 <td align="center">
-                                    <a href="<?= SERVERURL . "administrativo/cadastra_categoria&id=" . $categoriaObj->encryption($categoria->id) ?>">
+                                    <a href="<?= SERVERURL . "administrativo/verbas_cadastro&id=" . $verbaObj->encryption($verba->id) ?>">
                                         <button type="button" class="btn btn-sm btn-primary btn-block"><i
-                                                    class="fas fa-edit"></i></button>
+                                                class="fas fa-edit"></i></button>
                                     </a>
                                 </td>
                                 <td>
                                     <form class="form-horizontal formulario-ajax" method="POST"
                                           action="<?= SERVERURL ?>ajax/administrativoAjax.php" role="form"
                                           data-form="update">
-                                        <input type="hidden" name="_method" value="deletarCategoria">
-                                        <input type="hidden" name="idCategoria"
-                                               value="<?= $categoriaObj->encryption($categoria->id) ?>">
+                                        <input type="hidden" name="_method" value="deletarVerba">
+                                        <input type="hidden" name="idVerba"
+                                               value="<?= $verbaObj->encryption($verba->id) ?>">
                                         <button type="submit" class="btn btn-sm btn-danger btn-block"><i
-                                                    class="fas fa-trash"></i></button>
+                                                class="fas fa-trash"></i></button>
                                         <div class="resposta-ajax"></div>
                                     </form>
                                 </td>
@@ -63,7 +63,7 @@ $categorias = $categoriaObj->listaCategorias();
 
                         <tfoot>
                         <tr>
-                            <th>Categoria</th>
+                            <th>Verba</th>
                             <th width="5%">Editar</th>
                             <th width="5%">Excluir</th>
                         </tr>

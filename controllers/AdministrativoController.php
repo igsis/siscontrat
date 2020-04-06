@@ -385,4 +385,98 @@ class AdministrativoController extends AdministrativoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
+    public function listaVerbas()
+    {
+        $verbas = DbModel::listaPublicado("verbas", null, false);
+
+        return $verbas;
+    }
+
+    public function insereVerba($post)
+    {
+
+        unset ($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $insert = DbModel::insert('verbas', $dados, false);
+        if ($insert->rowCount() >= 1) {
+            $verba_id = DbModel::connection()->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Verba Cadastrada!',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/verbas_cadastro&id=' . MainModel::encryption($verba_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editarVerba($post)
+    {
+        $verba_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        unset ($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $update = DbModel::update('verbas', $dados, $verba_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Verba Atualizada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/verbas_cadastro&id=' . MainModel::encryption($verba_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function deletarVerba($post)
+    {
+        $verba_id = MainModel::decryption($post['idVerba']);
+        unset($post['idVerba']);
+
+        $update = DbModel::apaga('verbas', $verba_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Verba Deletada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/verbas&id=' . MainModel::encryption($verba_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function recuperaVerba($verba_id)
+    {
+        $verba_id = MainModel::decryption($verba_id);
+        return DbModel::getInfo('verbas', $verba_id, false)->fetchObject();
+    }
 }
