@@ -12,7 +12,7 @@
                 <h1 class="m-0 text-dark">Lista de Relações Jurídicas</h1>
             </div><!-- /.col -->
             <div class="col-3">
-                <a href="<?= SERVERURL ?>administrativo/cadastrar_relacoes"><button class="btn btn-success btn-block">Cadastrar relação jurídica</button></a>
+                <a href="<?= SERVERURL ?>administrativo/cadastrar_relacoes"><button class="btn btn-success btn-block">Adicionar relação jurídica</button></a>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
