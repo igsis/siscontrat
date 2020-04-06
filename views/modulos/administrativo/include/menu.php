@@ -41,3 +41,9 @@
         <p>Instituições</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="<?= SERVERURL ?>administrativo/verbas" class="nav-link" id="verbas">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Verbas</p>
+    </a>
+</li>

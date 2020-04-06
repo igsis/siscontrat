@@ -31,16 +31,22 @@ if (isset($_POST['_method'])) {
             break;
     }
 
-    if ($_POST['_method'] == "cadastrar") {
+    if ($_POST['_method'] == "cadastrarCategoria") {
         echo $adminObj->cadastrarCategoria($_POST);
-    } elseif ($_POST['_method'] == "editar") {
+    } elseif ($_POST['_method'] == "editarCategoria") {
         echo $adminObj->editarCategoria($_POST);
-    }elseif ($_POST['_method'] == "deletar"){
+    }elseif ($_POST['_method'] == "deletarCategoria"){
         echo $adminObj->deletaCategoria($_POST);
     }elseif ($_POST['_method'] == "cadastrarModulo") {
         echo $adminObj->insereModulo($_POST);
     } elseif ($_POST['_method'] == "editarModulo") {
         echo $adminObj->editaModulo($_POST);
+    }elseif($_POST['_method'] == "cadastrarVerba"){
+        echo $adminObj->insereVerba($_POST);
+    }elseif($_POST['_method'] == "editarVerba"){
+        echo $adminObj->editarVerba($_POST);
+    }elseif($_POST['_method'] == "deletarVerba"){
+        echo $adminObj->deletarVerba($_POST);
     }
 
 } else {
