@@ -561,4 +561,9 @@ class AdministrativoController extends AdministrativoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
+    public function listaUsuarios()
+    {
+        return parent::getUsuarios();
+    }
 }
