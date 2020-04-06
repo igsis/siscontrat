@@ -76,6 +76,8 @@ class ViewsModel
             'perfil',
             'perfil_cadastro',
             'aviso_cadastro',
+            'relacoes_juridicas',
+            'cadastrar_relacoes',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

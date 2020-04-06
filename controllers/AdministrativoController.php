@@ -385,4 +385,86 @@ class AdministrativoController extends AdministrativoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
+    public function ListaRelacoesJuridicas()
+    {
+        return parent::getRelacoesJuridicas();
+    }
+
+    public function recuperaRelacoesJuridicas($relacao_id) {
+        $relacao_id = MainModel::decryption($relacao_id);
+        return DbModel::getInfo('relacao_juridicas', $relacao_id, false)->fetchObject();
+    }
+
+    public function editaRelacoesJuridicas($post) {
+        $relacao_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        unset ($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $update = DbModel::update('relacao_juridicas', $dados, $relacao_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Relação Jurídica Atualizada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/cadastrar_relacoes&id=' . MainModel::encryption($relacao_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function insereRelacoesJuridicas($post){
+        unset($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $insert = DbModel::insert('relacao_juridicas', $dados, false);
+        if ($insert->rowCount() >= 1) {
+            $relacao_id = DbModel::connection(true)->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Relação Jurídica Cadastrada!',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/cadastrar_relacoes&id=' . MainModel::encryption($relacao_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+
+    public function apagaRelacoesJuridicas($id){
+        $id = MainModel::decryption($id['id']);
+        $apaga = DbModel::apaga("relacao_juridicas", $id, false);
+        if ($apaga){
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Relação Jurídica Deletada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL.'administrativo/relacoes_juridicas'
+            ];
+        }else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao apagar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
 }

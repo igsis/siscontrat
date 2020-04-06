@@ -29,6 +29,15 @@ if (isset($_POST['_method'])) {
         case "apagaPerfil":
             echo $adminObj->apagaPerfil($_POST);
             break;
+        case "cadastrarRelacoes":
+            echo $adminObj->insereRelacoesJuridicas($_POST);
+            break;
+        case "editarRelacoes":
+            echo $adminObj->editaRelacoesJuridicas($_POST);
+            break;
+        case "apagarRelacoes":
+            echo $adminObj->apagaRelacoesJuridicas($_POST);
+            break;
     }
 
     if ($_POST['_method'] == "cadastrar") {
