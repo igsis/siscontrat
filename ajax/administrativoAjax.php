@@ -38,6 +38,15 @@ if (isset($_POST['_method'])) {
         case "apagarRelacoes":
             echo $adminObj->apagaRelacoesJuridicas($_POST);
             break;
+        case "editarUsuarios":
+            echo $adminObj->editaUsuarios($_POST);
+            break;
+        case "cadastrarUsuarios":
+            echo $adminObj->insereUsuarios($_POST);
+            break;
+        case "apagarUsuarios":
+            echo $adminObj->apagaUsuarios($_POST);
+            break;
     }
 
     if ($_POST['_method'] == "cadastrarCategoria") {

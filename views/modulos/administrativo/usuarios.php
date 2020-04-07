@@ -12,7 +12,7 @@
                 <h1 class="m-0 text-dark">Lista de Usuários</h1>
             </div><!-- /.col -->
             <div class="col-3">
-                <a href="<?= SERVERURL ?>administrativo/cadastrar_usuario"><button class="btn btn-success btn-block">Adicionar usuários</button></a>
+                <a href="<?= SERVERURL ?>administrativo/cadastrar_usuarios"><button class="btn btn-success btn-block">Adicionar usuários</button></a>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -53,12 +53,12 @@
                                     <td><?=$usuario->email?></td>
                                     <td><?=$usuario->telefone?></td>
                                     <td class="text-center">
-                                        <a href="<?= SERVERURL . "administrativo/cadastrar_usuario&id=" . $usuarioObj->encryption($usuario->id) ?>"
+                                        <a href="<?= SERVERURL . "administrativo/cadastrar_usuarios&id=" . $usuarioObj->encryption($usuario->id) ?>"
                                           class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
                                     </td>
                                     <td class="text-center">
                                         <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/administrativoAjax.php" role="form" data-form="update">
-                                            <input type="hidden" name="_method" value="apagarUsuario">
+                                            <input type="hidden" name="_method" value="apagarUsuarios">
                                             <input type="hidden" name="id" value="<?= $usuarioObj->encryption($usuario->id)?>">
                                             <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Excluir</button>
                                                 <div class="resposta-ajax"></div>
