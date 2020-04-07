@@ -46,13 +46,19 @@
                                         <label for="nome_completo">Nome Completo *</label>
                                         <input type="text" id="nome_completo" name="nome_completo" value="<?= $usuario->nome_completo ?? "" ?>" class="form-control" required>
                                     </div>
-
-                                    <div class="form-group col-md-2">
-                                        <label for="tipo">É estagiário/jovem monitor? *</label> <br>
-                                        <label><input type="radio" name="jovem_monitor" id="jovem_monitor" value="1"> Sim </label>&nbsp;&nbsp;
-                                        <label><input type="radio" name="jovem_monitor" id="jovem_monitor" value="0"> Não </label>
-                                    </div>
-
+                                    <?php if(isset($usuario->id)): ?>
+                                        <div class="form-group col-md-2">
+                                            <label for="tipo">É estagiário/jovem monitor? *</label> <br>
+                                            <label><input type="radio" name="jovem_monitor" id="jovem_monitor" <?= $usuario->jovem_monitor == 1 ? 'checked' : NULL ?>> Sim </label>&nbsp;&nbsp;
+                                            <label><input type="radio" name="jovem_monitor" id="jovem_monitor" <?= $usuario->jovem_monitor == 0 ? 'checked' : NULL ?>> Não </label>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="form-group col-md-2">
+                                            <label for="tipo">É estagiário/jovem monitor? *</label> <br>
+                                            <label><input type="radio" name="jovem_monitor" id="jovem_monitor" value="1"> Sim </label>&nbsp;&nbsp;
+                                            <label><input type="radio" name="jovem_monitor" id="jovem_monitor" value="0"> Não </label>
+                                        </div>
+                                    <?php endif ?>
                                     <div class="form-group col-md-2">
                                     <label for="rf_usuario">RF/RG* </label>
                                     <input type="text" id="rgrf_usuario" name="rf_rg" value="<?= $usuario->rf_rg ?? "" ?>" class="form-control" required>
