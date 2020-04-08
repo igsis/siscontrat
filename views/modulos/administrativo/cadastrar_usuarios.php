@@ -6,6 +6,7 @@
     $usuarioObj = new AdministrativoController();
     
     $usuario = $usuarioObj->recuperaUsuarios($id);
+
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -101,6 +102,16 @@
                             </div >
                             <div class="resposta-ajax"></div>
                         </form>
+                        <?php if(isset($usuario->id)): ?>
+                            <div class="d-flex justify-content-center">
+                            <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/administrativoAjax.php" role="form" data-form="update">
+                                <input type="hidden" name="_method" value="resetarSenha">
+                                <input type="hidden" name="id" value="<?= $usuarioObj->encryption($usuario->id)?>">
+                                <button type="submit" name="reset" class="btn btn-warning ">Resetar senha</button>
+                                <div class="resposta-ajax"></div>
+                            </form>
+                            </div>
+                        <?php endif ?>
                         </div>  
                     </div>
                     </div>

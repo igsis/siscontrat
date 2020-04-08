@@ -642,4 +642,34 @@ class AdministrativoController extends AdministrativoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
+    public function resetaSenha($id){
+        $id = MainModel::decryption($id['id']);
+        $pdo = self::connection($capac = false);
+        $senha =  MainModel::encryption('siscontrat2019');
+        $sql = "UPDATE usuarios SET senha =  :senha  WHERE id = :id";
+        $statement = $pdo->prepare($sql);
+        $statement->bindValue(":id", $id);
+        $statement->bindValue(":senha", $senha);
+        $statement->execute();
+        $reseta = $statement;
+
+        if ($reseta){
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Senha Resetada!',
+                'texto' => 'A senha foi resetada para: siscontrat2019',
+                'tipo' => 'success',
+                'location' => SERVERURL.'administrativo/usuarios'
+            ];
+        }else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao resetar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
 }

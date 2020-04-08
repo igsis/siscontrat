@@ -47,6 +47,9 @@ if (isset($_POST['_method'])) {
         case "apagarUsuarios":
             echo $adminObj->apagaUsuarios($_POST);
             break;
+        case "resetarSenha":
+            echo $adminObj->resetaSenha($_POST);
+            break;
     }
 
     if ($_POST['_method'] == "cadastrarCategoria") {
