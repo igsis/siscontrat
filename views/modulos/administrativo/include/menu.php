@@ -53,3 +53,9 @@
         <p>Relações Jurídicas</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="<?= SERVERURL ?>administrativo/usuarios" class="nav-link" id="usuarios">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Usuários</p>
+    </a>
+</li>

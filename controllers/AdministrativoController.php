@@ -561,4 +561,115 @@ class AdministrativoController extends AdministrativoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
+    public function listaUsuarios()
+    {
+        return parent::getUsuarios();
+    }
+
+    public function recuperaUsuarios($usuario_id) {
+        $usuario_id = MainModel::decryption($usuario_id);
+        return DbModel::getInfo('usuarios', $usuario_id, false)->fetchObject();
+    }
+
+    public function editaUsuarios($post) {
+        $usuario_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        unset ($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $update = DbModel::update('usuarios', $dados, $usuario_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Usuário Atualizado!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/cadastrar_usuarios&id=' . MainModel::encryption($usuario_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function insereUsuarios($post){
+        unset($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $insert = DbModel::insert('usuarios', $dados, false);
+        if ($insert->rowCount() >= 1) {
+            $relacao_id = DbModel::connection(true)->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Usuário Cadastrado!',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/usuarios'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function apagaUsuarios($id){
+        $id = MainModel::decryption($id['id']);
+        $apaga = DbModel::apaga("usuarios", $id, false);
+        if ($apaga){
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Usuário Deletado!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL.'administrativo/usuarios'
+            ];
+        }else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao apagar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function resetaSenha($id){
+        $id = MainModel::decryption($id['id']);
+        $pdo = self::connection($capac = false);
+        $senha =  MainModel::encryption('siscontrat2019');
+        $sql = "UPDATE usuarios SET senha =  :senha  WHERE id = :id";
+        $statement = $pdo->prepare($sql);
+        $statement->bindValue(":id", $id);
+        $statement->bindValue(":senha", $senha);
+        $statement->execute();
+        $reseta = $statement;
+
+        if ($reseta){
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Senha Resetada!',
+                'texto' => 'A senha foi resetada para: siscontrat2019',
+                'tipo' => 'success',
+                'location' => SERVERURL.'administrativo/usuarios'
+            ];
+        }else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao resetar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
 }

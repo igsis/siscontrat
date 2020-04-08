@@ -80,6 +80,8 @@ class ViewsModel
             'verbas_cadastro',
             'relacoes_juridicas',
             'cadastrar_relacoes',
+            'usuarios',
+            'cadastrar_usuarios',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

@@ -12,7 +12,7 @@
                 <h1 class="m-0 text-dark">Lista de Módulos</h1>
             </div><!-- /.col -->
             <div class="col-3">
-                <a href="<?= SERVERURL ?>administrativo/cadastrar_modulo"><button class="btn btn-success btn-block">Cadastrar módulo</button></a>
+                <a href="<?= SERVERURL ?>administrativo/cadastrar_modulo"><button class="btn btn-success btn-block">Adicionar módulo</button></a>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
