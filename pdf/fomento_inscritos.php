@@ -92,7 +92,7 @@ foreach ($inscritos as $inscrito){
     if($inscrito->pessoa_tipo_id == 1){
         require_once "../controllers/PessoaFisicaController.php";
         $pessoaFisicaObj = new PessoaFisicaController();
-        $pf = $pessoaFisicaObj->recuperaPessoaFisica($pessoaFisicaObj->encryption($inscrito->pessoa_fisica_id))->fetch();
+        $pf = $pessoaFisicaObj->recuperaPessoaFisica($pessoaFisicaObj->encryption($inscrito->pessoa_fisica_id));
         $proponente = $pf['nome'];
         $documento = $pf['cpf'];
         $nomeRep = "não aplicável";
