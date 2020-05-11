@@ -121,10 +121,7 @@ $fomento = $fomentoObj->recuperaEdital($id);
                         <div class="resposta-ajax"></div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <?php if ($id && $_SESSION['perfil_s'] == 1): ?>
-                                <a href="<?= SERVERURL ?>fomentos/edital_anexos&id=<?= $id ?>" class="btn btn-danger">Anexos
-                                    Solicitados</a>
-                            <?php endif ?>
+                            <a href="<?= SERVERURL ?>fomentos/edital_anexos&id=<?= $id ?>" class="btn btn-danger">Anexos solicitados</a>
                             <button type="submit" class="btn btn-info float-right">Gravar</button>
                         </div>
                         <!-- /.card-footer -->

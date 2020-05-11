@@ -45,7 +45,7 @@ $documentos = $documentoObj->listaDocumentos();
                                     <td><?=$documento->documento?></td>
                                     <td><?=$documento->sigla?></td>
                                     <td>
-                                        <a href="<?= SERVERURL . "documentos/edital_cadastro&id=" . $documentoObj->encryption($documento->id) ?>" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                                        <a href="<?= SERVERURL . "fomentos/documento_cadastro&id=" . $documentoObj->encryption($documento->id) ?>" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
