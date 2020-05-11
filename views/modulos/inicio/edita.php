@@ -4,6 +4,7 @@ require_once "./controllers/UsuarioController.php";
 $insUsuario = new UsuarioController();
 $usuario = $insUsuario->recuperaUsuario($id)->fetch();
 $local = $insUsuario->locaisUsuario($id);
+
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -116,14 +117,21 @@ $local = $insUsuario->locaisUsuario($id);
 
                             <div class="row">
                                 <div class="form-group col-md-12">
-                                    <label for="nome">Instituição: *</label>
-                                    <input type="text" class="form-control" id="nome" name="nome_completo" placeholder="Digite o nome completo" maxlength="120" value="<?=$local['nome']?>" required>
+                                    <label for="nome">Local: *</label>
+                                    <input type="text" class="form-control" id="local" name="local" placeholder="Digite o local" 
+                                    maxlength="120" value="<?=$local->local?>" required>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-md-12">
-                                    <label for="nome">Local: *</label>
-                                    <input type="text" class="form-control" id="nome" name="nome_completo" placeholder="Digite o nome completo" maxlength="120" value="<?=$local['local']?>" required>
+                                <div class="form-group col-md-8">
+                                    <label for="email">Instituição: *</label>
+                                    <input type="text" class="form-control" id="instituicao" name="instituicao" 
+                                    maxlength="120" value="<?=$local->nome?>" disabled>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="telefone">Sigla: *</label>
+                                    <input type="text"  class="form-control" id="sigla" name="sigla" maxlength="15" 
+                                     value="<?=$local->sigla?>" required>
                                 </div>
                             </div>
 
