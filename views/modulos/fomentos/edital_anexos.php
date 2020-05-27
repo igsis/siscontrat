@@ -4,7 +4,7 @@ require_once "./controllers/FomentoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $fomentoObj = new FomentoController();
 
-$arquivos = $fomentoObj->listaArquivosEdital($id);
+$arquivos = $fomentoObj->listaArquivosEdital($id)->fetchAll(PDO::FETCH_OBJ);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -28,7 +28,7 @@ $arquivos = $fomentoObj->listaArquivosEdital($id);
                     <div class="card-header">
                         <h3 class="card-title">Arquivos</h3>
                         <div class="card-tools">
-                            <button class="btn btn-sm btn-success">Adicionar Documento</button>
+                            <a href="<?= SERVERURL.'fomentos/edital_anexos_cadastro&tipo='.$fomentoObj->encryption($arquivos[0]->tipo_contratacao_id) ?>"><button class="btn btn-sm btn-success">Adicionar Documento</button></a>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -40,7 +40,8 @@ $arquivos = $fomentoObj->listaArquivosEdital($id);
                                 <th>Ordem</th>
                                 <th>Nº do anexo</th>
                                 <th>Documento</th>
-                                <th>Ação</th>
+                                <th>Obrigatório</th>
+                                <th width="15%">Ação</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -49,7 +50,13 @@ $arquivos = $fomentoObj->listaArquivosEdital($id);
                                     <td><?= $arquivo->ordem ?></td>
                                     <td><?= $arquivo->anexo ?></td>
                                     <td><?= $arquivo->documento ?></td>
-                                    <td></td>
+                                    <td><?php if($arquivo->obrigatorio == 1) echo "sim"; else echo "não" ?></td>
+                                    <td>
+                                        <a href="<?= SERVERURL . "fomentos/edital_anexos_cadastro&id=" . $fomentoObj->encryption($arquivo->id) ?>"
+                                           class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                                        <a href="<?= SERVERURL . "fomentos/edital_anexos_cadastro&id=" . $fomentoObj->encryption($arquivo->id) ?>"
+                                           class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Apagar</a>
+                                    </td>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -58,6 +65,7 @@ $arquivos = $fomentoObj->listaArquivosEdital($id);
                                 <th>Ordem</th>
                                 <th>Nº do anexo</th>
                                 <th>Documento</th>
+                                <th>Obrigatório</th>
                                 <th>Ação</th>
                             </tr>
                             </tfoot>

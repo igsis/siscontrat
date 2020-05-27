@@ -66,7 +66,8 @@ class ViewsModel
             'representante',
             'representante_cadastro',
             'documento_lista',
-            'documento_cadastro'
+            'documento_cadastro',
+            'edital_anexos_cadastro'
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
