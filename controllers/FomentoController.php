@@ -215,7 +215,8 @@ class FomentoController extends FomentoModel
 
     public function listaArquivosEdital($edital_id) {
         $edital_id = MainModel::decryption($edital_id);
-        return parent::recuperaArquivosEdital($edital_id);
+        $tipoContratacao = DbModel::getInfo('fom_editais', $edital_id, true)->fetchObject()->tipo_contratacao_id;
+        return DbModel::consultaSimples("SELECT * FROM contratacao_documentos cd INNER JOIN fom_lista_documentos fld ON fld.id = cd.fom_lista_documento_id WHERE tipo_contratacao_id = '$tipoContratacao'",true)->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function insereTipoContratacao($post) {

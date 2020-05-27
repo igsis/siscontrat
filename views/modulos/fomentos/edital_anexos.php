@@ -34,25 +34,51 @@ $arquivos = $fomentoObj->listaArquivosEdital($id);
                     <!-- /.card-header -->
                     <!-- form start -->
                     <div class="card-body">
-                    <?php foreach ($arquivos as $arquivo) : ?>
-                        <div class="row">
+                        <table id="tabela" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Ordem</th>
+                                <th>Nº do anexo</th>
+                                <th>Documento</th>
+                                <th>Ação</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($arquivos as $arquivo) : ?>
+                                <tr>
+                                    <td><?= $arquivo->ordem ?></td>
+                                    <td><?= $arquivo->anexo ?></td>
+                                    <td><?= $arquivo->documento ?></td>
+                                    <td></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Ordem</th>
+                                <th>Nº do anexo</th>
+                                <th>Documento</th>
+                                <th>Ação</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                        <!--<div class="row">
                             <div class="form-group col-9">
                                 <label for="documento">Documento:</label>
                                 <select class="form-control" name="documento" id="documento">
                                     <option value="">Selecione uma Opção...</option>
-                                    <?php $fomentoObj->geraOpcao('fom_lista_documentos', $arquivo->fom_lista_documento_id, false, false, true) ?>
+                                    <?php /*$fomentoObj->geraOpcao('fom_lista_documentos', $arquivo->fom_lista_documento_id, false, false, true) */?>
                                 </select>
                             </div>
                             <div class="form-group col-2">
                                 <label for="anexo">Nº do Anexo:</label>
-                                <input class="form-control" name="anexo" id="anexo" value="<?= $arquivo->anexo ?>">
+                                <input class="form-control" name="anexo" id="anexo" value="<?/*= $arquivo->anexo */?>">
                             </div>
                             <div class="form-group col-1">
                                 <label for="anexo">Ordem:</label>
-                                <input class="form-control" name="anexo" id="anexo" value="<?= $arquivo->ordem ?>">
+                                <input class="form-control" name="anexo" id="anexo" value="<?/*= $arquivo->ordem */?>">
                             </div>
-                        </div>
-                    <?php endforeach; ?>
+                        </div>-->
                     </div>
                 </div>
                 <!-- /.card -->
