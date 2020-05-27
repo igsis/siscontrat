@@ -4,7 +4,7 @@ require_once "./controllers/FomentoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $fomentoObj = new FomentoController();
 
-$arquivos = $fomentoObj->listaArquivosEdital($id)->fetchAll(PDO::FETCH_OBJ);
+$arquivos = $fomentoObj->listaDocumentosEdital($id);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -28,7 +28,7 @@ $arquivos = $fomentoObj->listaArquivosEdital($id)->fetchAll(PDO::FETCH_OBJ);
                     <div class="card-header">
                         <h3 class="card-title">Arquivos</h3>
                         <div class="card-tools">
-                            <a href="<?= SERVERURL.'fomentos/edital_anexos_cadastro&tipo='.$fomentoObj->encryption($arquivos[0]->tipo_contratacao_id) ?>"><button class="btn btn-sm btn-success">Adicionar Documento</button></a>
+                            <a href="<?= SERVERURL.'fomentos/edital_anexos_cadastro&edital='.$id ?>"><button class="btn btn-sm btn-success">Adicionar Documento</button></a>
                         </div>
                     </div>
                     <!-- /.card-header -->

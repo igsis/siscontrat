@@ -1,12 +1,13 @@
 <?php
 require_once "./controllers/FomentoController.php";
 
-$tipo = $_GET['tipo'];
+$tipo = isset($_GET['tipo']) ?? null;
+$edital = $_GET['edital'];
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $fomentoObj = new FomentoController();
 
-$arquivos = $fomentoObj->listaArquivosEdital($id)->fetch(PDO::FETCH_OBJ);
+$arquivos = $fomentoObj->recuperaDocumentoEdital($tipo,$id);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
