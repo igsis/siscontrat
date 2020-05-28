@@ -41,7 +41,7 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($tipo,$id);
                         <?php endif; ?>
                         <div class="card-body">
                             <div class="row">
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-1">
                                     <label for="ordem">Ordem: *</label>
                                     <input type="number" class="form-control" id="ordem" name="ordem" value="<?= $arquivos->ordem ?? null ?>" required>
                                 </div>
@@ -49,15 +49,16 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($tipo,$id);
                                     <label for="anexo">Anexo: *</label>
                                     <input type="text" class="form-control" id="anexo" name="anexo" value="<?= $arquivos->anexo ?? null ?>" maxlength="10" required>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-7">
                                     <label for="documento">Documento: *</label>
-                                    <select>
-
+                                    <select class="form-control" name="documento" id="documento">
+                                        <option value="">Selecione uma Opção...</option>
+                                        <?php $fomentoObj->geraOpcao('fom_lista_documentos', $arquivos->fom_lista_documento_id, false, false, true) ?>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-1">
                                     <label for="obrigatorio">Obrigatório</label>
-                                    <input>
+
                                 </div>
                             </div>
                         </div>
