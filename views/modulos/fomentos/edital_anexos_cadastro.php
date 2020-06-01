@@ -2,7 +2,7 @@
 require_once "./controllers/FomentoController.php";
 
 $tipo = isset($_GET['tipo']) ?? null;
-$edital = $_GET['edital'];
+$edital_id = $_GET['edital'];
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $fomentoObj = new FomentoController();
@@ -13,8 +13,8 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($tipo,$id);
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Cadastro de editais</h1>
+            <div class="col-sm-12">
+                <h1 class="m-0 text-dark">Edital <?= $fomentoObj->exibeNomeEdital($edital_id)?></h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -29,7 +29,7 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($tipo,$id);
                 <!-- Horizontal Form -->
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Dados</h3>
+                        <h3 class="card-title">Cadastro de documento</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
@@ -58,7 +58,13 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($tipo,$id);
                                 </div>
                                 <div class="form-group col-md-1">
                                     <label for="obrigatorio">Obrigatório</label>
-
+                                    <input type="checkbox" class="form-control" id="obrigatorio" name="obrigatorio" value="1"
+                                        <?php
+                                        if(isset($arquivos->obrigatorio)) {
+                                            if ($arquivos->obrigatorio == 1 )
+                                                echo 'checked';
+                                        }
+                                        ?> >
                                 </div>
                             </div>
                         </div>

@@ -70,23 +70,6 @@ $arquivos = $fomentoObj->listaDocumentosEdital($id);
                             </tr>
                             </tfoot>
                         </table>
-                        <!--<div class="row">
-                            <div class="form-group col-9">
-                                <label for="documento">Documento:</label>
-                                <select class="form-control" name="documento" id="documento">
-                                    <option value="">Selecione uma Opção...</option>
-                                    <?php /*$fomentoObj->geraOpcao('fom_lista_documentos', $arquivo->fom_lista_documento_id, false, false, true) */?>
-                                </select>
-                            </div>
-                            <div class="form-group col-2">
-                                <label for="anexo">Nº do Anexo:</label>
-                                <input class="form-control" name="anexo" id="anexo" value="<?/*= $arquivo->anexo */?>">
-                            </div>
-                            <div class="form-group col-1">
-                                <label for="anexo">Ordem:</label>
-                                <input class="form-control" name="anexo" id="anexo" value="<?/*= $arquivo->ordem */?>">
-                            </div>
-                        </div>-->
                     </div>
                 </div>
                 <!-- /.card -->
