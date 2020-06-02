@@ -249,8 +249,38 @@ class FomentoController extends FomentoModel
         return DbModel::consultaSimples("SELECT * FROM contratacao_documentos cd INNER JOIN fom_lista_documentos fld ON fld.id = cd.fom_lista_documento_id WHERE tipo_contratacao_id = '$tipoContratacao'",true)->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function recuperaDocumentoEdital($tipoContratacao,$fom_lista_documento_id)
+    public function recuperaDocumentoEdital($id)
     {
-        return DbModel::consultaSimples("SELECT * FROM contratacao_documentos WHERE tipo_contratacao_id = '$tipoContratacao' AND fom_lista_documento_id = '$fom_lista_documento_id'",true)->fetch(PDO::FETCH_OBJ);
+        $id = $this->decryption($id);
+        return $this->getInfo("contratacao_documentos",$id,true)->fetch(PDO::FETCH_OBJ);
+    }
+
+    public function insereAnexoEdital($post)
+    {
+        unset ($post['_method']);
+        $tipo = MainModel::decryption($post['tipo_contratacao_id']);
+        unset($post['tipo_contratacao_id']);
+        $dados = MainModel::limpaPost($post);
+        $dados['tipo_contratacao_id'] = $tipo;
+
+        $insert = DbModel::insert('contratacao_documentos', $dados, true);
+        if ($insert->rowCount() >= 1) {
+            $anexo_id = DbModel::connection(true)->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Anexo do Edital',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_anexos_cadastro&edital=' . MainModel::encryption($anexo_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
     }
 }

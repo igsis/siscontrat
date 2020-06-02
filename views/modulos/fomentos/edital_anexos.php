@@ -26,9 +26,9 @@ $arquivos = $fomentoObj->listaDocumentosEdital($id);
                 <!-- Horizontal Form -->
                 <div class="card card-default">
                     <div class="card-header">
-                        <h3 class="card-title">Arquivos</h3>
+                        <h3 class="card-title">Edital <?= $fomentoObj->exibeNomeEdital($id)?></h3>
                         <div class="card-tools">
-                            <a href="<?= SERVERURL.'fomentos/edital_anexos_cadastro&edital='.$id ?>"><button class="btn btn-sm btn-success">Adicionar Documento</button></a>
+                            <a href="<?= SERVERURL.'fomentos/edital_anexos_cadastro&edital='.$id.'&tipo='.$fomentoObj->encryption($arquivos[0]->tipo_contratacao_id) ?>"><button class="btn btn-sm btn-success">Adicionar Documento</button></a>
                         </div>
                     </div>
                     <!-- /.card-header -->

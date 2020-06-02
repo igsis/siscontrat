@@ -1,20 +1,19 @@
 <?php
 require_once "./controllers/FomentoController.php";
 
-$tipo = isset($_GET['tipo']) ?? null;
-$edital_id = $_GET['edital'];
-
+$tipo = $_GET['tipo'] ?? null;
+$edital_id = $_GET['edital'] ?? null;
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $fomentoObj = new FomentoController();
 
-$arquivos = $fomentoObj->recuperaDocumentoEdital($tipo,$id);
+$arquivos = $fomentoObj->recuperaDocumentoEdital($id);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-12">
-                <h1 class="m-0 text-dark">Edital <?= $fomentoObj->exibeNomeEdital($edital_id)?></h1>
+                <h1 class="m-0 text-dark">Cadastro de documento</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -29,17 +28,17 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($tipo,$id);
                 <!-- Horizontal Form -->
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Cadastro de documento</h3>
+                        <h3 class="card-title">Edital <?= $fomentoObj->exibeNomeEdital($edital_id)?></h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
                     <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/fomentoAjax.php" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
-                        <input type="hidden" name="_method" value="<?= ($id) ? "editar" : "cadastrar" ?>">
+                        <input type="hidden" name="_method" value="<?= ($id) ? "editarAnexo" : "cadastrarAnexo" ?>">
                         <input type="hidden" name="tipo_contratacao_id" value="<?= $tipo ?>">
                         <?php if ($id): ?>
-                            <input type="hidden" name="id" id="edital_id" value="<?= $id ?>">
+                            <input type="hidden" name="id" id="id" value="<?= $id ?>">
                         <?php endif; ?>
-                        <div class="card-body">
+                        <div class="card-body"><?=$tipo?>
                             <div class="row">
                                 <div class="form-group col-md-1">
                                     <label for="ordem">Ordem: *</label>
@@ -50,8 +49,8 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($tipo,$id);
                                     <input type="text" class="form-control" id="anexo" name="anexo" value="<?= $arquivos->anexo ?? null ?>" maxlength="10" required>
                                 </div>
                                 <div class="form-group col-md-7">
-                                    <label for="documento">Documento: *</label>
-                                    <select class="form-control" name="documento" id="documento">
+                                    <label for="fom_lista_documento_id">Documento: *</label>
+                                    <select class="form-control" name="fom_lista_documento_id" id="fom_lista_documento_id">
                                         <option value="">Selecione uma Opção...</option>
                                         <?php $fomentoObj->geraOpcao('fom_lista_documentos', $arquivos->fom_lista_documento_id, false, false, true) ?>
                                     </select>
@@ -71,6 +70,7 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($tipo,$id);
                         <div class="resposta-ajax"></div>
                         <!-- /.card-body -->
                         <div class="card-footer">
+                            <a href="<?=SERVERURL.'fomentos/edital_anexos&id='.$edital_id?>" class="btn btn-default">Voltar</a>
                             <button type="submit" class="btn btn-info float-right">Gravar</button>
                         </div>
                         <!-- /.card-footer -->
