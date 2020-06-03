@@ -7,23 +7,34 @@ if (isset($_POST['_method'])) {
     require_once "../controllers/FomentoController.php";
     $fomentoObj = new FomentoController();
 
-    if ($_POST['_method'] == "cadastrar") {
-        echo $fomentoObj->insereEdital($_POST);
-    } elseif ($_POST['_method'] == "editar") {
-        echo $fomentoObj->editaEdital($_POST);
+    switch ($_POST['_method']) {
+        case "cadastrar":
+            echo $fomentoObj->insereEdital($_POST);
+            break;
+        case "editar":
+            echo $fomentoObj->editaEdital($_POST);
+            break;
+        case "aprovar":
+            echo $fomentoObj->aprovarProjeto($_POST['id'],$_POST['valor_projeto'],$_POST['edital_id']);
+            break;
+        case "reprovar":
+            echo $fomentoObj->reprovarProjeto($_POST['id']);
+            break;
+        case "adicionar_tipo":
+            echo $fomentoObj->insereTipoContratacao($_POST);
+            break;
+        case "cadastrarAnexo":
+            echo $fomentoObj->insereAnexoEdital($_POST);
+            break;
+        case "editarAnexo":
+            echo $fomentoObj->editaAnexoEdital($_POST);
+            break;
+        case "apagarAnexo":
+            echo $fomentoObj->apagaAnexoEdital($_POST);
+            break;
     }
-
     if ($_POST['_method'] == 'pesquisa' && $_POST['search'] != ''){
         echo $fomentoObj->pesquisaEdital($_POST['search']);
-    }
-    if ($_POST['_method'] == 'aprovar'){
-        echo $fomentoObj->aprovarProjeto($_POST['id'],$_POST['valor_projeto'],$_POST['edital_id']);
-    }
-    if ($_POST['_method'] == 'reprovar'){
-        echo $fomentoObj->reprovarProjeto($_POST['id']);
-    }
-    if ($_POST['_method'] == 'adicionar_tipo'){
-        echo $fomentoObj->insereTipoContratacao($_POST);
     }
 } else {
     include_once "../config/destroySession.php";

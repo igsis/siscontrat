@@ -4,7 +4,7 @@ require_once "./controllers/FomentoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $fomentoObj = new FomentoController();
 
-$arquivos = $fomentoObj->listaArquivosEdital($id);
+$arquivos = $fomentoObj->listaDocumentosEdital($id);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -26,34 +26,60 @@ $arquivos = $fomentoObj->listaArquivosEdital($id);
                 <!-- Horizontal Form -->
                 <div class="card card-default">
                     <div class="card-header">
-                        <h3 class="card-title">Arquivos</h3>
+                        <h3 class="card-title">Edital <?= $fomentoObj->exibeNomeEdital($id)?></h3>
                         <div class="card-tools">
-                            <button class="btn btn-sm btn-success">Adicionar Documento</button>
+                            <a href="<?= SERVERURL.'fomentos/edital_anexos_cadastro&edital='.$id ?>"><button class="btn btn-sm btn-success">Adicionar Documento</button></a>
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
                     <div class="card-body">
-                    <?php foreach ($arquivos as $arquivo) : ?>
-                        <div class="row">
-                            <div class="form-group col-9">
-                                <label for="documento">Documento:</label>
-                                <select class="form-control" name="documento" id="documento">
-                                    <option value="">Selecione uma Opção...</option>
-                                    <?php $fomentoObj->geraOpcao('fom_lista_documentos', $arquivo->fom_lista_documento_id, false, false, true) ?>
-                                </select>
-                            </div>
-                            <div class="form-group col-2">
-                                <label for="anexo">Nº do Anexo:</label>
-                                <input class="form-control" name="anexo" id="anexo" value="<?= $arquivo->anexo ?>">
-                            </div>
-                            <div class="form-group col-1">
-                                <label for="anexo">Ordem:</label>
-                                <input class="form-control" name="anexo" id="anexo" value="<?= $arquivo->ordem ?>">
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+                        <table id="tabela" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Ordem</th>
+                                <th>Nº do anexo</th>
+                                <th>Documento</th>
+                                <th>Obrigatório</th>
+                                <th width="15%">Ação</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($arquivos as $arquivo) : ?>
+                                <tr>
+                                    <td><?= $arquivo->ordem ?></td>
+                                    <td><?= $arquivo->anexo ?></td>
+                                    <td><?= $arquivo->documento ?></td>
+                                    <td><?php if($arquivo->obrigatorio == 1) echo "sim"; else echo "não" ?></td>
+                                    <td>
+                                        <a href="<?= SERVERURL . "fomentos/edital_anexos_cadastro&id=" . $fomentoObj->encryption($arquivo->id)."&edital=".$id ?>" class="btn btn-sm btn-primary float-left mr-2"><i class="fas fa-edit"></i> Editar</a>
+                                        <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/fomentoAjax.php" role="form" data-form="delete">
+                                            <input type="hidden" name="_method" value="apagarAnexo">
+                                            <input type="hidden" name="anexo_id" value="<?=$fomentoObj->encryption($arquivo->id)?>">
+                                            <input type="hidden" name="edital_id" value="<?=$id?>">
+                                            <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Apagar</button>
+                                            <div class="resposta-ajax"></div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Ordem</th>
+                                <th>Nº do anexo</th>
+                                <th>Documento</th>
+                                <th>Obrigatório</th>
+                                <th>Ação</th>
+                            </tr>
+                            </tfoot>
+                        </table>
                     </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <a href="<?= SERVERURL.'fomentos/edital_cadastro&id='.$id ?>" class="btn btn-default">Voltar</a>
+                    </div>
+                    <!-- /.card-footer -->
                 </div>
                 <!-- /.card -->
             </div>

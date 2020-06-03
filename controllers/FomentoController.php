@@ -213,9 +213,16 @@ class FomentoController extends FomentoModel
         return 1;
     }
 
-    public function listaArquivosEdital($edital_id) {
-        $edital_id = MainModel::decryption($edital_id);
-        return parent::recuperaArquivosEdital($edital_id);
+    public function exibeNomeEdital($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::getInfo("fom_editais",$id,true)->fetchColumn(3);
+    }
+
+    public function recuperaTipoEdital($edital_id)
+    {
+        $edital_id = $this->decryption($edital_id);
+        return DbModel::getInfo('fom_editais', $edital_id, true)->fetchObject()->tipo_contratacao_id;
     }
 
     public function insereTipoContratacao($post) {
@@ -236,6 +243,109 @@ class FomentoController extends FomentoModel
                 'titulo' => 'Oops! Algo deu Errado!',
                 'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
                 'tipo' => 'error',
+            ];
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function listaDocumentosEdital($edital_id) {
+        $tipoContratacao = $this->recuperaTipoEdital($edital_id);
+        return DbModel::consultaSimples("SELECT cd.id, cd.tipo_contratacao_id, cd.fom_lista_documento_id, cd.anexo, cd.ordem, cd.obrigatorio, fld.documento FROM contratacao_documentos cd INNER JOIN fom_lista_documentos fld ON fld.id = cd.fom_lista_documento_id WHERE tipo_contratacao_id = '$tipoContratacao'",true)->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function recuperaDocumentoEdital($id)
+    {
+        $id = $this->decryption($id);
+        return $this->getInfo("contratacao_documentos",$id,true)->fetch(PDO::FETCH_OBJ);
+    }
+
+    public function insereAnexoEdital($post)
+    {
+        unset($post['_method']);
+        $edital_id = $post['edital_id'];
+        unset($post['edital_id']);
+        $post['obrigatorio'] = isset($post['obrigatorio']) ? MainModel::limparString($post['obrigatorio']) : 0;
+        $dados = MainModel::limpaPost($post);
+        $dados['tipo_contratacao_id'] = $this->recuperaTipoEdital($edital_id);
+
+        $insert = DbModel::insert('contratacao_documentos', $dados, true);
+        if ($insert->rowCount() >= 1) {
+            $anexo_id = DbModel::connection(true)->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Anexo do Edital',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_anexos_cadastro&edital=' . $edital_id .'&id=' . MainModel::encryption($anexo_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+                'location' => SERVERURL . 'fomentos/edital_anexos_cadastro&edital=' . $edital_id
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editaAnexoEdital($post)
+    {
+        unset($post['_method']);
+        $id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        $edital_id = $post['edital_id'];
+        unset($post['edital_id']);
+        $post['obrigatorio'] = isset($post['obrigatorio']) ? MainModel::limparString($post['obrigatorio']) : 0;
+        $dados = MainModel::limpaPost($post);
+        $dados['tipo_contratacao_id'] = $this->recuperaTipoEdital($edital_id);
+
+
+        $this->update("contratacao_documentos",$dados,$id,true);
+        if (DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Anexo do Edital!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_anexos_cadastro&edital=' .$edital_id . '&id=' . MainModel::encryption($id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+                'location' => SERVERURL . 'fomentos/edital_anexos_cadastro&edital=' .$edital_id . '&id=' . MainModel::encryption($id)
+            ];
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function apagaAnexoEdital($post)
+    {
+        $edital_id = $post['edital_id'];
+        $id = MainModel::decryption($post['anexo_id']);
+        $delete = DbModel::deleteEspecial('contratacao_documentos', 'id', $id, true);
+
+        if ($delete->rowCount() >= 1) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Anexo do Edital!',
+                'texto' => 'Anexo removido com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_anexos&id='.$edital_id
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+                'location' => SERVERURL . 'fomentos/edital_anexos&id=' . $edital_id
             ];
         }
 
