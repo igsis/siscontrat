@@ -265,6 +265,7 @@ class FomentoController extends FomentoModel
         unset($post['_method']);
         $edital_id = $post['edital_id'];
         unset($post['edital_id']);
+        $post['obrigatorio'] = isset($post['obrigatorio']) ? MainModel::limparString($post['obrigatorio']) : 0;
         $dados = MainModel::limpaPost($post);
         $dados['tipo_contratacao_id'] = $this->recuperaTipoEdital($edital_id);
 
@@ -297,8 +298,10 @@ class FomentoController extends FomentoModel
         unset($post['id']);
         $edital_id = $post['edital_id'];
         unset($post['edital_id']);
+        $post['obrigatorio'] = isset($post['obrigatorio']) ? MainModel::limparString($post['obrigatorio']) : 0;
         $dados = MainModel::limpaPost($post);
         $dados['tipo_contratacao_id'] = $this->recuperaTipoEdital($edital_id);
+
 
         $this->update("contratacao_documentos",$dados,$id,true);
         if (DbModel::connection()->errorCode() == 0) {
