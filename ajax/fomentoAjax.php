@@ -27,6 +27,7 @@ if (isset($_POST['_method'])) {
             echo $fomentoObj->insereAnexoEdital($_POST);
             break;
         case "editarAnexo":
+            echo $fomentoObj->editaAnexoEdital($_POST);
             break;
         case "apagarAnexo":
             break;

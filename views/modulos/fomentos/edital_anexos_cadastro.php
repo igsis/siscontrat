@@ -35,7 +35,7 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($id);
                     <!-- form start -->
                     <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/fomentoAjax.php" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
                         <input type="hidden" name="_method" value="<?= ($id) ? "editarAnexo" : "cadastrarAnexo" ?>">
-                        <input type="hidden" name="tipo_contratacao_id" value="<?= $tipo ?>">
+                        <input type="hidden" name="edital_id" value="<?=$edital_id?>">
                         <?php if ($id): ?>
                             <input type="hidden" name="id" id="id" value="<?= $id ?>">
                         <?php endif; ?>
@@ -61,8 +61,9 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($id);
                                     <input type="checkbox" class="form-control" id="obrigatorio" name="obrigatorio" value="1"
                                         <?php
                                         if(isset($arquivos->obrigatorio)) {
-                                            if ($arquivos->obrigatorio == 1 )
+                                            if ($arquivos->obrigatorio == 1 ) {
                                                 echo 'checked';
+                                            }
                                         }
                                         ?> >
                                 </div>

@@ -262,11 +262,11 @@ class FomentoController extends FomentoModel
 
     public function insereAnexoEdital($post)
     {
-        unset ($post['_method']);
-        $tipo = MainModel::decryption($post['tipo_contratacao_id']);
-        unset($post['tipo_contratacao_id']);
+        unset($post['_method']);
+        $edital_id = $post['edital_id'];
+        unset($post['edital_id']);
         $dados = MainModel::limpaPost($post);
-        $dados['tipo_contratacao_id'] = $tipo;
+        $dados['tipo_contratacao_id'] = $this->recuperaTipoEdital($edital_id);
 
         $insert = DbModel::insert('contratacao_documentos', $dados, true);
         if ($insert->rowCount() >= 1) {
@@ -276,7 +276,7 @@ class FomentoController extends FomentoModel
                 'titulo' => 'Anexo do Edital',
                 'texto' => 'Dados cadastrados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL . 'fomentos/edital_anexos_cadastro&edital=' . MainModel::encryption($anexo_id)
+                'location' => SERVERURL . 'fomentos/edital_anexos_cadastro&edital=' . $edital_id .'&id=' . MainModel::encryption($anexo_id)
             ];
         } else {
             $alerta = [
@@ -284,8 +284,41 @@ class FomentoController extends FomentoModel
                 'titulo' => 'Oops! Algo deu Errado!',
                 'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
                 'tipo' => 'error',
+                'location' => SERVERURL . 'fomentos/edital_anexos_cadastro&edital=' . $edital_id
             ];
         }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editaAnexoEdital($post)
+    {
+        unset($post['_method']);
+        $id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        $edital_id = $post['edital_id'];
+        unset($post['edital_id']);
+        $dados = MainModel::limpaPost($post);
+        $dados['tipo_contratacao_id'] = $this->recuperaTipoEdital($edital_id);
+
+        $this->update("contratacao_documentos",$dados,$id,true);
+        if (DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Anexo do Edital!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_anexos_cadastro&edital=' .$edital_id . '&id=' . MainModel::encryption($id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+                'location' => SERVERURL . 'fomentos/edital_anexos_cadastro&edital=' .$edital_id . '&id=' . MainModel::encryption($id)
+            ];
+        }
+
         return MainModel::sweetAlert($alerta);
     }
 }
