@@ -1,10 +1,11 @@
 <?php
 require_once "./controllers/FomentoController.php";
 
-$tipo = $_GET['tipo'] ?? null;
-$edital_id = $_GET['edital'] ?? null;
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $fomentoObj = new FomentoController();
+
+$edital_id = $_GET['edital'] ?? null;
+$tipo = $fomentoObj->recuperaTipoEdital($edital_id);
 
 $arquivos = $fomentoObj->recuperaDocumentoEdital($id);
 ?>
@@ -38,7 +39,7 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($id);
                         <?php if ($id): ?>
                             <input type="hidden" name="id" id="id" value="<?= $id ?>">
                         <?php endif; ?>
-                        <div class="card-body"><?=$tipo?>
+                        <div class="card-body">
                             <div class="row">
                                 <div class="form-group col-md-1">
                                     <label for="ordem">Ordem: *</label>
@@ -70,7 +71,7 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($id);
                         <div class="resposta-ajax"></div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <a href="<?=SERVERURL.'fomentos/edital_anexos&id='.$edital_id?>" class="btn btn-default">Voltar</a>
+                            <a href="<?= SERVERURL.'fomentos/edital_anexos&id='.$edital_id ?>" class="btn btn-default">Voltar</a>
                             <button type="submit" class="btn btn-info float-right">Gravar</button>
                         </div>
                         <!-- /.card-footer -->

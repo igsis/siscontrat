@@ -28,7 +28,7 @@ $arquivos = $fomentoObj->listaDocumentosEdital($id);
                     <div class="card-header">
                         <h3 class="card-title">Edital <?= $fomentoObj->exibeNomeEdital($id)?></h3>
                         <div class="card-tools">
-                            <a href="<?= SERVERURL.'fomentos/edital_anexos_cadastro&edital='.$id.'&tipo='.$fomentoObj->encryption($arquivos[0]->tipo_contratacao_id) ?>"><button class="btn btn-sm btn-success">Adicionar Documento</button></a>
+                            <a href="<?= SERVERURL.'fomentos/edital_anexos_cadastro&edital='.$id ?>"><button class="btn btn-sm btn-success">Adicionar Documento</button></a>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -52,10 +52,8 @@ $arquivos = $fomentoObj->listaDocumentosEdital($id);
                                     <td><?= $arquivo->documento ?></td>
                                     <td><?php if($arquivo->obrigatorio == 1) echo "sim"; else echo "não" ?></td>
                                     <td>
-                                        <a href="<?= SERVERURL . "fomentos/edital_anexos_cadastro&id=" . $fomentoObj->encryption($arquivo->id) ?>"
-                                           class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
-                                        <a href="<?= SERVERURL . "fomentos/edital_anexos_cadastro&id=" . $fomentoObj->encryption($arquivo->id) ?>"
-                                           class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Apagar</a>
+                                        <a href="<?= SERVERURL . "fomentos/edital_anexos_cadastro&id=" . $fomentoObj->encryption($arquivo->id)."&edital=".$id ?>" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                                        <a href="<?= SERVERURL . "fomentos/edital_anexos_cadastro&id=" . $fomentoObj->encryption($arquivo->id)."&edital=".$id ?>" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Apagar</a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

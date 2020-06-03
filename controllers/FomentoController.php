@@ -219,6 +219,12 @@ class FomentoController extends FomentoModel
         return DbModel::getInfo("fom_editais",$id,true)->fetchColumn(3);
     }
 
+    public function recuperaTipoEdital($edital_id)
+    {
+        $edital_id = $this->decryption($edital_id);
+        return DbModel::getInfo('fom_editais', $edital_id, true)->fetchObject()->tipo_contratacao_id;
+    }
+
     public function insereTipoContratacao($post) {
         $edital_id = isset($post['id']) ? "&id=".$post['id'] : "";
         $dados['tipo_contratacao'] = MainModel::limparString($post['tipo_contratacao']);
@@ -244,9 +250,8 @@ class FomentoController extends FomentoModel
     }
 
     public function listaDocumentosEdital($edital_id) {
-        $edital_id = MainModel::decryption($edital_id);
-        $tipoContratacao = DbModel::getInfo('fom_editais', $edital_id, true)->fetchObject()->tipo_contratacao_id;
-        return DbModel::consultaSimples("SELECT * FROM contratacao_documentos cd INNER JOIN fom_lista_documentos fld ON fld.id = cd.fom_lista_documento_id WHERE tipo_contratacao_id = '$tipoContratacao'",true)->fetchAll(PDO::FETCH_OBJ);
+        $tipoContratacao = $this->recuperaTipoEdital($edital_id);
+        return DbModel::consultaSimples("SELECT cd.id, cd.tipo_contratacao_id, cd.fom_lista_documento_id, cd.anexo, cd.ordem, cd.obrigatorio, fld.documento FROM contratacao_documentos cd INNER JOIN fom_lista_documentos fld ON fld.id = cd.fom_lista_documento_id WHERE tipo_contratacao_id = '$tipoContratacao'",true)->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function recuperaDocumentoEdital($id)
