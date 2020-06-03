@@ -69,6 +69,11 @@ $arquivos = $fomentoObj->listaDocumentosEdital($id);
                             </tfoot>
                         </table>
                     </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <a href="<?= SERVERURL.'fomentos/edital_cadastro&id='.$id ?>" class="btn btn-default">Voltar</a>
+                    </div>
+                    <!-- /.card-footer -->
                 </div>
                 <!-- /.card -->
             </div>
