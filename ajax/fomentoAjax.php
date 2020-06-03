@@ -30,6 +30,7 @@ if (isset($_POST['_method'])) {
             echo $fomentoObj->editaAnexoEdital($_POST);
             break;
         case "apagarAnexo":
+            echo $fomentoObj->apagaAnexoEdital($_POST);
             break;
     }
     if ($_POST['_method'] == 'pesquisa' && $_POST['search'] != ''){

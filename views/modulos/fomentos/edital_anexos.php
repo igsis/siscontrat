@@ -52,8 +52,14 @@ $arquivos = $fomentoObj->listaDocumentosEdital($id);
                                     <td><?= $arquivo->documento ?></td>
                                     <td><?php if($arquivo->obrigatorio == 1) echo "sim"; else echo "não" ?></td>
                                     <td>
-                                        <a href="<?= SERVERURL . "fomentos/edital_anexos_cadastro&id=" . $fomentoObj->encryption($arquivo->id)."&edital=".$id ?>" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
-                                        <a href="<?= SERVERURL . "fomentos/edital_anexos_cadastro&id=" . $fomentoObj->encryption($arquivo->id)."&edital=".$id ?>" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Apagar</a>
+                                        <a href="<?= SERVERURL . "fomentos/edital_anexos_cadastro&id=" . $fomentoObj->encryption($arquivo->id)."&edital=".$id ?>" class="btn btn-sm btn-primary float-left mr-2"><i class="fas fa-edit"></i> Editar</a>
+                                        <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/fomentoAjax.php" role="form" data-form="delete">
+                                            <input type="hidden" name="_method" value="apagarAnexo">
+                                            <input type="hidden" name="anexo_id" value="<?=$fomentoObj->encryption($arquivo->id)?>">
+                                            <input type="hidden" name="edital_id" value="<?=$id?>">
+                                            <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Apagar</button>
+                                            <div class="resposta-ajax"></div>
+                                        </form>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

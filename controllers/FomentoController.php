@@ -324,4 +324,31 @@ class FomentoController extends FomentoModel
 
         return MainModel::sweetAlert($alerta);
     }
+
+    public function apagaAnexoEdital($post)
+    {
+        $edital_id = $post['edital_id'];
+        $id = MainModel::decryption($post['anexo_id']);
+        $delete = DbModel::deleteEspecial('contratacao_documentos', 'id', $id, true);
+
+        if ($delete->rowCount() >= 1) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Anexo do Edital!',
+                'texto' => 'Anexo removido com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_anexos&id='.$edital_id
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+                'location' => SERVERURL . 'fomentos/edital_anexos&id=' . $edital_id
+            ];
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
 }
