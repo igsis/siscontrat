@@ -11,7 +11,7 @@ $fomento = $fomentoObj->recuperaEdital($id);
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Cadastro de editais</h1>
+                <h1 class="m-0 text-dark">Cadastro de anexo de edital</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -121,10 +121,9 @@ $fomento = $fomentoObj->recuperaEdital($id);
                         <div class="resposta-ajax"></div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <?php if ($id && $_SESSION['perfil_s'] == 1): ?>
-                                <a href="<?= SERVERURL ?>fomentos/edital_anexos&id=<?= $id ?>" class="btn btn-danger">Anexos
-                                    Solicitados</a>
-                            <?php endif ?>
+                            <?php if ($id): ?>
+                                <a href="<?= SERVERURL ?>fomentos/edital_anexos&id=<?= $id ?>" class="btn btn-warning">Anexos solicitados</a>
+                            <?php endif; ?>
                             <button type="submit" class="btn btn-info float-right">Gravar</button>
                         </div>
                         <!-- /.card-footer -->

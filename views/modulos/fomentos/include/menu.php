@@ -22,3 +22,9 @@
         <p>Editais arquivados</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="<?= SERVERURL ?>fomentos/documento_lista" class="nav-link" id="lista_documentos_lista">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Lista de documentos</p>
+    </a>
+</li>
