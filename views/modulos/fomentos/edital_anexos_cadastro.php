@@ -43,7 +43,7 @@ $arquivos = $fomentoObj->recuperaDocumentoEdital($id);
                             <div class="row">
                                 <div class="form-group col-md-1">
                                     <label for="ordem">Ordem: *</label>
-                                    <input type="number" class="form-control" id="ordem" name="ordem" value="<?= $arquivos->ordem ?? null ?>" required>
+                                    <input type="number" class="form-control" id="ordem" name="ordem" value="<?= $arquivos->ordem ?? null ?>" min="1" required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="anexo">Anexo: *</label>
