@@ -48,7 +48,7 @@ $fomentos = $fomentoObj->listaEditais();
                                     <th>Data da abertura</th>
                                     <th>Data de encerramento</th>
                                     <th>Status das Inscrições</th>
-                                    <th>Ação</th>
+                                    <th width="15%">Ação</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,8 +64,17 @@ $fomentos = $fomentoObj->listaEditais();
                                             "<div class=\"quadr bg-red\" data-toggle=\"popover\" data-trigger=\"hover\" data-content=\"Encerradas\"></div>"?>
                                     </td>
                                     <td>
-                                        <a href="<?= SERVERURL . "fomentos/edital_cadastro&id=" . $fomentoObj->encryption($fomento->id) ?>"
-                                           class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <a href="<?= SERVERURL . "fomentos/edital_cadastro&id=" . $fomentoObj->encryption($fomento->id) ?>"
+                                                   class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                                            </div>
+                                            <div class="col-md">
+                                                <?=$fomentoObj->verificaEditalAtivo($fomento->data_abertura, $fomento->data_encerramento) ? "" :
+                                                    "<button type=\"button\" class=\"btn btn-sm btn-danger\" data-toggle=\"modal\" data-target=\"#arquivarEdital\" data-id=\"{$fomentoObj->encryption($fomento->id)}\" data-name='teste'><i class=\"fas fa-archive\"></i> Arquivar</button>"?>
+                                            </div>
+                                        </div>
+
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -92,8 +101,46 @@ $fomentos = $fomentoObj->listaEditais();
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
+<div class="modal fade" id="arquivarEdital" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Arquivar Edital</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p> </p>
+            </div>
+            <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/fomentoAjax.php" role="form" data-form="save">
+                <input type="hidden" name="_method" value="arquivarEdital">
+                <input type="hidden" name="id" id="id" value="">
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Arquivar</button>
+                </div>
+                <div class="resposta-ajax"></div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('[data-toggle="popover"]').popover();
     });
+</script>
+
+<script type="text/javascript">
+    $('#arquivarEdital').on('show.bs.modal', function (e) {
+        let edital = $(e.relatedTarget).attr('data-name');
+        let id = $(e.relatedTarget).attr('data-id');
+
+        $(this).find('p').text(`Tem certeza que deseja excluir o edital ${edital} ?`);
+        $(this).find('#id').attr('value', `${id}`);
+    })
 </script>
