@@ -140,6 +140,29 @@ class FomentoController extends FomentoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    public function arquivaEdital($post)
+    {
+        $id = MainModel::decryption($post['id']);
+        $arquiva = DbModel::apaga("fom_editais", $id, true);
+        if ($arquiva->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Arquivamento de edital',
+                'texto' => 'Edital arquivado com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_lista'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
     /** @TODO: Verificar se esta função é realmente necessária
      * @param int $edital_id
      * @return mixed

@@ -115,7 +115,7 @@ $fomentos = $fomentoObj->listaEditais();
                 <p> </p>
             </div>
             <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/fomentoAjax.php" role="form" data-form="save">
-                <input type="hidden" name="_method" value="arquivarEdital">
+                <input type="hidden" name="_method" value="arquivaEdital">
                 <input type="hidden" name="id" id="id" value="">
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>

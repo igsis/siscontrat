@@ -14,6 +14,9 @@ if (isset($_POST['_method'])) {
         case "editar":
             echo $fomentoObj->editaEdital($_POST);
             break;
+        case "arquivaEdital":
+            echo $fomentoObj->arquivaEdital($_POST);
+            break;
         case "aprovar":
             echo $fomentoObj->aprovarProjeto($_POST['id'],$_POST['valor_projeto'],$_POST['edital_id']);
             break;
