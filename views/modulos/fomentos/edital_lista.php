@@ -71,7 +71,7 @@ $fomentos = $fomentoObj->listaEditais();
                                             </div>
                                             <div class="col-md">
                                                 <?=$fomentoObj->verificaEditalAtivo($fomento->data_abertura, $fomento->data_encerramento) ? "" :
-                                                    "<button type=\"button\" class=\"btn btn-sm btn-danger\" data-toggle=\"modal\" data-target=\"#arquivarEdital\" data-id=\"{$fomentoObj->encryption($fomento->id)}\" data-name='teste'><i class=\"fas fa-archive\"></i> Arquivar</button>"?>
+                                                    "<button type=\"button\" class=\"btn btn-sm btn-danger\" data-toggle=\"modal\" data-target=\"#arquivarEdital\" data-id=\"{$fomentoObj->encryption($fomento->id)}\" data-name='{$fomento->titulo}'><i class=\"fas fa-archive\"></i> Arquivar</button>"?>
                                             </div>
                                         </div>
 
@@ -133,14 +133,4 @@ $fomentos = $fomentoObj->listaEditais();
     $(document).ready(function () {
         $('[data-toggle="popover"]').popover();
     });
-</script>
-
-<script type="text/javascript">
-    $('#arquivarEdital').on('show.bs.modal', function (e) {
-        let edital = $(e.relatedTarget).attr('data-name');
-        let id = $(e.relatedTarget).attr('data-id');
-
-        $(this).find('p').text(`Tem certeza que deseja excluir o edital ${edital} ?`);
-        $(this).find('#id').attr('value', `${id}`);
-    })
 </script>
