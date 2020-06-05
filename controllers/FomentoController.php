@@ -163,6 +163,30 @@ class FomentoController extends FomentoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    public function desarquivaEdital($post)
+    {
+        $id = $post['id'];
+        $dados['publicado'] = 1;
+        $desarquiva = DbModel::update("fom_editais",$dados,$id,true);
+        if ($desarquiva->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Desarquivamento de edital',
+                'texto' => 'Edital desarquivado com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_arquivado_lista'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
     /** @TODO: Verificar se esta função é realmente necessária
      * @param int $edital_id
      * @return mixed
