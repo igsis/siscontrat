@@ -285,3 +285,11 @@ $('#dinheiro').ready(function () {
      $('#dinheiro').text(dinheiroBr)
 
 });
+
+$('#arquivarEdital').on('show.bs.modal', function (e) {
+    let edital = $(e.relatedTarget).attr('data-name');
+    let id = $(e.relatedTarget).attr('data-id');
+
+    $(this).find('p').text(`Tem certeza que deseja excluir o edital ${edital} ?`);
+    $(this).find('#id').attr('value', `${id}`);
+})
