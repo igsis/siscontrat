@@ -44,7 +44,12 @@ $fomentos = $fomentoObj->listaEditaisArquivados();
                                     <td><?=$fomento->tipo_contratacao?></td>
                                     <td><?=$fomentoObj->dataParaBR($fomento->data_encerramento)?></td>
                                     <td>
-<!--                                        <a href="--><?//= SERVERURL . "fomentos/edital_cadastro&id=" . $fomentoObj->encryption($fomento->id) ?><!--" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>-->
+                                        <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/fomentoAjax.php" role="form" data-form="save">
+                                            <input type="hidden" name="_method" value="desarquivaEdital">
+                                            <input type="hidden" name="id" id="id" value="<?=$fomento->id?>">
+                                            <button type="submit" class="btn btn-success"><i class="fas fa-box-open"></i> Desarquivar</button>
+                                            <div class="resposta-ajax"></div>
+                                        </form>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

@@ -20,6 +20,7 @@
                             echo "<strong>POST</strong><pre>", var_dump($_POST), "</pre>";
                             echo "<strong>GET</strong><pre>", var_dump($_GET), "</pre>";
                             echo "<strong>FILES</strong><pre>", var_dump($_FILES), "</pre>";
+                            echo "<strong>SERVER</strong><pre>", var_dump($_SERVER), "</pre>";
                             echo ini_get('session.gc_maxlifetime') / 60; // em minutos
                             ?>
                         </div>

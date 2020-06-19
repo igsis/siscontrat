@@ -9,12 +9,12 @@ if (isset($_POST['usuario']) && (isset($_POST['senha']))) {
     <div class="card">
         <div class="card-header bg-dark">
             <a href="<?= SERVERURL ?>inicio" class="brand-link">
-                <img src="<?= SERVERURL ?>views/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <img src="<?= SERVERURL ?>views/dist/img/SisContratLogo.png" alt="SisContrat Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light"><?= NOMESIS ?></span>
             </a>
         </div>
         <div class="card-body register-card-body">
-            <p class="card-text"><span style="text-align: justify; display:block;"> Para iniciar sua sessão, faça login utilizando e-mail e senha cadastrados</span></p>
+            <p class="card-text"><span style="text-align: justify; display:block;"> Para iniciar sua sessão, faça login utilizando o usuário e senha cadastrados</span></p>
             <form action="" method="POST">
                 <label>Usuário</label>
                 <div class="input-group mb-3">

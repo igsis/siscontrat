@@ -11,7 +11,7 @@ $fomento = $fomentoObj->recuperaEdital($id);
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Cadastro de editais</h1>
+                <h1 class="m-0 text-dark">Cadastro de anexo de edital</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -121,10 +121,9 @@ $fomento = $fomentoObj->recuperaEdital($id);
                         <div class="resposta-ajax"></div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <?php if ($id && $_SESSION['perfil_s'] == 1): ?>
-                                <a href="<?= SERVERURL ?>fomentos/edital_anexos&id=<?= $id ?>" class="btn btn-danger">Anexos
-                                    Solicitados</a>
-                            <?php endif ?>
+                            <?php if ($id): ?>
+                                <a href="<?= SERVERURL ?>fomentos/edital_anexos&id=<?= $id ?>" class="btn btn-warning">Anexos solicitados</a>
+                            <?php endif; ?>
                             <button type="submit" class="btn btn-info float-right">Gravar</button>
                         </div>
                         <!-- /.card-footer -->
@@ -221,6 +220,22 @@ $fomento = $fomentoObj->recuperaEdital($id);
 
     $(function () {
         // Summernote
-        $('.textarea').summernote({ lang: 'pt-BR' })
+        $('.textarea').summernote({
+            lang: 'pt-BR',
+            cleaner:{
+                action: 'both', // both|button|paste 'button' only cleans via toolbar button, 'paste' only clean when pasting content, both does both options.
+                newline: '<br>', // Summernote's default is to use '<p><br></p>'
+                notStyle: 'position:absolute;top:0;left:0;right:0', // Position of Notification
+                icon: '<i class="note-icon">[Your Button]</i>',
+                keepHtml: false, // Remove all Html formats
+                keepOnlyTags: ['<p>', '<br>', '<ul>', '<li>', '<b>', '<strong>','<i>', '<a>'], // If keepHtml is true, remove all tags except these
+                keepClasses: true, // Remove Classes
+                badTags: ['style', 'script', 'applet', 'embed', 'noframes', 'noscript', 'html'], // Remove full tags with contents
+                badAttributes: ['style', 'start'], // Remove attributes from remaining tags
+                limitChars: false, // 0/false|# 0/false disables option
+                limitDisplay: 'both', // text|html|both
+                limitStop: false // true/false
+            }
+        })
     });
 </script>

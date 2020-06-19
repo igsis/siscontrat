@@ -175,4 +175,45 @@ class ArquivoController extends ArquivoModel
         $arquivo = DbModel::consultaSimples($sql)->rowCount();
         return $arquivo > 0 ? true : false;
     }
+
+    public function downloadArquivos($fom_projeto_id)
+    {
+        $path = "../../capac/uploads/";
+        $data = date('YmdHis');
+        $nome_arquivo = $data . ".zip";
+
+        $zip = new ZipArchive();
+
+        if ($zip->open($nome_arquivo, ZipArchive::CREATE) === true) {
+
+            $query = DbModel::consultaSimples(" SELECT * FROM fom_arquivos WHERE publicado = 1 AND fom_projeto_id = '$fom_projeto_id'",true)->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($query as $arquivo) {
+                $file = $path . $arquivo['arquivo'];
+                $file2 = $arquivo['arquivo'];
+                if ($zip->addFile($file, $file2)) {
+                    $zipou = true;
+                } else {
+                    $zipou = false;
+                }
+            }
+
+            $zip->close();
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Disposition: attachment; filename="' . $nome_arquivo . '"');
+        header('Content-Type: application/octet-stream');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Length: ' . filesize($nome_arquivo));
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+        header('Expires: 0');
+
+        ob_end_clean(); //essas duas linhas antes do readfile
+        flush();
+
+        readfile($nome_arquivo);
+
+        unlink($data . ".zip");
+    }
 }

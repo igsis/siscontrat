@@ -1,2 +1,5 @@
 RewriteEngine On
+
+RewriteRule ^(api)($|/) - [L]
+
 RewriteRule ^([a-zA-Z0-9&=/_]+)$ index.php?views=$1
