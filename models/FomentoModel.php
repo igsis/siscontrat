@@ -8,7 +8,7 @@ if ($pedidoAjax) {
 class FomentoModel extends MainModel
 {
     protected function recuperaInscritos($edital_id) {
-        $queryInscritos = DbModel::consultaSimples("SELECT * FROM fom_projetos WHERE fom_edital_id = '$edital_id' AND protocolo IS NOT NULL", true);
+        $queryInscritos = DbModel::consultaSimples("SELECT fp.*, fpd.instituicao, fpd.site FROM fom_projetos fp INNER JOIN fom_projeto_dados fpd ON fpd.fom_projeto_id = fp.id WHERE fom_edital_id = '$edital_id' AND protocolo IS NOT NULL", true);
         if ($queryInscritos->rowCount() > 0) {
             return $queryInscritos->fetchAll(PDO::FETCH_OBJ);
 //            foreach ($inscritos as $key => $inscrito) {
