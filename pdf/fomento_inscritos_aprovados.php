@@ -13,7 +13,8 @@ $objPHPExcel = new PHPExcel();
 $fomentoObj = new FomentoController();
 $arqObj = new ArquivoController();
 
-$nomeEdital = $fomentoObj->recuperaEdital($id)->titulo;
+$edital = $fomentoObj->recuperaEdital($id);
+$nomeEdital = $edital->titulo;
 $inscritos = $fomentoObj->listaInscritos($id);
 
 $linkStyle = [
@@ -26,8 +27,8 @@ $linkStyle = [
 // Podemos renomear o nome das planilha atual, lembrando que um único arquivo pode ter várias planilhas
 $objPHPExcel->getProperties()->setCreator("Sistema SisContrat");
 $objPHPExcel->getProperties()->setLastModifiedBy("Sistema SisContrat");
-$objPHPExcel->getProperties()->setTitle("Relatório de Inscritos Aprovados");
-$objPHPExcel->getProperties()->setSubject("Relatório de Inscritos Aprovados");
+$objPHPExcel->getProperties()->setTitle("Relatório de Inscritos");
+$objPHPExcel->getProperties()->setSubject("Relatório de Inscritos");
 $objPHPExcel->getProperties()->setDescription("Gerado automaticamente a partir do Sistema SisContrat");
 $objPHPExcel->getProperties()->setKeywords("office 2007 openxml php");
 $objPHPExcel->getProperties()->setCategory("Fomentos");
