@@ -226,7 +226,8 @@ class FomentoController extends FomentoModel
 
     public function recuperaProjeto($idInscrito){
         $id = MainModel::decryption($idInscrito);
-        $resultado = DbModel::getInfo('fom_projetos',$id,true)->fetch(PDO::FETCH_ASSOC);
+        $resultado = DbModel::consultaSimples("SELECT fp.*, fpd.instituicao, fpd.site FROM fom_projetos fp INNER JOIN fom_projeto_dados fpd ON fpd.fom_projeto_id = fp.id WHERE fp.id = '$id'",true)->fetch(PDO::FETCH_ASSOC);
+        //$resultado = DbModel::getInfo('fom_projetos',$id,true)->fetch(PDO::FETCH_ASSOC);
         $resultado['responsavel_inscricao'] = DbModel::consultaSimples("SELECT nome FROM usuarios WHERE id='{$resultado['usuario_id']}'")->fetchColumn();
         return $resultado;
     }
