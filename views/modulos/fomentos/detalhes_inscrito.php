@@ -117,6 +117,13 @@ $strArquivos = '';
                                 <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel"
                                      aria-labelledby="custom-tabs-one-profile-tab">
                                     <p>
+                                        <span class="font-weight-bold">Protocolo: </span> <?= $projeto['protocolo'] ?>
+                                    </p>
+                                    <p>
+                                        <span class="font-weight-bold">Data da Inscrição: </span>
+                                        <?= $fomentoObj->dataHora($projeto['data_inscricao']) ?>
+                                    </p>
+                                    <p>
                                         <span class="font-weight-bold">Razão Social:</span>
                                         <span class="text-left"><?= $pj['razao_social'] ?></span>
                                         <span class="font-weight-bold ml-5">CNPJ:</span>
@@ -146,8 +153,15 @@ $strArquivos = '';
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel"
                                      aria-labelledby="custom-tabs-one-messages-tab">
+                                    <p>
+                                        <span class="font-weight-bold">Protocolo: </span> <?= $projeto['protocolo'] ?>
+                                    </p>
+                                    <p>
+                                        <span class="font-weight-bold">Data da Inscrição: </span>
+                                        <?= $fomentoObj->dataHora($projeto['data_inscricao']) ?>
+                                    </p>
                                     <div class="row justify-content-center align-items-center">
-                                        <div class="col-5">
+                                        <div class="col-8">
                                             <div class="card card-gray">
                                                 <div class="card-header  text-center">
                                                     <h3 class="card-title">Lista de arquivos</h3>
