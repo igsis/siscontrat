@@ -8,7 +8,9 @@ if ($pedidoAjax) {
 class FomentoModel extends MainModel
 {
     protected function recuperaInscritos($edital_id, $aprovados = false) {
-        $sql = "SELECT fp.*, fpd.instituicao, fpd.site FROM fom_projetos fp LEFT JOIN fom_projeto_dados fpd ON fpd.fom_projeto_id = fp.id WHERE fom_edital_id = '$edital_id' AND protocolo IS NOT NULL";
+        $sql = "SELECT fp.*, fpd.instituicao, fpd.site FROM fom_projetos fp
+                LEFT JOIN fom_projeto_dados fpd ON fpd.fom_projeto_id = fp.id
+                WHERE fom_edital_id = '$edital_id' AND protocolo IS NOT NULL";
 
         if ($aprovados) {
             $sql .= " AND publicado = 2";
