@@ -88,8 +88,18 @@ $strArquivos = '';
                                         <span class="font-weight-bold">Protocolo: </span> <?= $projeto['protocolo'] ?>
                                     </p>
                                     <p>
+                                        <span class="font-weight-bold">Data da Inscrição: </span>
+                                        <?= $fomentoObj->dataHora($projeto['data_inscricao']) ?>
+                                    </p>
+                                    <p>
+                                        <span class="font-weight-bold">Nome do projeto:</span> <?= $projeto['nome_projeto'] ?>
+                                    </p>
+                                    <p>
                                         <span class="font-weight-bold">Instituição responsável: </span>
-                                        <span class="text-left"><?= $projeto['instituicao'] ?></span>
+                                        <?= $projeto['instituicao'] ?? null ?>
+                                    </p>
+                                    <p>
+                                        <span class="font-weight-bold">Site: </span><?= $projeto['site'] ?? null?>
                                     </p>
                                     <p>
                                         <span class="font-weight-bold">Responsável pela inscrição:</span>
@@ -101,17 +111,17 @@ $strArquivos = '';
                                         <span class="font-weight-bold ml-5">Duração: (em meses):</span>
                                         <span class="text-left"><?= $projeto['duracao'] ?></span>
                                     </p>
-                                    <p class="flex-wrap text-justify">
-                                        <span class="font-weight-bold mr-2">Núcleo artístico:</span>
-                                        <?= $projeto['nucleo_artistico'] ?>
-                                    </p>
                                     <p>
-                                        <span class="font-weight-bold">Representante do núcleo:</span>
+                                        <span class="font-weight-bold">Nome do núcleo artístico/coletivo artístico:</span>
+                                        <span class="font-weight-bold ml-5">Nome do representante do núcleo:</span>
                                         <?= $projeto['representante_nucleo'] ?>
                                     </p>
                                     <p>
-                                        <span class="font-weight-bold">Data da Inscrição: </span>
-                                        <?= $fomentoObj->dataHora($projeto['data_inscricao']) ?>
+                                        <span class="font-weight-bold">Nome do produtor independente:</span>
+                                    </p>
+                                    <p class="flex-wrap text-justify">
+                                        <span class="font-weight-bold mr-2">Núcleo artístico:</span>
+                                        <?= $projeto['nucleo_artistico'] ?>
                                     </p>
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel"
