@@ -221,7 +221,7 @@ class PessoaFisicaController extends PessoaFisicaModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function recuperaPessoaFisica($id) {
+    public function recuperaPessoaFisica($id, $capac = false) {
         $id = MainModel::decryption($id);
         $pf = DbModel::consultaSimples(
             "SELECT pf.*, pe.*, pb.*, po.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, r.regiao, gi.grau_instrucao
@@ -237,10 +237,10 @@ class PessoaFisicaController extends PessoaFisicaModel
             LEFT JOIN etnias e on pd.etnia_id = e.id
             LEFT JOIN regiaos r on pd.regiao_id = r.id
             LEFT JOIN grau_instrucoes gi on pd.grau_instrucao_id = gi.id
-            WHERE pf.id = '$id'");
+            WHERE pf.id = '$id'", $capac);
 
         $pf = $pf->fetch(PDO::FETCH_ASSOC);
-        $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$id'")->fetchAll(PDO::FETCH_ASSOC);
+        $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$id'", $capac)->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($telefones as $key => $telefone) {
             $pf['telefones']['tel_'.$key] = $telefone['telefone'];

@@ -1,16 +1,17 @@
 <?php
-
-require_once "./controllers/FomentoController.php";
-require_once "./controllers/PessoaJuridicaController.php";
-require_once "./controllers/RepresentanteController.php";
-require_once "./controllers/ArquivoController.php";
-
 $id = $_GET['id'];
 
+require_once "./controllers/ArquivoController.php";
+require_once "./controllers/FomentoController.php";
+
+require_once "./controllers/PessoaJuridicaController.php";
+require_once "./controllers/RepresentanteController.php";
+
+$arqObj = new ArquivoController();
 $fomentoObj = new FomentoController();
+
 $pessoaJuridicaObj = new PessoaJuridicaController();
 $repObj = new RepresentanteController();
-$arqObj = new ArquivoController();
 
 
 $projeto = $fomentoObj->recuperaProjeto($id);

@@ -101,7 +101,7 @@ foreach ($inscritos as $inscrito){
         require_once "../controllers/RepresentanteController.php";
         $pessoaJuridicaObj = new PessoaJuridicaController();
         $repObj = new RepresentanteController();
-        $pj = $pessoaJuridicaObj->recuperaPessoaJuridica($pessoaJuridicaObj->encryption($inscrito->pessoa_juridica_id));
+        $pj = $pessoaJuridicaObj->recuperaPessoaJuridica($pessoaJuridicaObj->encryption($inscrito->pessoa_juridica_id), true);
         $rep = $repObj->recuperaRepresentante($pessoaJuridicaObj->encryption($pj['representante_legal1_id']))->fetch();
         $proponente = $pj['razao_social'];
         $documento = $pj['cnpj'];

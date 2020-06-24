@@ -16,7 +16,7 @@ $arqObj = new ArquivoController();
 $edital = $fomentoObj->recuperaEdital($id);
 $nomeEdital = $edital->titulo;
 $pessoaTipo = $edital->pessoa_tipos_id;
-$inscritos = $fomentoObj->listaInscritos($id);
+$inscritos = $fomentoObj->listaInscritos($id, true);
 
 $linkStyle = [
     'font' => [
@@ -51,7 +51,11 @@ $objPHPExcel->getActiveSheet()->getStyle("A1:H1")->applyFromArray
 );
 
 // Inicia Include
-    include_once "./includes/fomento_inscritos_aprovados_pf.php";
+    if($pessoaTipo == 1) {
+        include_once "./includes/fomento_inscritos_aprovados_pf.php";
+    } else {
+        include_once "./includes/fomento_inscritos_aprovados_pf.php";
+    }
 // Fim Include
 
 $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(-1);

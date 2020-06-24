@@ -66,10 +66,7 @@ foreach ($inscritos as $inscrito){
 
     require_once "../controllers/PessoaFisicaController.php";
     $pessoaFisicaObj = new PessoaFisicaController();
-    $pf = $pessoaFisicaObj->recuperaPessoaFisica($pessoaFisicaObj->encryption($inscrito->pessoa_fisica_id));
-    $proponente = $pf['nome'];
-    $documento = $pf['cpf'];
-    $nomeRep = "não aplicável";
+    $pf = $pessoaFisicaObj->recuperaPessoaFisica($pessoaFisicaObj->encryption($inscrito->pessoa_fisica_id), true);
 
     $zip = SERVERURL."api/downloadInscritos.php?id=".$inscrito->id;
 
@@ -77,26 +74,26 @@ foreach ($inscritos as $inscrito){
     $objPHPExcel->getActiveSheet()->getStyle($f)->getNumberFormat()->setFormatCode("#,##0.00");
 
     $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue($a, $documento)
-        ->setCellValue($b, $inscrito->protocolo)
-        ->setCellValue($c, $inscrito->nucleo_artistico)
-        ->setCellValue($d, $nomeRep)
-        ->setCellValue($e, $proponente)
+        ->setCellValue($a, $inscrito->protocolo)
+        ->setCellValue($b, $inscrito->nome_projeto)
+        ->setCellValue($c, $inscrito->nome_nucleo)
+        ->setCellValue($d, $inscrito->representante_nucleo)
+        ->setCellValue($e, $inscrito->coletivo_produtor)
         ->setCellValue($f, $inscrito->valor_projeto)
         ->setCellValue($g, $inscrito->duracao)
-        ->setCellValue($h, 'download')
-        ->setCellValue($i, 'download')
-        ->setCellValue($j, 'download')
-        ->setCellValue($k, 'download')
-        ->setCellValue($l, 'download')
-        ->setCellValue($m, 'download')
-        ->setCellValue($n, 'download')
-        ->setCellValue($o, 'download')
-        ->setCellValue($p, 'download')
-        ->setCellValue($q, 'download')
-        ->setCellValue($r, 'download')
-        ->setCellValue($s, 'download')
-        ->setCellValue($t, 'download');
+        ->setCellValue($h, $pf['nome'])
+        ->setCellValue($i, $pf['cpf'])
+        ->setCellValue($j, $pf[''])
+        ->setCellValue($k, $pf[''])
+        ->setCellValue($l, $pf[''])
+        ->setCellValue($m, $pf[''])
+        ->setCellValue($n, $pf[''])
+        ->setCellValue($o, $pf[''])
+        ->setCellValue($p, $pf[''])
+        ->setCellValue($q, $pf[''])
+        ->setCellValue($r, $pf[''])
+        ->setCellValue($s, $pf[''])
+        ->setCellValue($t, $pf['']);
     $objPHPExcel->getActiveSheet()->getCell($h)->getHyperlink()->setUrl($zip);
     $objPHPExcel->getActiveSheet()->getCell($h)->getStyle()->applyFromArray($linkStyle);
 

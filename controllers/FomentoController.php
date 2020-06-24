@@ -216,12 +216,13 @@ class FomentoController extends FomentoModel
     /**
      * <p>Retorna todos os projetos inscritos no edital especificado</p>
      * @param string $edital_id <p>Recebe o ID do edital criptografado</p>
+     * @param bool $aprovados
      * @return array|bool
      */
-    public function listaInscritos($edital_id) {
+    public function listaInscritos($edital_id, $aprovados = false) {
         $edital_id = MainModel::decryption($edital_id);
 
-        return parent::recuperaInscritos($edital_id);
+        return parent::recuperaInscritos($edital_id, $aprovados);
     }
 
     public function recuperaProjeto($idInscrito){
