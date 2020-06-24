@@ -9,13 +9,10 @@ $fomentoObj = new FomentoController();
 
 $projeto = $fomentoObj->recuperaProjeto($id);
 
-if ($projeto['pessoa_tipo_id'] == 2){
-    require_once "./controllers/PessoaJuridicaController.php";
-    require_once "./controllers/RepresentanteController.php";
-    $pessoaJuridicaObj = new PessoaJuridicaController();
-    $repObj = new RepresentanteController();
-    $pj = $pessoaJuridicaObj->recuperaPessoaJuridica(MainModel::encryption($projeto['pessoa_juridica_id']), true);
-    $repre = $repObj->recuperaRepresentante(MainModel::encryption($pj['representante_legal1_id']))->fetch(PDO::FETCH_ASSOC);
+if($projeto['pessoa_tipo_id'] == 1){
+    require_once "./controllers/PessoaFisicaController.php";
+    $pessoaFisicaObj = new PessoaFisicaController();
+    $pf = $pessoaFisicaObj->recuperaPessoaFisica(MainModel::encryption($projeto['pessoa_fisica_id']),true);
 }
 
 /* arquivos */
@@ -69,13 +66,19 @@ $strArquivos = '';
                                        href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home"
                                        aria-selected="true">Projeto</a>
                                 </li>
-                                <?php if ($projeto['pessoa_tipo_id'] == 2): ?>
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill"
                                        href="#custom-tabs-one-profile" role="tab"
-                                       aria-controls="custom-tabs-one-profile" aria-selected="false">Empresa</a>
+                                       aria-controls="custom-tabs-one-profile" aria-selected="false">
+                                        <?php
+                                        if ($projeto['pessoa_tipo_id'] == 2) {
+                                            echo "Empresa";
+                                        } else {
+                                            echo "Pessoa";
+                                        }
+                                        ?>
+                                    </a>
                                 </li>
-                                <?php endif; ?>
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill"
                                        href="#custom-tabs-one-messages" role="tab"
@@ -129,43 +132,13 @@ $strArquivos = '';
                                         <?= nl2br($projeto['nucleo_artistico']) ?>
                                     </p>
                                 </div>
-                                <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel"
-                                     aria-labelledby="custom-tabs-one-profile-tab">
-                                    <p>
-                                        <span class="font-weight-bold">Protocolo: </span> <?= $projeto['protocolo'] ?>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold">Data da Inscrição: </span>
-                                        <?= $fomentoObj->dataHora($projeto['data_inscricao']) ?>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold">Razão Social:</span>
-                                        <span class="text-left"><?= $pj['razao_social'] ?></span>
-                                        <span class="font-weight-bold ml-5">CNPJ:</span>
-                                        <span class="text-left"> <?= $pj['cnpj'] ?></span>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold">E-mail:</span>
-                                        <span class="text-left"> <?= $pj['email'] ?></span>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold">Telefone #1:</span> <?= $pj['telefones']['tel_0'] ?>
-                                        <?php if (isset($pj['telefones']['tel_1'])): ?>
-                                            <span class="font-weight-bold ml-5">Telefone #2:</span> <?= $pj['telefones']['tel_1'] ?>
-                                        <?php endif;
-                                        if (isset($pj['telefones']['tel_2'])): ?>
-                                            <span class="font-weight-bold ml-5">Telefone #3:</span> <?= $pj['telefones']['tel_2'] ?>
-                                        <?php endif; ?>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold mr-2"> Endereço: </span> <?= "{$pj['logradouro']}, {$pj['numero']}  {$pj['complemento']} - {$pj['bairro']}, {$pj['cidade']} - {$pj['uf']}, {$pj['cep']}" ?>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold">Representante: </span> <?= $repre['nome'] ?>
-                                        <span class="text-left ml-5 font-weight-bold">CPF: </span> <?= $repre['cpf'] ?>
-                                        <span class="ml-5 font-weight-bold">RG: </span> <?= $repre['rg'] ?>
-                                    </p>
-                                </div>
+                                <?php
+                                if ($projeto['pessoa_tipo_id'] == 1):
+                                    include "include/detalhes_inscrito_pf.php";
+                                else:
+                                    include "include/detalhes_inscrito_pj.php";
+                                endif;
+                                ?>
                                 <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel"
                                      aria-labelledby="custom-tabs-one-messages-tab">
                                     <p>
