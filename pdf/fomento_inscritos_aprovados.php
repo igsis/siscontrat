@@ -35,7 +35,7 @@ $objPHPExcel->getProperties()->setKeywords("office 2007 openxml php");
 $objPHPExcel->getProperties()->setCategory("Fomentos");
 
 $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:H1')
-    ->setCellValue("A1","Lista de Inscristos Aprovados Edital - $nomeEdital");
+    ->setCellValue("A1","Lista de Inscritos Aprovados Edital - $nomeEdital");
 
 //Colorir o header
 $objPHPExcel->getActiveSheet()->getStyle("A1:H1")->applyFromArray
@@ -64,7 +64,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 ob_end_clean();
 ob_start();
 
-$nome_arquivo = "inscritos_aprovados" . date("d-m-Y") . ".xls";
+$nome_arquivo = "inscritos_aprovados_" . date("d-m-Y") . ".xls";
 
 
 // Cabeçalho do arquivo para ele baixar(Excel2007)
