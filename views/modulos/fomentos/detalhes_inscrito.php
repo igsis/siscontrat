@@ -4,24 +4,24 @@ $id = $_GET['id'];
 require_once "./controllers/ArquivoController.php";
 require_once "./controllers/FomentoController.php";
 
-require_once "./controllers/PessoaJuridicaController.php";
-require_once "./controllers/RepresentanteController.php";
-
 $arqObj = new ArquivoController();
 $fomentoObj = new FomentoController();
 
-$pessoaJuridicaObj = new PessoaJuridicaController();
-$repObj = new RepresentanteController();
-
-
 $projeto = $fomentoObj->recuperaProjeto($id);
-$pj = $pessoaJuridicaObj->recuperaPessoaJuridica(MainModel::encryption($projeto['pessoa_juridica_id']), true);
-$repre = $repObj->recuperaRepresentante(MainModel::encryption($pj['representante_legal1_id']))->fetch(PDO::FETCH_ASSOC);
+
+if ($projeto['pessoa_tipo_id'] == 2){
+    require_once "./controllers/PessoaJuridicaController.php";
+    require_once "./controllers/RepresentanteController.php";
+    $pessoaJuridicaObj = new PessoaJuridicaController();
+    $repObj = new RepresentanteController();
+    $pj = $pessoaJuridicaObj->recuperaPessoaJuridica(MainModel::encryption($projeto['pessoa_juridica_id']), true);
+    $repre = $repObj->recuperaRepresentante(MainModel::encryption($pj['representante_legal1_id']))->fetch(PDO::FETCH_ASSOC);
+}
+
+/* arquivos */
 $tipo_contratacao_id = $fomentoObj->recuperaTipoContratacao((string)MainModel::encryption($projeto['fom_edital_id']));
 $lista_documento_ids = $arqObj->recuperaIdListaDocumento(MainModel::encryption($projeto['fom_edital_id']), true)->fetchAll(PDO::FETCH_COLUMN);
-
 $arqEnviados = $arqObj->listarArquivosEnviados(MainModel::encryption($projeto['id']), $lista_documento_ids, $tipo_contratacao_id)->fetchAll(PDO::FETCH_OBJ);
-
 $strArquivos = '';
 
 ?>
@@ -69,11 +69,13 @@ $strArquivos = '';
                                        href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home"
                                        aria-selected="true">Projeto</a>
                                 </li>
+                                <?php if ($projeto['pessoa_tipo_id'] == 2): ?>
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill"
                                        href="#custom-tabs-one-profile" role="tab"
                                        aria-controls="custom-tabs-one-profile" aria-selected="false">Empresa</a>
                                 </li>
+                                <?php endif; ?>
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill"
                                        href="#custom-tabs-one-messages" role="tab"
@@ -95,13 +97,15 @@ $strArquivos = '';
                                     <p>
                                         <span class="font-weight-bold">Nome do projeto:</span> <?= $projeto['nome_projeto'] ?>
                                     </p>
-                                    <p>
-                                        <span class="font-weight-bold">Instituição responsável: </span>
-                                        <?= $projeto['instituicao'] ?? null ?>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold">Site: </span><?= $projeto['site'] ?? null?>
-                                    </p>
+                                    <?php if ($projeto['pessoa_tipo_id'] == 2): ?>
+                                        <p>
+                                            <span class="font-weight-bold">Instituição responsável: </span>
+                                            <?= $projeto['instituicao'] ?? null ?>
+                                        </p>
+                                        <p>
+                                            <span class="font-weight-bold">Site: </span><?= $projeto['site'] ?? null?>
+                                        </p>
+                                    <?php endif; ?>
                                     <p>
                                         <span class="font-weight-bold">Responsável pela inscrição:</span>
                                         <span class="text-left"><?= $projeto['responsavel_inscricao'] ?></span>
@@ -109,7 +113,7 @@ $strArquivos = '';
                                     <p>
                                         <span class="font-weight-bold">Valor do projeto:</span>
                                         <span id="dinheiro"> <?= $projeto['valor_projeto'] ?></span>
-                                        <span class="font-weight-bold ml-5">Duração: (em meses):</span>
+                                        <span class="font-weight-bold ml-5">Duração (em meses):</span>
                                         <span class="text-left"><?= $projeto['duracao'] ?></span>
                                     </p>
                                     <p>
@@ -122,7 +126,7 @@ $strArquivos = '';
                                     </p>
                                     <p class="flex-wrap text-justify">
                                         <span class="font-weight-bold mr-2">Núcleo artístico:</span>
-                                        <?= $projeto['nucleo_artistico'] ?>
+                                        <?= nl2br($projeto['nucleo_artistico']) ?>
                                     </p>
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel"
