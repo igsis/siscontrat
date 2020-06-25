@@ -102,8 +102,8 @@ $inscritos = $fomentoObj->listaInscritos($id);
                             <thead>
                             <tr>
                                 <th>Protocolo</th>
+                                <th>Nome do projeto</th>
                                 <th>Valor</th>
-                                <th>Instituição</th>
                                 <th>Status</th>
                                 <th>Ação</th>
                             </tr>
@@ -116,8 +116,8 @@ $inscritos = $fomentoObj->listaInscritos($id);
                                          as $inscrito): ?>
                                     <tr>
                                         <td><?= $inscrito->protocolo ?></td>
+                                        <td><?= $inscrito->nome_projeto ?></td>
                                         <td class="dinheiro"><?= $inscrito->valor_projeto ?></td>
-                                        <td><?= $inscrito->instituicao ?></td>
                                         <td class="d-flex justify-content-center align-items-center">
                                             <?php switch ($inscrito->publicado) {
                                                 case 2:
@@ -151,8 +151,8 @@ $inscritos = $fomentoObj->listaInscritos($id);
                             <tfoot>
                             <tr>
                                 <th>Protocolo</th>
+                                <th>Nome do projeto</th>
                                 <th>Valor</th>
-                                <th>Instituição</th>
                                 <th>Status</th>
                                 <th>Ação</th>
                             </tr>

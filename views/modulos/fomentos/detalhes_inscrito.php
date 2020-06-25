@@ -120,7 +120,7 @@ $strArquivos = '';
                                         <span class="text-left"><?= $projeto['duracao'] ?></span>
                                     </p>
                                     <p>
-                                        <span class="font-weight-bold">Nome do núcleo artístico/coletivo artístico:</span>
+                                        <span class="font-weight-bold">Nome do núcleo artístico/coletivo artístico:</span> <?= $projeto['nome_nucleo'] ?>
                                         <span class="font-weight-bold ml-5">Nome do representante do núcleo:</span>
                                         <?= $projeto['representante_nucleo'] ?>
                                     </p>
