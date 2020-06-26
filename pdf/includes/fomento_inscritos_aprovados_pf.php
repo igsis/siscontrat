@@ -1,5 +1,18 @@
 <?php
 
+//Colorir o header
+$objPHPExcel->getActiveSheet()->getStyle("A1:AC1")->applyFromArray
+(
+    array
+    (
+        'fill' => array
+        (
+            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+            'color' => array('rgb' => '3c8dbc')
+        ),
+    )
+);
+
 // Criamos as colunas
 $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue("A2", "Protocolo")
@@ -13,7 +26,6 @@ $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue("I2", "Nome do produtor independente")
     ->setCellValue("J2", "Integrantes de Núcleo")
     ->setCellValue("K2", "Nome Completo")
-    ->setCellValue("L2", "Nome do Coletivo/Grupo")
     ->setCellValue("M2", "CPF")
     ->setCellValue("N2", "Genero")
     ->setCellValue("O2", "Raça ou Cor")
@@ -85,7 +97,7 @@ foreach ($inscritos as $inscrito){
     require_once "../controllers/PessoaFisicaController.php";
     $pessoaFisicaObj = new PessoaFisicaController();
     $pf = $pessoaFisicaObj->recuperaPessoaFisica($pessoaFisicaObj->encryption($inscrito->pessoa_fisica_id), true);
-    $usuario = $pessoaFisicaObj->consultaSimples("SELECT nome FROM `usuarios` WHERE `id` = $inscrito->usuario_id")->fetchColumn();
+    $usuario = $pessoaFisicaObj->consultaSimples("SELECT nome FROM `usuarios` WHERE `id` = $inscrito->usuario_id", true)->fetchColumn();
 
     $sqlpfDados = "SELECT pfd.nome_grupo, pfd.rede_social, g.genero, s.subprefeitura, e.descricao, gi.grau_instrucao FROM `fom_pf_dados` AS pfd
                     INNER JOIN generos g on pfd.genero_id = g.id
@@ -97,22 +109,20 @@ foreach ($inscritos as $inscrito){
 
     $zip = SERVERURL."api/downloadInscritos.php?id=".$inscrito->id;
 
-    $objPHPExcel->getActiveSheet()->getStyle($c)->getAlignment()->setWrapText(true);
-    $objPHPExcel->getActiveSheet()->getStyle($f)->getNumberFormat()->setFormatCode("#,##0.00");
+    $objPHPExcel->getActiveSheet()->getStyle($j)->getAlignment()->setWrapText(true);
 
     $objPHPExcel->setActiveSheetIndex(0)
         ->setCellValue($a, $inscrito->protocolo)
         ->setCellValue($b, $fomentoObj->dataHora($inscrito->data_inscricao))
         ->setCellValue($c, $inscrito->nome_projeto)
         ->setCellValue($d, $usuario)
-        ->setCellValue($e, $inscrito->valor_projeto)
+        ->setCellValue($e, $fomentoObj->dinheiroParaBr($inscrito->valor_projeto))
         ->setCellValue($f, $inscrito->duracao)
         ->setCellValue($g, $inscrito->nome_nucleo)
         ->setCellValue($h, $inscrito->representante_nucleo)
         ->setCellValue($i, $inscrito->coletivo_produtor)
         ->setCellValue($j, $inscrito->nucleo_artistico)
         ->setCellValue($k, $pf['nome'])
-        ->setCellValue($l, $pfDados->nome_grupo)
         ->setCellValue($m, $pf['cpf'])
         ->setCellValue($n, $pfDados->genero)
         ->setCellValue($o, $pfDados->descricao)

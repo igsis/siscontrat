@@ -102,7 +102,7 @@ foreach ($inscritos as $inscrito){
         $pessoaJuridicaObj = new PessoaJuridicaController();
         $repObj = new RepresentanteController();
         $pj = $pessoaJuridicaObj->recuperaPessoaJuridica($pessoaJuridicaObj->encryption($inscrito->pessoa_juridica_id), true);
-        $rep = $repObj->recuperaRepresentante($pessoaJuridicaObj->encryption($pj['representante_legal1_id']))->fetch();
+        $rep = $repObj->recuperaRepresentante($pessoaJuridicaObj->encryption($pj['representante_legal1_id']), true)->fetch();
         $proponente = $pj['razao_social'];
         $documento = $pj['cnpj'];
         $nomeRep = $rep['nome'];

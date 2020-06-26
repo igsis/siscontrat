@@ -37,24 +37,11 @@ $objPHPExcel->getProperties()->setCategory("Fomentos");
 $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:H1')
     ->setCellValue("A1","Lista de Inscritos Aprovados Edital - $nomeEdital");
 
-//Colorir o header
-$objPHPExcel->getActiveSheet()->getStyle("A1:H1")->applyFromArray
-(
-    array
-    (
-        'fill' => array
-        (
-            'type' => PHPExcel_Style_Fill::FILL_SOLID,
-            'color' => array('rgb' => '3c8dbc')
-        ),
-    )
-);
-
 // Inicia Include
     if($pessoaTipo == 1) {
         include_once "./includes/fomento_inscritos_aprovados_pf.php";
     } else {
-        include_once "./includes/fomento_inscritos_aprovados_pf.php";
+        include_once "./includes/fomento_inscritos_aprovados_pj.php";
     }
 // Fim Include
 
