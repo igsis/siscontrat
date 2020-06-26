@@ -15,7 +15,7 @@ $pfDados = $pessoaFisicaObj->recuperaPfDados($pf['id'])->fetch();
     <p>
         <span class="font-weight-bold">Nome:</span>
         <span class="text-left"><?= $pf['nome'] ?></span>
-        <span class="font-weight-bold ml-5">CNPJ:</span>
+        <span class="font-weight-bold ml-5">CPF:</span>
         <span class="text-left"> <?= $pf['cpf'] ?></span>
     </p>
     <p>
