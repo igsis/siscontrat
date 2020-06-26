@@ -92,11 +92,10 @@ $strArquivos = '';
                                      aria-labelledby="custom-tabs-one-home-tab">
                                     <p>
                                         <span class="font-weight-bold">Protocolo: </span> <?= $projeto['protocolo'] ?>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold">Data da Inscrição: </span>
+                                        <span class="font-weight-bold ml-5">Data da Inscrição:</span>
                                         <?= $fomentoObj->dataHora($projeto['data_inscricao']) ?>
                                     </p>
+                                    <hr/>
                                     <p>
                                         <span class="font-weight-bold">Nome do projeto:</span> <?= $projeto['nome_projeto'] ?>
                                     </p>
@@ -125,12 +124,18 @@ $strArquivos = '';
                                         <?= $projeto['representante_nucleo'] ?>
                                     </p>
                                     <p>
-                                        <span class="font-weight-bold">Nome do produtor independente:</span>
+                                        <span class="font-weight-bold">Nome do produtor independente:</span> <?= $projeto['coletivo_produtor'] ?>
                                     </p>
-                                    <p class="flex-wrap text-justify">
-                                        <span class="font-weight-bold mr-2">Núcleo artístico:</span>
-                                        <?= nl2br($projeto['nucleo_artistico']) ?>
-                                    </p>
+                                    <?php
+                                    if ($projeto['nucleo_artistico'] != NULL){
+                                        ?>
+                                        <p class="flex-wrap text-justify">
+                                            <span class="font-weight-bold mr-2">Núcleo artístico:</span>
+                                            <?= nl2br($projeto['nucleo_artistico']) ?>
+                                        </p>
+                                    <?php
+                                    }
+                                    ?>
                                 </div>
                                 <?php
                                 if ($projeto['pessoa_tipo_id'] == 1):
@@ -143,11 +148,10 @@ $strArquivos = '';
                                      aria-labelledby="custom-tabs-one-messages-tab">
                                     <p>
                                         <span class="font-weight-bold">Protocolo: </span> <?= $projeto['protocolo'] ?>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold">Data da Inscrição: </span>
+                                        <span class="font-weight-bold ml-5">Data da Inscrição:</span>
                                         <?= $fomentoObj->dataHora($projeto['data_inscricao']) ?>
                                     </p>
+                                    <hr/>
                                     <div class="row justify-content-center align-items-center">
                                         <div class="col-8">
                                             <div class="card card-gray">

@@ -106,6 +106,7 @@ foreach ($inscritos as $inscrito){
                     INNER JOIN grau_instrucoes gi on pfd.grau_instrucao_id = gi.id
                     WHERE pessoa_fisicas_id = {$pf['id']}";
     $pfDados = $pessoaFisicaObj->consultaSimples($sqlpfDados, true)->fetchObject();
+    $pfDados = $pessoaFisicaObj->recuperaPfDados($pf['id'])->fetchObject();
 
     $zip = SERVERURL."api/downloadInscritos.php?id=".$inscrito->id;
 

@@ -10,11 +10,10 @@ $repre = $repObj->recuperaRepresentante(MainModel::encryption($pj['representante
      aria-labelledby="custom-tabs-one-profile-tab">
     <p>
         <span class="font-weight-bold">Protocolo: </span> <?= $projeto['protocolo'] ?>
-    </p>
-    <p>
-        <span class="font-weight-bold">Data da Inscrição: </span>
+        <span class="font-weight-bold ml-5">Data da Inscrição:</span>
         <?= $fomentoObj->dataHora($projeto['data_inscricao']) ?>
     </p>
+    <hr/>
     <p>
         <span class="font-weight-bold">Razão Social:</span>
         <span class="text-left"><?= $pj['razao_social'] ?></span>
