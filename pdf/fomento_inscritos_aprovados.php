@@ -8,6 +8,14 @@ require_once "../controllers/FomentoController.php";
 require_once "../controllers/ArquivoController.php";
 
 $id = $_GET['id'];
+$aprovado = $_GET['aprovado'] ?? false;
+
+if($aprovado){
+    $aprovados = "Aprovados";
+}
+else{
+    $aprovados = "";
+}
 
 $objPHPExcel = new PHPExcel();
 $fomentoObj = new FomentoController();
@@ -16,7 +24,7 @@ $arqObj = new ArquivoController();
 $edital = $fomentoObj->recuperaEdital($id);
 $nomeEdital = $edital->titulo;
 $pessoaTipo = $edital->pessoa_tipos_id;
-$inscritos = $fomentoObj->listaInscritos($id, true);
+$inscritos = $fomentoObj->listaInscritos($id, $aprovado);
 
 $linkStyle = [
     'font' => [
@@ -28,20 +36,20 @@ $linkStyle = [
 // Podemos renomear o nome das planilha atual, lembrando que um único arquivo pode ter várias planilhas
 $objPHPExcel->getProperties()->setCreator("Sistema SisContrat");
 $objPHPExcel->getProperties()->setLastModifiedBy("Sistema SisContrat");
-$objPHPExcel->getProperties()->setTitle("Relatório de Inscritos Aprovados");
-$objPHPExcel->getProperties()->setSubject("Relatório de Inscritos Aprovados");
+$objPHPExcel->getProperties()->setTitle("Relatório de Inscritos $aprovados");
+$objPHPExcel->getProperties()->setSubject("Relatório de Inscritos $aprovados");
 $objPHPExcel->getProperties()->setDescription("Gerado automaticamente a partir do Sistema SisContrat");
 $objPHPExcel->getProperties()->setKeywords("office 2007 openxml php");
 $objPHPExcel->getProperties()->setCategory("Fomentos");
 
 $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:H1')
-    ->setCellValue("A1","Lista de Inscritos Aprovados Edital - $nomeEdital");
+    ->setCellValue("A1","Lista de Inscritos $aprovados Edital - $nomeEdital");
 
 // Inicia Include
     if($pessoaTipo == 1) {
-        include_once "./includes/fomento_inscritos_aprovados_pf.php";
+        include_once "./includes/fomento_inscritos_pf.php";
     } else {
-        include_once "./includes/fomento_inscritos_aprovados_pj.php";
+        include_once "./includes/fomento_inscritos_pj.php";
     }
 // Fim Include
 
@@ -51,7 +59,7 @@ $objPHPExcel->setActiveSheetIndex(0);
 ob_end_clean();
 ob_start();
 
-$nome_arquivo = "inscritos_aprovados_" . date("d-m-Y") . ".xls";
+$nome_arquivo = "inscritos_".$aprovados."_" . date("d-m-Y") . ".xls";
 
 
 // Cabeçalho do arquivo para ele baixar(Excel2007)

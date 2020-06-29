@@ -88,11 +88,11 @@ $inscritos = $fomentoObj->listaInscritos($id);
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row mb-5 d-flex justify-content-end ">
-                            <a href="<?=SERVERURL?>pdf/fomento_inscritos.php?id=<?=$id?>" target="_blank" class="btn btn-warning">
+                            <a href="<?=SERVERURL?>pdf/fomento_inscritos_aprovados.php?id=<?=$id?>" target="_blank" class="btn btn-warning">
                                 <i class="fas fa-download mr-1"></i> Exportar inscritos
                             </a>
                             <?php if ($statusEdital->aprovados): ?>
-                                <div class="ml-1"><a href="<?= SERVERURL ?>pdf/fomento_inscritos_aprovados.php?id=<?= $id ?>" target="_blank"
+                                <div class="ml-1"><a href="<?= SERVERURL ?>pdf/fomento_inscritos_aprovados.php?id=<?= $id ?>&aprovado=true" target="_blank"
                                       class="btn btn-success">
                                         <i class="fas fa-download mr-1"></i> Inscritos Aprovados
                                     </a></div>
