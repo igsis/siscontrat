@@ -97,7 +97,7 @@ foreach ($inscritos as $inscrito){
     $repObj = new RepresentanteController();
     $pj = $pessoaJuridicaObj->recuperaPessoaJuridica($pessoaJuridicaObj->encryption($inscrito->pessoa_juridica_id), true);
     $rep = $repObj->recuperaRepresentante($pessoaJuridicaObj->encryption($pj['representante_legal1_id']), true)->fetch();
-    $dadosComp = $pessoaJuridicaObj->consultaSimples("SELECT * FROM fom_projeto_dados WHERE id = $inscrito->id", true)->fetchObject();
+    $dadosComp = $pessoaJuridicaObj->consultaSimples("SELECT * FROM fom_projeto_dados WHERE fom_projeto_id = $inscrito->id", true)->fetchObject();
     $usuario = $pessoaJuridicaObj->consultaSimples("SELECT nome FROM `usuarios` WHERE `id` = $inscrito->usuario_id", true)->fetchColumn();
 
     $zip = SERVERURL."api/downloadInscritos.php?id=".$inscrito->id;
