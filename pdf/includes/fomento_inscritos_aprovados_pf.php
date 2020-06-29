@@ -1,7 +1,7 @@
 <?php
 
 //Colorir o header
-$objPHPExcel->getActiveSheet()->getStyle("A1:AC1")->applyFromArray
+$objPHPExcel->getActiveSheet()->getStyle("A1:AB1")->applyFromArray
 (
     array
     (
@@ -26,29 +26,29 @@ $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue("I2", "Nome do produtor independente")
     ->setCellValue("J2", "Integrantes de Núcleo")
     ->setCellValue("K2", "Nome Completo")
-    ->setCellValue("M2", "CPF")
-    ->setCellValue("N2", "Genero")
-    ->setCellValue("O2", "Raça ou Cor")
-    ->setCellValue("P2", "Data de Nascimento")
-    ->setCellValue("Q2", "Rede Social")
-    ->setCellValue("R2", "Escolaridade")
-    ->setCellValue("S2", "E-mail")
-    ->setCellValue("T2", "Telefone #1")
-    ->setCellValue("U2", "Telefone #2")
-    ->setCellValue("V2", "CEP")
-    ->setCellValue("W2", "Rua")
-    ->setCellValue("X2", "Número")
-    ->setCellValue("Y2", "Bairro")
-    ->setCellValue("Z2", "Cidade")
-    ->setCellValue("AA2", "Estado")
-    ->setCellValue("AB2", "Subprefeitura")
-    ->setCellValue("AC2", "Anexos");
+    ->setCellValue("L2", "CPF")
+    ->setCellValue("M2", "Genero")
+    ->setCellValue("N2", "Raça ou Cor")
+    ->setCellValue("O2", "Data de Nascimento")
+    ->setCellValue("P2", "Rede Social")
+    ->setCellValue("Q2", "Escolaridade")
+    ->setCellValue("R2", "E-mail")
+    ->setCellValue("S2", "Telefone #1")
+    ->setCellValue("T2", "Telefone #2")
+    ->setCellValue("U2", "CEP")
+    ->setCellValue("V2", "Rua")
+    ->setCellValue("W2", "Número")
+    ->setCellValue("X2", "Bairro")
+    ->setCellValue("Y2", "Cidade")
+    ->setCellValue("Z2", "Estado")
+    ->setCellValue("AA2", "Subprefeitura")
+    ->setCellValue("AB2", "Anexos");
 
 // Definimos o estilo da fonte
-$objPHPExcel->getActiveSheet()->getStyle('A2:AC2')->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle('A2:AB2')->getFont()->setBold(true);
 
 //Colorir a primeira linha
-$objPHPExcel->getActiveSheet()->getStyle('A2:AC2')->applyFromArray
+$objPHPExcel->getActiveSheet()->getStyle('A2:AB2')->applyFromArray
 (
     array
     (
@@ -92,20 +92,11 @@ foreach ($inscritos as $inscrito){
     $z = "Z" . $cont;
     $aa = "AA" . $cont;
     $ab = "AB" . $cont;
-    $ac = "AC" . $cont;
 
     require_once "../controllers/PessoaFisicaController.php";
     $pessoaFisicaObj = new PessoaFisicaController();
     $pf = $pessoaFisicaObj->recuperaPessoaFisica($pessoaFisicaObj->encryption($inscrito->pessoa_fisica_id), true);
     $usuario = $pessoaFisicaObj->consultaSimples("SELECT nome FROM `usuarios` WHERE `id` = $inscrito->usuario_id", true)->fetchColumn();
-
-    $sqlpfDados = "SELECT pfd.nome_grupo, pfd.rede_social, g.genero, s.subprefeitura, e.descricao, gi.grau_instrucao FROM `fom_pf_dados` AS pfd
-                    INNER JOIN generos g on pfd.genero_id = g.id
-                    INNER JOIN subprefeituras s on pfd.subprefeitura_id = s.id
-                    INNER JOIN etnias e on pfd.etnia_id = e.id
-                    INNER JOIN grau_instrucoes gi on pfd.grau_instrucao_id = gi.id
-                    WHERE pessoa_fisicas_id = {$pf['id']}";
-    $pfDados = $pessoaFisicaObj->consultaSimples($sqlpfDados, true)->fetchObject();
     $pfDados = $pessoaFisicaObj->recuperaPfDados($pf['id'])->fetchObject();
 
     $zip = SERVERURL."api/downloadInscritos.php?id=".$inscrito->id;
@@ -124,27 +115,27 @@ foreach ($inscritos as $inscrito){
         ->setCellValue($i, $inscrito->coletivo_produtor)
         ->setCellValue($j, $inscrito->nucleo_artistico)
         ->setCellValue($k, $pf['nome'])
-        ->setCellValue($m, $pf['cpf'])
-        ->setCellValue($n, $pfDados->genero)
-        ->setCellValue($o, $pfDados->descricao)
-        ->setCellValue($p, $fomentoObj->dataParaBR($pf['data_nascimento']))
-        ->setCellValue($q, $pfDados->rede_social)
-        ->setCellValue($r, $pfDados->grau_instrucao)
-        ->setCellValue($s, $pf['email'])
-        ->setCellValue($t, $pf['telefones']['tel_0'])
-        ->setCellValue($u, $pf['telefones']['tel_1'])
-        ->setCellValue($v, $pf['cep'])
-        ->setCellValue($w, $pf['logradouro'])
-        ->setCellValue($x, $pf['numero'])
-        ->setCellValue($y, $pf['bairro'])
-        ->setCellValue($z, $pf['cidade'])
-        ->setCellValue($aa, $pf['uf'])
-        ->setCellValue($ab,$pfDados->subprefeitura)
-        ->setCellValue($ac, 'download');
+        ->setCellValue($l, $pf['cpf'])
+        ->setCellValue($m, $pfDados->genero)
+        ->setCellValue($n, $pfDados->descricao)
+        ->setCellValue($o, $fomentoObj->dataParaBR($pf['data_nascimento']))
+        ->setCellValue($p, $pfDados->rede_social)
+        ->setCellValue($q, $pfDados->grau_instrucao)
+        ->setCellValue($r, $pf['email'])
+        ->setCellValue($s, $pf['telefones']['tel_0'])
+        ->setCellValue($t, $pf['telefones']['tel_1'])
+        ->setCellValue($u, $pf['cep'])
+        ->setCellValue($v, $pf['logradouro'])
+        ->setCellValue($w, $pf['numero'])
+        ->setCellValue($x, $pf['bairro'])
+        ->setCellValue($y, $pf['cidade'])
+        ->setCellValue($z, $pf['uf'])
+        ->setCellValue($aa,$pfDados->subprefeitura)
+        ->setCellValue($ab, 'download');
 
 
-    $objPHPExcel->getActiveSheet()->getCell($ac)->getHyperlink()->setUrl($zip);
-    $objPHPExcel->getActiveSheet()->getCell($ac)->getStyle()->applyFromArray($linkStyle);
+    $objPHPExcel->getActiveSheet()->getCell($ab)->getHyperlink()->setUrl($zip);
+    $objPHPExcel->getActiveSheet()->getCell($ab)->getStyle()->applyFromArray($linkStyle);
 
     $cont++;
 }
@@ -156,12 +147,12 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
 $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
-$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(40);;
+$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(40);
 $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(50);
 $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
@@ -180,4 +171,3 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
-$objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setAutoSize(true);
