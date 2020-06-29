@@ -26,8 +26,8 @@ $linkStyle = [
 // Podemos renomear o nome das planilha atual, lembrando que um único arquivo pode ter várias planilhas
 $objPHPExcel->getProperties()->setCreator("Sistema SisContrat");
 $objPHPExcel->getProperties()->setLastModifiedBy("Sistema SisContrat");
-$objPHPExcel->getProperties()->setTitle("Relatório de Inscritos");
-$objPHPExcel->getProperties()->setSubject("Relatório de Inscritos");
+$objPHPExcel->getProperties()->setTitle("Relatório de Inscritos Aprovados");
+$objPHPExcel->getProperties()->setSubject("Relatório de Inscritos Aprovados");
 $objPHPExcel->getProperties()->setDescription("Gerado automaticamente a partir do Sistema SisContrat");
 $objPHPExcel->getProperties()->setKeywords("office 2007 openxml php");
 $objPHPExcel->getProperties()->setCategory("Fomentos");
@@ -101,8 +101,8 @@ foreach ($inscritos as $inscrito){
         require_once "../controllers/RepresentanteController.php";
         $pessoaJuridicaObj = new PessoaJuridicaController();
         $repObj = new RepresentanteController();
-        $pj = $pessoaJuridicaObj->recuperaPessoaJuridica($pessoaJuridicaObj->encryption($inscrito->pessoa_juridica_id));
-        $rep = $repObj->recuperaRepresentante($pessoaJuridicaObj->encryption($pj['representante_legal1_id']))->fetch();
+        $pj = $pessoaJuridicaObj->recuperaPessoaJuridica($pessoaJuridicaObj->encryption($inscrito->pessoa_juridica_id), true);
+        $rep = $repObj->recuperaRepresentante($pessoaJuridicaObj->encryption($pj['representante_legal1_id']), true)->fetch();
         $proponente = $pj['razao_social'];
         $documento = $pj['cnpj'];
         $nomeRep = $rep['nome'];

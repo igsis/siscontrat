@@ -146,9 +146,9 @@ class RepresentanteController extends MainModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function recuperaRepresentante($id) {
+    public function recuperaRepresentante($id, $capac = false) {
         $id = MainModel::decryption($id);
-        $representante = DbModel::getInfo('representante_legais',$id,true);
+        $representante = DbModel::getInfo('representante_legais',$id,$capac);
         return $representante;
     }
 

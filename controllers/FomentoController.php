@@ -140,6 +140,53 @@ class FomentoController extends FomentoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    public function arquivaEdital($post)
+    {
+        $id = MainModel::decryption($post['id']);
+        $arquiva = DbModel::apaga("fom_editais", $id, true);
+        if ($arquiva->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Arquivamento de edital',
+                'texto' => 'Edital arquivado com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_lista'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function desarquivaEdital($post)
+    {
+        $id = $post['id'];
+        $dados['publicado'] = 1;
+        $desarquiva = DbModel::update("fom_editais",$dados,$id,true);
+        if ($desarquiva->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Desarquivamento de edital',
+                'texto' => 'Edital desarquivado com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'fomentos/edital_arquivado_lista'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
     /** @TODO: Verificar se esta função é realmente necessária
      * @param int $edital_id
      * @return mixed
@@ -169,17 +216,19 @@ class FomentoController extends FomentoModel
     /**
      * <p>Retorna todos os projetos inscritos no edital especificado</p>
      * @param string $edital_id <p>Recebe o ID do edital criptografado</p>
+     * @param bool $aprovados
      * @return array|bool
      */
-    public function listaInscritos($edital_id) {
+    public function listaInscritos($edital_id, $aprovados = false) {
         $edital_id = MainModel::decryption($edital_id);
 
-        return parent::recuperaInscritos($edital_id);
+        return parent::recuperaInscritos($edital_id, $aprovados);
     }
 
     public function recuperaProjeto($idInscrito){
         $id = MainModel::decryption($idInscrito);
-        $resultado = DbModel::getInfo('fom_projetos',$id,true)->fetch(PDO::FETCH_ASSOC);
+        $resultado = DbModel::consultaSimples("SELECT fp.*, fpd.instituicao, fpd.site FROM fom_projetos fp LEFT JOIN fom_projeto_dados fpd ON fpd.fom_projeto_id = fp.id WHERE fp.id = '$id'",true)->fetch(PDO::FETCH_ASSOC);
+        //$resultado = DbModel::getInfo('fom_projetos',$id,true)->fetch(PDO::FETCH_ASSOC);
         $resultado['responsavel_inscricao'] = DbModel::consultaSimples("SELECT nome FROM usuarios WHERE id='{$resultado['usuario_id']}'")->fetchColumn();
         return $resultado;
     }

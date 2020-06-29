@@ -1,26 +1,24 @@
 <?php
-
-require_once "./controllers/FomentoController.php";
-require_once "./controllers/PessoaJuridicaController.php";
-require_once "./controllers/RepresentanteController.php";
-require_once "./controllers/ArquivoController.php";
-
 $id = $_GET['id'];
 
-$fomentoObj = new FomentoController();
-$pessoaJuridicaObj = new PessoaJuridicaController();
-$repObj = new RepresentanteController();
-$arqObj = new ArquivoController();
+require_once "./controllers/ArquivoController.php";
+require_once "./controllers/FomentoController.php";
 
+$arqObj = new ArquivoController();
+$fomentoObj = new FomentoController();
 
 $projeto = $fomentoObj->recuperaProjeto($id);
-$pj = $pessoaJuridicaObj->recuperaPessoaJuridica(MainModel::encryption($projeto['pessoa_juridica_id']), true);
-$repre = $repObj->recuperaRepresentante(MainModel::encryption($pj['representante_legal1_id']))->fetch(PDO::FETCH_ASSOC);
+
+if($projeto['pessoa_tipo_id'] == 1){
+    require_once "./controllers/PessoaFisicaController.php";
+    $pessoaFisicaObj = new PessoaFisicaController();
+    $pf = $pessoaFisicaObj->recuperaPessoaFisica(MainModel::encryption($projeto['pessoa_fisica_id']),true);
+}
+
+/* arquivos */
 $tipo_contratacao_id = $fomentoObj->recuperaTipoContratacao((string)MainModel::encryption($projeto['fom_edital_id']));
 $lista_documento_ids = $arqObj->recuperaIdListaDocumento(MainModel::encryption($projeto['fom_edital_id']), true)->fetchAll(PDO::FETCH_COLUMN);
-
 $arqEnviados = $arqObj->listarArquivosEnviados(MainModel::encryption($projeto['id']), $lista_documento_ids, $tipo_contratacao_id)->fetchAll(PDO::FETCH_OBJ);
-
 $strArquivos = '';
 
 ?>
@@ -71,7 +69,15 @@ $strArquivos = '';
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill"
                                        href="#custom-tabs-one-profile" role="tab"
-                                       aria-controls="custom-tabs-one-profile" aria-selected="false">Empresa</a>
+                                       aria-controls="custom-tabs-one-profile" aria-selected="false">
+                                        <?php
+                                        if ($projeto['pessoa_tipo_id'] == 2) {
+                                            echo "Empresa";
+                                        } else {
+                                            echo "Pessoa";
+                                        }
+                                        ?>
+                                    </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill"
@@ -86,11 +92,22 @@ $strArquivos = '';
                                      aria-labelledby="custom-tabs-one-home-tab">
                                     <p>
                                         <span class="font-weight-bold">Protocolo: </span> <?= $projeto['protocolo'] ?>
+                                        <span class="font-weight-bold ml-5">Data da Inscrição:</span>
+                                        <?= $fomentoObj->dataHora($projeto['data_inscricao']) ?>
                                     </p>
+                                    <hr/>
                                     <p>
-                                        <span class="font-weight-bold">Instituição responsável: </span>
-                                        <span class="text-left"><?= $projeto['instituicao'] ?></span>
+                                        <span class="font-weight-bold">Nome do projeto:</span> <?= $projeto['nome_projeto'] ?>
                                     </p>
+                                    <?php if ($projeto['pessoa_tipo_id'] == 2): ?>
+                                        <p>
+                                            <span class="font-weight-bold">Instituição responsável: </span>
+                                            <?= $projeto['instituicao'] ?? null ?>
+                                        </p>
+                                        <p>
+                                            <span class="font-weight-bold">Site: </span><?= $projeto['site'] ?? null?>
+                                        </p>
+                                    <?php endif; ?>
                                     <p>
                                         <span class="font-weight-bold">Responsável pela inscrição:</span>
                                         <span class="text-left"><?= $projeto['responsavel_inscricao'] ?></span>
@@ -98,56 +115,45 @@ $strArquivos = '';
                                     <p>
                                         <span class="font-weight-bold">Valor do projeto:</span>
                                         <span id="dinheiro"> <?= $projeto['valor_projeto'] ?></span>
-                                        <span class="font-weight-bold ml-5">Duração: (em meses):</span>
+                                        <span class="font-weight-bold ml-5">Duração (em meses):</span>
                                         <span class="text-left"><?= $projeto['duracao'] ?></span>
                                     </p>
-                                    <p class="flex-wrap text-justify">
-                                        <span class="font-weight-bold mr-2">Núcleo artístico:</span>
-                                        <?= $projeto['nucleo_artistico'] ?>
-                                    </p>
                                     <p>
-                                        <span class="font-weight-bold">Representante do núcleo:</span>
+                                        <span class="font-weight-bold">Nome do núcleo artístico/coletivo artístico:</span> <?= $projeto['nome_nucleo'] ?>
+                                        <span class="font-weight-bold ml-5">Nome do representante do núcleo:</span>
                                         <?= $projeto['representante_nucleo'] ?>
                                     </p>
                                     <p>
-                                        <span class="font-weight-bold">Data da Inscrição: </span>
-                                        <?= $fomentoObj->dataHora($projeto['data_inscricao']) ?>
+                                        <span class="font-weight-bold">Nome do produtor independente:</span> <?= $projeto['coletivo_produtor'] ?>
                                     </p>
+                                    <?php
+                                    if ($projeto['nucleo_artistico'] != NULL){
+                                        ?>
+                                        <p class="flex-wrap text-justify">
+                                            <span class="font-weight-bold mr-2">Núcleo artístico:</span>
+                                            <?= nl2br($projeto['nucleo_artistico']) ?>
+                                        </p>
+                                    <?php
+                                    }
+                                    ?>
                                 </div>
-                                <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel"
-                                     aria-labelledby="custom-tabs-one-profile-tab">
-                                    <p>
-                                        <span class="font-weight-bold">Razão Social:</span>
-                                        <span class="text-left"><?= $pj['razao_social'] ?></span>
-                                        <span class="font-weight-bold ml-5">CNPJ:</span>
-                                        <span class="text-left"> <?= $pj['cnpj'] ?></span>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold">E-mail:</span>
-                                        <span class="text-left"> <?= $pj['email'] ?></span>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold">Telefone #1:</span> <?= $pj['telefones']['tel_0'] ?>
-                                        <?php if (isset($pj['telefones']['tel_1'])): ?>
-                                            <span class="font-weight-bold ml-5">Telefone #2:</span> <?= $pj['telefones']['tel_1'] ?>
-                                        <?php endif;
-                                        if (isset($pj['telefones']['tel_2'])): ?>
-                                            <span class="font-weight-bold ml-5">Telefone #3:</span> <?= $pj['telefones']['tel_2'] ?>
-                                        <?php endif; ?>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold mr-2"> Endereço: </span> <?= "{$pj['logradouro']}, {$pj['numero']}  {$pj['complemento']} - {$pj['bairro']}, {$pj['cidade']} - {$pj['uf']}, {$pj['cep']}" ?>
-                                    </p>
-                                    <p>
-                                        <span class="font-weight-bold">Representante: </span> <?= $repre['nome'] ?>
-                                        <span class="text-left ml-5 font-weight-bold">CPF: </span> <?= $repre['cpf'] ?>
-                                        <span class="ml-5 font-weight-bold">RG: </span> <?= $repre['rg'] ?>
-                                    </p>
-                                </div>
+                                <?php
+                                if ($projeto['pessoa_tipo_id'] == 1):
+                                    include "include/detalhes_inscrito_pf.php";
+                                else:
+                                    include "include/detalhes_inscrito_pj.php";
+                                endif;
+                                ?>
                                 <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel"
                                      aria-labelledby="custom-tabs-one-messages-tab">
+                                    <p>
+                                        <span class="font-weight-bold">Protocolo: </span> <?= $projeto['protocolo'] ?>
+                                        <span class="font-weight-bold ml-5">Data da Inscrição:</span>
+                                        <?= $fomentoObj->dataHora($projeto['data_inscricao']) ?>
+                                    </p>
+                                    <hr/>
                                     <div class="row justify-content-center align-items-center">
-                                        <div class="col-5">
+                                        <div class="col-8">
                                             <div class="card card-gray">
                                                 <div class="card-header  text-center">
                                                     <h3 class="card-title">Lista de arquivos</h3>
