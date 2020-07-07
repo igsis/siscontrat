@@ -34,6 +34,7 @@ $pedidoAjax = false;
     <script src="<?= SERVERURL ?>views/plugins/jquery/jquery.min.js"></script>
     <!-- Favicon -->
     <link rel="shortcut icon" href="<?= SERVERURL ?>views/dist/img/SisContratLogo.png" />
+    <link rel="icon" href="<?= SERVERURL ?>views/dist/img/SisContratLogo.png" />
 
 
 </head>
