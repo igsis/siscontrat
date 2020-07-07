@@ -88,20 +88,22 @@ $inscritos = $fomentoObj->listaInscritos($id);
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row mb-5 d-flex justify-content-end ">
-                            <!--<a href="<?/*= SERVERURL . "api/exportarExcel.php?id=".$id */?>" target="_blank"
-                               class="btn btn-success">
-                                <i class="fas fa-download mr-1"></i> Exportar inscritos
-                            </a>-->
-                            <a href="<?=SERVERURL?>pdf/fomento_inscritos.php?id=<?=$id?>" target="_blank" class="btn btn-warning">
+                            <a href="<?=SERVERURL?>pdf/fomento_inscritos_aprovados.php?id=<?=$id?>" target="_blank" class="btn btn-warning">
                                 <i class="fas fa-download mr-1"></i> Exportar inscritos
                             </a>
+                            <?php if ($statusEdital->aprovados): ?>
+                                <div class="ml-1"><a href="<?= SERVERURL ?>pdf/fomento_inscritos_aprovados.php?id=<?= $id ?>&aprovado=true" target="_blank"
+                                      class="btn btn-success">
+                                        <i class="fas fa-download mr-1"></i> Inscritos Aprovados
+                                    </a></div>
+                            <?php endif ?>
                         </div>
                         <table id="tabela" class="table table-bordered table-striped">
                             <thead>
                             <tr>
                                 <th>Protocolo</th>
+                                <th>Nome do projeto</th>
                                 <th>Valor</th>
-                                <th>Instituição</th>
                                 <th>Status</th>
                                 <th>Ação</th>
                             </tr>
@@ -114,8 +116,8 @@ $inscritos = $fomentoObj->listaInscritos($id);
                                          as $inscrito): ?>
                                     <tr>
                                         <td><?= $inscrito->protocolo ?></td>
+                                        <td><?= $inscrito->nome_projeto ?></td>
                                         <td class="dinheiro"><?= $inscrito->valor_projeto ?></td>
-                                        <td><?= $inscrito->instituicao ?></td>
                                         <td class="d-flex justify-content-center align-items-center">
                                             <?php switch ($inscrito->publicado) {
                                                 case 2:
@@ -149,8 +151,8 @@ $inscritos = $fomentoObj->listaInscritos($id);
                             <tfoot>
                             <tr>
                                 <th>Protocolo</th>
+                                <th>Nome do projeto</th>
                                 <th>Valor</th>
-                                <th>Instituição</th>
                                 <th>Status</th>
                                 <th>Ação</th>
                             </tr>

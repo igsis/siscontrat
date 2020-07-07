@@ -124,7 +124,7 @@
         a.classList.add('btn-primary');
         a.classList.add('btn-sm');
         a.classList.add('text-light');
-        a.href = `<?=SERVERURL?>/fomentos/listar_inscritos&id=${id}`;
+        a.href = `<?=SERVERURL?>fomentos/listar_inscritos&id=${id}`;
         a.textContent = 'Listar Inscritos';
         return a;
     }
