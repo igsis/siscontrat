@@ -32,6 +32,8 @@ $pedidoAjax = false;
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- jQuery -->
     <script src="<?= SERVERURL ?>views/plugins/jquery/jquery.min.js"></script>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="<?= SERVERURL ?>views/dist/img/SisContratLogo.png" />
 
 
 </head>
