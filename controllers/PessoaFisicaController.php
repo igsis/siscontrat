@@ -250,7 +250,7 @@ class PessoaFisicaController extends PessoaFisicaModel
 
     public function recuperaPfDados($pessoafisica_id)
     {
-        return DbModel::consultaSimples("SELECT pfd.nome_grupo, pfd.rede_social, g.genero, s.subprefeitura, e.descricao, gi.grau_instrucao FROM `fom_pf_dados` AS pfd
+        return DbModel::consultaSimples("SELECT pfd.rede_social, g.genero, s.subprefeitura, e.descricao, gi.grau_instrucao FROM `fom_pf_dados` AS pfd
             INNER JOIN generos g on pfd.genero_id = g.id
             INNER JOIN subprefeituras s on pfd.subprefeitura_id = s.id
             INNER JOIN etnias e on pfd.etnia_id = e.id

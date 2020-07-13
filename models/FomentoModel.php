@@ -14,6 +14,8 @@ class FomentoModel extends MainModel
 
         if ($aprovados) {
             $sql .= " AND publicado = 2";
+        } else{
+            $sql .= " AND publicado != 0";
         }
         $queryInscritos = DbModel::consultaSimples($sql, true);
         if ($queryInscritos->rowCount() > 0) {
