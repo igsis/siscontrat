@@ -38,8 +38,11 @@ class ViewsModel
             'complemento_oficina_cadastro',
             'demais_anexos',
             'detalhes_inscrito',
+            'documento_cadastro',
+            'documento_lista',
             'edita',
             'edital_anexos',
+            'edital_anexos_cadastro',
             'edital_arquivado_lista',
             'edital_cadastro',
             'edital_lista',
@@ -63,11 +66,9 @@ class ViewsModel
             'projeto_lista',
             'proponente',
             'proponente_lista',
+            'recupera_senha',
             'representante',
             'representante_cadastro',
-            'documento_lista',
-            'documento_cadastro',
-            'edital_anexos_cadastro'
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
@@ -87,6 +88,8 @@ class ViewsModel
             $conteudo = "login";
         } elseif ($modulo == "fomento_edital") {
             $conteudo = "fomento_edital";
+        } elseif ($modulo == "recupera_senha") {
+            $conteudo = "recupera_senha";
         } else {
             $conteudo = "login";
         }
