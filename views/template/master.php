@@ -51,6 +51,8 @@ elseif ($view == 'cadastro'):
     require_once "./views/modulos/inicio/cadastro.php";
 elseif ($view == 'recupera_senha'):
     require_once "./views/modulos/inicio/recupera_senha.php";
+elseif($view == 'resete_senha'):
+    require_once "./views/modulos/inicio/resete_senha.php";
 else:
     session_start(['name' => 'sis']);
     require_once "./controllers/UsuarioController.php";
