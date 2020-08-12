@@ -64,7 +64,7 @@ class RecuperaSenhaController extends RecuperaSenhaModel
     {
         // Send email to user with the token in a link they can click on
         $destinatario = $endEmail;
-        $subject = "CAPAC - Recuperação de Senha";
+        $subject = "Siscontrat - Recuperação de Senha";
         $email = $this->geraEmail($token);
 
         // To send HTML mail, the Content-type header must be set
