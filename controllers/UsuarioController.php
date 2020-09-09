@@ -206,4 +206,8 @@ class UsuarioController extends UsuarioModel
     public function recuperaUsuario($id) {
         return DbModel::getInfo('usuarios',$id);
     }
+
+    public function recuperaEmail($email){
+        return UsuarioModel::getExisteEmail($email);
+    }
 }
