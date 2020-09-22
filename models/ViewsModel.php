@@ -59,6 +59,7 @@ class ViewsModel
             'listar_inscritos',
             'login',
             'logout',
+            'pedido_contratacao_lista',
             'pf_cadastro',
             'pf_lista',
             'pj_cadastro',

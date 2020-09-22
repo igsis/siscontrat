@@ -23,7 +23,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a href="#" class="nav-link">
+    <a href="<?= SERVERURL ?>formacao/pedido_contratacao_lista" class="nav-link" id="pedido_contratacao_lista">
         <i class="far fa-circle nav-icon"></i>
         <p>Pedidos de Contratação</p>
     </a>
