@@ -17,7 +17,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a href="#" class="nav-link">
+    <a href="<?= SERVERURL ?>formacao/dados_contratacao_lista" class="nav-link" id="dados_contratacao_lista">
         <i class="far fa-circle nav-icon"></i>
         <p>Dados para Contratação</p>
     </a>
