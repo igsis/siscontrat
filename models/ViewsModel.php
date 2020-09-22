@@ -58,6 +58,7 @@ class ViewsModel
             'listar_inscritos',
             'login',
             'logout',
+            'pf_lista',
             'pf_cadastro',
             'pj_cadastro',
             'produtor_cadastro',
