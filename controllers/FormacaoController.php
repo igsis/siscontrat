@@ -69,7 +69,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaProjetos()
     {
-        //
+        return parent::getProjetos();
     }
 
     public function editaProjeto($id)

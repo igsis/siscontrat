@@ -23,5 +23,9 @@ class FormacaoModel extends MainModel
     protected function getLinguagens() {
         return DbModel::consultaSimples("SELECT * FROM linguagens where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
     }
+
+    protected function getProjetos() {
+        return DbModel::consultaSimples("SELECT * FROM projetos where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
 }
 
