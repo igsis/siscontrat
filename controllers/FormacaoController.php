@@ -54,7 +54,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaLinguagens()
     {
-        //
+        return parent::getLinguagens();
     }
 
     public function editaLinguagem($id)

@@ -76,6 +76,7 @@ class ViewsModel
             'cargo_lista',
             'coordenadoria_lista',
             'programa_lista',
+            'linguagem_lista',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
