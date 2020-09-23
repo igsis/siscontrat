@@ -78,6 +78,7 @@ class ViewsModel
             'programa_lista',
             'linguagem_lista',
             'projeto_lista',
+            'subprefeitura_lista',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

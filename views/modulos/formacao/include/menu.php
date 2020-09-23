@@ -44,7 +44,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/subprefeitura_lista" class="nav-link">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Subprefeitura</p>
             </a>

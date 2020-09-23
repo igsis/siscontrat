@@ -82,6 +82,11 @@ class FormacaoController extends FormacaoModel
         //
     }
 
+    public function listaSubprefeituras()
+    {
+        return parent::getSubprefeituras();
+    }
+
     public function listaTerritorios()
     {
         //
