@@ -50,7 +50,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/territorio_lista" class="nav-link">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Território</p>
             </a>

@@ -89,7 +89,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaTerritorios()
     {
-        //
+        return parent::getTerritorios();
     }
     
     public function editaTerritorio($id)

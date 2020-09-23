@@ -30,5 +30,8 @@ class FormacaoModel extends MainModel
     protected function getSubprefeituras() {
         return DbModel::consultaSimples("SELECT * FROM subprefeituras where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
     }
+    protected function getTerritorios() {
+        return DbModel::consultaSimples("SELECT * FROM territorios where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
 }
 

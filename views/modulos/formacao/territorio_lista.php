@@ -1,16 +1,16 @@
 
 <?php
     require_once "./controllers/FormacaoController.php";
-    $subprefeituraObj = new FormacaoController();
+    $territorioObj = new FormacaoController();
     
-    $subprefeituras = $subprefeituraObj->listaSubprefeituras();
+    $territorios = $territorioObj->listaTerritorios();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-9">
-                <h1 class="m-0 text-dark">Lista de Subprefeituras</h1>
+                <h1 class="m-0 text-dark">Lista de Territórios</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -38,14 +38,14 @@
                         <table id="tabela" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Subprefeitura</th>
+                                    <th>Território</th>
                                     <th width="15%">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($subprefeituras as $subprefeitura): ?>
+                                <?php foreach ($territorios as $territorio): ?>
                                 <tr>
-                                    <td><?=$subprefeitura->subprefeitura?></td>
+                                    <td><?=$territorio->territorio?></td>
                                     <td>
                                         <button type="submit" class="btn bg-gradient-danger btn-sm">
                                             <i class="fas fa-trash"></i> Apagar
@@ -59,7 +59,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Subprefeitura</th>
+                                    <th>Território</th>
                                     <th width="15%">Ações</th>
                                 </tr>
                             </tfoot>
