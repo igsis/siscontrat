@@ -23,7 +23,7 @@ if (isset($_GET['modulo'])) {
                 <!-- Horizontal Form -->
                 <div class="card card-info card-outline">
                     <div class="card-body">
-                        Dummy Text
+                    Esse módulo tem a função de inserir, editar e enviar pedidos de eventos artísticos a serem realizados na instituição.
                     </div>
                     <!-- /.card-body -->
                 </div>

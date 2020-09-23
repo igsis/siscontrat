@@ -73,6 +73,7 @@ class ViewsModel
             'representante',
             'representante_cadastro',
             'resete_senha',
+            'cargo_lista',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

@@ -1,15 +1,15 @@
 <?php
 if ($pedidoAjax) {
-    require_once "../models/MainModel.php";
+    require_once "../models/FormacaoModel.php";
 } else {
-    require_once "./models/MainModel.php";
+    require_once "./models/FormacaoModel.php";
 }
 
-class FormacaoController extends MainModel
+class FormacaoController extends FormacaoModel
 {
     public function listaCargos()
     {
-        //
+        return parent::getCargos();
     }
 
     public function editaCargo($id)
