@@ -12,5 +12,8 @@ class FormacaoModel extends MainModel
             return DbModel::consultaSimples("SELECT * FROM formacao_cargos where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
     }
 
+    protected function getCoordenadorias() {
+        return DbModel::consultaSimples("SELECT * FROM coordenadorias where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+}
 }
 

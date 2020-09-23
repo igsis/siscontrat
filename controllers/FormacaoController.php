@@ -24,7 +24,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaCoordenadorias()
     {
-        //
+        return parent::getCoordenadorias();
     }
 
     public function editaCoordenadoria($id)
