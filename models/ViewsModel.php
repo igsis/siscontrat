@@ -81,6 +81,7 @@ class ViewsModel
             'subprefeitura_lista',
             'territorio_lista',
             'vigencia_lista',
+            'cargo_cadastro',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
