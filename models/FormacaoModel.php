@@ -33,5 +33,8 @@ class FormacaoModel extends MainModel
     protected function getTerritorios() {
         return DbModel::consultaSimples("SELECT * FROM territorios where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
     }
+    protected function getVigencias() {
+        return DbModel::consultaSimples("SELECT * FROM formacao_vigencias where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
 }
 

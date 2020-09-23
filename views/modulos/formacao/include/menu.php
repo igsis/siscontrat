@@ -56,7 +56,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/vigencia_lista" class="nav-link">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Vigência</p>
             </a>

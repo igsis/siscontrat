@@ -101,4 +101,9 @@ class FormacaoController extends FormacaoModel
     {
         //
     }
+
+    public function listaVigencias()
+    {
+        return parent::getVigencias();
+    }
 }
