@@ -75,6 +75,7 @@ class ViewsModel
             'resete_senha',
             'cargo_lista',
             'coordenadoria_lista',
+            'programa_lista',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

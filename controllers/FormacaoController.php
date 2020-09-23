@@ -39,7 +39,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaProgramas()
     {
-        //
+        return parent::getProgramas();
     }
 
     public function editaPrograma($id)
