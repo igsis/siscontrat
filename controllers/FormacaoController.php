@@ -436,6 +436,85 @@ class FormacaoController extends FormacaoModel
         return parent::getSubprefeituras();
     }
 
+    public function recuperaSubprefeitura($subprefeitura_id) {
+        $subprefeitura_id = MainModel::decryption($subprefeitura_id);
+        return DbModel::getInfo('subprefeituras', $subprefeitura_id, false)->fetchObject();
+    }
+
+    public function insereSubprefeitura($post){
+        unset($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $insert = DbModel::insert('subprefeituras', $dados, false);
+        if ($insert->rowCount() >= 1) {
+            $subprefeitura_id = DbModel::connection(true)->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Subprefeitura Cadastrada!',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/subprefeitura_cadastro&id=' . MainModel::encryption($subprefeitura_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editaSubprefeitura($post)
+    {
+        $subprefeitura_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        unset ($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $update = DbModel::update('subprefeituras', $dados, $subprefeitura_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Subprefeitura Atualizada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/subprefeitura_cadastro&id=' . MainModel::encryption($subprefeitura_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function apagaSubprefeitura($id)
+    {
+        $id = MainModel::decryption($id['id']);
+        $apaga = DbModel::apaga("subprefeituras", $id, false);
+        if ($apaga){
+                $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Subprefeitura Deletada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL.'formacao/subprefeitura_lista'
+                ];
+        }else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao apagar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+
     public function listaTerritorios()
     {
         return parent::getTerritorios();

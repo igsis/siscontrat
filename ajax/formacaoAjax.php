@@ -60,6 +60,15 @@ if (isset($_POST['_method'])) {
         case "apagarProjeto":
             echo $insForm->apagaProjeto($_POST);
             break; 
+        case "cadastrarSubprefeitura":
+            echo $insForm->insereSubprefeitura($_POST);
+            break;   
+        case "editarSubprefeitura":
+            echo $insForm->editaSubprefeitura($_POST);
+            break; 
+        case "apagarSubprefeitura":
+            echo $insForm->apagaSubprefeitura($_POST);
+            break; 
     }
 } else {
     include_once "../config/destroySession.php";
