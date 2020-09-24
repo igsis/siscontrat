@@ -86,7 +86,13 @@ if (isset($_POST['_method'])) {
             break; 
         case "apagarVigencia":
             echo $insForm->apagaVigencia($_POST);
-            break; 
+            break;
+        case "cadastrarPedido":
+            echo $insForm->cadastrarPedido($_POST);
+            break;
+        case "editarPedido":
+            echo $insForm->editarPedido($_POST);
+            break;
     }
 } else {
     include_once "../config/destroySession.php";

@@ -60,6 +60,7 @@ class ViewsModel
             'login',
             'logout',
             'pedido_contratacao_lista',
+            'pedido_contratacao_cadastro',
             'pf_cadastro',
             'pf_lista',
             'pj_cadastro',
