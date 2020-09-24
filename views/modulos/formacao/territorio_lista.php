@@ -28,7 +28,7 @@
                         <h3 class="card-title">Listagem</h3>
                         <div class="card-tools">
                             <!-- button with a dropdown -->
-                            <a href="<?= SERVERURL ?>formacao/pf_cadastro" class="btn btn-success btn-sm" >
+                            <a href="<?= SERVERURL ?>formacao/territorio_cadastro" class="btn btn-success btn-sm" >
                                 <i class="fas fa-plus"></i> Cadastrar Novo
                             </a>
                         </div>
@@ -39,7 +39,8 @@
                             <thead>
                                 <tr>
                                     <th>Território</th>
-                                    <th width="15%">Ações</th>
+                                    <th width="15%">Apagar</th>
+                                    <th width="15%">Editar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,12 +48,21 @@
                                 <tr>
                                     <td><?=$territorio->territorio?></td>
                                     <td>
-                                        <button type="submit" class="btn bg-gradient-danger btn-sm">
-                                            <i class="fas fa-trash"></i> Apagar
-                                        </button>
-                                        <button type="submit" class="btn bg-gradient-primary btn-sm">
-                                            <i class="fas fa-user-edit"></i> Editar
-                                        </button>
+                                        <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
+                                            <input type="hidden" name="_method" value="apagarTerritorio">
+                                            <input type="hidden" name="id" value="<?= $territorioObj->encryption($territorio->id)?>">
+                                                <button type="submit" class="btn bg-gradient-danger btn-sm">
+                                                    <i class="fas fa-trash"></i> Apagar
+                                                </button>
+                                                <div class="resposta-ajax"></div>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a href="<?= SERVERURL . "formacao/territorio_cadastro&id=" . $territorioObj->encryption($territorio->id) ?>"
+                                            <button type="submit" class="btn bg-gradient-primary btn-sm">
+                                                <i class="fas fa-user-edit"></i> Editar
+                                            </button>
+                                        </a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>    
@@ -60,7 +70,8 @@
                             <tfoot>
                                 <tr>
                                     <th>Território</th>
-                                    <th width="15%">Ações</th>
+                                    <th width="15%">Apagar</th>
+                                    <th width="15%">Editar</th>
                                 </tr>
                             </tfoot>
                         </table>

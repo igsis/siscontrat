@@ -87,6 +87,8 @@ class ViewsModel
             'linguagem_cadastro',
             'projeto_cadastro',
             'subprefeitura_cadastro',
+            'territorio_cadastro',
+            
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

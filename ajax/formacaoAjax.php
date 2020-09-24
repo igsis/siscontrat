@@ -69,6 +69,15 @@ if (isset($_POST['_method'])) {
         case "apagarSubprefeitura":
             echo $insForm->apagaSubprefeitura($_POST);
             break; 
+        case "cadastrarTerritorio":
+            echo $insForm->insereTerritorio($_POST);
+            break;   
+        case "editarTerritorio":
+            echo $insForm->editaTerritorio($_POST);
+            break; 
+        case "apagarTerritorio":
+            echo $insForm->apagaTerritorio($_POST);
+            break; 
     }
 } else {
     include_once "../config/destroySession.php";

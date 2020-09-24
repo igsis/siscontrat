@@ -520,14 +520,82 @@ class FormacaoController extends FormacaoModel
         return parent::getTerritorios();
     }
     
-    public function editaTerritorio($id)
+    public function recuperaTerritorio($territorio_id) {
+        $territorio_id = MainModel::decryption($territorio_id);
+        return DbModel::getInfo('territorios', $territorio_id, false)->fetchObject();
+    }
+
+    public function insereTerritorio($post){
+        unset($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $insert = DbModel::insert('territorios', $dados, false);
+        if ($insert->rowCount() >= 1) {
+            $territorio_id = DbModel::connection(true)->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Território Cadastrado!',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/territorio_cadastro&id=' . MainModel::encryption($territorio_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editaTerritorio($post)
     {
-        //
+        $territorio_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        unset ($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $update = DbModel::update('territorios', $dados, $territorio_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Território Atualizado!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/territorio_cadastro&id=' . MainModel::encryption($territorio_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
     }
     
     public function apagaTerritorio($id)
     {
-        //
+        $id = MainModel::decryption($id['id']);
+        $apaga = DbModel::apaga("territorios", $id, false);
+        if ($apaga){
+                $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Território Deletado!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL.'formacao/territorio_lista'
+                ];
+        }else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao apagar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
     }
 
     public function listaVigencias()
