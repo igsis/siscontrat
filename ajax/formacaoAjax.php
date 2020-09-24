@@ -78,6 +78,15 @@ if (isset($_POST['_method'])) {
         case "apagarTerritorio":
             echo $insForm->apagaTerritorio($_POST);
             break; 
+        case "cadastrarVigencia":
+            echo $insForm->insereVigencia($_POST);
+            break;   
+        case "editarVigencia":
+            echo $insForm->editaVigencia($_POST);
+            break; 
+        case "apagarVigencia":
+            echo $insForm->apagaVigencia($_POST);
+            break; 
     }
 } else {
     include_once "../config/destroySession.php";

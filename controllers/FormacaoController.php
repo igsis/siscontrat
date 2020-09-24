@@ -602,4 +602,57 @@ class FormacaoController extends FormacaoModel
     {
         return parent::getVigencias();
     }
+
+    public function recuperaVigencia($vigencia_id) {
+        $vigencia_id = MainModel::decryption($vigencia_id);
+        return DbModel::getInfo('formacao_vigencias', $vigencia_id, false)->fetchObject();
+    }
+
+    public function insereVigencia($post){
+        unset($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $insert = DbModel::insert('formacao_vigencias', $dados, false);
+        if ($insert->rowCount() >= 1) {
+            $vigencia_id = DbModel::connection(true)->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Vigência Cadastrada!',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/vigencia_cadastro&id=' . MainModel::encryption($vigencia_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function apagaVigencia($id)
+    {
+        $id = MainModel::decryption($id['id']);
+        $apaga = DbModel::apaga("formacao_vigencias", $id, false);
+        if ($apaga){
+                $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Vigência Deletada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL.'formacao/vigencia_lista'
+                ];
+        }else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao apagar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
 }

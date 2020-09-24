@@ -88,7 +88,7 @@ class ViewsModel
             'projeto_cadastro',
             'subprefeitura_cadastro',
             'territorio_cadastro',
-            
+            'vigencia_cadastro',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
