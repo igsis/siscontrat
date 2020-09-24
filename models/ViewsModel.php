@@ -85,6 +85,7 @@ class ViewsModel
             'coordenadoria_cadastro',
             'programa_cadastro',
             'linguagem_cadastro',
+            'projeto_cadastro'
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
