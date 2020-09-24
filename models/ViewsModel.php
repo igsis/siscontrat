@@ -83,6 +83,7 @@ class ViewsModel
             'vigencia_lista',
             'cargo_cadastro',
             'coordenadoria_cadastro',
+            'programa_cadastro',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

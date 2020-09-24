@@ -180,14 +180,89 @@ class FormacaoController extends FormacaoModel
         return parent::getProgramas();
     }
 
+    public function listaVerbas()
+    {
+        return parent::getVerbas();
+    }
+
+
+    public function recuperaPrograma($programa_id) {
+        $programa_id = MainModel::decryption($programa_id);
+        return DbModel::getInfo('programas', $programa_id, false)->fetchObject();
+    }
+
+    public function inserePrograma($post){
+        unset($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $insert = DbModel::insert('programas', $dados, false);
+        if ($insert->rowCount() >= 1) {
+            $programa_id = DbModel::connection(true)->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Programa Cadastrado!',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/programa_cadastro&id=' . MainModel::encryption($programa_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+
     public function editaPrograma($id)
     {
-        //
+        $programa_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        unset ($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $update = DbModel::update('programas', $dados, $programa_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Programa Atualizado!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/programa_cadastro&id=' . MainModel::encryption($programa_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
     }
 
     public function apagaPrograma($id)
     {
-        //
+        $id = MainModel::decryption($id['id']);
+        $apaga = DbModel::apaga("programas", $id, false);
+        if ($apaga){
+                $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Programa Deletado!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL.'formacao/programa_lista'
+                ];
+        }else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao apagar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
     }
 
     public function listaLinguagens()

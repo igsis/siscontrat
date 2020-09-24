@@ -32,7 +32,16 @@ if (isset($_POST['_method'])) {
             break; 
         case "apagarCoordenadoria":
             echo $insForm->apagaCoordenadoria($_POST);
+            break;
+        case "cadastrarPrograma":
+            echo $insForm->inserePrograma($_POST);
             break;   
+        case "editaPrograma":
+            echo $insForm->editaPrograma($_POST);
+            break;    
+        case "apagarPrograma":
+            echo $insForm->apagaPrograma($_POST);
+            break; 
     }
 } else {
     include_once "../config/destroySession.php";

@@ -27,7 +27,7 @@
                         <h3 class="card-title">Listagem</h3>
                         <div class="card-tools">
                             <!-- button with a dropdown -->
-                            <a href="<?= SERVERURL ?>formacao/pf_cadastro" class="btn btn-success btn-sm" >
+                            <a href="<?= SERVERURL ?>formacao/programa_cadastro" class="btn btn-success btn-sm" >
                                 <i class="fas fa-plus"></i> Cadastrar Novo
                             </a>
                         </div>
@@ -41,23 +41,33 @@
                                     <th>Verba</th>
                                     <th>Edital</th>
                                     <th>Descrição</th>
-                                    <th width="15%">Ações</th>
+                                    <th width="15%">Apagar</th>
+                                    <th width="15%">Editar</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($programas as $programa): ?>
                                 <tr>
-                                    <td><?=$programa->programa?></td>
-                                    <td><?=$programa->verba_id?></td>
-                                    <td><?=$programa->edital?></td>
-                                    <td><?=$programa->descricao?></td>
+                                    <td><?=$programa['programa']?></td>
+                                    <td><?=$programa['nome_verba']?></td>
+                                    <td><?=$programa['edital']?></td>
+                                    <td><?=$programa['descricao']?></td>
                                     <td>
-                                        <button type="submit" class="btn bg-gradient-danger btn-sm">
-                                            <i class="fas fa-trash"></i> Apagar
-                                        </button>
-                                        <button type="submit" class="btn bg-gradient-primary btn-sm">
-                                            <i class="fas fa-user-edit"></i> Editar
-                                        </button>
+                                        <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
+                                            <input type="hidden" name="_method" value="apagarPrograma">
+                                            <input type="hidden" name="id" value="<?= $programaObj->encryption($programa['id'])?>">
+                                                <button type="submit" class="btn bg-gradient-danger btn-sm">
+                                                    <i class="fas fa-trash"></i> Apagar
+                                                </button>
+                                                <div class="resposta-ajax"></div>
+                                        </form>
+                                    </td>
+                                    <td>        
+                                        <a href="<?= SERVERURL . "formacao/programa_cadastro&id=" . $programaObj->encryption($programa['id']) ?>"
+                                            <button type="submit" class="btn bg-gradient-primary btn-sm">
+                                                <i class="fas fa-user-edit"></i> Editar
+                                            </button>
+                                        </a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>    
@@ -68,7 +78,8 @@
                                     <th>Verba</th>
                                     <th>Edital</th>
                                     <th>Descrição</th>
-                                    <th width="15%">Ações</th>
+                                    <th width="15%">Apagar</th>
+                                    <th width="15%">Editar</th>
                                 </tr>
                             </tfoot>
                         </table>

@@ -17,7 +17,16 @@ class FormacaoModel extends MainModel
     }
 
     protected function getProgramas() {
-        return DbModel::consultaSimples("SELECT * FROM programas where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+        
+        $sql = "SELECT p.id as id, p.programa as programa, p.verba_id , p.edital as edital, p.descricao as descricao, p.publicado, v.verba as nome_verba 
+                FROM programas p
+                INNER JOIN verbas v ON p.verba_id = v.id
+                WHERE p.publicado = 1"
+                ;
+        $pdo = parent::connection();
+        $statement = $pdo->prepare($sql);
+        $statement->execute();
+        return $statement;
     }
 
     protected function getLinguagens() {
@@ -35,6 +44,10 @@ class FormacaoModel extends MainModel
     }
     protected function getVigencias() {
         return DbModel::consultaSimples("SELECT * FROM formacao_vigencias where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    protected function getVerbas() {
+        return DbModel::consultaSimples("SELECT * FROM verbas where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
     }
 }
 
