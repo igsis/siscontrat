@@ -24,6 +24,15 @@ if (isset($_POST['_method'])) {
         case "apagarCargo":
             echo $insForm->apagaCargo($_POST);
             break;   
+        case "cadastrarCoordenadoria":
+            echo $insForm->insereCoordenadoria($_POST);
+            break;   
+        case "editarCoordenadoria":
+            echo $insForm->editaCoordenadoria($_POST);
+            break; 
+        case "apagarCoordenadoria":
+            echo $insForm->apagaCoordenadoria($_POST);
+            break;   
     }
 } else {
     include_once "../config/destroySession.php";

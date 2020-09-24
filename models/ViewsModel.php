@@ -82,6 +82,7 @@ class ViewsModel
             'territorio_lista',
             'vigencia_lista',
             'cargo_cadastro',
+            'coordenadoria_cadastro',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

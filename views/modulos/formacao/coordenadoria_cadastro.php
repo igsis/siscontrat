@@ -3,9 +3,9 @@
 require_once "./controllers/FormacaoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$cargoObj = new FormacaoController();
+$coordenadoriaObj = new FormacaoController();
 
-$cargo = $cargoObj->recuperaCargo($id);
+$coordenadoria = $coordenadoriaObj->recuperaCoordenadoria($id);
 
 ?>
 <!-- Content Header (Page header) -->
@@ -13,7 +13,7 @@ $cargo = $cargoObj->recuperaCargo($id);
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-12">
-                <h1 class="m-0 text-dark">Cargo</h1>
+                <h1 class="m-0 text-dark">Coordenadoria</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -41,30 +41,22 @@ $cargo = $cargoObj->recuperaCargo($id);
                             <div class="col-12">
                                 <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" 
                                 method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
-                                    <input type="hidden" name="_method" value="<?= ($id) ? "editarCargo" : "cadastrarCargo" ?>">
+                                    <input type="hidden" name="_method" value="<?= ($id) ? "editarCoordenadoria" : "cadastrarCoordenadoria" ?>">
                                     <?php if ($id): ?>
                                         <input type="hidden" name="id" id="modulo_id" value="<?= $id ?>">
                                     <?php endif; ?>
                                     <div class="row">
-                                        <div class="form-group col-md-4">
-                                            <label for="sigla">Cargo*: </label>
-                                            <input type="text" class="form-control" id="cargo" name="cargo"
-                                                maxlength="70" value="<?= $cargo->cargo ?? "" ?>" 
+                                        <div class="form-group col">
+                                            <label for="sigla">Coordenadoria*: </label>
+                                            <input type="text" class="form-control" id="coordenadoria" name="coordenadoria"
+                                                maxlength="70" value="<?= $coordenadoria->coordenadoria ?? "" ?>" 
                                                 required>
-                                        </div>
-
-                                        <div class="form-group col-md-8">
-                                            <label for="sigla">Justificativa*: </label>
-                                            <input type="text" class="form-control" id="justificativa" name="justificativa"
-                                                maxlength="70" value="<?= $cargo->justificativa ?? "" ?>" 
-                                                required>
-                                        </div>
-                                    
+                                        </div>                                    
                                     
                                     </div>
                                     
                                     <div class="card-footer">
-                                        <a href="<?= SERVERURL ?>formacao/cargo_lista">
+                                        <a href="<?= SERVERURL ?>formacao/coordenadoria_lista">
                                             <button type="button" class="btn btn-default pull-left">Voltar</button>
                                         </a>
                                         <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary float-right">
