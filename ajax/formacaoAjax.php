@@ -42,6 +42,15 @@ if (isset($_POST['_method'])) {
         case "apagarPrograma":
             echo $insForm->apagaPrograma($_POST);
             break; 
+        case "cadastrarLinguagem":
+            echo $insForm->insereLinguagem($_POST);
+            break;   
+        case "editarLinguagem":
+            echo $insForm->editaLinguagem($_POST);
+            break; 
+        case "apagarLinguagem":
+            echo $insForm->apagaLinguagem($_POST);
+            break; 
     }
 } else {
     include_once "../config/destroySession.php";
