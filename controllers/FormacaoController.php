@@ -655,4 +655,126 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    public function listaPedidos()
+    {
+        return parent::getPedidos();
+    }
+
+    public function retornaLocaisFormacao($idContratacao, $obj = NULL)
+    {
+        return parent::getLocaisFormacao($idContratacao, $obj);
+    }
+
+    public function retornaValorTotalVigencia($idContratacao)
+    {
+        return parent::getValorTotalVigencia($idContratacao);
+    }
+
+    public function recuperaPedido($pedido_id)
+    {
+        $pedido_id = MainModel::decryption($pedido_id);
+        return DbModel::consultaSimples("SELECT origem_id, valor_total, data_kit_pagamento, numero_processo, numero_processo_mae, forma_pagamento, justificativa, observacao, verba_id FROM pedidos
+                                                  WHERE id = $pedido_id AND publicado = 1 AND origem_tipo_id = 2")->fetchObject();
+    }
+
+    public function recuperaContratacao($contratacao_id)
+    {
+        $contratacao_id = MainModel::decryption($contratacao_id);
+        return DbModel::consultaSimples("SELECT fc.ano, fc.chamado, ci.classificacao_indicativa, t.territorio, cord.coordenadoria, s.subprefeitura, 
+                                                         pro.programa, l.linguagem, pj.projeto, c.cargo, v.id AS 'idVigencia',v.ano AS 'vigencia', v.descricao, v.numero_parcelas,
+		                                                 fc.observacao, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', pf.nome
+                                                  FROM formacao_contratacoes AS fc
+                                                  INNER JOIN classificacao_indicativas AS ci ON ci.id = fc.classificacao
+                                                  INNER JOIN territorios AS t ON t.id = fc.territorio_id
+                                                  INNER JOIN coordenadorias AS cord ON cord.id = fc.coordenadoria_id
+                                                  INNER JOIN subprefeituras AS s ON s.id = fc.subprefeitura_id
+                                                  INNER JOIN programas AS pro ON pro.id = fc.programa_id
+                                                  INNER JOIN pessoa_fisicas AS pf ON fc.pessoa_fisica_id = pf.id
+                                                  INNER JOIN linguagens AS l ON l.id = fc.linguagem_id
+                                                  INNER JOIN projetos AS pj ON pj.id = fc.projeto_id
+                                                  INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
+                                                  INNER JOIN formacao_vigencias AS v ON v.id = fc.form_vigencia_id
+                                                  INNER JOIN usuarios AS fiscal ON fiscal.id = fc.fiscal_id
+                                                  LEFT JOIN usuarios AS suplente ON suplente.id = fc.suplente_id
+                                                  WHERE fc.id = $contratacao_id AND fc.publicado = 1")->fetchObject();
+    }
+
+
+    public function cadastrarPedido($post)
+    {
+        unset($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $insert = DbModel::insert('pedidos', $dados);
+        if ($insert->rowCount() >= 1) {
+            $pedido_id = DbModel::connection()->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Pedido Cadastrado',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/pedido_contratacao_cadastro&id=' . MainModel::encryption($pedido_id)
+            ];
+        } else {
+            $alerta = [
+                'Alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde.',
+                'tipo' => 'error'
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editarPedido($post)
+    {
+        $pedido_id = MainModel::decryption($post['id']);
+        $contratacao_id = MainModel::decryption($post['contratacao_id']);
+        unset($post['_method']);
+        unset($post['id']);
+        unset($post['contratacao_id']);
+
+        $consultaLocais = DbModel::consultaSimples("SELECT * FROM formacao_locais WHERE form_pre_pedido_id = $contratacao_id")->rowCount();
+        if ($consultaLocais > 0) :
+            DbModel::deleteEspecial('formacao_locais', 'form_pre_pedido_id', $contratacao_id);
+        endif;
+
+        for ($i = 0; $i < count($post['local_id']); $i++):
+            if ($post['local_id'][$i] > 0):
+                $teste = [
+                    'form_pre_pedido_id' => $contratacao_id,
+                    'local_id' => $post['local_id'][$i]
+                ];
+                DbModel::insert('formacao_locais', $teste);
+            endif;
+        endfor;
+
+        unset($post['local_id']);
+        $dados = MainModel::limpaPost($post);
+        $update = DbModel::update('pedidos', $dados, $pedido_id);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Pedido Atualizado',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/pedido_contratacao_cadastro&id=' . MainModel::encryption($pedido_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+
+    public function deletarPedido()
+    {
+
+    }
 }
