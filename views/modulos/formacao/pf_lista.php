@@ -23,7 +23,7 @@
                         <h3 class="card-title">Pessoas Físicas Cadastradas</h3>
                         <div class="card-tools">
                             <!-- button with a dropdown -->
-                            <a href="<?= SERVERURL ?>formacao/pf_cadastro" class="btn btn-success btn-sm" >
+                            <a href="<?= SERVERURL ?>formacao/pesquisa_pf" class="btn btn-success btn-sm" >
                                 <i class="fas fa-plus"></i> Cadastrar Novo
                             </a>
                             <button type="button" class="btn btn-info btn-sm">
@@ -40,7 +40,8 @@
                                 <th>CPF / Passaporte</th>
                                 <th>Data de Nascimento</th>
                                 <th>E-mail</th>
-                                <th width="15%">Ações</th>
+                                <th width="15%">Demais Anexos</th>
+                                <th width="15%">Editar</th>
                             </tr>
                             </thead>
                             <tbody>
