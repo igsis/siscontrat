@@ -97,5 +97,6 @@ class FormacaoModel extends MainModel
     {
         return DbModel::consultaSimples("SELECT * FROM verbas where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
     }
+
 }
 

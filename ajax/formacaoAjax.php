@@ -89,6 +89,12 @@ if (isset($_POST['_method'])) {
         case "apagarVigencia":
             echo $insForm->apagaVigencia($_POST);
             break;
+        case "cadastrarParcelaVigencia":
+            echo $insForm->insereParcelaVigencia($_POST);
+            break;
+        case "editarParcelaVigencia":
+            echo $insForm->editaParcelaVigencia($_POST);
+            break;
         case "cadastrarPedido":
             echo $insForm->cadastrarPedido($_POST);
             break;

@@ -605,6 +605,11 @@ class FormacaoController extends FormacaoModel
         return parent::getVigencias();
     }
 
+    public function recuperaParcelasVigencias($id_parcela_vigencia) {
+        $parcela_id = MainModel::decryption($id_parcela_vigencia)??"";
+        return DbModel::consultaSimples("SELECT * FROM formacao_parcelas where formacao_vigencia_id = $parcela_id")->fetchAll(PDO::FETCH_OBJ);
+    }
+
     public function recuperaVigencia($vigencia_id) {
         $vigencia_id = MainModel::decryption($vigencia_id);
         return DbModel::getInfo('formacao_vigencias', $vigencia_id, false)->fetchObject();
@@ -634,6 +639,81 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    public function insereParcelaVigencia($post){
+        unset($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $insert = DbModel::insert('formacao_parcelas', $dados, false);
+        if ($insert->rowCount() >= 1) {
+            $parcela_id = DbModel::connection(true)->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Parcelas Cadastradas!',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/vigencia_cadastro&id=' . MainModel::encryption($parcela_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+    
+    public function editaVigencia($post)
+    {
+        $vigencia_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        unset ($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $update = DbModel::update('formacao_vigencias', $dados, $vigencia_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Vigência Atualizada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/vigencia_cadastro&id=' . MainModel::encryption($vigencia_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editaParcelaVigencia($post)
+    {
+        $parcela_id = MainModel::decryption($post['parcela_id']);
+        unset($post['parcela_id']);
+        unset ($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $update = DbModel::update('formacao_parcelas', $dados, $parcela_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Parcela Atualizada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/vigencia_cadastro&id=' . MainModel::encryption($parcela_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
     public function apagaVigencia($id)
     {
         $id = MainModel::decryption($id['id']);
