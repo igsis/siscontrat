@@ -44,7 +44,7 @@ if (isset($_POST['pf_cpf'])){
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/pessoaFisicaAjax.php" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
+                    <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/FormacaoAjax.php" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
                         <input type="hidden" name="_method" value="<?= ($id) ? "editarPF" : "cadastrarPF" ?>">
                         <input type="hidden" name="pagina" value="formacao/pf_cadastro">
                         <input type="hidden" name="pf_ultima_atualizacao" value="<?= date('Y-m-d H-i-s') ?>">
@@ -65,7 +65,7 @@ if (isset($_POST['pf_cpf'])){
 
                             <div class="row">
                                 <?php
-                                if (isset($_POST['pf_cpf']) || $pf['cpf'] != ""){
+                                if (isset($_POST['pf_cpf']) && $pf['cpf'] != ""){
                                     ?>
                                     <div class="form-group col-md-2">
                                         <label for="rg">RG: *</label>
@@ -161,7 +161,7 @@ if (isset($_POST['pf_cpf'])){
                                 </div>
                             </div>
                             <hr/>
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="form-group col">
                                     <label for="regiao_id">Região: *</label>
                                     <select class="form-control" id="regiao_id" name="dt_regiao_id" required>
@@ -189,8 +189,8 @@ if (isset($_POST['pf_cpf'])){
                                         ?>
                                     </select>
                                 </div>
-                            </div>
-                            <hr/>
+                            </div> 
+                            <hr/>-->
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="nit">NIT: *</label>
@@ -235,6 +235,36 @@ if (isset($_POST['pf_cpf'])){
                         <!-- /.card-footer -->
                         <div class="resposta-ajax"></div>
                     </form>
+                    <hr/>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <form method="POST" action='#'
+                            role="form">
+                                <input type="hidden" name="idPf" value="">
+                                    <button type="submit" class="btn btn-info pull-right btn-block">Demais
+                                        Anexos
+                                    </button>
+                            </form>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <form method="post" action="3" role="form" target="_blank">
+                                <input type="hidden" name="idPf" value="">
+                                    <button type="submit" class="btn btn-info btn-block">Imprimir resumo
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <form method="POST" action="#" role="form" target="_blank">
+                                <input type="hidden" name="idPf" value="">
+                                    <button type="submit" class="btn btn-info pull-right btn-block">Clique aqui para
+                                    gerar a FACC
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- /.card -->
             </div>
