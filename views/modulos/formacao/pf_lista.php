@@ -1,4 +1,8 @@
 <?php
+    require_once "./controllers/FormacaoController.php";
+    $listaPfObj = new FormacaoController();
+    
+    $lista_pf = $listaPfObj->listaPF();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -45,11 +49,12 @@
                             </tr>
                             </thead>
                             <tbody>
+                                <?php foreach ($lista_pf as $pf): ?>
                                 <tr>
-                                    <td>Diego</td>
-                                    <td>111.111.111-11</td>
-                                    <td>03/07/1990</td>
-                                    <td>diego@teste.com</td>
+                                    <td><?=$pf->nome?></td>
+                                    <td><?=$pf->cpf?></td>
+                                    <td><?=$pf->data_nascimento?></td>
+                                    <td><?=$pf->email?></td>
                                     <td>
                                         <button type="button" class="btn bg-gradient-info btn-sm float-left mr-2">
                                             <i class="fas fa-file-archive"></i> Anexos
@@ -59,6 +64,7 @@
                                         </button>
                                     </td>
                                 </tr>
+                                <?php endforeach; ?>  
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -66,7 +72,8 @@
                                     <th>CPF / Passaporte</th>
                                     <th>Data de Nascimento</th>
                                     <th>E-mail</th>
-                                    <th width="15%">Ações</th>
+                                    <th width="15%">Demais Anexos</th>
+                                    <th width="15%">Editar</th>
                                 </tr>
                             </tfoot>
                         </table>

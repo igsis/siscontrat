@@ -1,4 +1,8 @@
 <?php
+    require_once "./controllers/FormacaoController.php";
+    $dados_contratacaoObj = new FormacaoController();
+    
+    $dados_contratacao = $dados_contratacaoObj->listaDadosContratacao();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -43,13 +47,14 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php foreach ($dados_contratacao as $contratacao): ?>
                                 <tr>
-                                    <td>20200320.00001-F</td>
-                                    <td>Diego</td>
-                                    <td>2020</td>
-                                    <td>Programa Teste</td>
-                                    <td>Aeoo</td>
-                                    <td>Cargo Teste</td>
+                                    <td><?=$contratacao['protocolo']?></td>
+                                    <td><?=$contratacao['pessoa']?></td>
+                                    <td><?=$contratacao['ano']?></td>
+                                    <td><?=$contratacao['programa']?></td>
+                                    <td><?=$contratacao['linguagem']?></td>
+                                    <td><?=$contratacao['cargo']?></td>
                                     <td>
                                         <button type="button" class="btn bg-gradient-info btn-sm float-left mr-2">
                                             <i class="fas fa-file-archive"></i> Visualizar
@@ -59,6 +64,7 @@
                                         </button>
                                     </td>
                                 </tr>
+                                <?php endforeach; ?> 
                             </tbody>
                             <tfoot>
                                 <tr>

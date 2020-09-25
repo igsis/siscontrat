@@ -923,4 +923,14 @@ class FormacaoController extends FormacaoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
+    public function listaDadosContratacao()
+    {
+        return parent::getDadosContratacao();
+    }
+
+    public function listaPF()
+    {
+        return parent::getPF();
+    }
 }
