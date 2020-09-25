@@ -18,7 +18,7 @@ class FormacaoModel extends MainModel
 
     protected function getProgramas() {
         
-        $sql = "SELECT p.id as id, p.programa as programa, p.verba_id , p.edital as edital, p.descricao as descricao, p.publicado, v.verba as nome_verba 
+        $sql = "SELECT p.id as id, p.programa as programa, p.verba_id as verba_id, p.edital as edital, p.descricao as descricao, p.publicado, v.verba as nome_verba 
                 FROM programas p
                 INNER JOIN verbas v ON p.verba_id = v.id
                 WHERE p.publicado = 1"

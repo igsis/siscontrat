@@ -70,7 +70,7 @@ $listaVerba = $verbaObj->listaVerbas();
                                     <div class="row">
                                         <div class="form-group col-md-12">
                                             <label for="descricao">Descrição *</label>
-                                            <textarea name="descricao" id="descricao" rows="3" required value="<?= $programa->descricao ?? "" ?>"class="form-control"></textarea>
+                                            <textarea name="descricao" id="descricao" rows="3"  required class="form-control"><?= $programa->descricao ?? "" ?></textarea>
                                         </div>
                                     </div>
                                     

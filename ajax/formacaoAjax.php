@@ -36,7 +36,7 @@ if (isset($_POST['_method'])) {
         case "cadastrarPrograma":
             echo $insForm->inserePrograma($_POST);
             break;   
-        case "editaPrograma":
+        case "editarPrograma":
             echo $insForm->editaPrograma($_POST);
             break;    
         case "apagarPrograma":

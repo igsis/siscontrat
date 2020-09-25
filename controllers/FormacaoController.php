@@ -216,7 +216,7 @@ class FormacaoController extends FormacaoModel
     }
 
 
-    public function editaPrograma($id)
+    public function editaPrograma($post)
     {
         $programa_id = MainModel::decryption($post['id']);
         unset($post['id']);
