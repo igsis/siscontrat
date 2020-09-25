@@ -1,11 +1,11 @@
 <?php
-$id = isset($_GET['id']) ? $_GET['id'] : "";
+$pedido_id = isset($_GET['id']) ? $_GET['id'] : "";
 require_once "./controllers/formacaoController.php";
 
 $pedidoObj = new FormacaoController();
 
-$pedido = $pedidoObj->recuperaPedido($id);
-$parcelas = $pedidoObj->recuperaParcelasPedido($id);
+$pedido = $pedidoObj->recuperaPedido($pedido_id);
+$parcelas = $pedidoObj->recuperaParcelasPedido($pedido_id);
 ?>
 <div class="content-header">
     <div class="container-fluid">
@@ -29,33 +29,33 @@ $parcelas = $pedidoObj->recuperaParcelasPedido($id);
                 <div class="card-body">
                     <form action="<?= SERVERURL ?>ajax/formacaoAjax.php" method="POST"
                           class="form-horizontal formulario-ajax"
-                          data-form="<?= ($id) ? "update" : "save" ?>">
-                        <input type="hidden" name="_method" value="<?= ($id) ? "editarParcela" : "cadastrarParcela" ?>">
-                        <?php if ($id): ?>
-                            <input type="hidden" name="id" value="<?= $id ?>">
+                          data-form="<?= ($pedido_id) ? "update" : "save" ?>">
+                        <input type="hidden" name="_method" value="<?= ($pedido_id) ? "editarParcela" : "cadastrarParcela" ?>">
+                        <?php if ($pedido_id): ?>
+                            <input type="hidden" name="pedido_id" value="<?= $pedido_id ?>">
                         <?php endif; ?>
                         <?php for ($i = 0; $i < $pedido->numero_parcelas; $i++): ?>
-                                <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label for="parcela[]">Parcela:</label>
-                                        <input type="text" readonly class="form-control" value="<?= $i + 1 ?>"
-                                               name="numero_parcela[]" required>
-                                    </div>
-
-                                    <div class="form-group col-md-4">
-                                        <label for="valor[]">Valor:</label>
-                                        <input type="text" name="valor[<?= $i ?>]"
-                                               class="form-control valor" maxlength="10"
-                                               value="<?= isset($parcelas[$i]->valor) ? MainModel::dinheiroParaBr($parcelas[$i]->valor) : "" ?>">
-                                    </div>
-
-                                    <div class="form-group col-md-4">
-                                        <label for="data_pagamento">Data pagamento: </label>
-                                        <input type="date" name="data_pagamento[<?= $i ?>]" class="form-control"
-                                               placeholder="DD/MM/AAAA"
-                                               value="<?= isset($parcelas[$i]->data_pagamento) ? $parcelas[$i]->data_pagamento : "" ?>">
-                                    </div>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label for="parcela[]">Parcela:</label>
+                                    <input type="text" readonly class="form-control" value="<?= $i + 1 ?>"
+                                           name="numero_parcelas[]" required>
                                 </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="valor[]">Valor:</label>
+                                    <input type="text" name="valor[]"
+                                           class="form-control valor" maxlength="10"
+                                           value="<?= isset($parcelas[$i]->valor) ? MainModel::dinheiroParaBr($parcelas[$i]->valor) : "" ?>">
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="data_pagamento">Data pagamento: </label>
+                                    <input type="date" name="data_pagamento[<?= $i ?>]" class="form-control"
+                                           placeholder="DD/MM/AAAA"
+                                           value="<?= isset($parcelas[$i]->data_pagamento) ? $parcelas[$i]->data_pagamento : "" ?>">
+                                </div>
+                            </div>
                         <?php endfor; ?>
                         <div class="resposta-ajax"></div>
                 </div>
@@ -64,21 +64,21 @@ $parcelas = $pedidoObj->recuperaParcelasPedido($id);
                     <div class="row">
                         <div class="col-md-4">
                             <strong> Valor Total: </strong> R$
-                            <span id="valorTotal" data-id="<?= $pedido->valor_total ?>"> <?= MainModel::dinheiroParaBr($pedido->valor_total) ?></span>
+                            <span id="valorTotal"
+                                  data-id="<?= $pedido->valor_total ?>"> <?= MainModel::dinheiroParaBr($pedido->valor_total) ?></span>
                         </div>
 
                         <div class="col-md-4">
                             <strong> Valor somado das parcelas: </strong> R$
                             <span id="totalSomado"> <?= MainModel::dinheiroParaBr($pedido->valor_total) ?></span>
                         </div>
-                    <div class="col-md-4">
-                        <input type="hidden" value="#" name="idPedido">
-                        <input type="hidden" value="<?= $pedido->numero_parcelas ?>" name="numParcelas">
-                        <button type="submit" name="parcelaEditada" id="grava"
-                                class="btn btn-primary float-right">
-                            Gravar
-                        </button>
-                    </div>
+                        <div class="col-md-4">
+                            <input type="hidden" value="<?= $pedido->numero_parcelas ?>" name="numParcelas">
+                            <button type="submit" name="parcelaEditada" id="grava"
+                                    class="btn btn-primary float-right">
+                                Gravar
+                            </button>
+                        </div>
                     </div>
                 </div>
                 </form>
@@ -117,6 +117,7 @@ $parcelas = $pedidoObj->recuperaParcelasPedido($id);
             msgValorErrado.hide();
         }
     }
+
     $(document).ready(valores);
     $('.valor').keyup(valores);
 

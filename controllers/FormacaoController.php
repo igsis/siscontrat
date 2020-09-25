@@ -824,11 +824,11 @@ class FormacaoController extends FormacaoModel
 
         for ($i = 0; $i < count($post['local_id']); $i++):
             if ($post['local_id'][$i] > 0):
-                $teste = [
+                $array = [
                     'form_pre_pedido_id' => $contratacao_id,
                     'local_id' => $post['local_id'][$i]
                 ];
-                DbModel::insert('formacao_locais', $teste);
+                DbModel::insert('formacao_locais', $array);
             endif;
         endfor;
 
@@ -885,6 +885,42 @@ class FormacaoController extends FormacaoModel
     }
 
     public function editarParcela($post){
+        unset($post['_method']);
+        $pedido_id = MainModel::decryption($post['pedido_id']);
+        unset($post['pedido_id']);
+        $parcelas = DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->fetchAll(PDO::FETCH_ASSOC);
+        if (count($parcelas) > 0) {
+            foreach ($parcelas as $parcela) {
+                DbModel::consultaSimples("UPDATE parcelas SET publicado = 0 WHERE pedido_id = $pedido_id AND numero_parcelas = " . $parcela['numero_parcelas']);
+            }
+        }
 
+        for ($i = 0; $i < count($post['numero_parcelas']); $i++):
+                $array = [
+                    'pedido_id' => $pedido_id,
+                    'numero_parcelas' => $i,
+                    'valor' => $post['valor'][$i],
+                    'data_pagamento' => $post['data_pagamento'][$i],
+                    'publicado' => '1',
+                ];
+                $insert = DbModel::insert('parcelas', $array);
+        endfor;
+        if(DbModel::connection()->errorCode() == 0){
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Parcelas Atualizadas!',
+                'texto' => 'Parcelas atualizadas com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/pedido_edita_parcelas&id=' . MainModel::encryption($pedido_id)
+            ];
+        }else{
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error'
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
     }
 }

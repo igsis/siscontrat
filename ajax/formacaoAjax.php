@@ -104,7 +104,7 @@ if (isset($_POST['_method'])) {
         case "deletarPedido":
             echo $insForm->deletarPedido($_POST);
             break;
-        case "editar":
+        case "editarParcela":
             echo $insForm->editarParcela($_POST);
             break;
         case "cadastrarPF":
