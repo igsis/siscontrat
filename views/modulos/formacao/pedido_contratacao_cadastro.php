@@ -38,7 +38,7 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                             <?php endif; ?>
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="ano">Ano: *</label>
+                                    <label for="ano">Ano:</label>
                                     <input type="text" name="ano" class="form-control"
                                            value="<?= isset($contratacao->ano) ? $contratacao->ano : "" ?>"
                                            disabled>
@@ -185,21 +185,30 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="dataKit">Data kit pagamento: *</label>
                                     <input type="date" name="data_kit_pagamento" class="form-control" required
                                            value="<?= isset($pedido->data_kit_pagamento) ? $pedido->data_kit_pagamento : "" ?>"
                                            placeholder="DD/MM/AAAA">
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
+                                    <br>
+                                    <a href="<?= SERVERURL . "formacao/pedido_edita_parcelas&id=" . $id ?>">
+                                        <button type="button" class="btn btn-info btn-block">Editar parcelas</button>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
                                     <label for="numero_processo">Número do Processo: *</label>
                                     <input type="text" name="numero_processo" required class="form-control"
                                            value="<?= isset($pedido->numero_processo) ? $pedido->numero_processo : "" ?>"
                                            data-mask="9999.9999/9999999-9" minlength="19">
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="numero_processo_mae">Número do Processo Mãe: *</label>
                                     <input type="text" name="numero_processo_mae" id="processoMae" required
                                            value="<?= isset($pedido->numero_processo_mae) ? $pedido->numero_processo_mae : "" ?>"

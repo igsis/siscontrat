@@ -7,7 +7,7 @@ if (isset($_POST['_method'])) {
    // $idPf = $_SESSION['origem_id_s'];
     require_once "../controllers/FormacaoController.php";
     $insForm = new FormacaoController();
-    require_once "./controllers/PessoaFisicaController.php";
+    require_once "../controllers/PessoaFisicaController.php";
     $insPessoaFisica = new PessoaFisicaController();
 
     switch ($_POST['_method']) {
@@ -94,6 +94,12 @@ if (isset($_POST['_method'])) {
             break;
         case "editarPedido":
             echo $insForm->editarPedido($_POST);
+            break;
+        case "deletarPedido":
+            echo $insForm->deletarPedido($_POST);
+            break;
+        case "editar":
+            echo $insForm->editarParcela($_POST);
             break;
         case "cadastrarPF":
             echo $insPessoaFisica->inserePessoaFisica($_POST);

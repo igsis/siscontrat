@@ -28,7 +28,7 @@ $pedidos = $formObj->listaPedidos();
                         <h3 class="card-title">Listagem</h3>
                         <div class="card-tools">
                             <!-- button with a dropdown -->
-                            <a href="<?= SERVERURL ?>formacao/pf_cadastro" class="btn btn-success btn-sm">
+                            <a href="<?= SERVERURL ?>" class="btn btn-success btn-sm">
                                 <i class="fas fa-file-excel"></i> Exportar para Excel
                             </a>
                         </div>
@@ -49,28 +49,32 @@ $pedidos = $formObj->listaPedidos();
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($pedidos AS $pedido): ?>
-                            <tr>
-                                <td><?= $pedido->protocolo ?></td>
-                                <td><?= $pedido->numero_processo ?></td>
-                                <td><?= $pedido->nome ?></td>
-                                <td><?= $formObj->retornaLocaisFormacao($pedido->origem_id)?></td>
-                                <td><?= $pedido->ano ?></td>
-                                <td><?= $pedido->verba ?></td>
-                                <td><?= $pedido->status ?></td>
-                                <td>
-                                    <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&id=" . $formObj->encryption($pedido->id) ?>">
-                                        <button type="submit" class="btn bg-gradient-primary btn-sm">
-                                            <i class="fas fa-user-edit"></i> Editar
-                                        </button>
-                                    </a>
-                                    <a href="<?= SERVERURL . "formacao/pedido_contratacao_lista&id=" . $formObj->encryption($pedido->id) ?>">
-                                        <button type="submit" class="btn bg-gradient-danger btn-sm">
-                                            <i class="fas fa-trash"></i> Apagar
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
+                            <?php foreach ($pedidos as $pedido): ?>
+                                <tr>
+                                    <td><?= $pedido->protocolo ?></td>
+                                    <td><?= $pedido->numero_processo ?></td>
+                                    <td><?= $pedido->nome ?></td>
+                                    <td><?= $formObj->retornaLocaisFormacao($pedido->origem_id) ?></td>
+                                    <td><?= $pedido->ano ?></td>
+                                    <td><?= $pedido->verba ?></td>
+                                    <td><?= $pedido->status ?></td>
+                                    <td style="text-align: center">
+                                        <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&id=" . $formObj->encryption($pedido->id) ?>">
+                                            <button type="submit" class="btn bg-gradient-primary btn-sm float-left">
+                                                <i class="fas fa-user-edit"></i> Editar
+                                            </button>
+                                        </a>
+                                        <form action="<?= SERVERURL ?>ajax/formacaoAjax.php"
+                                              class="form-horizontal formulario-ajax" method="POST">
+                                            <input type="hidden" name="_method" value="deletarPedido">
+                                            <input type="hidden" name="id" value="<?= $formObj->encryption($pedido->id) ?>">
+                                            <button type="submit" class="btn bg-gradient-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Apagar
+                                            </button>
+                                            <div class="resposta-ajax"></div>
+                                        </form>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                             </tbody>
                             <tfoot>
@@ -87,41 +91,8 @@ $pedidos = $formObj->listaPedidos();
                             </tfoot>
                         </table>
                     </div>
-                    <!-- /.card-body -->
-
                 </div>
-                <!-- /.card -->
             </div>
         </div>
-        <!-- /.row -->
-    </div><!-- /.container-fluid -->
-</div>
-<!-- /.content -->
-
-<div class="modal fade" id="arquivarEdital" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Arquivar Edital</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p></p>
-            </div>
-            <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/fomentoAjax.php"
-                  role="form" data-form="save">
-                <input type="hidden" name="_method" value="arquivaEdital">
-                <input type="hidden" name="id" id="id" value="">
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success">Arquivar</button>
-                </div>
-                <div class="resposta-ajax"></div>
-            </form>
-        </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>

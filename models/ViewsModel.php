@@ -61,6 +61,7 @@ class ViewsModel
             'logout',
             'pedido_contratacao_lista',
             'pedido_contratacao_cadastro',
+            'pedido_edita_parcelas',
             'pf_cadastro',
             'pf_lista',
             'pj_cadastro',

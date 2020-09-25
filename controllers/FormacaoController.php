@@ -1,8 +1,10 @@
 <?php
 if ($pedidoAjax) {
     require_once "../models/FormacaoModel.php";
+    require_once "../controllers/PedidoController.php";
 } else {
     require_once "./models/FormacaoModel.php";
+    require_once "./controllers/PedidoController.php";
 }
 
 class FormacaoController extends FormacaoModel
@@ -660,20 +662,20 @@ class FormacaoController extends FormacaoModel
         return parent::getPedidos();
     }
 
-    public function retornaLocaisFormacao($idContratacao, $obj = NULL)
+    public function retornaLocaisFormacao($contratacao_id, $obj = NULL)
     {
-        return parent::getLocaisFormacao($idContratacao, $obj);
+        return parent::getLocaisFormacao($contratacao_id, $obj);
     }
 
-    public function retornaValorTotalVigencia($idContratacao)
+    public function retornaValorTotalVigencia($contratacao_id)
     {
-        return parent::getValorTotalVigencia($idContratacao);
+        return parent::getValorTotalVigencia($contratacao_id);
     }
 
     public function recuperaPedido($pedido_id)
     {
         $pedido_id = MainModel::decryption($pedido_id);
-        return DbModel::consultaSimples("SELECT origem_id, valor_total, data_kit_pagamento, numero_processo, numero_processo_mae, forma_pagamento, justificativa, observacao, verba_id FROM pedidos
+        return DbModel::consultaSimples("SELECT origem_id, valor_total, data_kit_pagamento, numero_processo, numero_parcelas, valor_total,numero_processo_mae, forma_pagamento, justificativa, observacao, verba_id FROM pedidos
                                                   WHERE id = $pedido_id AND publicado = 1 AND origem_tipo_id = 2")->fetchObject();
     }
 
@@ -773,8 +775,36 @@ class FormacaoController extends FormacaoModel
     }
 
 
-    public function deletarPedido()
+    public function deletarPedido($post)
     {
+        unset($post['_method']);
+        $pedido_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        $delete = DbModel::apaga('pedidos', $pedido_id);
+        if($delete->rowCount() >= 1 || DbModel::connection()->errorCode() == 0){
+            $alerta = [
+              'alerta' => 'sucesso',
+              'titulo' => 'Pedido Apagado!',
+              'texto' => 'Pedido apagado com sucesso!',
+              'tipo' => 'success',
+              'location' => SERVERURL . 'formacao/pedido_contratacao_lista'
+            ];
+        }else{
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidos, tente novamente mais tarde',
+                'tipo' => 'error'
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function recuperaParcelasPedido($pedido_id){
+        return PedidoController::getParcelasPedido($pedido_id);
+    }
+
+    public function editarParcela($post){
 
     }
 }
