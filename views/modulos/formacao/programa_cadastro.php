@@ -59,12 +59,15 @@ $listaVerba = $verbaObj->listaVerbas();
                                         <div class="form-group col-md-4">
                                             <label for="verba">Verba *</label>
                                             <select name="verba_id" id="verba_id" required class="form-control">
-                                            <?php foreach ($listaVerba as $linha): ?>
-                                                <option value="<?php echo $linha->id ?>"><?php echo $linha->verba ?></option>
-                                            <?php endforeach ?>
-
+                                                <option value="" >Selecione uma opção</option>
+                                                <?php foreach ($listaVerba as $linha): ?>
+                                                    <option value="<?= $linha->id ?>" <?= isset($programa->verba_id) && ($linha->id == $programa->verba_id) ? "selected" : "" ?>>
+                                                        <?php echo $linha->verba ?>
+                                                    </option>
+                                                    
+                                                <?php endforeach ?>
                                             </select>
-                                        </div>                                    
+                                        </div>                                 
                                     
                                     </div>
                                     <div class="row">
