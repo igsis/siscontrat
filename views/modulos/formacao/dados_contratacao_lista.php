@@ -1,8 +1,10 @@
 <?php
     require_once "./controllers/FormacaoController.php";
+    $id = isset($_GET['id']) ? $_GET['id'] : null;
     $dados_contratacaoObj = new FormacaoController();
     
     $dados_contratacao = $dados_contratacaoObj->listaDadosContratacao();
+    //var_dump($dados_contratacao);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -43,7 +45,9 @@
                                     <th>Programa</th>
                                     <th>Linguagem</th>
                                     <th>Cargo</th>
-                                    <th width="15%">Ações</th>
+                                    <th width="15%">Visualizar</th>
+                                    <th width="15%">Editar</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,9 +60,13 @@
                                     <td><?=$contratacao['linguagem']?></td>
                                     <td><?=$contratacao['cargo']?></td>
                                     <td>
-                                        <button type="button" class="btn bg-gradient-info btn-sm float-left mr-2">
-                                            <i class="fas fa-file-archive"></i> Visualizar
-                                        </button>
+                                        <!-- <a href="<?= SERVERURL . "formacao/detalhes_contratacao&id=" . $dados_contratacaoObj->encryption($dados_contratacao->id) ?>"
+                                            <button type="submit" class="btn bg-gradient-primary btn-sm">
+                                                <i class="fas fa-user-edit"></i> Visualizar
+                                            </button>
+                                        </a> -->
+                                    </td>
+                                    <td>
                                         <button type="submit" class="btn bg-gradient-primary btn-sm">
                                             <i class="fas fa-user-edit"></i> Editar
                                         </button>
@@ -74,7 +82,9 @@
                                     <th>Programa</th>
                                     <th>Linguagem</th>
                                     <th>Cargo</th>
-                                    <th width="15%">Ações</th>
+                                    <th width="15%">Visualizae</th>
+                                    <th width="15%">Editar</th>
+
                                 </tr>
                             </tfoot>
                         </table>

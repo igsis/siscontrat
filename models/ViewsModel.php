@@ -91,7 +91,8 @@ class ViewsModel
             'subprefeitura_cadastro',
             'territorio_cadastro',
             'vigencia_cadastro',
-            'pesquisa_pf'
+            'pesquisa_pf',
+            'detalhes_contratacao',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

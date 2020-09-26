@@ -639,29 +639,29 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function insereParcelaVigencia($post){
-        unset($post['_method']);
-        $dados = MainModel::limpaPost($post);
-        $insert = DbModel::insert('formacao_parcelas', $dados, false);
-        if ($insert->rowCount() >= 1) {
-            $parcela_id = DbModel::connection(true)->lastInsertId();
-            $alerta = [
-                'alerta' => 'sucesso',
-                'titulo' => 'Parcelas Cadastradas!',
-                'texto' => 'Dados cadastrados com sucesso!',
-                'tipo' => 'success',
-                'location' => SERVERURL . 'formacao/vigencia_cadastro&id=' . MainModel::encryption($parcela_id)
-            ];
-        } else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-        return MainModel::sweetAlert($alerta);
-    }
+    // public function insereParcelaVigencia($post){
+    //     unset($post['_method']);
+    //     $dados = MainModel::limpaPost($post);
+    //     insert = DbModel::insert('formacao_parcelas', $dados, false);
+    //     if ($insert->rowCount() >= 1) {
+    //         $parcela_id = DbModel::connection(true)->lastInsertId();
+    //         $alerta = [
+    //             'alerta' => 'sucesso',
+    //             'titulo' => 'Parcelas Cadastradas!',
+    //             'texto' => 'Dados cadastrados com sucesso!',
+    //             'tipo' => 'success',
+    //             'location' => SERVERURL . 'formacao/vigencia_cadastro&id=' . MainModel::encryption($parcela_id)
+    //         ];
+    //     } else {
+    //         $alerta = [
+    //             'alerta' => 'simples',
+    //             'titulo' => 'Oops! Algo deu Errado!',
+    //             'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+    //             'tipo' => 'error',
+    //         ];
+    //     }
+    //     return MainModel::sweetAlert($alerta);
+    // }
     
     public function editaVigencia($post)
     {
@@ -691,25 +691,45 @@ class FormacaoController extends FormacaoModel
 
     public function editaParcelaVigencia($post)
     {
-        $parcela_id = MainModel::decryption($post['parcela_id']);
+        unset($post['_method']);
+        $parcela_id = MainModel::decryption($post['id']);
         unset($post['parcela_id']);
-        unset ($post['_method']);
-        $dados = MainModel::limpaPost($post);
-        $update = DbModel::update('formacao_parcelas', $dados, $parcela_id, false);
-        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+        var_dump($post);
+        $parcelas = DbModel::consultaSimples("SELECT * FROM formacao_parcelas WHERE formacao_vigencia_id = $parcela_id 'AND publicado = 1'")->fetchAll(PDO::FETCH_ASSOC);
+        if (count($parcelas) > 0) {
+            foreach ($parcelas as $parcela) {
+                DbModel::consultaSimples("UPDATE formacao_parcelas SET publicado = 0 WHERE formacao_vigencia_id = $parcela_id AND numero_parcelas = " . $parcela['numero_parcelas']);
+            }
+        }
+
+        for ($i = 0; $i < count($post['numero_parcelas']); $i++):
+                $array = [
+                    'formacao_vigencia_id' => $parcela_id,
+                    'numero_parcelas' => $i,
+                    'valor' => $post['valor'][$i],
+                    'data_inicio' => $post['data_inicio'][$i],
+                    'data_fim' => $post['data_fim'][$i],
+                    'data_pagamento' => $post['data_pagamento'][$i],
+                    'carga_horaria' => $post['carga_horaria'][$i],
+
+                    'publicado' => '1',
+                ];
+                $insert = DbModel::insert('formacao_parcelas', $array);
+        endfor;
+        if(DbModel::connection()->errorCode() == 0){
             $alerta = [
                 'alerta' => 'sucesso',
-                'titulo' => 'Parcela Atualizada!',
-                'texto' => 'Dados atualizados com sucesso!',
+                'titulo' => 'Parcelas Atualizadas!',
+                'texto' => 'Parcelas atualizadas com sucesso!',
                 'tipo' => 'success',
                 'location' => SERVERURL . 'formacao/vigencia_cadastro&id=' . MainModel::encryption($parcela_id)
             ];
-        } else {
+        }else{
             $alerta = [
                 'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
+                'titulo' => 'Oops! Algo deu errado!',
                 'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
+                'tipo' => 'error'
             ];
         }
         return MainModel::sweetAlert($alerta);
@@ -929,8 +949,45 @@ class FormacaoController extends FormacaoModel
         return parent::getDadosContratacao();
     }
 
+    
+    public function recuperaDetalhesContratacao($contratacao_id)
+    {
+        $contratacao_id = MainModel::decryption($contratacao_id);
+        //var_dump($contratacao_id);
+        return DbModel::consultaSimples("SELECT f.id, 
+                                                f.ano,
+                                                f.chamado,
+                                                cla.classificacao_indicativa,
+                                                t.territorio,
+                                                c.coordenadoria,
+                                                s.subprefeitura,
+                                                prog.programa,
+                                                l.linguagem,
+                                                proj.projeto,
+                                                fc.cargo,
+                                                fv.ano AS 'vigencia',
+                                                f.observacao,
+                                                fiscal.nome_completo AS 'fiscal',
+                                                suplente.nome_completo AS 'suplente',       
+                                                f.num_processo_pagto AS 'numpgt'
+                                        FROM formacao_contratacoes AS f 
+                                        INNER JOIN classificacao_indicativas AS cla ON f.classificacao = cla.id
+                                        INNER JOIN territorios AS t ON f.territorio_id = t.id
+                                        INNER JOIN coordenadorias AS c ON f.coordenadoria_id = c.id
+                                        INNER JOIN subprefeituras AS s ON f.subprefeitura_id = s.id
+                                        INNER JOIN programas AS prog ON f.programa_id = prog.id
+                                        INNER JOIN linguagens AS l ON f.linguagem_id = l.id
+                                        INNER JOIN projetos AS proj ON f.projeto_id = proj.id
+                                        INNER JOIN formacao_cargos fc ON f.form_cargo_id = fc.id
+                                        INNER JOIN formacao_vigencias fv ON f.form_vigencia_id = fv.id
+                                        INNER JOIN usuarios AS fiscal ON f.fiscal_id = fiscal.id
+                                        LEFT JOIN usuarios AS suplente ON f.suplente_id = suplente.id 
+                                        WHERE f.id = $contratacao_id 'AND f.publicado = 1'")->fetchObject();
+    }
+
     public function listaPF()
     {
         return parent::getPF();
     }
+
 }
