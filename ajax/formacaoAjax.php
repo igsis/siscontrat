@@ -4,7 +4,7 @@ require_once "../config/configGeral.php";
 
 if (isset($_POST['_method'])) {
     session_start(['name' => 'sis']);
-   // $idPf = $_SESSION['origem_id_s'];
+    // $idPf = $_SESSION['origem_id_s'];
     require_once "../controllers/FormacaoController.php";
     $insForm = new FormacaoController();
     require_once "../controllers/PessoaFisicaController.php";
@@ -22,70 +22,70 @@ if (isset($_POST['_method'])) {
             break;
         case "editarCargo":
             echo $insForm->editaCargo($_POST);
-            break;   
+            break;
         case "apagarCargo":
             echo $insForm->apagaCargo($_POST);
-            break;   
+            break;
         case "cadastrarCoordenadoria":
             echo $insForm->insereCoordenadoria($_POST);
-            break;   
+            break;
         case "editarCoordenadoria":
             echo $insForm->editaCoordenadoria($_POST);
-            break; 
+            break;
         case "apagarCoordenadoria":
             echo $insForm->apagaCoordenadoria($_POST);
             break;
         case "cadastrarPrograma":
             echo $insForm->inserePrograma($_POST);
-            break;   
+            break;
         case "editarPrograma":
             echo $insForm->editaPrograma($_POST);
-            break;    
+            break;
         case "apagarPrograma":
             echo $insForm->apagaPrograma($_POST);
-            break; 
+            break;
         case "cadastrarLinguagem":
             echo $insForm->insereLinguagem($_POST);
-            break;   
+            break;
         case "editarLinguagem":
             echo $insForm->editaLinguagem($_POST);
-            break; 
+            break;
         case "apagarLinguagem":
             echo $insForm->apagaLinguagem($_POST);
-            break; 
+            break;
         case "cadastrarProjeto":
             echo $insForm->insereProjeto($_POST);
-            break;   
+            break;
         case "editarProjeto":
             echo $insForm->editaProjeto($_POST);
-            break; 
+            break;
         case "apagarProjeto":
             echo $insForm->apagaProjeto($_POST);
-            break; 
+            break;
         case "cadastrarSubprefeitura":
             echo $insForm->insereSubprefeitura($_POST);
-            break;   
+            break;
         case "editarSubprefeitura":
             echo $insForm->editaSubprefeitura($_POST);
-            break; 
+            break;
         case "apagarSubprefeitura":
             echo $insForm->apagaSubprefeitura($_POST);
-            break; 
+            break;
         case "cadastrarTerritorio":
             echo $insForm->insereTerritorio($_POST);
-            break;   
+            break;
         case "editarTerritorio":
             echo $insForm->editaTerritorio($_POST);
-            break; 
+            break;
         case "apagarTerritorio":
             echo $insForm->apagaTerritorio($_POST);
-            break; 
+            break;
         case "cadastrarVigencia":
             echo $insForm->insereVigencia($_POST);
-            break;   
+            break;
         case "editarVigencia":
             echo $insForm->editaVigencia($_POST);
-            break; 
+            break;
         case "apagarVigencia":
             echo $insForm->apagaVigencia($_POST);
             break;
@@ -107,12 +107,18 @@ if (isset($_POST['_method'])) {
         case "editarParcela":
             echo $insForm->editarParcela($_POST);
             break;
+        case "cadastrarNotaEmpenho":
+            echo $insForm->cadastrarNotaEmpenho($_POST);
+            break;
         case "cadastrarPF":
             echo $insPessoaFisica->inserePessoaFisica($_POST['pagina']);
             break;
         case "editarPF":
             echo $insPessoaFisica->editaPessoaFisica($_POST['id'], $_POST['pagina']);
             break;
+    }
+    if ($_POST['_method'] == "pesquisa" && $_POST['search'] != "") {
+        echo $insForm->pesquisasPagamento($_POST['search'], $_POST['where']);
     }
 } else {
     include_once "../config/destroySession.php";

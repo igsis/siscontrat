@@ -59,6 +59,8 @@ class ViewsModel
             'listar_inscritos',
             'login',
             'logout',
+            'pagamento_busca',
+            'empenho_cadastro',
             'pedido_contratacao_lista',
             'pedido_contratacao_cadastro',
             'pedido_edita_parcelas',
