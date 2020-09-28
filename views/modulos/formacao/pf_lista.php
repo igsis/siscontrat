@@ -3,6 +3,7 @@
     $listaPfObj = new FormacaoController();
     
     $lista_pf = $listaPfObj->listaPF();
+    //var_dump($lista_pf);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -59,9 +60,11 @@
                                         <button type="button" class="btn bg-gradient-info btn-sm float-left mr-2">
                                             <i class="fas fa-file-archive"></i> Anexos
                                         </button>
-                                        <button type="submit" class="btn bg-gradient-primary btn-sm">
-                                            <i class="fas fa-user-edit"></i> Editar
-                                        </button>
+                                    </td>
+                                    <td>
+                                        <a href="<?= SERVERURL . "formacao/pf_cadastro&id=" . $listaPfObj->encryption($pf->id) ?>" class="btn bg-gradient-primary btn-sm">
+                                                <i class="fas fa-user-edit"></i> Editar
+                                        </a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>  
