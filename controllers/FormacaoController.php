@@ -960,6 +960,75 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    public function retornaNotaEmpenho($pedido_id){
+        $pedido_id = MainModel::decryption($pedido_id);
+        return DbModel::consultaSimples("SELECT nota_empenho, emissao_nota_empenho, entrega_nota_empenho FROM pagamentos WHERE pedido_id = $pedido_id")->fetchObject();
+    }
+
+    public function cadastrarNotaEmpenho($post)
+    {
+        unset($post['_method']);
+        $post['pedido_id'] = MainModel::decryption($post['pedido_id']);
+        $dados = MainModel::limpaPost($post);
+
+        $insert = DbModel::insert('pagamentos', $dados);
+        if ($insert->rowCount() >= 1) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Nota de Empenho Cadastrada!',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/empenho_cadastro&id=' . MainModel::encryption($post['pedido_id'])
+            ];
+        } else {
+            $alerta = [
+                'Alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde.',
+                'tipo' => 'error'
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function pesquisasPagamento($post, $where)
+    {
+        $sqlProtocolo = "";
+        $sqlProponente = "";
+        $sqlProcesso = "";
+
+        if ($where == "protocolo") {
+            $protocolo = $post;
+            $sqlProtocolo = " AND fc.protocolo LIKE '%$protocolo%'";
+        }
+
+        if ($where == "proponente") {
+            $proponente = $post;
+            $sqlProponente = " AND p.pessoa_fisica_id = '$proponente'";
+        }
+        if ($where == "processo"){
+            $processo = $post;
+            $sqlProcesso = " AND p.numero_processo LIKE '%$processo%'";
+        }
+
+
+        $consulta = DbModel::consultaSimples("SELECT fc.id, p.id AS pedido_id, fc.protocolo, pf.nome, p.numero_processo 
+                                                  FROM formacao_contratacoes fc 
+                                                  INNER JOIN pedidos p ON fc.id = p.origem_id
+                                                  LEFT JOIN pessoa_fisicas pf ON p.pessoa_fisica_id = pf.id
+                                                  WHERE p.origem_tipo_id = 2 AND fc.publicado = 1 $sqlProponente $sqlProcesso $sqlProtocolo")->fetchAll(PDO::FETCH_ASSOC);
+        if (count($consulta) > 0) {
+            for ($i = 0; $i < count($consulta); $i++) {
+                $consulta[$i]['id'] = MainModel::encryption($consulta[$i]['id']);
+                $consulta[$i]['pedido_id'] = MainModel::encryption($consulta[$i]['pedido_id']);
+            }
+            return json_encode(array($consulta));
+        }
+
+        return '0';
+    }
+
+
     public function listaDadosContratacao()
     {
         return parent::getDadosContratacao();

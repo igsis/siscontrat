@@ -1,11 +1,15 @@
 <?php
-$pedido_id = isset($_GET['id']) ? $_GET['id'] : "";
+$pedido_id = isset($_POST['pedido_id']) ? $_POST['pedido_id'] : "";
 require_once "./controllers/formacaoController.php";
-
 $pedidoObj = new FormacaoController();
 
-$pedido = $pedidoObj->recuperaPedido($pedido_id);
-$parcelas = $pedidoObj->recuperaParcelasPedido($pedido_id);
+if ($pedido_id != "") {
+    $pedido = $pedidoObj->recuperaPedido($pedido_id);
+    $parcelas = $pedidoObj->recuperaParcelasPedido($pedido_id);
+}
+
+$valor_total = isset($pedido->valor_total) ? $pedido->valor_total : MainModel::dinheiroDeBr($_POST['valor']);
+$numParcelas = isset($pedido->numero_parcelas) ? $pedido->numero_parcelas : $_POST['nParcelas'];
 ?>
 <div class="content-header">
     <div class="container-fluid">
@@ -30,11 +34,12 @@ $parcelas = $pedidoObj->recuperaParcelasPedido($pedido_id);
                     <form action="<?= SERVERURL ?>ajax/formacaoAjax.php" method="POST"
                           class="form-horizontal formulario-ajax"
                           data-form="<?= ($pedido_id) ? "update" : "save" ?>">
-                        <input type="hidden" name="_method" value="<?= ($pedido_id) ? "editarParcela" : "cadastrarParcela" ?>">
+                        <input type="hidden" name="_method"
+                               value="<?= ($pedido_id) ? "editarParcela" : "cadastrarParcela" ?>">
                         <?php if ($pedido_id): ?>
                             <input type="hidden" name="pedido_id" value="<?= $pedido_id ?>">
                         <?php endif; ?>
-                        <?php for ($i = 0; $i < $pedido->numero_parcelas; $i++): ?>
+                        <?php for ($i = 0; $i < $numParcelas; $i++): ?>
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="parcela[]">Parcela:</label>
@@ -62,20 +67,26 @@ $parcelas = $pedidoObj->recuperaParcelasPedido($pedido_id);
 
                 <div class="card-footer">
                     <div class="row">
-                        <div class="col-md-4">
-                            <strong> Valor Total: </strong> R$
-                            <span id="valorTotal"
-                                  data-id="<?= $pedido->valor_total ?>"> <?= MainModel::dinheiroParaBr($pedido->valor_total) ?></span>
+                        <div class="col-md-3">
+                            <a href="<?= SERVERURL ?>formacao/pedido_contratacao_cadastro&id=<?= $pedido_id ?>">
+                                <button type="button" class="btn btn-default">Voltar</button>
+                            </a>
                         </div>
 
-                        <div class="col-md-4">
-                            <strong> Valor somado das parcelas: </strong> R$
-                            <span id="totalSomado"> <?= MainModel::dinheiroParaBr($pedido->valor_total) ?></span>
+                        <div class="col-md-3">
+                            <strong> Valor total: </strong> R$
+                            <span id="valorTotal"
+                                  data-id="<?= $valor_total ?>"> <?= MainModel::dinheiroParaBr($valor_total) ?></span>
                         </div>
-                        <div class="col-md-4">
-                            <input type="hidden" value="<?= $pedido->numero_parcelas ?>" name="numParcelas">
+
+                        <div class="col-md-3">
+                            <strong> Valor somado das parcelas: </strong> R$
+                            <span id="totalSomado"> <?= isset($pedido->valor_total) ? MainModel::dinheiroParaBr($pedido->valor_total) : "" ?></span>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="hidden" value="<?= $numParcelas ?>" name="numParcelas">
                             <button type="submit" name="parcelaEditada" id="grava"
-                                    class="btn btn-primary float-right">
+                                    class="btn btn-info float-right">
                                 Gravar
                             </button>
                         </div>

@@ -84,14 +84,19 @@ class FormacaoModel extends MainModel
 
     protected function getValorTotalVigencia($vigencia_id)
     {
-        $valor = "";
-        $arrayValores = DbModel::consultaSimples("SELECT valor FROM formacao_parcelas WHERE formacao_vigencia_id = '$vigencia_id' AND publicado = 1 AND valor != 0.00")->fetchAll();
-        foreach ($arrayValores as $arrayValor):
-            $valor = $valor + $arrayValor['valor'];
-        endforeach;
-
+        $valor = 0;
+        $consultaValores = DbModel::consultaSimples("SELECT valor FROM formacao_parcelas WHERE formacao_vigencia_id = '$vigencia_id' AND publicado = 1 AND valor != 0.00");
+        $count = $consultaValores->rowCount();
+        if ($count > 0) {
+            $arrayValores = $consultaValores->fetchAll(PDO::FETCH_OBJ);
+            for ($i = 0; $i < $count; $i++):
+                $valor = $valor + $arrayValores[$i]->valor;
+            endfor;
+        }
         return $valor;
     }
+
+
 
     protected function getVerbas()
     {
