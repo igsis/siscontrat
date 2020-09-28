@@ -108,7 +108,10 @@ if (isset($_POST['_method'])) {
             echo $insForm->editarParcela($_POST);
             break;
         case "cadastrarPF":
-            echo $insPessoaFisica->inserePessoaFisica('formacao/pf_cadastra', true);
+            echo $insPessoaFisica->inserePessoaFisica($_POST['pagina']);
+            break;
+        case "editarPF":
+            echo $insPessoaFisica->editaPessoaFisica($_POST['id'], $_POST['pagina']);
             break;
     }
 } else {

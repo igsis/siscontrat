@@ -16,6 +16,8 @@ if (isset($_POST['pf_cpf'])){
         $pf = $insPessoaFisica->recuperaPessoaFisica($id);
         $documento = $pf['cpf'];
     }
+
+    
 }
 
 ?>
@@ -230,8 +232,13 @@ if (isset($_POST['pf_cpf'])){
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
+                            <a href="<?= SERVERURL ?>formacao/pf_lista">
+                                <button type="button" class="btn btn-default pull-left">Voltar</button>
+                            </a>
+
                             <button type="submit" class="btn btn-info float-right">Gravar</button>
                         </div>
+                        
                         <!-- /.card-footer -->
                         <div class="resposta-ajax"></div>
                     </form>
