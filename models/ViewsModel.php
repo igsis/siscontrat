@@ -93,6 +93,9 @@ class ViewsModel
             'vigencia_cadastro',
             'pesquisa_pf',
             'detalhes_contratacao',
+            'pf_demais_anexos',
+            'dados_contratacao_cadastro'
+            
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

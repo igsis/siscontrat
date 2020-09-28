@@ -998,7 +998,7 @@ class FormacaoController extends FormacaoModel
                                         INNER JOIN formacao_vigencias fv ON f.form_vigencia_id = fv.id
                                         INNER JOIN usuarios AS fiscal ON f.fiscal_id = fiscal.id
                                         LEFT JOIN usuarios AS suplente ON f.suplente_id = suplente.id 
-                                        WHERE f.id = $contratacao_id 'AND f.publicado = 1'")->fetchObject();
+                                        WHERE f.id = $contratacao_id AND f.publicado = 1 ")->fetchObject();
     }
 
     public function listaPF()
@@ -1006,4 +1006,20 @@ class FormacaoController extends FormacaoModel
         return parent::getPF();
     }
 
+    public function listaClassificacao()
+    {
+        return parent::getClassificacao();
+    }
+
+    public function listaRegiaoPrefencial()
+    {
+        return parent::getRegiaoPreferencial();
+    }
+
+
+
+    
+
+
 }
+

@@ -121,10 +121,38 @@ class FormacaoModel extends MainModel
         return $statement;
     }
 
+    protected function getCPF($cpf){
+        $consulta_pf_cpf = DbModel::consultaSimples("SELECT id, cpf FROM pessoa_fisicas WHERE cpf = '$cpf'");
+        return $consulta_pf_cpf;
+    }
+
+    protected function getPassaporte($passaporte){
+        $consulta_pf_pass = DbModel::consultaSimples("SELECT id, passaporte FROM pessoa_fisicas WHERE passaporte = '$passaporte'");
+        return $consulta_pf_pass;
+    }
+
     protected function getPF()
     {
         return DbModel::consultaSimples("SELECT * FROM pessoa_fisicas")->fetchAll(PDO::FETCH_OBJ);
     }
+
+    protected function getClassificacao()
+    {
+        return DbModel::consultaSimples("SELECT * FROM classificacao_indicativas")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    protected function getRegiaoPreferencial()
+    {
+        return DbModel::consultaSimples("SELECT * FROM regiao_preferenciais")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    protected function getFiscalSuplente()
+    {
+        return DbModel::consultaSimples("SELECT * FROM usuarios")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+
+    
 
 }
 

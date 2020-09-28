@@ -29,7 +29,7 @@
                         <h3 class="card-title">Listagem</h3>
                         <div class="card-tools">
                             <!-- button with a dropdown -->
-                            <a href="<?= SERVERURL ?>formacao/pf_cadastro" class="btn btn-success btn-sm" >
+                            <a href="<?= SERVERURL ?>formacao/dados_contratacao_cadastro" class="btn btn-success btn-sm" >
                                 <i class="fas fa-plus"></i> Cadastrar Novo
                             </a>
                         </div>
@@ -60,13 +60,14 @@
                                     <td><?=$contratacao['linguagem']?></td>
                                     <td><?=$contratacao['cargo']?></td>
                                     <td>
-                                        <!-- <a href="<?= SERVERURL . "formacao/detalhes_contratacao&id=" . $dados_contratacaoObj->encryption($dados_contratacao->id) ?>"
-                                            <button type="submit" class="btn bg-gradient-primary btn-sm">
+                                        <a href="<?= SERVERURL . "formacao/detalhes_contratacao&id=" . $dados_contratacaoObj->encryption($contratacao['id']) ?>">
+                                            <button type="submit" class="btn bg-gradient-info btn-sm float-left mr-2">
                                                 <i class="fas fa-user-edit"></i> Visualizar
                                             </button>
-                                        </a> -->
+                                        </a>
                                     </td>
                                     <td>
+                                    <a href="<?= SERVERURL . "formacao/dados_contratacao_cadastro&id=" . $dados_contratacaoObj->encryption($contratacao['id']) ?>">
                                         <button type="submit" class="btn bg-gradient-primary btn-sm">
                                             <i class="fas fa-user-edit"></i> Editar
                                         </button>
