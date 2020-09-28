@@ -117,8 +117,8 @@ $vigencia = $vigenciaObj->recuperaVigencia($id);
                                     <?php endif; ?>
 
                                     <div class="card-footer">
-                                        <a href="<?= SERVERURL ?>formacao/vigencia_lista">
-                                            <button type="button" class="btn btn-default pull-left">Voltar</button>
+                                        <a href="<?= SERVERURL ?>formacao/vigencia_lista" class="btn btn-default pull-left">
+                                            Voltar
                                         </a>
                                         <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary float-right">
                                             Gravar

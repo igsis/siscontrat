@@ -1,8 +1,8 @@
 <?php
-    require_once "./controllers/FormacaoController.php";
-    $vigenciaObj = new FormacaoController();
-    
-    $vigencias = $vigenciaObj->listaVigencias();
+require_once "./controllers/FormacaoController.php";
+$vigenciaObj = new FormacaoController();
+
+$vigencias = $vigenciaObj->listaVigencias();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -36,46 +36,44 @@
                     <div class="card-body">
                         <table id="tabela" class="table table-bordered table-striped">
                             <thead>
-                                <tr>
-                                    <th>Ano</th>
-                                    <th>Descrição</th>
-                                    <th width="15%">Editar</th>
-                                    <th width="15%">Apagar</th>
-                                </tr>
+                            <tr>
+                                <th>Ano</th>
+                                <th>Descrição</th>
+                                <th width="15%">Editar</th>
+                                <th width="15%">Apagar</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($vigencias as $vigencia): ?>
+                            <?php foreach ($vigencias as $vigencia): ?>
                                 <tr>
                                     <td><?=$vigencia->ano?></td>
                                     <td><?=$vigencia->descricao?></td>
                                     <td>
-                                        <a href="<?= SERVERURL . "formacao/vigencia_cadastro&id=" . $vigenciaObj->encryption($vigencia->id) ?>"
-                                        <button type="submit" class="btn bg-gradient-primary btn-sm">
+                                        <a href="<?= SERVERURL . "formacao/vigencia_cadastro&id=" . $vigenciaObj->encryption($vigencia->id) ?>"  class="btn bg-gradient-primary btn-sm">
                                             <i class="fas fa-user-edit"></i> Editar
-                                        </button>
                                         </a>
                                     </td>
                                     <td>
                                         <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
                                             <input type="hidden" name="_method" value="apagarVigencia">
                                             <input type="hidden" name="id" value="<?= $vigenciaObj->encryption($vigencia->id)?>">
-                                                <button type="submit" class="btn bg-gradient-danger btn-sm">
-                                                    <i class="fas fa-trash"></i> Apagar
-                                                </button>
-                                                <div class="resposta-ajax"></div>
+                                            <button type="submit" class="btn bg-gradient-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Apagar
+                                            </button>
+                                            <div class="resposta-ajax"></div>
                                         </form>
                                     </td>
 
                                 </tr>
-                                <?php endforeach; ?>    
+                            <?php endforeach; ?>
                             </tbody>
                             <tfoot>
-                                <tr>
-                                    <th>Ano</th>
-                                    <th>Descrição</th>
-                                    <th width="15%">Editar</th>
-                                    <th width="15%">Apagar</th>
-                                </tr>
+                            <tr>
+                                <th>Ano</th>
+                                <th>Descrição</th>
+                                <th width="15%">Editar</th>
+                                <th width="15%">Apagar</th>
+                            </tr>
                             </tfoot>
                         </table>
                     </div>
@@ -89,5 +87,3 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-
-</div>
