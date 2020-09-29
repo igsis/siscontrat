@@ -46,10 +46,10 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                     <div class="row">
                                         <label for="tipoDocumento">Tipo de documento: </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="tipoDocumento" value="1" checked>CPF
+                                            <input type="radio" name="tipoDocumento"  onclick="defineCampo()" id="cpf_check" >CPF
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="tipoDocumento" value="2">Passaporte
+                                            <input type="radio" name="tipoDocumento" id="passaporte_check" onclick="defineCampo()" >Passaporte
                                         </label>
                                     </div>
                                     <div class="row">
@@ -57,11 +57,9 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                     </div>
                                     <div class="row">
                                         <div class="form-group col">
-                                            <label for="cpf" id="textoDocumento">CPF *</label>
-                                                <input type="text" class="form-control" minlength=14 name="procurar"
-                                                value="" id="cpf" data-mask="000.000.000-00" minlength="14">
-                                            <input type="text" class="form-control" name="passaporte" id="passaporte"
-                                                value="" maxlength="10">
+                                            <label for="cpf" id="textoDocumento"></label>
+                                                <input type="text" class="form-control" name=""
+                                                id="documento">
                                                 
                                         </div>        
                                     </div>                                        
@@ -78,26 +76,21 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                 </form>
 
                                 <div class="panel panel-default">
-                                    <!-- Default panel contents -->
-                                    <!-- Table -->
-                                    <table class="table">
+                                    <!-- Default panel contents
+                                    Table -->
+                                    <table class="table" id="tabela">
                                         <thead>
                                         <tr>
                                             <th>Nome</th>
                                             <th id="trocaDoc">CPF</th>
                                             <th>E-mail</th>
+                                            <th>Ação</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        <!-- <?php
-                                        if ($exibir) {
-                                            echo $resultado;
-                                        } elseif (!$exibir) {
-                                            echo $resultado;
-                                        } else {
-                                            echo $resultado;
-                                        }
-                                        ?> -->
+                                        <tbody id="tb-effect">
+                                            <tr>
+                                                <td>Hello World</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -114,118 +107,161 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
 </div>
 
 <script>
-    let tipos = document.querySelectorAll("input[type='radio'][name='tipoDocumento']");
-    let passaporte = document.querySelector("input[name='passaporte']");
-    let procurar = document.querySelector("input[name='procurar']");
-    let trocaDoc = document.querySelector("#trocaDoc");
+    let pesquisaDocumento = document.querySelector('#documento');
+    let tbody = document.querySelector('tbody');
+    
 
-    for (const tipo of tipos) {
-        tipo.addEventListener('change', tp => {
+    function defineCampo(){
+        let checkbox_cpf = $('#cpf_check');
+        let checkbox_passaporte = $('#passaporte_check');
+        let documento = $('#documento');
+        if(checkbox_cpf.prop('checked')){
+            documento.attr("data-mask","999.999.999-99");
+            documento.attr("name", "cpf");
+            documento.attr("data-id", "cpf");
+        }else if(checkbox_passaporte.prop('checked')){
+            documento.attr("name", "passaporte");
+            documento.removeAttr("data-mask");
+            documento.removeAttr("maxlength");
+            documento.attr("data-id", "passaporte");
+        }
+    }
+    console.log($('#documento').attr("data-id"));
 
-            const nulo = null;
-
-            passaporte.value = nulo
-            procurar.value = nulo
-
-            if (tp.target.value == 1) {
-                passaporte.style.display = 'none'
-                procurar.disabled = false
-                passaporte.disabled = true
-                procurar.style.display = 'block'
-                procurar.value = ''
-                $('#textoDocumento').text('CPF *')
+    if($('#documento').attr("data-id") == 'cpf'){
+        //pesquisa por cpf
+        pesquisaDocumento.addEventListener("input", () => {
+            limparTabela(false)
+            if (pesquisaDocumento.value == '') {
+                limparTabela();
             } else {
-                passaporte.style.display = 'block'
-                passaporte.disabled = false
-                passaporte.value = ''
-                procurar.disabled = true
-                procurar.style.display = 'none'
-                $('#textoDocumento').text('Passaporte *')
+                $.ajax({
+                    type: "POST",
+                    url: "<?= SERVERURL ?>ajax/formacaoAjax.php",
+                    data: {
+                        _method: 'pesquisaPf',
+                        search: `${pesquisaDocumento.value}`,
+                        where: 'cpf',
+                    },
+                    success: function (data, text) {
+                        limparTabela(false);
+                        if (text == 'success' && data != 0) {
+                            const resultado = JSON.parse(data)[0];
+                            limparTabela(false);
+                            resultado.forEach((result) => {
+                                //console.log(result);
+                                criarLinha(result);
+                            })
+
+                        } else if (data == 0) {
+                            limparTabela()
+                        }
+                    },
+                    error: function (response, status, error) {
+                        throw new Error(`Status: ${status} não possivel conectar com arquivo AJAX.\n Erro: ${error} `);
+                    }
+                })
             }
-        })
+        });
+    }else if($('#documento').attr("data-id") == 'passaporte'){
+        //proponente
+        pesquisaDocumento.addEventListener("input", () => {
+            limparTabela(false)
+            if (pesquisaDocumento.value == '') {
+                limparTabela();
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "<?= SERVERURL ?>ajax/formacaoAjax.php",
+                    data: {
+                        _method: 'pesquisaPf',
+                        search: `${pesquisaDocumento.value}`,
+                        where: 'passaporte',
+                    },
+                    success: function (data, text) {
+                        limparTabela(false);
+                        if (text == 'success' && data != 0) {
+                            const resultado = JSON.parse(data)[0];
+                            limparTabela(false);
+                            resultado.forEach((result) => {
+                                //console.log(result);
+                                criarLinha(result);
+                            })
+                        } else if (data == 0) {
+                            limparTabela()
+                        }
+                    },
+                    error: function (response, status, error) {
+                        throw new Error(`Status: ${status} não possivel conectar com arquivo AJAX.\n Erro: ${error} `);
+                    }
+                })
+            }
+        });
+
+
     }
 
-    if (`<?=$tipoDocumento?>` == 2) {
-        trocaDoc.innerHTML = 'Passaporte'
-        tipos[1].checked = true
-        passaporte.style.display = 'block'
-        passaporte.disabled = false
-        procurar.disabled = true
-        procurar.style.display = 'none'
-    } else {
-        passaporte.style.display = 'none'
-        passaporte.disabled = true
+    
+    function criarLinha(dados) {
+        let tbody = document.querySelector('tbody');
+        let tr = document.createElement('tr');
+        tr.appendChild(criarColuna(dados.nome));
+        tr.appendChild(criarColuna(dados.documento));
+        tr.appendChild(criarColuna(dados.email));
+        tr.appendChild(criarColuna(criarBotaoSelecionar(dados.id)));
+
+        tbody.appendChild(tr);
     }
 
-    /**
-     * @return {boolean}
-     */
-    function TestaCPF(cpf) {
-        var Soma;
-        var Resto;
-        var strCPF = cpf;
-        Soma = 0;
-
-        if (strCPF === "11111111111" ||
-            strCPF === "22222222222" ||
-            strCPF === "33333333333" ||
-            strCPF === "44444444444" ||
-            strCPF === "55555555555" ||
-            strCPF === "66666666666" ||
-            strCPF === "77777777777" ||
-            strCPF === "88888888888" ||
-            strCPF === "99999999999")
-            return false;
-
-        for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
-        Resto = (Soma * 10) % 11;
-
-        if ((Resto == 10) || (Resto == 11)) Resto = 0;
-        if (Resto != parseInt(strCPF.substring(9, 10))) return false;
-
-        Soma = 0;
-        for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
-        Resto = (Soma * 10) % 11;
-
-        if ((Resto == 10) || (Resto == 11)) Resto = 0;
-        if (Resto != parseInt(strCPF.substring(10, 11))) return false;
-        return true;
+    function criarColuna(dado) {
+        let td = document.createElement('td');
+        if (typeof dado != "object")
+            td.textContent = dado;
+        else
+            td.appendChild(dado);
+        return td;
     }
 
-    function validacao() {
-        var strCPF = document.querySelector('#cpf').value;
+    function criarBotaoSelecionar(id) {
+        let a = document.createElement('a');
+        a.classList.add('btn');
+        a.classList.add('btn-primary');
+        a.classList.add('btn-sm');
+        a.classList.add('text-light');
+        a.href = `<?=SERVERURL?>formacao/pf_cadastro&id=${id}`;
+        a.textContent = 'Selecionar';
+        return a;
+    }
 
-        if (strCPF != null) {
-            // tira os pontos do valor, ficando apenas os numeros
-            strCPF = strCPF.replace(/[^0-9]/g, '');
+    function criarBotaoAdicionar() {
+        let a = document.createElement('a');
+        a.classList.add('btn');
+        a.classList.add('btn-primary');
+        a.classList.add('btn-sm');
+        a.classList.add('text-light');
+        a.href = `<?=SERVERURL?>formacao/pf_cadastro&=` + $('#documento').val();
+        a.textContent = 'Adicionar';
+        return a;
+    }
 
-            var validado = TestaCPF(strCPF);
 
-            if (!validado)
-                $("#adicionar").attr("disabled", true);
-            else
-                $("#adicionar").attr("disabled", false);
+    function mensagemSemResultados(tbody) {
+        let tr = document.createElement('tr');
+        let td = criarColuna(criarBotaoAdicionar());
+        //td.classList.add('text-center');
+        td.colSpan = '4';
+        tr.appendChild(td);
 
+        tbody.appendChild(tr);
+    }
+
+    function limparTabela(nada = true) {
+        let trs = document.querySelectorAll('tbody tr');
+        trs.forEach((tr) => {
+            tr.remove();
+        });
+        if (nada) {
+            mensagemSemResultados(tbody)
         }
     }
-
-
-    $('#formulario').submit(function (event) {
-        var strCPF = document.querySelector('#cpf').value;
-
-        if (strCPF !== '' && `<?=$tipoDocumento?>` != 2) {
-            console.log(`<?=$tipoDocumento?>`)
-            // tira os pontos do valor, ficando apenas os numeros
-            strCPF = strCPF.replace(/[^0-9]/g, '');
-
-            var validado = TestaCPF(strCPF);
-
-            if (!validado) {
-                event.preventDefault()
-                alert("CPF inválido")
-            }
-        }
-    })
-
-
 </script>

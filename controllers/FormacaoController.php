@@ -1174,5 +1174,10 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    public function listaDocumento($documento, $tipo_documento)
+    {
+        return parent::getDocumento($documento, $tipo_documento);
+    }
+
 }
 

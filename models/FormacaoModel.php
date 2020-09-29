@@ -126,14 +126,21 @@ class FormacaoModel extends MainModel
         return $statement;
     }
 
-    protected function getCPF($cpf){
-        $consulta_pf_cpf = DbModel::consultaSimples("SELECT id, cpf FROM pessoa_fisicas WHERE cpf = '$cpf'");
-        return $consulta_pf_cpf;
-    }
+    protected function getDocumento($documento,$tipo_doc){
+        if($tipo_doc == 'cpf'){
+            $consulta = DbModel::consultaSimples("SELECT id, nome, cpf as 'documento', email FROM pessoa_fisicas WHERE cpf LIKE '%$documento%'")->fetchAll(PDO::FETCH_ASSOC);
+        }else if($tipo_doc == 'passaporte'){
+            $consulta = DbModel::consultaSimples("SELECT id, nome, passaporte as 'documento', email FROM pessoa_fisicas WHERE passaporte LIKE '%$documento%'")->fetchAll(PDO::FETCH_ASSOC);
+        }
 
-    protected function getPassaporte($passaporte){
-        $consulta_pf_pass = DbModel::consultaSimples("SELECT id, passaporte FROM pessoa_fisicas WHERE passaporte = '$passaporte'");
-        return $consulta_pf_pass;
+        if (count($consulta) > 0) {
+            for ($i = 0; $i < count($consulta); $i++) {
+                $consulta[$i]['id'] = MainModel::encryption($consulta[$i]['id']);
+            }
+            return json_encode(array($consulta));
+        }
+        return 'a';
+        
     }
 
     protected function getPF()
@@ -155,6 +162,7 @@ class FormacaoModel extends MainModel
     {
         return DbModel::consultaSimples("SELECT * FROM usuarios")->fetchAll(PDO::FETCH_OBJ);
     }
+
 
 
     

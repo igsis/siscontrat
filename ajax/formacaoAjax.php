@@ -131,6 +131,11 @@ if (isset($_POST['_method'])) {
     if ($_POST['_method'] == "pesquisa" && $_POST['search'] != "") {
         echo $insForm->pesquisasPagamento($_POST['search'], $_POST['where']);
     }
+    if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
+        echo $insForm->listaDocumento($_POST['search'], $_POST['where']);
+    }
 } else {
     include_once "../config/destroySession.php";
 }
+
+

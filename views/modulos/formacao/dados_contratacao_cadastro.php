@@ -49,6 +49,7 @@
                         <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" 
                             method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
                             <input type="hidden" name="_method" value="<?= ($id) ? "editarDadosContratacao" : "cadastrarDadosContratacao" ?>">
+                            <input type="hidden" name="form_status_id" value="1">
                         <?php if ($id): ?>
                             <input type="hidden" name="id" id="modulo_id" value="<?= $id ?>">
                         <?php endif; ?>
@@ -187,7 +188,7 @@
                                     <option value="">Selecione a vigência...</option>
                                     <?php foreach ($vigencia as $linha): ?>
                                         <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->form_vigencia_id) && ($linha->id == $dados_contratacao->form_vigencia_id) ? "selected" : "" ?>>
-                                            <?php echo $linha->ano ; echo $linha->descricao ?>
+                                            <?php echo $linha->ano . ' (' . $linha->descricao . ')'?>
                                         </option>
                                     <?php endforeach ?>
                                 </select>
@@ -246,7 +247,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="card-footer">
                             <a href="<?= SERVERURL ?>formacao/dados_contratacao_lista">
                                 <button type="button" class="btn btn-default pull-left">Voltar</button>
@@ -256,7 +256,17 @@
                             </button>
                         </div >
                         <div class="resposta-ajax"></div>
+                        <?php if ($id): ?>
+                            <div class="col align-self-center">
+                            <hr>
+                                <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&id=" . $contratacaoObj->encryption($dados_contratacao->id) ?>" class="btn btn-success">
+                                     Gerar pedido de contratação
+                                </a>
+                            </div>
+                        <?php endif; ?>
                     </div>
+
+                    
                 </div>
             </div>
 
@@ -272,13 +282,14 @@
 
 <script>
     let ano = $('#ano');
-    let vigencia = $('#vigencia');
+    let vigencia = $('#form_vigencia_id');
     let botao = $('#cadastra');
     var isMsgAno = $('#msgEscondeAno');
     isMsgAno.hide();
 
     function maior() {
         let valorVigencia = $('#vigencia option:selected').text();
+        //console.log(valorVigencia);
         valorVigencia = parseInt(valorVigencia.substring(0,5))
         if (ano.val() > valorVigencia) {
             botao.prop('disabled', true);
