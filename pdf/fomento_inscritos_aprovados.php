@@ -3,7 +3,7 @@ setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 
 $pedidoAjax = true;
 require_once "../config/configGeral.php";
-require_once "../views/plugins/fpdf/fpdf.php";
+require_once "../views/plugins/phpexcel/PHPExcel.php";
 require_once "../controllers/FomentoController.php";
 require_once "../controllers/ArquivoController.php";
 

@@ -2,9 +2,11 @@
 if ($pedidoAjax) {
     require_once "../models/FormacaoModel.php";
     require_once "../controllers/PedidoController.php";
+    require_once "../controllers/PessoaFisicaController.php";
 } else {
     require_once "./models/FormacaoModel.php";
     require_once "./controllers/PedidoController.php";
+    require_once "./controllers/PessoaFisicaController.php";
 }
 
 class FormacaoController extends FormacaoModel
@@ -14,7 +16,8 @@ class FormacaoController extends FormacaoModel
         return parent::getCargos();
     }
 
-    public function insereCargo($post){
+    public function insereCargo($post)
+    {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
         $insert = DbModel::insert('formacao_cargos', $dados, false);
@@ -38,7 +41,8 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function recuperaCargo($cargo_id) {
+    public function recuperaCargo($cargo_id)
+    {
         $cargo_id = MainModel::decryption($cargo_id);
         return DbModel::getInfo('formacao_cargos', $cargo_id, false)->fetchObject();
     }
@@ -73,15 +77,15 @@ class FormacaoController extends FormacaoModel
     {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("formacao_cargos", $id, false);
-        if ($apaga){
-                $alerta = [
+        if ($apaga) {
+            $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Cargo Deletado!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL.'formacao/cargo_lista'
-                ];
-        }else {
+                'location' => SERVERURL . 'formacao/cargo_lista'
+            ];
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',
@@ -90,7 +94,7 @@ class FormacaoController extends FormacaoModel
             ];
         }
         return MainModel::sweetAlert($alerta);
-    
+
     }
 
     public function listaCoordenadorias()
@@ -98,7 +102,8 @@ class FormacaoController extends FormacaoModel
         return parent::getCoordenadorias();
     }
 
-    public function insereCoordenadoria($post){
+    public function insereCoordenadoria($post)
+    {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
         $insert = DbModel::insert('coordenadorias', $dados, false);
@@ -122,7 +127,8 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function recuperaCoordenadoria($coordenadoria_id) {
+    public function recuperaCoordenadoria($coordenadoria_id)
+    {
         $coordenadoria_id = MainModel::decryption($coordenadoria_id);
         return DbModel::getInfo('coordenadorias', $coordenadoria_id, false)->fetchObject();
     }
@@ -158,15 +164,15 @@ class FormacaoController extends FormacaoModel
     {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("coordenadorias", $id, false);
-        if ($apaga){
-                $alerta = [
+        if ($apaga) {
+            $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Coordenadoria Deletada!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL.'formacao/coordenadoria_lista'
-                ];
-        }else {
+                'location' => SERVERURL . 'formacao/coordenadoria_lista'
+            ];
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',
@@ -188,12 +194,14 @@ class FormacaoController extends FormacaoModel
     }
 
 
-    public function recuperaPrograma($programa_id) {
+    public function recuperaPrograma($programa_id)
+    {
         $programa_id = MainModel::decryption($programa_id);
         return DbModel::getInfo('programas', $programa_id, false)->fetchObject();
     }
 
-    public function inserePrograma($post){
+    public function inserePrograma($post)
+    {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
         $insert = DbModel::insert('programas', $dados, false);
@@ -248,15 +256,15 @@ class FormacaoController extends FormacaoModel
     {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("programas", $id, false);
-        if ($apaga){
-                $alerta = [
+        if ($apaga) {
+            $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Programa Deletado!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL.'formacao/programa_lista'
-                ];
-        }else {
+                'location' => SERVERURL . 'formacao/programa_lista'
+            ];
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',
@@ -272,12 +280,14 @@ class FormacaoController extends FormacaoModel
         return parent::getLinguagens();
     }
 
-    public function recuperaLinguagem($linguagem_id) {
+    public function recuperaLinguagem($linguagem_id)
+    {
         $linguagem_id = MainModel::decryption($linguagem_id);
         return DbModel::getInfo('linguagens', $linguagem_id, false)->fetchObject();
     }
 
-    public function insereLinguagem($post){
+    public function insereLinguagem($post)
+    {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
         $insert = DbModel::insert('linguagens', $dados, false);
@@ -331,15 +341,15 @@ class FormacaoController extends FormacaoModel
     {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("linguagens", $id, false);
-        if ($apaga){
-                $alerta = [
+        if ($apaga) {
+            $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Linguagem Deletada!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL.'formacao/linguagem_lista'
-                ];
-        }else {
+                'location' => SERVERURL . 'formacao/linguagem_lista'
+            ];
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',
@@ -355,12 +365,14 @@ class FormacaoController extends FormacaoModel
         return parent::getProjetos();
     }
 
-    public function recuperaProjeto($projeto_id) {
+    public function recuperaProjeto($projeto_id)
+    {
         $projeto_id = MainModel::decryption($projeto_id);
         return DbModel::getInfo('projetos', $projeto_id, false)->fetchObject();
     }
 
-    public function insereProjeto($post){
+    public function insereProjeto($post)
+    {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
         $insert = DbModel::insert('projetos', $dados, false);
@@ -414,15 +426,15 @@ class FormacaoController extends FormacaoModel
     {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("projetos", $id, false);
-        if ($apaga){
-                $alerta = [
+        if ($apaga) {
+            $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Projeto Deletado!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL.'formacao/projeto_lista'
-                ];
-        }else {
+                'location' => SERVERURL . 'formacao/projeto_lista'
+            ];
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',
@@ -438,12 +450,14 @@ class FormacaoController extends FormacaoModel
         return parent::getSubprefeituras();
     }
 
-    public function recuperaSubprefeitura($subprefeitura_id) {
+    public function recuperaSubprefeitura($subprefeitura_id)
+    {
         $subprefeitura_id = MainModel::decryption($subprefeitura_id);
         return DbModel::getInfo('subprefeituras', $subprefeitura_id, false)->fetchObject();
     }
 
-    public function insereSubprefeitura($post){
+    public function insereSubprefeitura($post)
+    {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
         $insert = DbModel::insert('subprefeituras', $dados, false);
@@ -497,15 +511,15 @@ class FormacaoController extends FormacaoModel
     {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("subprefeituras", $id, false);
-        if ($apaga){
-                $alerta = [
+        if ($apaga) {
+            $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Subprefeitura Deletada!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL.'formacao/subprefeitura_lista'
-                ];
-        }else {
+                'location' => SERVERURL . 'formacao/subprefeitura_lista'
+            ];
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',
@@ -521,13 +535,15 @@ class FormacaoController extends FormacaoModel
     {
         return parent::getTerritorios();
     }
-    
-    public function recuperaTerritorio($territorio_id) {
+
+    public function recuperaTerritorio($territorio_id)
+    {
         $territorio_id = MainModel::decryption($territorio_id);
         return DbModel::getInfo('territorios', $territorio_id, false)->fetchObject();
     }
 
-    public function insereTerritorio($post){
+    public function insereTerritorio($post)
+    {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
         $insert = DbModel::insert('territorios', $dados, false);
@@ -576,20 +592,20 @@ class FormacaoController extends FormacaoModel
         }
         return MainModel::sweetAlert($alerta);
     }
-    
+
     public function apagaTerritorio($id)
     {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("territorios", $id, false);
-        if ($apaga){
-                $alerta = [
+        if ($apaga) {
+            $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Território Deletado!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL.'formacao/territorio_lista'
-                ];
-        }else {
+                'location' => SERVERURL . 'formacao/territorio_lista'
+            ];
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',
@@ -605,17 +621,20 @@ class FormacaoController extends FormacaoModel
         return parent::getVigencias();
     }
 
-    public function recuperaParcelasVigencias($id_parcela_vigencia) {
-        $parcela_id = MainModel::decryption($id_parcela_vigencia)??"";
+    public function recuperaParcelasVigencias($id_parcela_vigencia)
+    {
+        $parcela_id = MainModel::decryption($id_parcela_vigencia) ?? "";
         return DbModel::consultaSimples("SELECT * FROM formacao_parcelas where formacao_vigencia_id = $parcela_id")->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function recuperaVigencia($vigencia_id) {
+    public function recuperaVigencia($vigencia_id)
+    {
         $vigencia_id = MainModel::decryption($vigencia_id);
         return DbModel::getInfo('formacao_vigencias', $vigencia_id, false)->fetchObject();
     }
 
-    public function insereVigencia($post){
+    public function insereVigencia($post)
+    {
         unset($post['_method']);
         $arrayVigencia = [
             'ano' => $post['ano'],
@@ -667,7 +686,7 @@ class FormacaoController extends FormacaoModel
     //     }
     //     return MainModel::sweetAlert($alerta);
     // }
-    
+
 //    public function editaVigencia($post)
 //    {
 //        $vigencia_id = MainModel::decryption($post['id']);
@@ -709,7 +728,7 @@ class FormacaoController extends FormacaoModel
             'ano' => $post['ano'],
             'numero_parcelas' => $post['quantidade_parcelas'],
             'descricao' => $post['descricao']
-            ];
+        ];
 
         $update = DbModel::update('formacao_vigencias', $arrayVigencia, $vigencia_id);
 
@@ -719,20 +738,20 @@ class FormacaoController extends FormacaoModel
         }
 
         for ($i = 0; $i < count($post['numero_parcelas']); $i++):
-                $array = [
-                    'formacao_vigencia_id' => $vigencia_id,
-                    'numero_parcelas' => $i,
-                    'valor' => $post['valor'][$i],
-                    'data_inicio' => $post['data_inicio'][$i],
-                    'data_fim' => $post['data_fim'][$i],
-                    'data_pagamento' => $post['data_pagamento'][$i],
-                    'carga_horaria' => $post['carga'][$i],
-                    'publicado' => '1',
-                ];
-                $insert = DbModel::insert('formacao_parcelas', $array);
+            $array = [
+                'formacao_vigencia_id' => $vigencia_id,
+                'numero_parcelas' => $i,
+                'valor' => $post['valor'][$i],
+                'data_inicio' => $post['data_inicio'][$i],
+                'data_fim' => $post['data_fim'][$i],
+                'data_pagamento' => $post['data_pagamento'][$i],
+                'carga_horaria' => $post['carga'][$i],
+                'publicado' => '1',
+            ];
+            $insert = DbModel::insert('formacao_parcelas', $array);
         endfor;
 
-        if(DbModel::connection()->errorCode() == 0){
+        if (DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Parcelas Atualizadas!',
@@ -740,7 +759,7 @@ class FormacaoController extends FormacaoModel
                 'tipo' => 'success',
                 'location' => SERVERURL . 'formacao/vigencia_cadastro&id=' . MainModel::encryption($vigencia_id)
             ];
-        }else{
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu errado!',
@@ -750,19 +769,20 @@ class FormacaoController extends FormacaoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
     public function apagaVigencia($id)
     {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("formacao_vigencias", $id, false);
-        if ($apaga){
-                $alerta = [
+        if ($apaga) {
+            $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Vigência Deletada!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL.'formacao/vigencia_lista'
-                ];
-        }else {
+                'location' => SERVERURL . 'formacao/vigencia_lista'
+            ];
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',
@@ -783,22 +803,24 @@ class FormacaoController extends FormacaoModel
         return parent::getLocaisFormacao($contratacao_id, $obj);
     }
 
-    public function retornaValorTotalVigencia($contratacao_id)
+    public function retornaValorTotalVigencia($vigencia_id)
     {
-        return parent::getValorTotalVigencia($contratacao_id);
+        return parent::getValorTotalVigencia($vigencia_id);
     }
 
     public function recuperaPedido($pedido_id)
     {
         $pedido_id = MainModel::decryption($pedido_id);
-        return DbModel::consultaSimples("SELECT origem_id, valor_total, data_kit_pagamento, numero_processo, numero_parcelas, valor_total,numero_processo_mae, forma_pagamento, justificativa, observacao, verba_id FROM pedidos
+        return DbModel::consultaSimples("SELECT origem_id, valor_total, data_kit_pagamento, numero_processo, numero_parcelas, pessoa_fisica_id, valor_total,numero_processo_mae, forma_pagamento, justificativa, observacao, verba_id FROM pedidos
                                                   WHERE id = $pedido_id AND publicado = 1 AND origem_tipo_id = 2")->fetchObject();
     }
 
-    public function recuperaContratacao($contratacao_id)
+    public function recuperaContratacao($contratacao_id, $decription = 1)
     {
-        $contratacao_id = MainModel::decryption($contratacao_id);
-        return DbModel::consultaSimples("SELECT fc.ano, fc.chamado, ci.classificacao_indicativa, t.territorio, cord.coordenadoria, s.subprefeitura, 
+        if($decription == 1){
+            $contratacao_id = MainModel::decryption($contratacao_id);
+        }
+        return DbModel::consultaSimples("SELECT fc.ano, fc.chamado, fc.protocolo, ci.classificacao_indicativa, t.territorio, cord.coordenadoria, s.subprefeitura, 
                                                          pro.programa, l.linguagem, pj.projeto, c.cargo, v.id AS 'idVigencia',v.ano AS 'vigencia', v.descricao, v.numero_parcelas,
 		                                                 fc.observacao, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', pf.nome
                                                   FROM formacao_contratacoes AS fc
@@ -817,6 +839,45 @@ class FormacaoController extends FormacaoModel
                                                   WHERE fc.id = $contratacao_id AND fc.publicado = 1")->fetchObject();
     }
 
+    //retorna um obj com os dados de uma determinada pessoa fisica
+    public function recuperaPf($pessoa_fisica_id)
+    {
+        return DbModel::consultaSimples("SELECT pf.*, n.nacionalidade, pe.* 
+                                                  FROM pessoa_fisicas AS pf 
+                                                  LEFT JOIN nacionalidades AS n ON pf.nacionalidade_id = n.id  
+                                                  LEFT JOIN pf_enderecos AS pe ON pf.id = pe.pessoa_fisica_id
+                                                  WHERE pf.id = $pessoa_fisica_id")->fetchObject();
+    }
+
+    public function recuperaTelPf($pesquisa_fisica_id, $obj = 0){
+        $tel = "";
+        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE id = $pesquisa_fisica_id")->fetchAll();
+        if ($obj != NULL):
+            return $telArrays;
+        else:
+            foreach ($telArrays as $telArrays) {
+                $tel = $tel . $telArrays['telefone'] . '; ';
+            }
+            return substr($tel, 0, -2);
+        endif;
+    }
+
+    function retornaPeriodoFormacao($vigencia_id)
+    {
+        $testaDataInicio = DbModel::consultaSimples("SELECT data_inicio FROM formacao_parcelas WHERE formacao_vigencia_id = $vigencia_id AND publicado = 1 ORDER BY data_inicio ASC LIMIT 0,1");
+        if ($testaDataInicio->rowCount() > 0) {
+            $data_inicio = $testaDataInicio->fetchObject()->data_inicio;
+            $data_fim = DbModel::consultaSimples("SELECT data_fim FROM formacao_parcelas WHERE formacao_vigencia_id = $vigencia_id AND publicado = 1 ORDER BY data_fim DESC LIMIT 0,1")->fetchObject()->data_fim;
+            if ($data_inicio == $data_fim || $data_fim == "0000-00-00") {
+                return MainModel::dataParaBR($data_inicio);
+            } else {
+                return "de " . MainModel::dataParaBR($data_inicio) . " à " . MainModel::dataParaBR($data_fim);
+            }
+        } else {
+            return "(Parcelas não cadastradas)";
+        }
+
+    }
 
     public function cadastrarPedido($post)
     {
@@ -897,15 +958,15 @@ class FormacaoController extends FormacaoModel
         $pedido_id = MainModel::decryption($post['id']);
         unset($post['id']);
         $delete = DbModel::apaga('pedidos', $pedido_id);
-        if($delete->rowCount() >= 1 || DbModel::connection()->errorCode() == 0){
+        if ($delete->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $alerta = [
-              'alerta' => 'sucesso',
-              'titulo' => 'Pedido Apagado!',
-              'texto' => 'Pedido apagado com sucesso!',
-              'tipo' => 'success',
-              'location' => SERVERURL . 'formacao/pedido_contratacao_lista'
+                'alerta' => 'sucesso',
+                'titulo' => 'Pedido Apagado!',
+                'texto' => 'Pedido apagado com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/pedido_contratacao_lista'
             ];
-        }else{
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu errado!',
@@ -916,11 +977,13 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function recuperaParcelasPedido($pedido_id){
+    public function recuperaParcelasPedido($pedido_id)
+    {
         return PedidoController::getParcelasPedido($pedido_id);
     }
 
-    public function editarParcela($post){
+    public function editarParcela($post)
+    {
         unset($post['_method']);
         $pedido_id = MainModel::decryption($post['pedido_id']);
         unset($post['pedido_id']);
@@ -932,16 +995,16 @@ class FormacaoController extends FormacaoModel
         }
 
         for ($i = 0; $i < count($post['numero_parcelas']); $i++):
-                $array = [
-                    'pedido_id' => $pedido_id,
-                    'numero_parcelas' => $i,
-                    'valor' => $post['valor'][$i],
-                    'data_pagamento' => $post['data_pagamento'][$i],
-                    'publicado' => '1',
-                ];
-                $insert = DbModel::insert('parcelas', $array);
+            $array = [
+                'pedido_id' => $pedido_id,
+                'numero_parcelas' => $i,
+                'valor' => $post['valor'][$i],
+                'data_pagamento' => $post['data_pagamento'][$i],
+                'publicado' => '1',
+            ];
+            $insert = DbModel::insert('parcelas', $array);
         endfor;
-        if(DbModel::connection()->errorCode() == 0){
+        if (DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Parcelas Atualizadas!',
@@ -949,7 +1012,7 @@ class FormacaoController extends FormacaoModel
                 'tipo' => 'success',
                 'location' => SERVERURL . 'formacao/pedido_edita_parcelas&id=' . MainModel::encryption($pedido_id)
             ];
-        }else{
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu errado!',
@@ -960,7 +1023,8 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function retornaNotaEmpenho($pedido_id){
+    public function retornaNotaEmpenho($pedido_id)
+    {
         $pedido_id = MainModel::decryption($pedido_id);
         return DbModel::consultaSimples("SELECT nota_empenho, emissao_nota_empenho, entrega_nota_empenho FROM pagamentos WHERE pedido_id = $pedido_id")->fetchObject();
     }
@@ -1006,20 +1070,19 @@ class FormacaoController extends FormacaoModel
             $proponente = $post;
             $sqlProponente = " AND p.pessoa_fisica_id = '$proponente'";
         }
-        if ($where == "processo"){
+        if ($where == "processo") {
             $processo = $post;
             $sqlProcesso = " AND p.numero_processo LIKE '%$processo%'";
         }
 
 
-        $consulta = DbModel::consultaSimples("SELECT fc.id, p.id AS pedido_id, fc.protocolo, pf.nome, p.numero_processo 
+        $consulta = DbModel::consultaSimples("SELECT p.id AS pedido_id, fc.protocolo, pf.nome, p.numero_processo 
                                                   FROM formacao_contratacoes fc 
                                                   INNER JOIN pedidos p ON fc.id = p.origem_id
                                                   LEFT JOIN pessoa_fisicas pf ON p.pessoa_fisica_id = pf.id
                                                   WHERE p.origem_tipo_id = 2 AND fc.publicado = 1 $sqlProponente $sqlProcesso $sqlProtocolo")->fetchAll(PDO::FETCH_ASSOC);
         if (count($consulta) > 0) {
             for ($i = 0; $i < count($consulta); $i++) {
-                $consulta[$i]['id'] = MainModel::encryption($consulta[$i]['id']);
                 $consulta[$i]['pedido_id'] = MainModel::encryption($consulta[$i]['pedido_id']);
             }
             return json_encode(array($consulta));
@@ -1028,13 +1091,26 @@ class FormacaoController extends FormacaoModel
         return '0';
     }
 
+    public function retornaObjetoFormacao($contratacao_id)
+    {
+        $consultaNomes = DbModel::consultaSimples("SELECT p.programa, l.linguagem, p.edital FROM programas AS p 
+                                        INNER JOIN formacao_contratacoes AS fc ON p.id = fc.programa_id
+                                        INNER JOIN linguagens l ON fc.linguagem_id = l.id
+                                        WHERE fc.id = $contratacao_id AND fc.publicado = 1");
+        if ($consultaNomes->rowCount() > 0) {
+            $nomesObj = $consultaNomes->fetchObject();
+            return $nomesObj->programa . " - " . $nomesObj->linguagem . " - " . $nomesObj->edital;
+        } else {
+            return "";
+        }
+    }
 
     public function listaDadosContratacao()
     {
         return parent::getDadosContratacao();
     }
 
-    
+
     public function recuperaDetalhesContratacao($contratacao_id)
     {
         $contratacao_id = MainModel::decryption($contratacao_id);
@@ -1148,7 +1224,7 @@ class FormacaoController extends FormacaoModel
         }
         return MainModel::sweetAlert($alerta);
     }
-    
+
     public function apagaDadosContratacao($post)
     {
         unset($post['_method']);
@@ -1157,11 +1233,11 @@ class FormacaoController extends FormacaoModel
         $delete = DbModel::apaga('formacao_contratacoes', $contratacao_id);
         if($delete->rowCount() >= 1 || DbModel::connection()->errorCode() == 0){
             $alerta = [
-              'alerta' => 'sucesso',
-              'titulo' => 'Dados de contratação Apagados!',
-              'texto' => 'Dados apagados com sucesso!',
-              'tipo' => 'success',
-              'location' => SERVERURL . 'formacao/dados_contratacao_lista'
+                'alerta' => 'sucesso',
+                'titulo' => 'Dados de contratação Apagados!',
+                'texto' => 'Dados apagados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/dados_contratacao_lista'
             ];
         }else{
             $alerta = [
@@ -1178,6 +1254,5 @@ class FormacaoController extends FormacaoModel
     {
         return parent::getDocumento($documento, $tipo_documento);
     }
-
 }
 
