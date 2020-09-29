@@ -125,11 +125,12 @@ if (isset($_POST['_method'])) {
         case "apagarDadosContratacao":
             echo $insForm->apagaDadosContratacao($_POST);
             break;
-        
-        
-    }
-    if ($_POST['_method'] == "pesquisa" && $_POST['search'] != "") {
-        echo $insForm->pesquisasPagamento($_POST['search'], $_POST['where']);
+        case "pesquisa":
+            echo $insForm->pesquisas($_POST['search'], $_POST['where']);
+            break;
+        case "concluirPedido":
+            echo $insForm->concluirPedido($_POST);
+            break;
     }
     if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
         echo $insForm->listaDocumento($_POST['search'], $_POST['where']);

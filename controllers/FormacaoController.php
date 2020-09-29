@@ -811,8 +811,13 @@ class FormacaoController extends FormacaoModel
     public function recuperaPedido($pedido_id)
     {
         $pedido_id = MainModel::decryption($pedido_id);
-        return DbModel::consultaSimples("SELECT origem_id, valor_total, data_kit_pagamento, numero_processo, numero_parcelas, pessoa_fisica_id, valor_total,numero_processo_mae, forma_pagamento, justificativa, observacao, verba_id FROM pedidos
-                                                  WHERE id = $pedido_id AND publicado = 1 AND origem_tipo_id = 2")->fetchObject();
+        return DbModel::consultaSimples("SELECT p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
+                                                         p.forma_pagamento, p.justificativa, p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome 
+                                                  FROM pedidos AS p
+                                                  INNER JOIN pedido_status AS s ON s.id = p.status_pedido_id 
+                                                  INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id
+                                                  INNER JOIN pessoa_fisicas AS pf ON pf.id = p.pessoa_fisica_id
+                                                  WHERE p.id = $pedido_id AND p.publicado = 1 AND p.origem_tipo_id = 2")->fetchObject();
     }
 
     public function recuperaContratacao($contratacao_id, $decription = 1)
@@ -951,7 +956,6 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-
     public function deletarPedido($post)
     {
         unset($post['_method']);
@@ -965,6 +969,30 @@ class FormacaoController extends FormacaoModel
                 'texto' => 'Pedido apagado com sucesso!',
                 'tipo' => 'success',
                 'location' => SERVERURL . 'formacao/pedido_contratacao_lista'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidos, tente novamente mais tarde',
+                'tipo' => 'error'
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function concluirPedido($post){
+        unset($post['_method']);
+        $pedido_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        $update = DbModel::consultaSimples("UPDATE pedidos SET status_pedido_id = 21 WHERE id = $pedido_id AND origem_tipo_id = 2 AND publicado = 1");
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Pedido Concluído!',
+                'texto' => 'Pedido concluído com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/conclusao_busca'
             ];
         } else {
             $alerta = [
@@ -1055,11 +1083,12 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function pesquisasPagamento($post, $where)
+    public function pesquisas($post, $where)
     {
         $sqlProtocolo = "";
         $sqlProponente = "";
         $sqlProcesso = "";
+        $sqlStatus = "";
 
         if ($where == "protocolo") {
             $protocolo = $post;
@@ -1074,13 +1103,18 @@ class FormacaoController extends FormacaoModel
             $processo = $post;
             $sqlProcesso = " AND p.numero_processo LIKE '%$processo%'";
         }
+        if ($where == "status") {
+            $status = $post;
+            $sqlStatus = " AND p.status_pedido_id = '$status'";
+        }
 
 
-        $consulta = DbModel::consultaSimples("SELECT p.id AS pedido_id, fc.protocolo, pf.nome, p.numero_processo 
+        $consulta = DbModel::consultaSimples("SELECT p.id AS pedido_id, fc.protocolo, pf.nome, p.numero_processo, s.status 
                                                   FROM formacao_contratacoes fc 
                                                   INNER JOIN pedidos p ON fc.id = p.origem_id
                                                   LEFT JOIN pessoa_fisicas pf ON p.pessoa_fisica_id = pf.id
-                                                  WHERE p.origem_tipo_id = 2 AND fc.publicado = 1 $sqlProponente $sqlProcesso $sqlProtocolo")->fetchAll(PDO::FETCH_ASSOC);
+                                                  INNER JOIN pedido_status s ON s.id = p.status_pedido_id
+                                                  WHERE p.origem_tipo_id = 2 AND fc.publicado = 1 $sqlProponente $sqlProcesso $sqlProtocolo $sqlStatus")->fetchAll(PDO::FETCH_ASSOC);
         if (count($consulta) > 0) {
             for ($i = 0; $i < count($consulta); $i++) {
                 $consulta[$i]['pedido_id'] = MainModel::encryption($consulta[$i]['pedido_id']);
