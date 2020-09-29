@@ -37,12 +37,6 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                         <div class="col-12">
                         <div class="row mx-2">
                             <div class="col-12">
-                                <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" 
-                                method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
-                                    <input type="hidden" name="_method" value="">
-                                    <?php if ($id): ?>
-                                        <input type="hidden" name="id" id="modulo_id" value="<?= $id ?>">
-                                    <?php endif; ?>
                                     <div class="row">
                                         <label for="tipoDocumento">Tipo de documento: </label>
                                         <label class="radio-inline">
@@ -64,9 +58,6 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                         </div>        
                                     </div>                                        
                                     
-                                    
-                                </form>
-
                                 <div class="panel panel-default">
                                     <!-- Default panel contents
                                     Table -->
@@ -147,6 +138,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
 
                     } else if (data == 0) {
                         limparTabela()
+                        //mensagemSemResultados('tbody');
                     }
                     },
                     error: function (response, status, error) {
