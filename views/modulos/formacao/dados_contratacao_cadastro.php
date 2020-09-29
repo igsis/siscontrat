@@ -206,7 +206,7 @@
                                 <select class="form-control" name="regiao_preferencia_id" id="regiao_preferencia_id" required>
                                     <option value="">Selecione uma região...</option>
                                     <?php foreach ($regiao as $linha): ?>
-                                        <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->regiao_preferencial_id) && ($linha->id == $dados_contratacao->regiao_preferencial_id) ? "selected" : "" ?>>
+                                        <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->regiao_preferencia_id) && ($linha->id == $dados_contratacao->regiao_preferencia_id) ? "selected" : "" ?>>
                                             <?php echo $linha->regiao ?>
                                         </option>
                                     <?php endforeach ?>
