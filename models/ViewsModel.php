@@ -60,6 +60,7 @@ class ViewsModel
             'login',
             'logout',
             'pagamento_busca',
+            'pagamento_lista_parcelas',
             'empenho_cadastro',
             'pedido_contratacao_lista',
             'pedido_contratacao_cadastro',

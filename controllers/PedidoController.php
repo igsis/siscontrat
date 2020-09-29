@@ -198,9 +198,13 @@ class PedidoController extends PedidoModel
         return $proponente;
     }
 
-    public function getParcelasPedido($pedido_id)
+    public function getParcelasPedido($pedido_id, $unica = 0, $parcela_id = NULL)
     {
         $pedido_id = MainModel::decryption($pedido_id);
-        return DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+        if($unica == 1 && $parcela_id != NULL):
+            return DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1 AND id = $parcela_id")->fetchObject();
+        else:
+            return DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+        endif;
     }
 }

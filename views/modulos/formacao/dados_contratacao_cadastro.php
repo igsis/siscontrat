@@ -288,9 +288,8 @@
     isMsgAno.hide();
 
     function maior() {
-        let valorVigencia = $('#vigencia option:selected').text();
-        //console.log(valorVigencia);
-        valorVigencia = parseInt(valorVigencia.substring(0,5))
+        let valorVigencia = $('#form_vigencia_id option:selected').text();
+        valorVigencia = parseInt(valorVigencia.substring(0,80))
         if (ano.val() > valorVigencia) {
             botao.prop('disabled', true);
             isMsgAno.show();

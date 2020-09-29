@@ -211,7 +211,7 @@
         tr.appendChild(criarColuna(dados.protocolo));
         tr.appendChild(criarColuna(dados.nome));
         tr.appendChild(criarColuna(criarBotaoEmpenho(dados.pedido_id)));
-        tr.appendChild(criarColuna(criarBotaoPgto(dados.id)));
+        tr.appendChild(criarColuna(criarBotaoPgto(dados.pedido_id)));
 
         tbody.appendChild(tr);
     }
@@ -242,7 +242,7 @@
         a.classList.add('btn-primary');
         a.classList.add('btn-sm');
         a.classList.add('text-light');
-        a.href = `<?=SERVERURL?>formacao/pagamento&id=${id}`;
+        a.href = `<?=SERVERURL?>formacao/pagamento_lista_parcelas&id=${id}`;
         a.textContent = 'Pagamento';
         return a;
     }
