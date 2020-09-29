@@ -64,15 +64,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                         </div>        
                                     </div>                                        
                                     
-                                    <div class="card-footer">
-                                        <a href="<?= SERVERURL ?>formacao/pf_lista">
-                                            <button type="button" class="btn btn-default pull-left">Voltar</button>
-                                        </a>
-                                        <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary float-right">
-                                            Buscar
-                                        </button>
-                                    </div >
-                                    <div class="resposta-ajax"></div>
+                                    
                                 </form>
 
                                 <div class="panel panel-default">
@@ -89,7 +81,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                         </thead>
                                         <tbody id="tb-effect">
                                             <tr>
-                                                <td>Hello World</td>
+                                            
                                             </tr>
                                         </tbody>
                                     </table>
@@ -125,81 +117,46 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
             documento.removeAttr("maxlength");
             documento.attr("data-id", "passaporte");
         }
+        documento.val('');
     }
-    console.log($('#documento').attr("data-id"));
 
-    if($('#documento').attr("data-id") == 'cpf'){
-        //pesquisa por cpf
-        pesquisaDocumento.addEventListener("input", () => {
-            limparTabela(false)
-            if (pesquisaDocumento.value == '') {
-                limparTabela();
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url: "<?= SERVERURL ?>ajax/formacaoAjax.php",
-                    data: {
-                        _method: 'pesquisaPf',
-                        search: `${pesquisaDocumento.value}`,
-                        where: 'cpf',
-                    },
-                    success: function (data, text) {
+
+    pesquisaDocumento.addEventListener("keyup", () => {
+        let tipo_doc = $('#documento').attr("data-id");
+        limparTabela(false)
+        if (pesquisaDocumento.value == '') {
+            limparTabela();
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "<?= SERVERURL ?>ajax/formacaoAjax.php",
+                data: {
+                    _method: 'pesquisaPf',
+                    search: `${pesquisaDocumento.value}`,
+                    where: tipo_doc,
+                },
+                success: function (data, text) {
+                    limparTabela(false);
+                    if (text == 'success' && data != 0) {
+                        const resultado = JSON.parse(data)[0];
                         limparTabela(false);
-                        if (text == 'success' && data != 0) {
-                            const resultado = JSON.parse(data)[0];
-                            limparTabela(false);
-                            resultado.forEach((result) => {
+                        resultado.forEach((result) => {
                                 //console.log(result);
-                                criarLinha(result);
-                            })
+                        criarLinha(result);
+                    })
 
-                        } else if (data == 0) {
-                            limparTabela()
-                        }
+                    } else if (data == 0) {
+                        limparTabela()
+                    }
                     },
                     error: function (response, status, error) {
                         throw new Error(`Status: ${status} não possivel conectar com arquivo AJAX.\n Erro: ${error} `);
-                    }
-                })
-            }
-        });
-    }else if($('#documento').attr("data-id") == 'passaporte'){
-        //proponente
-        pesquisaDocumento.addEventListener("input", () => {
-            limparTabela(false)
-            if (pesquisaDocumento.value == '') {
-                limparTabela();
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url: "<?= SERVERURL ?>ajax/formacaoAjax.php",
-                    data: {
-                        _method: 'pesquisaPf',
-                        search: `${pesquisaDocumento.value}`,
-                        where: 'passaporte',
-                    },
-                    success: function (data, text) {
-                        limparTabela(false);
-                        if (text == 'success' && data != 0) {
-                            const resultado = JSON.parse(data)[0];
-                            limparTabela(false);
-                            resultado.forEach((result) => {
-                                //console.log(result);
-                                criarLinha(result);
-                            })
-                        } else if (data == 0) {
-                            limparTabela()
-                        }
-                    },
-                    error: function (response, status, error) {
-                        throw new Error(`Status: ${status} não possivel conectar com arquivo AJAX.\n Erro: ${error} `);
-                    }
-                })
-            }
-        });
+                }
+            })
+        }
+        
+    });
 
-
-    }
 
     
     function criarLinha(dados) {
