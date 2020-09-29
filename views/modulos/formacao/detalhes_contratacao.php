@@ -114,6 +114,14 @@
                             <a href="<?= SERVERURL ?>formacao/dados_contratacao_lista">
                                 <button type="button" class="btn btn-default pull-left">Voltar</button>
                             </a>
+                            <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
+                                <input type="hidden" name="_method" value="apagarDadosContratacao">
+                                <input type="hidden" name="id" value="<?= $detalhesObj->encryption($detalhe->id)?>">
+                                <button type="submit" class="btn bg-gradient-danger btn-sm  float-right">
+                                    <i class="fas fa-trash"></i> Apagar
+                                </button>
+                                <div class="resposta-ajax"></div>
+                            </form>
                         </div>
                     </div>
                     

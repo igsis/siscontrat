@@ -116,6 +116,17 @@ if (isset($_POST['_method'])) {
         case "editarPF":
             echo $insPessoaFisica->editaPessoaFisica($_POST['id'], $_POST['pagina']);
             break;
+        case "cadastrarDadosContratacao":
+            echo $insForm->insereDadosContratacao($_POST);
+            break;
+        case "editarDadosContratacao":
+            echo $insForm->editaDadosContratacao($_POST);
+            break;
+        case "apagarDadosContratacao":
+            echo $insForm->apagaDadosContratacao($_POST);
+            break;
+        
+        
     }
     if ($_POST['_method'] == "pesquisa" && $_POST['search'] != "") {
         echo $insForm->pesquisasPagamento($_POST['search'], $_POST['where']);

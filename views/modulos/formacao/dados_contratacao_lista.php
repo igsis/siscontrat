@@ -83,7 +83,7 @@
                                     <th>Programa</th>
                                     <th>Linguagem</th>
                                     <th>Cargo</th>
-                                    <th width="15%">Visualizae</th>
+                                    <th width="15%">Visualizar</th>
                                     <th width="15%">Editar</th>
 
                                 </tr>

@@ -1085,10 +1085,94 @@ class FormacaoController extends FormacaoModel
         return parent::getRegiaoPreferencial();
     }
 
+    public function listaFiscalSuplente()
+    {
+        return parent::getFiscalSuplente();
+    }
+
+    public function insereDadosContratacao($post)
+    {
+        unset($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $insert = DbModel::insert('formacao_contratacoes', $dados);
+        if ($insert->rowCount() >= 1) {
+            $contratacao_id = DbModel::connection()->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Dados de contratação Cadastrados',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/dados_contratacao_cadastro&id=' . MainModel::encryption($contratacao_id)
+            ];
+        } else {
+            $alerta = [
+                'Alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde.',
+                'tipo' => 'error'
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
 
 
+    public function recuperaDadosContratacao($contratacao_id) {
+        $contratacao_id = MainModel::decryption($contratacao_id);
+        return DbModel::getInfo('formacao_contratacoes', $contratacao_id, false)->fetchObject();
+    }
+
+    public function editaDadosContratacao($post)
+    {
+        $contratacao_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        unset ($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $update = DbModel::update('formacao_contratacoes', $dados, $contratacao_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Dados de Contratação Atualizados!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/dados_contratacao_cadastro&id=' . MainModel::encryption($contratacao_id)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
     
-
+    public function apagaDadosContratacao($post)
+    {
+        unset($post['_method']);
+        $contratacao_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        $delete = DbModel::apaga('formacao_contratacoes', $contratacao_id);
+        if($delete->rowCount() >= 1 || DbModel::connection()->errorCode() == 0){
+            $alerta = [
+              'alerta' => 'sucesso',
+              'titulo' => 'Dados de contratação Apagados!',
+              'texto' => 'Dados apagados com sucesso!',
+              'tipo' => 'success',
+              'location' => SERVERURL . 'formacao/dados_contratacao_lista'
+            ];
+        }else{
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidos, tente novamente mais tarde',
+                'tipo' => 'error'
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
 
 }
 

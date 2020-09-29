@@ -3,7 +3,8 @@
     require_once "./controllers/FormacaoController.php";
     $id = isset($_GET['id']) ? $_GET['id'] : null;
     $contratacaoObj = new FormacaoController();
-    //$dados_contratacao = $contratacaoObj->recuperaDadosContratacao();
+    $dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
+    //var_dump($dados_contratacao);
     $pf = $contratacaoObj->listaPF();
     $classificacao = $contratacaoObj->listaClassificacao();
     $territorio = $contratacaoObj->listaTerritorios();
@@ -13,6 +14,9 @@
     $linguagem = $contratacaoObj->listaLinguagens();
     $projeto = $contratacaoObj->listaProjetos();
     $cargo = $contratacaoObj->listaCargos();
+    $regiao = $contratacaoObj->listaRegiaoPrefencial();
+    $ficalSuplente = $contratacaoObj->listaFiscalSuplente();
+    $vigencia = $contratacaoObj->listaVigencias();
 
 
 ?>
@@ -42,22 +46,28 @@
                     <!-- /.card-header -->
                     <!-- form start -->
                     <div class="card-body">
+                        <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" 
+                            method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
+                            <input type="hidden" name="_method" value="<?= ($id) ? "editarDadosContratacao" : "cadastrarDadosContratacao" ?>">
+                        <?php if ($id): ?>
+                            <input type="hidden" name="id" id="modulo_id" value="<?= $id ?>">
+                        <?php endif; ?>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="ano">Ano: *</label>
-                                <input type="number" min="2018" id="ano" name="ano" required class="form-control">
+                                <input type="number" min="2018" id="ano" name="ano"  value="<?= $dados_contratacao->ano ?? "" ?>" required class="form-control">
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label for="chamado">Chamado: *</label>
-                                <input type="number" min="1" max="127" id="chamado" name="chamado" max="127" required class="form-control">
+                                <input type="number" min="1" max="127" id="chamado" name="chamado" max="127" value="<?= $dados_contratacao->chamado ?? "" ?>" required class="form-control">
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="from-group col-md-12">
                                 <label for="pf">Pessoa Física: *</label>
-                                <select required value="" name="idPF" id="idPF" class="form-control">
+                                <select required value="" name="pessoa_fisica_id" id="pessoa_fisica_id" class="form-control">
                                     <option>Selecione a pessoa física...</option>
                                     <?php foreach ($pf as $linha): ?>
                                         <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->pessoa_fisica_id) && ($linha->id == $dados_contratacao->pessoa_fisica_id) ? "selected" : "" ?>>
@@ -87,7 +97,7 @@
                         <div class="row">
                             <div class="form-group col-md-3">
                                 <label for="territorio">Território: *</label>
-                                <select class="form-control" name="territorio" id="territorio" required>
+                                <select class="form-control" name="territorio_id" id="territorio_id" required>
                                 <option value="">Selecione o território...</option>
                                     <?php foreach ($territorio as $linha): ?>
                                         <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->territorio_id) && ($linha->id == $dados_contratacao->territorio_id) ? "selected" : "" ?>>
@@ -99,7 +109,7 @@
 
                             <div class="form-group col-md-3">
                                 <label for="coordenadoria">Coordenadoria: *</label>
-                                <select class="form-control" name="coordenadoria" id="coordenadoria" required>
+                                <select class="form-control" name="coordenadoria_id" id="coordenadoria_id" required>
                                     <option value="">Selecione a coordenadoria...</option>
                                     <?php foreach ($coordenadoria as $linha): ?>
                                         <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->coordenadoria_id) && ($linha->id == $dados_contratacao->coordenadoria_id) ? "selected" : "" ?>>
@@ -111,7 +121,7 @@
 
                             <div class="form-group col-md-3">
                                 <label for="subprefeitura">Subprefeitura: *</label>
-                                <select class="form-control" name="subprefeitura" id="subprefeitura" required>
+                                <select class="form-control" name="subprefeitura_id" id="subprefeitura_id" required>
                                     <option value="">Selecione a subprefeitura...</option>
                                     <?php foreach ($subprefeitura as $linha): ?>
                                         <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->subprefeitura_id) && ($linha->id == $dados_contratacao->subprefeitura_id) ? "selected" : "" ?>>
@@ -123,7 +133,7 @@
 
                             <div class="form-group col-md-3">
                                 <label for="programa">Programa: *</label>
-                                <select class="form-control" name="programa" id="programa" required>
+                                <select class="form-control" name="programa_id" id="programa_id" required>
                                     <option value="">Selecione o programa...</option>
                                     <?php foreach ($programa as $linha): ?>
                                         <option value="<?= $linha['id'] ?>" <?= isset($dados_contratacao->programa_id) && ($linha['id'] == $dados_contratacao->programa_id) ? "selected" : "" ?>>
@@ -137,7 +147,7 @@
                         <div class="row">
                             <div class="form-group col-md-3">
                                 <label for="linguagem">Linguagem: *</label>
-                                <select class="form-control" name="linguagem" id="linguagem" required>
+                                <select class="form-control" name="linguagem_id" id="linguagem_id" required>
                                     <option value="">Selecione a linguagem...</option>
                                     <?php foreach ($linguagem as $linha): ?>
                                         <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->linguagem_id) && ($linha->id == $dados_contratacao->linguagem_id) ? "selected" : "" ?>>
@@ -149,7 +159,7 @@
 
                             <div class="form-group col-md-3">
                                 <label for="projeto">Projeto: *</label>
-                                <select class="form-control" name="projeto" id="projeto" required>
+                                <select class="form-control" name="projeto_id" id="projeto_id" required>
                                     <option value="">Selecione o projeto...</option>
                                     <?php foreach ($projeto as $linha): ?>
                                         <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->projeto_id) && ($linha->id == $dados_contratacao->projeto_id) ? "selected" : "" ?>>
@@ -161,7 +171,7 @@
 
                             <div class="form-group col-md-3">
                                 <label for="cargo">Cargo: *</label>
-                                <select class="form-control" name="cargo" id="cargo" required>
+                                <select class="form-control" name="form_cargo_id" id="form_cargo_id" required>
                                     <option value="">Selecione o cargo...</option>
                                     <?php foreach ($cargo as $linha): ?>
                                         <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->form_cargo_id) && ($linha->id == $dados_contratacao->form_cargo_id) ? "selected" : "" ?>>
@@ -171,7 +181,17 @@
                                 </select>
                             </div>
 
-                        
+                            <div class="form-group col-md-3">
+                                <label for="cargo">Vigência: *</label>
+                                <select class="form-control" name="form_vigencia_id" id="form_vigencia_id" required>
+                                    <option value="">Selecione a vigência...</option>
+                                    <?php foreach ($vigencia as $linha): ?>
+                                        <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->form_vigencia_id) && ($linha->id == $dados_contratacao->form_vigencia_id) ? "selected" : "" ?>>
+                                            <?php echo $linha->ano ; echo $linha->descricao ?>
+                                        </option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -183,7 +203,7 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for="regiao">Região Preferencial: *</label>
-                                <select class="form-control" name="regiao" id="regiao" required>
+                                <select class="form-control" name="regiao_preferencia_id" id="regiao_preferencia_id" required>
                                     <option value="">Selecione uma região...</option>
                                     <?php foreach ($regiao as $linha): ?>
                                         <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->regiao_preferencial_id) && ($linha->id == $dados_contratacao->regiao_preferencial_id) ? "selected" : "" ?>>
@@ -197,18 +217,18 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for="observacao">Observação: </label>
-                                <textarea name="observacao" id="observacao" rows="3" class="form-control"></textarea>
+                                <textarea name="observacao" id="observacao" rows="3" class="form-control"><?= $dados_contratacao->observacao ?? "" ?></textarea>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="fiscal">Fiscal: *</label>
-                                <select name="fiscal" id="fiscal" class="form-control" required>
+                                <select name="fiscal_id" id="fiscal_id" class="form-control" required>
                                     <option value="">Selecione um fiscal...</option>
-                                    <?php foreach ($usuario as $linha): ?>
-                                        <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->usuario_id) && ($linha->id == $dados_contratacao->usuario_id) ? "selected" : "" ?>>
-                                            <?php echo $linha->oqsera?>
+                                    <?php foreach ($ficalSuplente as $linha): ?>
+                                        <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->fiscal_id) && ($linha->id == $dados_contratacao->fiscal_id) ? "selected" : "" ?>>
+                                            <?php echo $linha->nome_completo?>
                                         </option>
                                     <?php endforeach ?>
                                 </select>
@@ -216,16 +236,26 @@
 
                             <div class="form-group col-md-6">
                                 <label for="fiscal">Suplente: </label>
-                                <select name="suplente" id="suplente" class="form-control">
+                                <select name="suplente_id" id="suplente_id" class="form-control">
                                     <option value="">Selecione um suplente...</option>
-                                    <?php foreach ($usuario as $linha): ?>
-                                        <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->usuario_id) && ($linha->id == $dados_contratacao->usuario_id) ? "selected" : "" ?>>
-                                            <?php echo $linha->oqsera?>
+                                    <?php foreach ($ficalSuplente as $linha): ?>
+                                        <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->suplente_id) && ($linha->id == $dados_contratacao->suplente_id) ? "selected" : "" ?>>
+                                            <?php echo $linha->nome_completo?>
                                         </option>
                                     <?php endforeach ?>
                                 </select>
                             </div>
                         </div>
+
+                        <div class="card-footer">
+                            <a href="<?= SERVERURL ?>formacao/dados_contratacao_lista">
+                                <button type="button" class="btn btn-default pull-left">Voltar</button>
+                            </a>
+                            <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary float-right">
+                                Gravar
+                            </button>
+                        </div >
+                        <div class="resposta-ajax"></div>
                     </div>
                 </div>
             </div>

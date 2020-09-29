@@ -148,7 +148,7 @@ class FormacaoModel extends MainModel
 
     protected function getRegiaoPreferencial()
     {
-        return DbModel::consultaSimples("SELECT * FROM regiao_preferenciais")->fetchAll(PDO::FETCH_OBJ);
+        return DbModel::consultaSimples("SELECT * FROM regiao_preferencias")->fetchAll(PDO::FETCH_OBJ);
     }
 
     protected function getFiscalSuplente()
