@@ -18,7 +18,7 @@ class PDF extends FPDF{
         // Move to the right
 
         // Logo
-        $this->Image('../pdf/logo_smc.jpg', 30, 10);
+        $this->Image('../views/dist/img/logo_smc.jpg', 30, 10);
 
         // Line break
         $this->Ln(20);

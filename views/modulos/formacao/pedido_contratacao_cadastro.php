@@ -295,16 +295,16 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                             </a>
                         </div>
 
-                        <?php if(isset($pedido_id) && isset($consulta)): ?>
-                        <div class="col-md" style="text-align: center">
-                            <a href="<?= SERVERURL ?>formacao/area_impressao">
-                                <button type="button" class="btn btn-success">Ir para área de impressão</button>
-                            </a>
-                        </div>
-                        <?php elseif(isset($consulta)): ?>
-                                <div class="col-md" style="text-align: center;">
-                                    <span style="color: red;"><b>Para acessar a área de impressão é necessário cadastrar as parcelas, lembre-se de cadastra-las clicando no botão (Editar parcelas)</b></span>
-                                </div>
+                        <?php if (isset($pedido_id) && isset($consulta)): ?>
+                            <div class="col-md" style="text-align: center">
+                                <a href="<?= SERVERURL ?>formacao/area_impressao&pedido_id=<?= $pedido_id ?>">
+                                    <button type="button" class="btn btn-success">Ir para área de impressão</button>
+                                </a>
+                            </div>
+                        <?php elseif (isset($consulta)): ?>
+                            <div class="col-md" style="text-align: center;">
+                                <span style="color: red;"><b>Para acessar a área de impressão é necessário cadastrar as parcelas, lembre-se de cadastra-las clicando no botão (Editar parcelas)</b></span>
+                            </div>
                         <?php endif; ?>
 
                         <div class="col-md">
