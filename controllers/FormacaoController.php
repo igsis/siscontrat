@@ -822,12 +822,12 @@ class FormacaoController extends FormacaoModel
 
     public function recuperaContratacao($contratacao_id, $decription = 1)
     {
-        if($decription == 1){
+        if ($decription == 1) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
-        return DbModel::consultaSimples("SELECT fc.ano, fc.chamado, fc.protocolo, ci.classificacao_indicativa, t.territorio, cord.coordenadoria, s.subprefeitura, 
+        return DbModel::consultaSimples("SELECT fc.ano, fc.chamado, fc.protocolo, fc.pessoa_fisica_id, ci.classificacao_indicativa, t.territorio, cord.coordenadoria, s.subprefeitura, 
                                                          pro.programa, l.linguagem, pj.projeto, c.cargo, v.id AS 'idVigencia',v.ano AS 'vigencia', v.descricao, v.numero_parcelas,
-		                                                 fc.observacao, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', pf.nome
+		                                                 fc.observacao, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', pf.nome, r.regiao
                                                   FROM formacao_contratacoes AS fc
                                                   INNER JOIN classificacao_indicativas AS ci ON ci.id = fc.classificacao
                                                   INNER JOIN territorios AS t ON t.id = fc.territorio_id
@@ -839,6 +839,7 @@ class FormacaoController extends FormacaoModel
                                                   INNER JOIN projetos AS pj ON pj.id = fc.projeto_id
                                                   INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
                                                   INNER JOIN formacao_vigencias AS v ON v.id = fc.form_vigencia_id
+                                                  INNER JOIN regiao_preferencias AS r on fc.regiao_preferencia_id = r.id    
                                                   INNER JOIN usuarios AS fiscal ON fiscal.id = fc.fiscal_id
                                                   LEFT JOIN usuarios AS suplente ON suplente.id = fc.suplente_id
                                                   WHERE fc.id = $contratacao_id AND fc.publicado = 1")->fetchObject();
@@ -854,7 +855,8 @@ class FormacaoController extends FormacaoModel
                                                   WHERE pf.id = $pessoa_fisica_id")->fetchObject();
     }
 
-    public function recuperaTelPf($pesquisa_fisica_id, $obj = 0){
+    public function recuperaTelPf($pesquisa_fisica_id, $obj = 0)
+    {
         $tel = "";
         $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE id = $pesquisa_fisica_id")->fetchAll();
         if ($obj != NULL):
@@ -867,17 +869,20 @@ class FormacaoController extends FormacaoModel
         endif;
     }
 
-    function retornaPeriodoFormacao($vigencia_id)
+    function retornaPeriodoFormacao($pedido_id)
     {
-        $testaDataInicio = DbModel::consultaSimples("SELECT data_inicio FROM formacao_parcelas WHERE formacao_vigencia_id = $vigencia_id AND publicado = 1 ORDER BY data_inicio ASC LIMIT 0,1");
+        $pedido_id = MainModel::decryption($pedido_id);
+
+        $testaDataInicio = DbModel::consultaSimples("SELECT pc.data_inicio FROM parcelas AS p INNER JOIN parcela_complementos AS pc ON pc.parcela_id = p.id WHERE p.pedido_id = $pedido_id AND pc.publicado = 1 AND p.publicado = 1 ORDER BY pc.data_inicio ASC LIMIT 0,1;");
         if ($testaDataInicio->rowCount() > 0) {
             $data_inicio = $testaDataInicio->fetchObject()->data_inicio;
-            $data_fim = DbModel::consultaSimples("SELECT data_fim FROM formacao_parcelas WHERE formacao_vigencia_id = $vigencia_id AND publicado = 1 ORDER BY data_fim DESC LIMIT 0,1")->fetchObject()->data_fim;
-            if ($data_inicio == $data_fim || $data_fim == "0000-00-00") {
+            $data_fim = DbModel::consultaSimples("SELECT pc.data_fim FROM parcelas AS p INNER JOIN parcela_complementos AS pc ON pc.parcela_id = p.id WHERE p.pedido_id = $pedido_id AND pc.publicado = 1 AND p.publicado = 1 ORDER BY data_fim DESC LIMIT 0,1")->fetchObject()->data_fim;
+            /*if ($data_inicio == $data_fim || $data_fim == "0000-00-00") {
                 return MainModel::dataParaBR($data_inicio);
             } else {
                 return "de " . MainModel::dataParaBR($data_inicio) . " à " . MainModel::dataParaBR($data_fim);
-            }
+            }*/
+            return "de " . MainModel::dataParaBR($data_inicio) . " à " . MainModel::dataParaBR($data_fim);
         } else {
             return "(Parcelas não cadastradas)";
         }
@@ -887,8 +892,26 @@ class FormacaoController extends FormacaoModel
     public function cadastrarPedido($post)
     {
         unset($post['_method']);
+        $post['origem_id'] = MainModel::decryption($post['origem_id']);
 
+        $consultaLocais = DbModel::consultaSimples("SELECT * FROM formacao_locais WHERE form_pre_pedido_id = " . $post['origem_id'])->rowCount();
+        if ($consultaLocais > 0) :
+            DbModel::deleteEspecial('formacao_locais', 'form_pre_pedido_id', $post['origem_id']);
+        endif;
+
+        for ($i = 0; $i < count($post['local_id']); $i++):
+            if ($post['local_id'][$i] > 0):
+                $array = [
+                    'form_pre_pedido_id' => $post['origem_id'],
+                    'local_id' => $post['local_id'][$i]
+                ];
+                DbModel::insert('formacao_locais', $array);
+            endif;
+        endfor;
+
+        unset($post['local_id']);
         $dados = MainModel::limpaPost($post);
+        var_dump($dados);
 
         $insert = DbModel::insert('pedidos', $dados);
         if ($insert->rowCount() >= 1) {
@@ -898,7 +921,7 @@ class FormacaoController extends FormacaoModel
                 'titulo' => 'Pedido Cadastrado',
                 'texto' => 'Dados cadastrados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL . 'formacao/pedido_contratacao_cadastro&id=' . MainModel::encryption($pedido_id)
+                'location' => SERVERURL . 'formacao/pedido_contratacao_cadastro&pedido_id=' . MainModel::encryption($pedido_id)
             ];
         } else {
             $alerta = [
@@ -914,10 +937,10 @@ class FormacaoController extends FormacaoModel
     public function editarPedido($post)
     {
         $pedido_id = MainModel::decryption($post['id']);
-        $contratacao_id = MainModel::decryption($post['contratacao_id']);
+        $contratacao_id = MainModel::decryption($post['origem_id']);
         unset($post['_method']);
         unset($post['id']);
-        unset($post['contratacao_id']);
+        unset($post['origem_id']);
 
         $consultaLocais = DbModel::consultaSimples("SELECT * FROM formacao_locais WHERE form_pre_pedido_id = $contratacao_id")->rowCount();
         if ($consultaLocais > 0) :
@@ -943,7 +966,7 @@ class FormacaoController extends FormacaoModel
                 'titulo' => 'Pedido Atualizado',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL . 'formacao/pedido_contratacao_cadastro&id=' . MainModel::encryption($pedido_id)
+                'location' => SERVERURL . 'formacao/pedido_contratacao_cadastro&pedido_id=' . MainModel::encryption($pedido_id)
             ];
         } else {
             $alerta = [
@@ -981,7 +1004,8 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function concluirPedido($post){
+    public function concluirPedido($post)
+    {
         unset($post['_method']);
         $pedido_id = MainModel::decryption($post['id']);
         unset($post['id']);
@@ -1005,11 +1029,6 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function recuperaParcelasPedido($pedido_id)
-    {
-        return PedidoController::getParcelasPedido($pedido_id);
-    }
-
     public function editarParcela($post)
     {
         unset($post['_method']);
@@ -1018,27 +1037,51 @@ class FormacaoController extends FormacaoModel
         $parcelas = DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->fetchAll(PDO::FETCH_ASSOC);
         if (count($parcelas) > 0) {
             foreach ($parcelas as $parcela) {
-                DbModel::consultaSimples("UPDATE parcelas SET publicado = 0 WHERE pedido_id = $pedido_id AND numero_parcelas = " . $parcela['numero_parcelas']);
+                DbModel::consultaSimples("UPDATE parcela_complementos SET publicado = '0' WHERE parcela_id = '{$parcela['id']}'");
+                DbModel::consultaSimples("UPDATE parcelas SET publicado = '0' WHERE pedido_id = $pedido_id AND numero_parcelas = '{$parcela['numero_parcelas']}'");
             }
+
         }
 
+        //insere as parcelas dentro da tabela parcelas e parcelas_complementos
         for ($i = 0; $i < count($post['numero_parcelas']); $i++):
-            $array = [
+            $arrayParcela = [
                 'pedido_id' => $pedido_id,
-                'numero_parcelas' => $i,
+                'numero_parcelas' => $i + 1,
                 'valor' => $post['valor'][$i],
                 'data_pagamento' => $post['data_pagamento'][$i],
                 'publicado' => '1',
             ];
-            $insert = DbModel::insert('parcelas', $array);
+            $insertParcelas = DbModel::insert('parcelas', $arrayParcela);
+            if($insertParcelas && DbModel::connection()->errorCode() == 0):
+                $arrayParcelaComplementos = [
+                    'parcela_id' => DbModel::connection()->lastInsertId(),
+                    'data_inicio' => $post['data_inicio'][$i],
+                    'data_fim' => $post['data_fim'][$i],
+                    'carga_horaria' => $post['carga_horaria'][$i],
+                    'publicado' => '1',
+                ];
+                DbModel::insert('parcela_complementos', $arrayParcelaComplementos);
+            endif;
         endfor;
+
         if (DbModel::connection()->errorCode() == 0) {
+            $dadosParcelas = DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+            $formaCompleta = "";
+            for ($i = 0; $i < count($dadosParcelas); $i++) :
+                $forma = $i + 1 . "º parcela R$ " . MainModel::dinheiroParaBr($dadosParcelas[$i]->valor) . ". Entrega de documentos a partir de " . MainModel::dataParaBR($dadosParcelas[$i]->data_pagamento) . ".\n";
+                $formaCompleta = $formaCompleta . $forma;
+            endfor;
+
+            $formaCompleta = $formaCompleta . "\nA liquidação de cada parcela se dará em 3 (três) dias úteis após a data de confirmação da correta execução do(s) serviço(s).";
+            DbModel::consultaSimples("UPDATE pedidos SET forma_pagamento = '$formaCompleta' WHERE id = $pedido_id AND origem_tipo_id = 2");
+
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Parcelas Atualizadas!',
                 'texto' => 'Parcelas atualizadas com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL . 'formacao/pedido_edita_parcelas&id=' . MainModel::encryption($pedido_id)
+                'location' => SERVERURL . 'formacao/pedido_contratacao_cadastro&pedido_id=' . MainModel::encryption($pedido_id)
             ];
         } else {
             $alerta = [
@@ -1049,6 +1092,13 @@ class FormacaoController extends FormacaoModel
             ];
         }
         return MainModel::sweetAlert($alerta);
+    }
+
+    public  function consultaParcela($pedido_id){
+        $pedido_id = MainModel::decryption($pedido_id);
+        $testaParcelas = DbModel::consultaSimples("SELECT id FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->rowCount();
+        $consulta = $testaParcelas > 0;
+        return $consulta;
     }
 
     public function retornaNotaEmpenho($pedido_id)
@@ -1228,7 +1278,8 @@ class FormacaoController extends FormacaoModel
     }
 
 
-    public function recuperaDadosContratacao($contratacao_id) {
+    public function recuperaDadosContratacao($contratacao_id)
+    {
         $contratacao_id = MainModel::decryption($contratacao_id);
         return DbModel::getInfo('formacao_contratacoes', $contratacao_id, false)->fetchObject();
     }
@@ -1265,7 +1316,7 @@ class FormacaoController extends FormacaoModel
         $contratacao_id = MainModel::decryption($post['id']);
         unset($post['id']);
         $delete = DbModel::apaga('formacao_contratacoes', $contratacao_id);
-        if($delete->rowCount() >= 1 || DbModel::connection()->errorCode() == 0){
+        if ($delete->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Dados de contratação Apagados!',
@@ -1273,7 +1324,7 @@ class FormacaoController extends FormacaoModel
                 'tipo' => 'success',
                 'location' => SERVERURL . 'formacao/dados_contratacao_lista'
             ];
-        }else{
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu errado!',
