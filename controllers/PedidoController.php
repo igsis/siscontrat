@@ -216,4 +216,21 @@ class PedidoController extends PedidoModel
             return DbModel::consultaSimples("SELECT * FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND pc.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
         endif;
     }
+
+    public function retornaCargaHoraria($pedido_id, $decryption = 0){
+        if($decryption == 1){
+            $pedido_id = MainModel::decryption($pedido_id);
+        }
+
+        $carga = 0;
+        $consultaParcelas = DbModel::consultaSimples("SELECT pc.carga_horaria FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND pc.publicado = 1")->fetchAll();
+        foreach ($consultaParcelas as $consultaParcela) {
+            $carga = $carga + $consultaParcela['carga_horaria'];
+        }
+        return $carga;
+    }
+
+    public function retornaPenalidades($penal_id){
+        return DbModel::consultaSimples("SELECT texto FROM penalidades WHERE id = $penal_id")->fetchObject()->texto;
+    }
 }

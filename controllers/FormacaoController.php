@@ -826,7 +826,7 @@ class FormacaoController extends FormacaoModel
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
         return DbModel::consultaSimples("SELECT fc.ano, fc.chamado, fc.protocolo, fc.pessoa_fisica_id, ci.classificacao_indicativa, t.territorio, cord.coordenadoria, s.subprefeitura, 
-                                                         pro.programa, l.linguagem, pj.projeto, c.cargo, v.id AS 'idVigencia',v.ano AS 'vigencia', v.descricao, v.numero_parcelas,
+                                                         pro.programa, pro.edital, l.linguagem, pj.projeto, c.cargo, v.id AS 'idVigencia',v.ano AS 'vigencia', v.descricao, v.numero_parcelas,
 		                                                 fc.observacao, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', pf.nome, r.regiao
                                                   FROM formacao_contratacoes AS fc
                                                   INNER JOIN classificacao_indicativas AS ci ON ci.id = fc.classificacao
@@ -848,10 +848,11 @@ class FormacaoController extends FormacaoModel
     //retorna um obj com os dados de uma determinada pessoa fisica
     public function recuperaPf($pessoa_fisica_id)
     {
-        return DbModel::consultaSimples("SELECT pf.*, n.nacionalidade, pe.* 
+        return DbModel::consultaSimples("SELECT pf.*, n.nacionalidade, pe.*, d.drt 
                                                   FROM pessoa_fisicas AS pf 
                                                   LEFT JOIN nacionalidades AS n ON pf.nacionalidade_id = n.id  
                                                   LEFT JOIN pf_enderecos AS pe ON pf.id = pe.pessoa_fisica_id
+                                                  LEFT JOIN drts AS D ON pf.id = d.pessoa_fisica_id
                                                   WHERE pf.id = $pessoa_fisica_id")->fetchObject();
     }
 
@@ -1053,7 +1054,7 @@ class FormacaoController extends FormacaoModel
                 'publicado' => '1',
             ];
             $insertParcelas = DbModel::insert('parcelas', $arrayParcela);
-            if($insertParcelas && DbModel::connection()->errorCode() == 0):
+            if ($insertParcelas && DbModel::connection()->errorCode() == 0):
                 $arrayParcelaComplementos = [
                     'parcela_id' => DbModel::connection()->lastInsertId(),
                     'data_inicio' => $post['data_inicio'][$i],
@@ -1094,7 +1095,8 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public  function consultaParcela($pedido_id){
+    public function consultaParcela($pedido_id)
+    {
         $pedido_id = MainModel::decryption($pedido_id);
         $testaParcelas = DbModel::consultaSimples("SELECT id FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->rowCount();
         $consulta = $testaParcelas > 0;

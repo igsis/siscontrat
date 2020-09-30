@@ -59,6 +59,7 @@ class ViewsModel
             'listar_inscritos',
             'login',
             'logout',
+            'area_impressao',
             'conclusao_busca',
             'concluir_pedido',
             'pagamento_busca',

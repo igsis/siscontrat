@@ -87,8 +87,8 @@ equivalente) no dia $data_fim, com atraso de ____dias.<br>O prazo contratual é 
 
 <div align="center">
     <button id="botao-copiar" class="btn btn-primary" onclick="copyText(getElementById('texto'))">
-        <i class="fa fa-copy"></i>
         CLIQUE AQUI PARA COPIAR O TEXTO
+        <i class="fa fa-copy"></i>
     </button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="http://sei.prefeitura.sp.gov.br" target="_blank">
