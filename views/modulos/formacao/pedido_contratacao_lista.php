@@ -59,9 +59,6 @@ $pedidos = $formObj->listaPedidos();
                                     <td><?= $pedido->verba ?></td>
                                     <td><?= $pedido->status ?></td>
                                     <td style="text-align: center">
-                                        <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&id=" . $formObj->encryption($pedido->id) ?>"
-                                           class="btn bg-gradient-primary btn-sm float-left">
-                                            <i class="fas fa-user-edit"></i> Editar
                                         <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&pedido_id=" . $formObj->encryption($pedido->id) ?>">
                                             <button type="submit" class="btn bg-gradient-primary btn-sm float-left">
                                                 <i class="fas fa-user-edit"></i> Editar
