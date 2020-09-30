@@ -57,7 +57,7 @@ $pdf->Ln(5);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
-$pdf->Cell(40, $l, utf8_decode("Nome:"), 0, 0, 'L');
+$pdf->Cell(15, $l, utf8_decode("Nome:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
 $pdf->MultiCell(168, $l, utf8_decode($pf['nome']), 0, 'L', 0);
 

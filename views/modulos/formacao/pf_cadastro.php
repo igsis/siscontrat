@@ -1,7 +1,7 @@
 <?php
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 //$doc = isset($_GET['documento']) ? $_GET['documento'] : null;
-$link_resumo = SERVERURL . "pdf/rlt_formacao_pf.php";
+
 require_once "./controllers/PessoaFisicaController.php";
 $insPessoaFisica = new PessoaFisicaController();
 
@@ -265,7 +265,7 @@ if (isset($_POST['pf_cpf'])){
                             </div>
 
                             <div class="form-group col-md-4">
-                                <a href="" target="_blank">
+                                <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= $id ?>" target="_blank">
                                     <button type="submit" class="btn btn-info pull-right btn-block">Clique aqui para
                                         gerar a FACC
                                     </button>
