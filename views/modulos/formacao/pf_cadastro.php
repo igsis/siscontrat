@@ -1,5 +1,7 @@
 <?php
 $id = isset($_GET['id']) ? $_GET['id'] : null;
+//$doc = isset($_GET['documento']) ? $_GET['documento'] : null;
+$link_resumo = SERVERURL . "pdf/rlt_formacao_pf.php";
 require_once "./controllers/PessoaFisicaController.php";
 $insPessoaFisica = new PessoaFisicaController();
 
@@ -243,34 +245,36 @@ if (isset($_POST['pf_cpf'])){
                         <div class="resposta-ajax"></div>
                     </form>
                     <hr/>
-                    <div class="row">
-                        <div class="form-group col-md-4">
-                            <form method="POST" action='#'
-                            role="form">
-                                <input type="hidden" name="idPf" value="">
+                    <?php
+                        if ($id){
+                    ?>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <a href="" target="_blank">
                                     <button type="submit" class="btn btn-info pull-right btn-block">Demais
                                         Anexos
                                     </button>
-                            </form>
-                        </div>
+                                </a>
+                            </div>
 
-                        <div class="form-group col-md-4">
-                            <form method="post" action="3" role="form" target="_blank">
-                                <input type="hidden" name="idPf" value="">
+                            <div class="form-group col-md-4">
+                                <a href="<?= SERVERURL ?>pdf/rlt_formacao_pf.php?id=<?= $id ?>" target="_blank">
                                     <button type="submit" class="btn btn-info btn-block">Imprimir resumo
-                                </button>
-                            </form>
-                        </div>
+                                    </button>
+                                </a>
+                            </div>
 
-                        <div class="form-group col-md-4">
-                            <form method="POST" action="#" role="form" target="_blank">
-                                <input type="hidden" name="idPf" value="">
+                            <div class="form-group col-md-4">
+                                <a href="" target="_blank">
                                     <button type="submit" class="btn btn-info pull-right btn-block">Clique aqui para
-                                    gerar a FACC
-                                </button>
-                            </form>
+                                        gerar a FACC
+                                    </button>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    <?php
+                        }
+                    ?>
 
                 </div>
                 <!-- /.card -->

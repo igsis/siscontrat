@@ -1339,5 +1339,20 @@ class FormacaoController extends FormacaoModel
     {
         return parent::getDocumento($documento, $tipo_documento);
     }
+
+    public function recuperaEnderecoPf($idPf){
+        $idPf = MainModel::decryption($idPf);
+       
+        $testaEnderecos = DbModel::consultaSimples("SELECT * FROM pf_enderecos WHERE pessoa_fisica_id = $idPf");
+
+        if ($testaEnderecos->rowCount() > 0) {
+            while ($enderecoArray = $testaEnderecos->fetch(PDO::FETCH_ASSOC)) {
+                $endereco = $enderecoArray['logradouro'] . ", " . $enderecoArray['numero'] . " " . $enderecoArray['complemento'] . " / - " . $enderecoArray['bairro'] . " - " . $enderecoArray['cidade'] . " / " . $enderecoArray['uf'];
+            }
+        } else {
+            $endereco = "Não cadastrado";
+        }
+        return $endereco;
+    }
 }
 
