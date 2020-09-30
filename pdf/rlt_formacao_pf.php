@@ -7,16 +7,27 @@ require_once "../views/plugins/fpdf/fpdf.php";
 require_once "../controllers/PessoaFisicaController.php";
 require_once "../controllers/FormacaoController.php";
 $pfObj = new PessoaFisicaController();
-$enderecoObj = new FormacaoController();
+$formObj = new FormacaoController();
 
 $id_pf =  $_GET['id'];
 
 class PDF extends FPDF{
+    // Page header
+    function Header()
+    {
+        // Move to the right
+
+        // Logo
+        $this->Image('../pdf/logo_smc.jpg', 30, 10);
+
+        // Line break
+        $this->Ln(20);
+    }
 }
 
 $pf = $pfObj->recuperaPessoaFisica($id_pf);
-$endereco = $enderecoObj->recuperaEnderecoPf($id_pf);
-
+$endereco = $formObj->recuperaEnderecoPf($id_pf);
+$numTelefone = $formObj->recuperaTelefonePf($id_pf);
 if ($pf['passaporte'] == "") {
     $documento = $pf['rg'];
     $cpf = $pf['cpf'];
@@ -75,6 +86,42 @@ $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(19, $l, utf8_decode('Endereço:'), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
 $pdf->MultiCell(180, $l, utf8_decode($endereco));
+
+// $count = 1;
+// if ($numTelefone > 0) {
+//     foreach ($numTelefone as $row) {
+//         if ($row['telefone'] != "") {
+//             $pdf->SetX($x);
+//             $pdf->SetFont('Arial', 'B', 10);
+//             $pdf->Cell(20, $l, utf8_decode('Telefone ' . $count . ':'), 0, 0, 'L');
+//             $pdf->SetFont('Arial', '', 10);
+//             $pdf->Cell(87, $l, utf8_decode($row['telefone']), 0, 1, 'L');
+//             $count++;
+//         }
+//     }
+// }
+
+$pdf->SetX($x);
+$pdf->SetFont('Arial', 'B', 10);
+$pdf->Cell(13, $l, utf8_decode('E-mail:'), 0, 0, 'L');
+$pdf->SetFont('Arial', '', 10);
+$pdf->Cell(53, $l, utf8_decode($pf['email'] == NULL ? "Não Cadastrado" : $pf['email']), 0, 1, 'L');
+
+$pdf->SetX($x);
+$pdf->SetFont('Arial', 'B', 10);
+$pdf->Cell(13, $l, utf8_decode('Banco:'), 0, 0, 'L');
+$pdf->SetFont('Arial', '', 10);
+$pdf->Cell(30, $l, utf8_decode(str_replace("–", "-", $pf['banco'] == NULL ? "Não Cadastrado" : $pf['banco'])), 0, 1, 'L');
+$pdf->SetFont('Arial', 'B', 10);
+$pdf->SetX($x);
+$pdf->Cell(16, $l, utf8_decode('Agência:'), 0, 0, 'L');
+$pdf->SetFont('Arial', '', 10);
+$pdf->Cell(40, $l, utf8_decode($pf['agencia'] == NULL ? "Não Cadastrado" : $pf['agencia']), 0, 1, 'L');
+$pdf->SetFont('Arial', 'B', 10);
+$pdf->SetX($x);
+$pdf->Cell(12, $l, utf8_decode('Conta:'), 0, 0, 'L');
+$pdf->SetFont('Arial', '', 10);
+$pdf->Cell(45, $l, utf8_decode($pf['conta'] == NULL ? "Não Cadastrado" : $pf['conta']), 0, 1, 'L');
 
 $pdf->Output('rlt_formacao_pf.pdf', 'I');
 ?>

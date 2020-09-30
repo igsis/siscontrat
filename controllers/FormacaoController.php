@@ -1354,5 +1354,14 @@ class FormacaoController extends FormacaoModel
         }
         return $endereco;
     }
+
+    public function recuperaTelefonePf($idPf){
+        $idPf = MainModel::decryption($idPf);
+        $sqlTelefone = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPf' AND publicado = 1");
+        $telefones = $sqlTelefone->fetch(PDO::FETCH_ASSOC);
+        $numTelefone = count($telefones);
+
+        return $numTelefone;
+    }
 }
 
