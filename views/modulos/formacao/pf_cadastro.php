@@ -67,7 +67,7 @@ if (isset($_POST['pf_cpf'])){
 
                             <div class="row">
                                 <?php
-                                if (isset($_POST['pf_cpf']) && $pf['cpf'] != ""){
+                                if (isset($pf['cpf']) && $pf['cpf'] != ""){
                                     ?>
                                     <div class="form-group col-md-2">
                                         <label for="rg">RG: *</label>
@@ -87,7 +87,7 @@ if (isset($_POST['pf_cpf'])){
                                     ?>
                                     <div class="form-group col-md-6">
                                         <label for="passaporte" id="documento">Passaporte: </label>
-                                        <input type="text" id="passaporte" name="pf_passaporte" class="form-control" value="<?= $documento ?? "" ?>" readonly>
+                                        <input type="text" id="passaporte" name="pf_passaporte" class="form-control" value="<?= $pf['passaporte'] ?? "" ?>" readonly>
                                     </div>
                                     <?php
                                 }

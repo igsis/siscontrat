@@ -53,17 +53,25 @@
                                 <?php foreach ($lista_pf as $pf): ?>
                                 <tr>
                                     <td><?=$pf->nome?></td>
-                                    <td><?=$pf->cpf?></td>
+                                    <td>
+                                        <?php
+                                        if (isset($pf->cpf) && $pf->cpf != ""){
+                                            echo $pf->cpf;
+                                        }else{
+                                            echo $pf->passaporte;
+                                        }
+                                        ?>
+                                    </td>
                                     <td><?=$pf->data_nascimento?></td>
                                     <td><?=$pf->email?></td>
                                     <td>
-                                        <button type="button" class="btn bg-gradient-info btn-sm float-left mr-2">
+                                        <a href="" class="btn bg-gradient-info btn-sm float-left mr-2">
                                             <i class="fas fa-file-archive"></i> Anexos
-                                        </button>
+                                    
                                     </td>
                                     <td>
                                         <a href="<?= SERVERURL . "formacao/pf_cadastro&id=" . $listaPfObj->encryption($pf->id) ?>" class="btn bg-gradient-primary btn-sm">
-                                                <i class="fas fa-user-edit"></i> Editar
+                                            <i class="fas fa-user-edit"></i> Editar
                                         </a>
                                     </td>
                                 </tr>
