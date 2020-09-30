@@ -28,7 +28,7 @@ $pedidos = $formObj->listaPedidos();
                         <h3 class="card-title">Listagem</h3>
                         <div class="card-tools">
                             <!-- button with a dropdown -->
-                            <a href="<?= SERVERURL ?>" class="btn btn-success btn-sm">
+                            <a href="<?= SERVERURL ?>" target="_blank" class="btn btn-success btn-sm">
                                 <i class="fas fa-file-excel"></i> Exportar para Excel
                             </a>
                         </div>
@@ -45,7 +45,7 @@ $pedidos = $formObj->listaPedidos();
                                 <th>Ano</th>
                                 <th>Verba</th>
                                 <th>Status</th>
-                                <th width="15%">Ações</th>
+                                <th width="17%">Ações</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -59,15 +59,15 @@ $pedidos = $formObj->listaPedidos();
                                     <td><?= $pedido->verba ?></td>
                                     <td><?= $pedido->status ?></td>
                                     <td style="text-align: center">
-                                        <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&id=" . $formObj->encryption($pedido->id) ?>">
-                                            <button type="submit" class="btn bg-gradient-primary btn-sm float-left">
-                                                <i class="fas fa-user-edit"></i> Editar
-                                            </button>
+                                        <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&id=" . $formObj->encryption($pedido->id) ?>"
+                                           class="btn bg-gradient-primary btn-sm float-left">
+                                            <i class="fas fa-user-edit"></i> Editar
                                         </a>
                                         <form action="<?= SERVERURL ?>ajax/formacaoAjax.php"
                                               class="form-horizontal formulario-ajax" method="POST">
                                             <input type="hidden" name="_method" value="deletarPedido">
-                                            <input type="hidden" name="id" value="<?= $formObj->encryption($pedido->id) ?>">
+                                            <input type="hidden" name="id"
+                                                   value="<?= $formObj->encryption($pedido->id) ?>">
                                             <button type="submit" class="btn bg-gradient-danger btn-sm">
                                                 <i class="fas fa-trash"></i> Apagar
                                             </button>
@@ -86,7 +86,7 @@ $pedidos = $formObj->listaPedidos();
                                 <th>Ano</th>
                                 <th>Verba</th>
                                 <th>Status</th>
-                                <th width="15%">Ações</th>
+                                <th width="17%">Ações</th>
                             </tr>
                             </tfoot>
                         </table>
