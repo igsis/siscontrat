@@ -1,12 +1,15 @@
 <?php
+$pedido_id = isset($_GET['pedido_id']) ? $_GET['pedido_id'] : "";
 require_once "./controllers/FormacaoController.php";
 
-$id = isset($_GET['id']) ? $_GET['id'] : NULL;
 $pedidoObj = new FormacaoController();
-if($id != NULL){
-    $pedido = $pedidoObj->recuperaPedido($id);
+
+if ($pedido_id != NULL) {
+    $pedido = $pedidoObj->recuperaPedido($pedido_id);
+    $consulta = $pedidoObj->consultaParcela($pedido_id);
 }
-$contratacao_id = isset($_POST['contratacao_id']) ? $_POST['contratacao_id'] : MainModel::encryption($pedido->origem_id);
+
+$contratacao_id = isset($_GET['contratacao_id']) ? $_GET['contratacao_id'] : MainModel::encryption($pedido->origem_id);
 $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
 
 ?>
@@ -47,10 +50,13 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
 
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label for="pessoa_fisica">Pessoa Fisica:</label>
-                            <input type="text" name="pessoa_fisica" class="form-control"
-                                   value="<?= isset($contratacao->nome) ? $contratacao->nome : "" ?>"
-                                   disabled>
+                            <label for="pessoa_fisica_id">Pessoa Fisica:</label>
+                            <select name="pessoa_fisica_id" id="pf_id" tabindex="-1" aria-disabled="true"
+                                    class="form-control"
+                                    style="background: #eee; pointer-events: none; touch-action: none;">
+                                <option value="">Selecione uma opção...</option>
+                                <?php $pedidoObj->geraOpcao("pessoa_fisicas", $contratacao->pessoa_fisica_id ?? "") ?>
+                            </select>
                         </div>
 
                         <div class="form-group col-md-6">
@@ -118,11 +124,17 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                     </div>
 
                     <div class="row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                             <label for="vigencia">Vigência:</label>
                             <input type="text" name="vigencia" class="form-control"
                                    value="<?= isset($contratacao->vigencia) ? $contratacao->vigencia . ' (' . $contratacao->descricao . ')' : "" ?>"
                                    disabled>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="observacao">Região Preferencial:</label>
+                            <input name="text" class="form-control" name="regiao"
+                                   value="<?= isset($contratacao->regiao) ? $contratacao->regiao : "" ?>" disabled>
                         </div>
                     </div>
 
@@ -152,32 +164,34 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
 
                     <hr>
 
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <br>
-                            <form action="<?= SERVERURL ?>formacao/pedido_edita_parcelas" method="POST">
-                                <input type="hidden" name="nParcelas" id="nParcelas" value="">
-                                <input type="hidden" name="valor" id="valor" value="">
-                                <input type="hidden" name="pedido_id" value="<?= $id ?? NULL?>">
-                                <button type="submit" class="btn btn-info float-right">Editar parcelas</button>
-                            </form>
+                    <?php if ($pedido_id != NULL): ?>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <br>
+                                <form action="<?= SERVERURL ?>formacao/pedido_edita_parcelas" method="POST">
+                                    <input type="hidden" name="nParcelas" id="nParcelas" value="">
+                                    <input type="hidden" name="valor" id="valor" value="">
+                                    <input type="hidden" name="pedido_id" value="<?= $pedido_id ?? NULL ?>">
+                                    <button type="submit" class="btn btn-info float-right">Editar parcelas</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
 
                     <form class="form-horizontal formulario-ajax" method="POST"
                           action="<?= SERVERURL ?>ajax/formacaoAjax.php" role="form"
-                          data-form="<?= ($id) ? "update" : "save" ?>">
+                          data-form="<?= ($pedido_id) ? "update" : "save" ?>">
                         <input type="hidden" name="_method"
-                               value="<?= ($id) ? "editarPedido" : "cadastrarPedido" ?>">
-                        <?php if ($id): ?>
-                            <input type="hidden" name="id" value="<?= $id ?>">
+                               value="<?= ($pedido_id) ? "editarPedido" : "cadastrarPedido" ?>">
+                        <?php if ($pedido_id): ?>
+                            <input type="hidden" name="id" value="<?= $pedido_id ?>">
                         <?php endif; ?>
                         <div class="row">
                             <div class="form-group col-md-3">
                                 <label for="verba_id">Verba: * </label>
                                 <select name="verba_id" required class="form-control">
                                     <option value="">Selecione uma opção...</option>
-                                    <?php $pedidoObj->geraOpcao("verbas", $pedido->verba_id) ?>
+                                    <?php $pedidoObj->geraOpcao("verbas", $pedido->verba_id ?? "") ?>
                                 </select>
                             </div>
 
@@ -229,7 +243,7 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                                 <textarea id="forma_pagamento" name="forma_pagamento" required
                                           class="form-control"
                                           readonly
-                                          placeholder="A FORMA DE PAGAMENTO É PREENCHIDA AUTOMATICAMENTE APÓS O CADASTRO DO PEDIDO/EDIÇÃO DE PARCELAS"
+                                          placeholder="A FORMA DE PAGAMENTO É PREENCHIDA AUTOMATICAMENTE APÓS O CADASTRO/EDIÇÃO DE PARCELAS"
                                           rows="8"><?= isset($pedido->forma_pagamento) ? $pedido->forma_pagamento : "" ?></textarea>
                             </div>
 
@@ -241,16 +255,20 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                         </div>
 
                         <div class="row">
-                            <?php for ($i = 0; $i < 3; $i++) { ?>
+                            <?php for ($i = 0; $i < 3; $i++) :
+                                if (isset($pedido)):
+                                    $local = $pedidoObj->retornaLocaisFormacao($pedido->origem_id, '1')[$i]['id'];
+                                else:
+                                    $local = "";
+                                endif; ?>
                                 <div class="form-group col-md-4">
-                                    <label for="local_id[]">Local #<?= $i + 1 ?>
-                                        : <?= $i == 0 ? " *" : "" ?></label>
+                                    <label for="local_id[]">Local #<?= $i + 1 ?>: <?= $i == 0 ? " *" : "" ?></label>
                                     <select name="local_id[]" class="form-control">
                                         <option value="0">Selecione uma opção...</option>
-                                        <?php $pedidoObj->geraOpcao('locais', $pedidoObj->retornaLocaisFormacao($pedido->origem_id, '1')[$i]['id']) ?>
+                                        <?php $pedidoObj->geraOpcao('locais', $local) ?>
                                     </select>
                                 </div>
-                            <?php } ?>
+                            <?php endfor; ?>
                         </div>
 
                         <div class="row">
@@ -258,20 +276,44 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                             <textarea name="observacao" rows="8" class="form-control"></textarea>
                         </div>
 
+                        <input type="hidden" name="pessoa_tipo_id" value="1">
+                        <input type="hidden" id="pf" name="pessoa_fisica_id" value="">
+                        <input type="hidden" name="status_pedido_id" value="2">
+
                         <input type="hidden" name="origem_tipo_id" value="2">
                         <?php if ($contratacao_id): ?>
-                            <input type="hidden" name="contratacao_id" value="<?= $contratacao_id ?>">
+                            <input type="hidden" name="origem_id" value="<?= $contratacao_id ?>">
                         <?php endif; ?>
                         <div class="resposta-ajax"></div>
                 </div>
 
                 <div class="card-footer">
-                    <a href="<?= SERVERURL ?>formacao/pedido_contratacao_lista">
-                        <button type="button" class="btn btn-default">Voltar</button>
-                    </a>
-                    <button type="submit" class="btn btn-info float-right">
-                        <?= $id == NULL ? "Cadastrar" : "Editar" ?>
-                    </button>
+                    <div class="row">
+                        <div class="col-md">
+                            <a href="<?= SERVERURL ?>formacao/pedido_contratacao_lista">
+                                <button type="button" class="btn btn-default">Voltar</button>
+                            </a>
+                        </div>
+
+                        <?php if(isset($pedido_id) && isset($consulta)): ?>
+                        <div class="col-md" style="text-align: center">
+                            <a href="<?= SERVERURL ?>formacao/area_impressao">
+                                <button type="button" class="btn btn-success">Ir para área de impressão</button>
+                            </a>
+                        </div>
+                        <?php elseif(isset($consulta)): ?>
+                                <div class="col-md" style="text-align: center;">
+                                    <span style="color: red;"><b>Para acessar a área de impressão é necessário cadastrar as parcelas, lembre-se de cadastra-las clicando no botão (Editar parcelas)</b></span>
+                                </div>
+                        <?php endif; ?>
+
+                        <div class="col-md">
+                            <button type="submit" class="btn btn-info float-right">
+                                <?= $pedido_id == NULL ? "Cadastrar" : "Editar" ?>
+                            </button>
+                        </div>
+
+                    </div>
                     </form>
                 </div>
             </div>
@@ -295,8 +337,13 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
             return false;
     };
 
+    function popularPf() {
+        $('#pf').attr('value', $('#pf_id').val())
+    }
+
     $(document).ready(function () {
         $('#numero_parcelas').mask('00', {reverse: true});
         getCamposParcela();
+        popularPf();
     });
 </script>

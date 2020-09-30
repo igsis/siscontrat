@@ -1,11 +1,15 @@
 <?php
 $pedido_id = isset($_POST['pedido_id']) ? $_POST['pedido_id'] : "";
+if($pedido_id == ""):
+    $pedido_id = isset($_GET['pedido_id']) ? $_GET['pedido_id'] : "";
+endif;
+
 require_once "./controllers/formacaoController.php";
 $pedidoObj = new FormacaoController();
 
 if ($pedido_id != "") {
     $pedido = $pedidoObj->recuperaPedido($pedido_id);
-    $parcelas = $pedidoObj->recuperaParcelasPedido($pedido_id);
+    $parcelas = PedidoController::getParcelasPedidoComplementos($pedido_id);
 }
 
 $valor_total = isset($pedido->valor_total) ? $pedido->valor_total : MainModel::dinheiroDeBr($_POST['valor']);
@@ -41,24 +45,44 @@ $numParcelas = isset($pedido->numero_parcelas) ? $pedido->numero_parcelas : $_PO
                         <?php endif; ?>
                         <?php for ($i = 0; $i < $numParcelas; $i++): ?>
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="parcela[]">Parcela:</label>
                                     <input type="text" readonly class="form-control" value="<?= $i + 1 ?>"
                                            name="numero_parcelas[]" required>
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="valor[]">Valor:</label>
                                     <input type="text" name="valor[]"
-                                           class="form-control valor" maxlength="10"
+                                           class="form-control valor" maxlength="10" required
                                            value="<?= isset($parcelas[$i]->valor) ? MainModel::dinheiroParaBr($parcelas[$i]->valor) : "" ?>">
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="data_pagamento">Data pagamento: </label>
                                     <input type="date" name="data_pagamento[<?= $i ?>]" class="form-control"
-                                           placeholder="DD/MM/AAAA"
+                                           placeholder="DD/MM/AAAA" required
                                            value="<?= isset($parcelas[$i]->data_pagamento) ? $parcelas[$i]->data_pagamento : "" ?>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="data_inicio">Data de inicio: </label>
+                                    <input type="date" name="data_inicio[<?= $i ?>]" class="form-control"
+                                           placeholder="DD/MM/AAAA" required
+                                           value="<?= isset($parcelas[$i]->data_inicio) ? $parcelas[$i]->data_inicio : "" ?>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="data_fim">Data fim: </label>
+                                    <input type="date" name="data_fim[<?= $i ?>]" class="form-control"
+                                           placeholder="DD/MM/AAAA" required
+                                           value="<?= isset($parcelas[$i]->data_fim) ? $parcelas[$i]->data_fim : "" ?>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="carga_horaria">Carga Horária: </label>
+                                    <input type="number" name="carga_horaria[<?= $i ?>]" class="form-control" min="1" maxlength="2"
+                                           value="<?= isset($parcelas[$i]->carga_horaria) ? $parcelas[$i]->carga_horaria : "" ?>" required>
                                 </div>
                             </div>
                         <?php endfor; ?>
@@ -68,7 +92,7 @@ $numParcelas = isset($pedido->numero_parcelas) ? $pedido->numero_parcelas : $_PO
                 <div class="card-footer">
                     <div class="row">
                         <div class="col-md-3">
-                            <a href="<?= SERVERURL ?>formacao/pedido_contratacao_cadastro&id=<?= $pedido_id ?>">
+                            <a href="<?= SERVERURL ?>formacao/pedido_contratacao_cadastro&pedido_id=<?= $pedido_id ?>">
                                 <button type="button" class="btn btn-default">Voltar</button>
                             </a>
                         </div>

@@ -98,13 +98,13 @@ $i = 1;
                                             </th>
 
                                             <th style="text-align:center">
-                                                <a href="<?= SERVERURL ?>pdf/formacao_pagamento.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>" target="_blank">
+                                                <a href="<?= SERVERURL ?>pdf/formacao_horas.php?id=<?= $pedido_id ?>" target="_blank">
                                                     <button type="button" class="btn btn-primary">Relatório Horas</button>
                                                 </a>
                                             </th>
 
                                             <th style="text-align:center">
-                                                <a href="<?= SERVERURL ?>pdf/formacao_pagamento.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>" target="_blank">
+                                                <a href="<?= SERVERURL ?>pdf/formacao_contabilidade.php?id=<?= $pedido_id ?>" target="_blank">
                                                     <button type="button" class="btn btn-primary">Contabilidade</button>
                                                 </a>
                                             </th>

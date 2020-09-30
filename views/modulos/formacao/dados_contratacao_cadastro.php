@@ -83,7 +83,7 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for="classificacao">Classificação Indicativa: *</label>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default"><i class="fa fa-info"></i></button>
+                                <button type="button" class="btn bg-gradient-primary btn-sm" data-toggle="modal" data-target="#modal-default"><i class="fa fa-info"></i></button>
                                 <select required class="form-control" name="classificacao" id="classificacao">
                                     <option value="">Selecione uma classificação indicativa...</option>
                                     <?php foreach ($classificacao as $linha): ?>
@@ -259,7 +259,7 @@
                         <?php if ($id): ?>
                             <div class="col align-self-center">
                             <hr>
-                                <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&id=" . $contratacaoObj->encryption($dados_contratacao->id) ?>" class="btn btn-success">
+                                <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&contratacao_id=" . $contratacaoObj->encryption($dados_contratacao->id) ?>" class="btn btn-success">
                                      Gerar pedido de contratação
                                 </a>
                             </div>
@@ -276,6 +276,7 @@
 </div>
 
 
+<?php MainModel::exibeModalClassificacaoIndicativa() ?>
 
 <script>
     let ano = $('#ano');
