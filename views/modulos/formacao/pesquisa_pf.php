@@ -130,15 +130,15 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                     limparTabela(false);
                     if (text == 'success' && data != 0) {
                         const resultado = JSON.parse(data)[0];
-                        limparTabela(false);
+                        //limparTabela(false);
                         resultado.forEach((result) => {
                                 //console.log(result);
                         criarLinha(result);
                     })
 
                     } else if (data == 0) {
-                        limparTabela()
-                        //mensagemSemResultados('tbody');
+                        limparTabela(true)
+                        //mensagemSemResultados(tbody);
                     }
                     },
                     error: function (response, status, error) {

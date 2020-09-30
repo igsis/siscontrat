@@ -139,7 +139,7 @@ class FormacaoModel extends MainModel
             }
             return json_encode(array($consulta));
         }
-        return 'a';
+        return 0;
         
     }
 
