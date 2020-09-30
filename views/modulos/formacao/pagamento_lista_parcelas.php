@@ -53,6 +53,14 @@ $i = 1;
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-md">
+                                <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= MainModel::encryption($pedido->pessoa_fisica_id) ?>" target="_blank">
+                                    <button class="btn btn-primary float-right">Gerar FACC</button>
+                                </a>
+                            </div>
+                        </div>
+
                         <hr>
 
                         <div class="row">
@@ -80,7 +88,7 @@ $i = 1;
 
                                             <th style="text-align:center">
                                                 <a href="<?= SERVERURL ?>pdf/formacao_pagamento.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
-                                                   method="POST" target="_blank">
+                                                    target="_blank">
                                                     <button type="button" class="btn btn-primary">Pagamento</button>
                                                 </a>
                                             </th>

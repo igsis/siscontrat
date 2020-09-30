@@ -45,6 +45,8 @@ $l = 7; //DEFINE A ALTURA DA LINHA
 
 $pdf->SetXY($x, 35);// SetXY - DEFINE O X (largura) E O Y (altura) NA PÁGINA
 
+$pdf->SetTitle("Proposta Vocacional");
+
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(10, 5, '(A)', 0, 0, 'L');
@@ -317,6 +319,6 @@ if ($pf->passaporte != NULL) {
     $pdf->Cell(100, 4, "CPF: " . $pf->cpf, 0, 0, 'L');
 }
 
-$pdf->Output();
+$pdf->Output('Proposta Vocacional', "I");
 ?>
 

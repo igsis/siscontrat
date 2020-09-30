@@ -4,6 +4,7 @@ require_once "./controllers/FormacaoController.php";
 
 $formObj = new FormacaoController();
 
+$pf_id = $formObj->recuperaPedido($id)->pessoa_fisica_id;
 ?>
 
 <div class="content-header">
@@ -49,14 +50,18 @@ $formObj = new FormacaoController();
 
                         <div class="card-body">
                             <div class="row">
-                                <a href="<?= SERVERURL ?>pdf/formacao_proposta_vocacional.php?id=<?= $id ?>"
-                                   target="_blank">
-                                    <button class="btn btn-primary">Vocacional</button>
-                                </a>
-                                <a href="<?= SERVERURL ?>pdf/formacao_proposta_vocacional.php?id=<?= $id ?>"
-                                   target="_blank">
-                                    <button class="btn btn-primary">PIÁ</button>
-                                </a>
+                                <div class="col-md-1">
+                                    <a href="<?= SERVERURL ?>pdf/formacao_proposta_vocacional.php?id=<?= $id ?>"
+                                       target="_blank">
+                                        <button class="btn btn-primary">Vocacional</button>
+                                    </a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="<?= SERVERURL ?>pdf/formacao_proposta_vocacional.php?id=<?= $id ?>"
+                                       target="_blank">
+                                        <button class="btn btn-primary">PIÁ</button>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -69,7 +74,7 @@ $formObj = new FormacaoController();
 
                         <div class="card-body">
                             <div class="col-md-12">
-                                <a href="#" target="_blank">
+                                <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= MainModel::encryption($pf_id) ?>" target="_blank">
                                     <button class="btn btn-primary">FACC</button>
                                 </a>
                             </div>
@@ -84,20 +89,26 @@ $formObj = new FormacaoController();
 
                         <div class="card-body">
                             <div class="row">
-                                <a href="<?= SERVERURL ?>pdf/formacao_pedido_contratacao.php&id=<?= $id ?>"
-                                   target="_blank">
-                                    <button class="btn btn-primary">Vocacional</button>
-                                </a>
+                                <div class="col-md-1">
+                                    <a href="<?= SERVERURL ?>pdf/formacao_reserva.php?id=<?= $id ?>&tipo=vocacional"
+                                       target="_blank">
+                                        <button class="btn btn-primary">Vocacional</button>
+                                    </a>
+                                </div>
 
-                                <a href="<?= SERVERURL ?>pdf/formacao_pedido_contratacao.php&id=<?= $id ?>"
-                                   target="_blank">
-                                    <button class="btn btn-primary">PIÁ</button>
-                                </a>
+                                <div class="col-md-2">
+                                    <a href="<?= SERVERURL ?>pdf/formacao_reserva.php?id=<?= $id ?>&tipo=sme"
+                                       target="_blank">
+                                        <button class="btn btn-primary">VOCACIONAL/PIÁ - SME</button>
+                                    </a>
+                                </div>
 
-                                <a href="<?= SERVERURL ?>pdf/formacao_pedido_contratacao.php&id=<?= $id ?>"
-                                   target="_blank">
-                                    <button class="btn btn-primary">PIÁ</button>
-                                </a>
+                                <div class="col-md-3">
+                                    <a href="<?= SERVERURL ?>pdf/formacao_reserva.php?id=<?= $id ?>&tipo=pia"
+                                       target="_blank">
+                                        <button class="btn btn-primary">FORMAÇÃO - PIÁ</button>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -110,7 +121,7 @@ $formObj = new FormacaoController();
 
                         <div class="card-body">
                             <div class="col-md-12">
-                                <a href="<?= SERVERURL ?>pdf/formacao_pedido_contratacao.php&id=<?= $id ?>"
+                                <a href="<?= SERVERURL ?>pdf/formacao_despacho.php?id=<?= $id ?>"
                                    target="_blank">
                                     <button class="btn btn-primary">Vocacional/PIÁ</button>
                                 </a>
@@ -120,8 +131,7 @@ $formObj = new FormacaoController();
 
                 </div>
                 <div class="card-footer">
-                    <a href="<?= SERVERURL ?>formacao/pedido_contratacao_cadastro&pedido_id=<?= $id ?>"
-                       target="_blank">
+                    <a href="<?= SERVERURL ?>formacao/pedido_contratacao_cadastro&pedido_id=<?= $id ?>">
                         <button type="button" class="btn btn-default">Voltar</button>
                     </a>
                 </div>
