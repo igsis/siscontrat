@@ -8,7 +8,6 @@ require_once "../controllers/PessoaFisicaController.php";
 require_once "../controllers/FormacaoController.php";
 $pfObj = new PessoaFisicaController();
 $formObj = new FormacaoController();
-
 $id_pf =  $_GET['id'];
 
 class PDF extends FPDF{
@@ -27,7 +26,8 @@ class PDF extends FPDF{
 
 $pf = $pfObj->recuperaPessoaFisica($id_pf);
 $endereco = $formObj->recuperaEnderecoPf($id_pf);
-$numTelefone = $formObj->recuperaTelefonePf($id_pf);
+$numTelefone = $formObj->recuperaTelefonePf2($id_pf);
+
 if ($pf['passaporte'] == "") {
     $documento = $pf['rg'];
     $cpf = $pf['cpf'];
@@ -87,19 +87,20 @@ $pdf->Cell(19, $l, utf8_decode('Endereço:'), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
 $pdf->MultiCell(180, $l, utf8_decode($endereco));
 
-// $count = 1;
-// if ($numTelefone > 0) {
-//     foreach ($numTelefone as $row) {
-//         if ($row['telefone'] != "") {
-//             $pdf->SetX($x);
-//             $pdf->SetFont('Arial', 'B', 10);
-//             $pdf->Cell(20, $l, utf8_decode('Telefone ' . $count . ':'), 0, 0, 'L');
-//             $pdf->SetFont('Arial', '', 10);
-//             $pdf->Cell(87, $l, utf8_decode($row['telefone']), 0, 1, 'L');
-//             $count++;
-//         }
-//     }
-// }
+$count = 1;
+if ($numTelefone > 0) {
+    //var_dump($numTelefone);
+    foreach ($numTelefone as $row) {
+        if ($row->telefone != "") {
+            $pdf->SetX($x);
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(20, $l, utf8_decode('Telefone ' . $count . ':'), 0, 0, 'L');
+            $pdf->SetFont('Arial', '', 10);
+            $pdf->Cell(87, $l, utf8_decode($row->telefone), 0, 1, 'L');
+            $count++;
+        }
+    }
+}
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);

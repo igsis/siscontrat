@@ -1365,5 +1365,15 @@ class FormacaoController extends FormacaoModel
 
         return $telefones;
     }
+
+    public function recuperaTelefonePf2($idPf){
+        $idPf = MainModel::decryption($idPf);
+        return DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPf' AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+        //$telefones = $sqlTelefone->fetch(PDO::FETCH_ASSOC);
+        //$numTelefone = $sqlTelefone->rowCount();
+
+        //return $telefones;
+    }
+
 }
 
