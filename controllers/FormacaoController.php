@@ -808,16 +808,29 @@ class FormacaoController extends FormacaoModel
         return parent::getValorTotalVigencia($vigencia_id);
     }
 
-    public function recuperaPedido($pedido_id)
+    public function recuperaPedido($pedido_id, $excel = 0, $ano = 0)
     {
-        $pedido_id = MainModel::decryption($pedido_id);
-        return DbModel::consultaSimples("SELECT p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
+        if($excel != 0 && $ano != 0):
+            return DbModel::consultaSimples("SELECT p.numero_processo, fc.protocolo, pf.id, pf.nome, pro.programa, c.cargo AS 'funcao', l.linguagem, pf.email, s.status
+                                                      FROM pedidos AS p
+                                                      INNER JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
+                                                      INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id
+                                                      INNER JOIN programas AS pro ON fc.programa_id = pro.id
+                                                      INNER JOIN formacao_cargos AS c ON fc.form_cargo_id = c.id
+                                                      INNER JOIN linguagens AS l ON fc.linguagem_id = l.id
+                                                      INNER JOIN formacao_status AS s ON fc.form_status_id = s.id
+                                                      WHERE p.publicado = 1 AND fc.ano = $ano")->fetchAll(PDO::FETCH_OBJ);
+        else:
+            $pedido_id = MainModel::decryption($pedido_id);
+            return DbModel::consultaSimples("SELECT p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
                                                          p.forma_pagamento, p.justificativa, p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome 
                                                   FROM pedidos AS p
                                                   INNER JOIN pedido_status AS s ON s.id = p.status_pedido_id 
                                                   INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id
                                                   INNER JOIN pessoa_fisicas AS pf ON pf.id = p.pessoa_fisica_id
                                                   WHERE p.id = $pedido_id AND p.publicado = 1 AND p.origem_tipo_id = 2")->fetchObject();
+        endif;
+
     }
 
     public function recuperaContratacao($contratacao_id, $decription = 1)
@@ -859,7 +872,7 @@ class FormacaoController extends FormacaoModel
     public function recuperaTelPf($pesquisa_fisica_id, $obj = 0)
     {
         $tel = "";
-        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE id = $pesquisa_fisica_id")->fetchAll();
+        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id")->fetchAll();
         if ($obj != NULL):
             return $telArrays;
         else:

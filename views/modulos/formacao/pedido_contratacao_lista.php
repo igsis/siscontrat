@@ -111,7 +111,7 @@ $ano = date("Y");
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="./include/excel_pedido_contrato.php" method="GET" target="_blank">
+            <form action="<?= SERVERURL ?>pdf/formacao_pedido_excel.php" method="GET" target="_blank">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col">
@@ -129,8 +129,5 @@ $ano = date("Y");
                 </div>
             </form>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
