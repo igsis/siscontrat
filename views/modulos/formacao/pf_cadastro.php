@@ -250,10 +250,8 @@ if (isset($_POST['pf_cpf'])){
                     ?>
                         <div class="row">
                             <div class="form-group col-md-4">
-                                <a href="" target="_blank">
-                                    <button type="submit" class="btn btn-info pull-right btn-block">Demais
-                                        Anexos
-                                    </button>
+                                <a href="<?= SERVERURL . "formacao/pf_demais_anexos&id=" . $id?>" class="btn btn-info pull-right btn-block">
+                                     Demais Anexos
                                 </a>
                             </div>
 
