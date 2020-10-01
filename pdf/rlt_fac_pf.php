@@ -23,7 +23,7 @@ class PDF extends FPDF{
 }
 
 $pf = $pfObj->recuperaPessoaFisica($id_pf);
-
+$telefone = $formObj->recuperaTelefonePf($id_pf);
 
 $data = date('d-m-Y');
 
@@ -73,7 +73,7 @@ $pdf->Cell(5, $l, utf8_decode($pf['uf']), 0, 0, 'L');
 $pdf->SetXY($x, 96);
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(33, $l, utf8_decode($pf['cep']), 0, 0, 'L');
-$pdf->Cell(57, $l, utf8_decode($pf['cep']), 0, 0, 'L');
+$pdf->Cell(57, $l, utf8_decode($telefone['telefone']), 0, 0, 'L');
 $pdf->Cell(15, $l, utf8_decode($pf['codigo']), 0, 0, 'L');
 $pdf->Cell(35, $l, utf8_decode($pf['agencia']), 0, 0, 'L');
 $pdf->Cell(37, $l, utf8_decode($pf['conta']), 0, 0, 'L');

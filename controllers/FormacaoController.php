@@ -1361,9 +1361,9 @@ class FormacaoController extends FormacaoModel
         $idPf = MainModel::decryption($idPf);
         $sqlTelefone = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPf' AND publicado = 1");
         $telefones = $sqlTelefone->fetch(PDO::FETCH_ASSOC);
-        $numTelefone = count($telefones);
+        $numTelefone = $sqlTelefone->rowCount();
 
-        return $numTelefone;
+        return $telefones;
     }
 }
 
