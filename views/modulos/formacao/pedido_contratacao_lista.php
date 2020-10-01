@@ -4,6 +4,9 @@ require_once "./controllers/FormacaoController.php";
 $formObj = new FormacaoController();
 
 $pedidos = $formObj->listaPedidos();
+
+//Ano máximo
+$ano = date("Y");
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -28,9 +31,10 @@ $pedidos = $formObj->listaPedidos();
                         <h3 class="card-title">Listagem</h3>
                         <div class="card-tools">
                             <!-- button with a dropdown -->
-                            <a href="<?= SERVERURL ?>" target="_blank" class="btn btn-success btn-sm">
+                            <button class="btn btn-success btn-sm" data-toggle="modal"
+                                    data-target="#modal-exportar-pedido">
                                 <i class="fas fa-file-excel"></i> Exportar para Excel
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -97,3 +101,36 @@ $pedidos = $formObj->listaPedidos();
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal-exportar-pedido">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Escolha ano dos pedidods</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="./include/excel_pedido_contrato.php" method="GET" target="_blank">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="ano">Ano:</label>
+                                <input type="number" name="ano" class="form-control" min="2020" max="<?= $ano ?>"
+                                       value="<?= $ano ?>">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Exportar</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
