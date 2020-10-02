@@ -65,9 +65,9 @@
                                     <td><?=$pf->data_nascimento?></td>
                                     <td><?=$pf->email?></td>
                                     <td>
-                                        <a href="" class="btn bg-gradient-info btn-sm float-left mr-2">
+                                        <a href="<?= SERVERURL . "formacao/pf_demais_anexos&id=" . $listaPfObj->encryption($pf->id) ?>" class="btn bg-gradient-info btn-sm float-left mr-2">
                                             <i class="fas fa-file-archive"></i> Anexos
-                                    
+                                        </a>
                                     </td>
                                     <td>
                                         <a href="<?= SERVERURL . "formacao/pf_cadastro&id=" . $listaPfObj->encryption($pf->id) ?>" class="btn bg-gradient-primary btn-sm">
