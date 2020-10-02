@@ -38,14 +38,19 @@
                             <thead>
                                 <tr>
                                     <th>Coordenadoria</th>
-                                    <th width="15%">Apagar</th>
                                     <th width="15%">Editar</th>
-                                </tr>
+                                    <th width="15%">Apagar</th>
+                                                                    </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($coordenadorias as $cordenadoria): ?>
                                 <tr>
                                     <td><?=$cordenadoria->coordenadoria?></td>
+                                    <td>
+                                        <a href="<?= SERVERURL . "formacao/coordenadoria_cadastro&id=" . $coordenadoriaObj->encryption($cordenadoria->id) ?>" class="btn bg-gradient-primary btn-sm">
+                                            <i class="fas fa-user-edit"></i> Editar
+                                        </a>
+                                    </td>
                                     <td>
                                         <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
                                             <input type="hidden" name="_method" value="apagarCoordenadoria">
@@ -56,21 +61,14 @@
                                                 <div class="resposta-ajax"></div>
                                         </form>
                                     </td>
-                                    <td>
-                                        <a href="<?= SERVERURL . "formacao/coordenadoria_cadastro&id=" . $coordenadoriaObj->encryption($cordenadoria->id) ?>"
-                                            <button type="submit" class="btn bg-gradient-primary btn-sm">
-                                                <i class="fas fa-user-edit"></i> Editar
-                                            </button>
-                                        </a>
-                                    </td>
                                 </tr>
                                 <?php endforeach; ?>    
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Coordenadoria</th>
-                                    <th width="15%">Apagar</th>
                                     <th width="15%">Editar</th>
+                                    <th width="15%">Apagar</th>
                                 </tr>
                             </tfoot>
                         </table>

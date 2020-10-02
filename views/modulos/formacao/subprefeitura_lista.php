@@ -39,14 +39,21 @@
                             <thead>
                                 <tr>
                                     <th>Subprefeitura</th>
-                                    <th width="15%">Apagar</th>
                                     <th width="15%">Editar</th>
+                                    <th width="15%">Apagar</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($subprefeituras as $subprefeitura): ?>
                                 <tr>
                                     <td><?=$subprefeitura->subprefeitura?></td>
+                                    <td>
+                                        <a href="<?= SERVERURL . "formacao/subprefeitura_cadastro&id=" . $subprefeituraObj->encryption($subprefeitura->id) ?>"
+                                        <button type="submit" class="btn bg-gradient-primary btn-sm">
+                                            <i class="fas fa-user-edit"></i> Editar
+                                        </button>
+                                        </a>
+                                    </td>
                                     <td>
                                         <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
                                             <input type="hidden" name="_method" value="apagarSubprefeitura">
@@ -57,21 +64,14 @@
                                                 <div class="resposta-ajax"></div>
                                         </form>
                                     </td>
-                                    <td>
-                                        <a href="<?= SERVERURL . "formacao/subprefeitura_cadastro&id=" . $subprefeituraObj->encryption($subprefeitura->id) ?>"
-                                            <button type="submit" class="btn bg-gradient-primary btn-sm">
-                                                <i class="fas fa-user-edit"></i> Editar
-                                            </button>
-                                        </a>
-                                    </td>
                                 </tr>
                                 <?php endforeach; ?>    
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Subprefeitura</th>
-                                    <th width="15%">Apagar</th>
                                     <th width="15%">Editar</th>
+                                    <th width="15%">Apagar</th>
                                 </tr>
                             </tfoot>
                         </table>

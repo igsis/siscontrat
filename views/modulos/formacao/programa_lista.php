@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-9">
-                <h1 class="m-0 text-dark">Lista dos Programas</h1>
+                <h1 class="m-0 text-dark">  Lista dos Programas</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -41,8 +41,8 @@
                                     <th>Verba</th>
                                     <th>Edital</th>
                                     <th>Descrição</th>
-                                    <th width="15%">Apagar</th>
                                     <th width="15%">Editar</th>
+                                    <th width="15%">Apagar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,21 +53,19 @@
                                     <td><?=$programa['edital']?></td>
                                     <td><?=$programa['descricao']?></td>
                                     <td>
+                                        <a href="<?= SERVERURL . "formacao/programa_cadastro&id=" . $programaObj->encryption($programa['id']) ?>"  class="btn bg-gradient-primary btn-sm">
+                                                <i class="fas fa-user-edit"></i> Editar
+                                        </a>
+                                    </td>
+                                    <td>
                                         <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
                                             <input type="hidden" name="_method" value="apagarPrograma">
                                             <input type="hidden" name="id" value="<?= $programaObj->encryption($programa['id'])?>">
-                                                <button type="submit" class="btn bg-gradient-danger btn-sm">
-                                                    <i class="fas fa-trash"></i> Apagar
-                                                </button>
-                                                <div class="resposta-ajax"></div>
-                                        </form>
-                                    </td>
-                                    <td>        
-                                        <a href="<?= SERVERURL . "formacao/programa_cadastro&id=" . $programaObj->encryption($programa['id']) ?>"
-                                            <button type="submit" class="btn bg-gradient-primary btn-sm">
-                                                <i class="fas fa-user-edit"></i> Editar
+                                            <button type="submit" class="btn bg-gradient-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Apagar
                                             </button>
-                                        </a>
+                                            <div class="resposta-ajax"></div>
+                                        </form>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>    
@@ -78,8 +76,8 @@
                                     <th>Verba</th>
                                     <th>Edital</th>
                                     <th>Descrição</th>
-                                    <th width="15%">Apagar</th>
                                     <th width="15%">Editar</th>
+                                    <th width="15%">Apagar</th>
                                 </tr>
                             </tfoot>
                         </table>

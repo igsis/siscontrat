@@ -39,9 +39,8 @@
                                 <tr>
                                     <th>Cargo</th>
                                     <th>Justificativa</th>
-                                    <th width="15%">Apagar</th>
                                     <th width="15%">Editar</th>
-
+                                    <th width="15%">Apagar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,22 +48,20 @@
                                 <tr>
                                     <td><?=$cargo->cargo?></td>
                                     <td><?=$cargo->justificativa?></td>
+                                                                        <td>
+                                        <a href="<?= SERVERURL . "formacao/cargo_cadastro&id=" . $cargoObj->encryption($cargo->id) ?>" class="btn bg-gradient-primary btn-sm">
+                                            <i class="fas fa-user-edit"></i> Editar
+                                        </a>
+                                    </td>
                                     <td>
                                         <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
                                             <input type="hidden" name="_method" value="apagarCargo">
                                             <input type="hidden" name="id" value="<?= $cargoObj->encryption($cargo->id)?>">
-                                                <button type="submit" class="btn bg-gradient-danger btn-sm">
-                                                    <i class="fas fa-trash"></i> Apagar
-                                                </button>
-                                                <div class="resposta-ajax"></div>
-                                        </form>
-                                    </td>
-                                    <td>        
-                                        <a href="<?= SERVERURL . "formacao/cargo_cadastro&id=" . $cargoObj->encryption($cargo->id) ?>"
-                                            <button type="submit" class="btn bg-gradient-primary btn-sm">
-                                                <i class="fas fa-user-edit"></i> Editar
+                                            <button type="submit" class="btn bg-gradient-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Apagar
                                             </button>
-                                        </a>
+                                            <div class="resposta-ajax"></div>
+                                        </form>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>    
@@ -73,8 +70,8 @@
                                 <tr>
                                     <th>Cargo</th>
                                     <th>Justificativa</th>
-                                    <th width="15%">Apagar</th>
                                     <th width="15%">Editar</th>
+                                    <th width="15%">Apagar</th>
                                 </tr>
                             </tfoot>
                         </table>

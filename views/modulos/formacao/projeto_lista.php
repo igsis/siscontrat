@@ -38,8 +38,8 @@
                             <thead>
                                 <tr>
                                     <th>Projeto</th>
-                                    <th width="15%">Apagar</th>
                                     <th width="15%">Editar</th>
+                                    <th width="15%">Apagar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,21 +47,19 @@
                                 <tr>
                                     <td><?=$projeto->projeto?></td>
                                     <td>
+                                        <a href="<?= SERVERURL . "formacao/projeto_cadastro&id=" . $projetoObj->encryption($projeto->id) ?>"  class="btn bg-gradient-primary btn-sm">
+                                            <i class="fas fa-user-edit"></i> Editar
+                                        </a>
+                                    </td>
+                                    <td>
                                         <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
                                             <input type="hidden" name="_method" value="apagarProjeto">
                                             <input type="hidden" name="id" value="<?= $projetoObj->encryption($projeto->id)?>">
-                                                <button type="submit" class="btn bg-gradient-danger btn-sm">
-                                                    <i class="fas fa-trash"></i> Apagar
-                                                </button>
-                                                <div class="resposta-ajax"></div>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <a href="<?= SERVERURL . "formacao/projeto_cadastro&id=" . $projetoObj->encryption($projeto->id) ?>"
-                                            <button type="submit" class="btn bg-gradient-primary btn-sm">
-                                                <i class="fas fa-user-edit"></i> Editar
+                                            <button type="submit" class="btn bg-gradient-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Apagar
                                             </button>
-                                        </a>
+                                            <div class="resposta-ajax"></div>
+                                        </form>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>    
@@ -69,8 +67,8 @@
                             <tfoot>
                                 <tr>
                                     <th>Projeto</th>
-                                    <th width="15%">Apagar</th>
                                     <th width="15%">Editar</th>
+                                    <th width="15%">Apagar</th>
                                 </tr>
                             </tfoot>
                         </table>
