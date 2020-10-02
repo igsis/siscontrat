@@ -1,19 +1,17 @@
 <?php
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 
+$doc = isset($_GET['doc']) ? $_GET['doc'] : null;
+
+$type = isset($_GET['type']) ? $_GET['type'] : null;
 
 require_once "./controllers/PessoaFisicaController.php";
 $insPessoaFisica = new PessoaFisicaController();
 
-if (isset($_POST['adicionar']) && $id) {
-    $documento = $id;
-}else if ($id) {
+if ($id && $type == null) {
     $pf = $insPessoaFisica->recuperaPessoaFisica($id);
     $documento = $pf['cpf'];
 }
-
-
-
 
 if (isset($_POST['pf_cpf'])){
     $documento = $_POST['pf_cpf'];
@@ -74,7 +72,8 @@ if (isset($_POST['pf_cpf'])){
 
                             <div class="row">
                                 <?php
-                                if (isset($pf['cpf']) && $pf['cpf'] != ""){
+                                    if((isset($pf['cpf']) && $pf['cpf'] != "") || ($type == 1)){
+
                                     ?>
                                     <div class="form-group col-md-2">
                                         <label for="rg">RG: *</label>
@@ -82,7 +81,7 @@ if (isset($_POST['pf_cpf'])){
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="cpf">CPF: </label>
-                                        <input type="text" name="pf_cpf" class="form-control" id="cpf" value="<?= $documento ?>" readonly>
+                                        <input type="text" name="pf_cpf" class="form-control" id="cpf" value="<?= $documento ?? $doc ?> " readonly>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="ccm">CCM:</label>
@@ -94,7 +93,7 @@ if (isset($_POST['pf_cpf'])){
                                     ?>
                                     <div class="form-group col-md-6">
                                         <label for="passaporte" id="documento">Passaporte: </label>
-                                        <input type="text" id="passaporte" name="pf_passaporte" class="form-control" value="<?= $documento != NULL ?   $documento : $pf['passaporte']?>" readonly>
+                                        <input type="text" id="passaporte" name="pf_passaporte" class="form-control" value="<?= $pf['passaporte'] ?? $doc ?>" readonly>
                                     </div>
                                     <?php
                                 }

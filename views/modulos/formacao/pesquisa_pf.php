@@ -40,10 +40,10 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                     <div class="row">
                                         <label for="tipoDocumento">Tipo de documento: </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="tipoDocumento"  onclick="defineCampo()" id="cpf_check" >CPF
+                                            <input type="radio" name="tipoDocumento" value="1" onclick="defineCampo()" id="cpf_check">CPF
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="tipoDocumento" id="passaporte_check" onclick="defineCampo()" >Passaporte
+                                            <input type="radio" name="tipoDocumento" value="2" id="passaporte_check" onclick="defineCampo()" >Passaporte
                                         </label>
                                     </div>
                                     <div class="row">
@@ -183,13 +183,22 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
     }
 
     function criarBotaoAdicionar() {
+        //Verificar qual documento será enviado
+
+        if ($("#cpf_check").is(':checked')){
+            var tipo_documento = 1;
+        } else {
+            var tipo_documento = 2;
+        }
+
+        console.log(tipo_documento);
         let a = document.createElement('a');
         a.classList.add('btn');
         a.classList.add('btn-primary');
         a.classList.add('btn-sm');
         a.classList.add('text-light');
         //a.attr("name", "adicionar");
-        a.href = `<?=SERVERURL?>formacao/pf_cadastro?id=` + $('#documento').val();
+        a.href = `<?=SERVERURL?>formacao/pf_cadastro&doc=` + $('#documento').val() + `&type=` + tipo_documento;
         a.textContent = 'Adicionar';
         return a;
     }
