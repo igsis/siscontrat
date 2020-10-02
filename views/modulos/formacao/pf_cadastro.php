@@ -1,14 +1,19 @@
 <?php
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-//$doc = isset($_GET['documento']) ? $_GET['documento'] : null;
+
 
 require_once "./controllers/PessoaFisicaController.php";
 $insPessoaFisica = new PessoaFisicaController();
 
-if ($id) {
+if (isset($_POST['adicionar']) && $id) {
+    $documento = $id;
+}else if ($id) {
     $pf = $insPessoaFisica->recuperaPessoaFisica($id);
     $documento = $pf['cpf'];
 }
+
+
+
 
 if (isset($_POST['pf_cpf'])){
     $documento = $_POST['pf_cpf'];
@@ -89,7 +94,7 @@ if (isset($_POST['pf_cpf'])){
                                     ?>
                                     <div class="form-group col-md-6">
                                         <label for="passaporte" id="documento">Passaporte: </label>
-                                        <input type="text" id="passaporte" name="pf_passaporte" class="form-control" value="<?= $pf['passaporte'] ?? "" ?>" readonly>
+                                        <input type="text" id="passaporte" name="pf_passaporte" class="form-control" value="<?= $documento != NULL ?   $documento : $pf['passaporte']?>" readonly>
                                     </div>
                                     <?php
                                 }

@@ -188,7 +188,8 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
         a.classList.add('btn-primary');
         a.classList.add('btn-sm');
         a.classList.add('text-light');
-        a.href = `<?=SERVERURL?>formacao/pf_cadastro&=` + $('#documento').val();
+        //a.attr("name", "adicionar");
+        a.href = `<?=SERVERURL?>formacao/pf_cadastro?id=` + $('#documento').val();
         a.textContent = 'Adicionar';
         return a;
     }
