@@ -1179,7 +1179,7 @@ class FormacaoController extends FormacaoModel
                                                   INNER JOIN pedidos p ON fc.id = p.origem_id
                                                   LEFT JOIN pessoa_fisicas pf ON p.pessoa_fisica_id = pf.id
                                                   INNER JOIN pedido_status s ON s.id = p.status_pedido_id
-                                                  WHERE p.origem_tipo_id = 2 AND fc.publicado = 1 $sqlProponente $sqlProcesso $sqlProtocolo $sqlStatus")->fetchAll(PDO::FETCH_ASSOC);
+                                                  WHERE p.origem_tipo_id = 2 AND p.publicado = 1$sqlProponente $sqlProcesso $sqlProtocolo $sqlStatus")->fetchAll(PDO::FETCH_ASSOC);
         if (count($consulta) > 0) {
             for ($i = 0; $i < count($consulta); $i++) {
                 $consulta[$i]['pedido_id'] = MainModel::encryption($consulta[$i]['pedido_id']);
