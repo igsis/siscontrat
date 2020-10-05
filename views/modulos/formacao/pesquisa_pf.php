@@ -44,7 +44,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                                    id="cpf_check">CPF
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="tipoDocumento" value="2" id="passaporte_check"
+                                            <input type="radio" name="tipoDocumento" value="2" id="passaporte_check" 
                                                    onclick="defineCampo()">Passaporte
                                         </label>
                                     </div>
@@ -190,51 +190,63 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
 
         if ($("#cpf_check").is(':checked')) {
             var tipo_documento = 1;
-            // var n = $("#documento").length;
-            // if (n > 13){
-                //console.log(n)
-                var validado = TestaCPF(strCPF);
-
-                    if (!validado) {
-                        event.preventDefault()
-                        alert("CPF inválido")
-                    }
-            // }
             
         } else {
             var tipo_documento = 2;
-        }
-        let documento = $('#documento').val();
-        if (documento.length >= 14) {
+            let documento = $('#documento').val();
             doc = documento.replace(/[.]+/g, 'p');
             doc = doc.replace('-', 't');
             let a = document.createElement('a');
-            a.classList.add('btn');
-            a.classList.add('btn-primary');
-            a.classList.add('btn-sm');
-            a.classList.add('text-light');
-            //a.attr("name", "adicionar");
-            a.href = `<?=SERVERURL?>formacao/pf_cadastro&doc=${doc}&type=${tipo_documento}`;
-            a.textContent = 'Adicionar';
-            return a;
+                a.classList.add('btn');
+                a.classList.add('btn-primary');
+                a.classList.add('btn-sm');
+                a.classList.add('text-light');
+                a.href = `<?=SERVERURL?>formacao/pf_cadastro&doc=${doc}&type=${tipo_documento}`;
+                a.textContent = 'Adicionar';
+                return a;
         }
+        let documento = $('#documento').val();
+        if (documento.length >= 14 && tipo_documento == 1) {
+            var validado = TestaCPF(strCPF);
+            if (!validado) {
+                event.preventDefault()
+                alert("CPF inválido")
+            }
+        else{
+                doc = documento.replace(/[.]+/g, 'p');
+                doc = doc.replace('-', 't');
+                let a = document.createElement('a');
+                a.classList.add('btn');
+                a.classList.add('btn-primary');
+                a.classList.add('btn-sm');
+                a.classList.add('text-light');
+                a.href = `<?=SERVERURL?>formacao/pf_cadastro&doc=${doc}&type=${tipo_documento}`;
+                a.textContent = 'Adicionar';
+                return a;
+            
+        }
+            
+        }
+        
     }
 
     function TestaCPF(cpf) {
+        
         var Soma;
         var Resto;
-        var strCPF = cpf;
+        var strCPF = cpf.replace(/[.]+/g, '');
+        strCPF = strCPF.replace('-','');
         Soma = 0;
 
-        if (strCPF === "111.111.111-11" ||
-            strCPF === "222.222.222-22" ||
-            strCPF === "333.333.333-33" ||
-            strCPF === "444.444.444-44" ||
-            strCPF === "555.555.555-55" ||
-            strCPF === "666.666.666-66" ||
-            strCPF === "777.777.777-77" ||
-            strCPF === "888.888.888-88" ||
-            strCPF === "999.999.999-99")
+        if (strCPF === "11111111111" ||
+            strCPF === "22222222222" ||
+            strCPF === "33333333333" ||
+            strCPF === "44444444444" ||
+            strCPF === "55555555555" ||
+            strCPF === "66666666666" ||
+            strCPF === "77777777777" ||
+            strCPF === "88888888888" ||
+            strCPF === "99999999999")
             return false;
 
         for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
