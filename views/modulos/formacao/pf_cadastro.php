@@ -21,8 +21,11 @@ if (isset($_POST['pf_cpf'])){
         $pf = $insPessoaFisica->recuperaPessoaFisica($id);
         $documento = $pf['cpf'];
     }
+}
 
-    
+if ($type == 1){
+    $documento = str_replace('p','.',$doc);
+    $documento = str_replace('t','-',$documento);
 }
 
 ?>
@@ -73,7 +76,6 @@ if (isset($_POST['pf_cpf'])){
                             <div class="row">
                                 <?php
                                     if((isset($pf['cpf']) && $pf['cpf'] != "") || ($type == 1)){
-
                                     ?>
                                     <div class="form-group col-md-2">
                                         <label for="rg">RG: *</label>
