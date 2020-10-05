@@ -47,9 +47,9 @@ $territorio = $territorioObj->recuperaTerritorio($id);
                                     <?php endif; ?>
                                     <div class="row">
                                         <div class="form-group col">
-                                            <label for="sigla">Território*: </label>
+                                            <label for="sigla">Território: *</label>
                                             <input type="text" class="form-control" id="territorio" name="territorio"
-                                                maxlength="70" value="<?= $territorio->territorio ?? "" ?>" 
+                                                maxlength="15" value="<?= $territorio->territorio ?? "" ?>"
                                                 required>
                                         </div>                                    
                                     

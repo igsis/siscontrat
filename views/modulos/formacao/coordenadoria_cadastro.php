@@ -49,7 +49,7 @@ $coordenadoria = $coordenadoriaObj->recuperaCoordenadoria($id);
                                         <div class="form-group col">
                                             <label for="sigla">Coordenadoria*: </label>
                                             <input type="text" class="form-control" id="coordenadoria" name="coordenadoria"
-                                                maxlength="70" value="<?= $coordenadoria->coordenadoria ?? "" ?>" 
+                                                maxlength="25" value="<?= $coordenadoria->coordenadoria ?? "" ?>"
                                                 required>
                                         </div>                                    
                                     

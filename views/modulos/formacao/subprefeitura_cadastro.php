@@ -47,7 +47,7 @@ $subprefeitura = $subprefeituraObj->recuperaSubprefeitura($id);
                                     <?php endif; ?>
                                     <div class="row">
                                         <div class="form-group col">
-                                            <label for="sigla">Subprefeitura*: </label>
+                                            <label for="sigla">Subprefeitura: *</label>
                                             <input type="text" class="form-control" id="subprefeitura" name="subprefeitura"
                                                 maxlength="70" value="<?= $subprefeitura->subprefeitura ?? "" ?>" 
                                                 required>

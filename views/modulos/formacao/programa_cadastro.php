@@ -47,17 +47,17 @@ $listaVerba = $verbaObj->listaVerbas();
                                     <?php endif; ?>
                                     <div class="row">
                                         <div class="form-group col-md-4">
-                                            <label for="programa">Programa *</label>
+                                            <label for="programa">Programa: *</label>
                                             <input type="text" id="programa" name="programa" required value="<?= $programa->programa ?? "" ?>" class="form-control">
                                         </div>
 
                                         <div class="form-group col-md-4">
-                                            <label for="edital">Edital *</label>
+                                            <label for="edital">Edital: *</label>
                                             <input type="text" id="edital" name="edital" required value="<?= $programa->edital ?? "" ?>" class="form-control">
                                         </div>
 
                                         <div class="form-group col-md-4">
-                                            <label for="verba">Verba *</label>
+                                            <label for="verba">Verba: *</label>
                                             <select name="verba_id" id="verba_id" required class="form-control">
                                                 <option value="" >Selecione uma opção</option>
                                                 <?php foreach ($listaVerba as $linha): ?>
@@ -72,7 +72,7 @@ $listaVerba = $verbaObj->listaVerbas();
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-12">
-                                            <label for="descricao">Descrição *</label>
+                                            <label for="descricao">Descrição: *</label>
                                             <textarea name="descricao" id="descricao" rows="3"  required class="form-control"><?= $programa->descricao ?? "" ?></textarea>
                                         </div>
                                     </div>

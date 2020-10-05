@@ -65,7 +65,9 @@ if ($type == 1){
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="nome">Nome: *</label>
-                                    <input type="text" class="form-control" name="pf_nome" placeholder="Digite o nome" maxlength="70" value="<?= $pf['nome'] ?? "" ?>" required>
+                                    <input type="text" class="form-control" name="pf_nome" placeholder="Digite o nome" maxlength="70" value="<?= $pf['nome'] ?? "" ?>" required
+                                           placeholder="Digite o nome" title="Apenas letras"
+                                           pattern="[a-zA-ZàèìòùÀÈÌÒÙâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇáéíóúýÁÉÍÓÚÝ ]{1,70}">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="nomeArtistico">Nome Artístico:</label>
@@ -150,7 +152,7 @@ if ($type == 1){
                                     <input type="text" class="form-control" name="en_logradouro" id="rua" placeholder="Digite a rua" maxlength="200" value="<?= $pf['logradouro'] ?? "" ?>" readonly>
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="numero">Número: *</label>
+                                    <label for="numero">Número: *</label> <i>(Caso não houver colocar 0)</i>
                                     <input type="number" name="en_numero" class="form-control" placeholder="Ex.: 10" value="<?= $pf['numero'] ?? "" ?>" required>
                                 </div>
                                 <div class="form-group col-md-2">

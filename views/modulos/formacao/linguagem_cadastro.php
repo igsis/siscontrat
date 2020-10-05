@@ -47,9 +47,9 @@ $linguagem = $linguagemObj->recuperaLinguagem($id);
                                     <?php endif; ?>
                                     <div class="row">
                                         <div class="form-group col">
-                                            <label for="sigla">Linguagem*: </label>
+                                            <label for="sigla">Linguagem: *</label>
                                             <input type="text" class="form-control" id="linguagem" name="linguagem"
-                                                maxlength="70" value="<?= $linguagem->linguagem ?? "" ?>" 
+                                                maxlength="20" value="<?= $linguagem->linguagem ?? "" ?>"
                                                 required>
                                         </div>                                    
                                     

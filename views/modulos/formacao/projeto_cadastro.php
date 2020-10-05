@@ -47,9 +47,9 @@ $projeto = $projetoObj->recuperaProjeto($id);
                                     <?php endif; ?>
                                     <div class="row">
                                         <div class="form-group col">
-                                            <label for="sigla">Projeto*: </label>
+                                            <label for="sigla">Projeto: *</label>
                                             <input type="text" class="form-control" id="projeto" name="projeto"
-                                                maxlength="70" value="<?= $projeto->projeto ?? "" ?>" 
+                                                maxlength="25" value="<?= $projeto->projeto ?? "" ?>"
                                                 required>
                                         </div>                                    
                                     
