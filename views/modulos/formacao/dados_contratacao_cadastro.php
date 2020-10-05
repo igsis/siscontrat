@@ -17,7 +17,7 @@
     $regiao = $contratacaoObj->listaRegiaoPrefencial();
     $ficalSuplente = $contratacaoObj->listaFiscalSuplente();
     $vigencia = $contratacaoObj->listaVigencias();
-
+    $id_user = $_SESSION['usuario_id_s'];
 
 ?>
 
@@ -50,6 +50,7 @@
                             method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
                             <input type="hidden" name="_method" value="<?= ($id) ? "editarDadosContratacao" : "cadastrarDadosContratacao" ?>">
                             <input type="hidden" name="form_status_id" value="1">
+                            <input type="hidden" name="usuario_id" value="<?= $id_user ?>">
                         <?php if ($id): ?>
                             <input type="hidden" name="id" id="modulo_id" value="<?= $id ?>">
                         <?php endif; ?>
