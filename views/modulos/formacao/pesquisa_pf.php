@@ -94,6 +94,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
 <script>
     let pesquisaDocumento = document.querySelector('#documento');
     let tbody = document.querySelector('tbody');
+    let cpf = $('#documento').val();
 
 
     function defineCampo() {
@@ -184,10 +185,22 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
     }
 
     function criarBotaoAdicionar() {
+        let strCPF = document.querySelector('#documento').value;
         //Verificar qual documento será enviado
 
         if ($("#cpf_check").is(':checked')) {
             var tipo_documento = 1;
+            // var n = $("#documento").length;
+            // if (n > 13){
+                //console.log(n)
+                var validado = TestaCPF(strCPF);
+
+                    if (!validado) {
+                        event.preventDefault()
+                        alert("CPF inválido")
+                    }
+            // }
+            
         } else {
             var tipo_documento = 2;
         }
@@ -207,6 +220,37 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
         }
     }
 
+    function TestaCPF(cpf) {
+        var Soma;
+        var Resto;
+        var strCPF = cpf;
+        Soma = 0;
+
+        if (strCPF === "111.111.111-11" ||
+            strCPF === "222.222.222-22" ||
+            strCPF === "333.333.333-33" ||
+            strCPF === "444.444.444-44" ||
+            strCPF === "555.555.555-55" ||
+            strCPF === "666.666.666-66" ||
+            strCPF === "777.777.777-77" ||
+            strCPF === "888.888.888-88" ||
+            strCPF === "999.999.999-99")
+            return false;
+
+        for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11)) Resto = 0;
+        if (Resto != parseInt(strCPF.substring(9, 10))) return false;
+
+        Soma = 0;
+        for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11)) Resto = 0;
+        if (Resto != parseInt(strCPF.substring(10, 11))) return false;
+        return true;
+    }
 
     function mensagemSemResultados(tbody) {
         let tr = document.createElement('tr');
