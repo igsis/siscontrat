@@ -257,13 +257,14 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                         <div class="row">
                             <?php for ($i = 0; $i < 3; $i++) :
                                 if (isset($pedido)):
-                                    $local = $pedidoObj->retornaLocaisFormacao($pedido->origem_id, '1')[$i]['id'];
+                                    $local = $pedidoObj->retornaLocaisFormacao($pedido->origem_id, '1')[$i]['id'] ?? "";
                                 else:
                                     $local = "";
                                 endif; ?>
                                 <div class="form-group col-md-4">
                                     <label for="local_id[]">Local #<?= $i + 1 ?>: <?= $i == 0 ? " *" : "" ?></label>
-                                    <select name="local_id[]" class="form-control">
+                                    <select name="local_id[]" class="form-control locais" onchange="removeLocal()"
+                                            id="local<?= $i ?>">
                                         <option value="0">Selecione uma opção...</option>
                                         <?php $pedidoObj->geraOpcao('locais', $local) ?>
                                     </select>
@@ -295,7 +296,7 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                             </a>
                         </div>
 
-                        <?php if (isset($pedido_id) && isset($consulta)): ?>
+                        <?php if (isset($pedido_id) && isset($consulta) && $consulta): ?>
                             <div class="col-md" style="text-align: center">
                                 <a href="<?= SERVERURL ?>formacao/area_impressao&pedido_id=<?= $pedido_id ?>">
                                     <button type="button" class="btn btn-success">Ir para área de impressão</button>
@@ -340,6 +341,16 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
     function popularPf() {
         $('#pf').attr('value', $('#pf_id').val())
     }
+
+    /*function removeLocal() {
+        $('.locais option:selected').each(function () {
+            console.log($('#local0').val());
+            if ($('#local0').val() == $('#local1').val()) {
+                $('#local1').find('[value="' + $(this).val() + '"]').remove();
+                $('#local2').find('[value="' + $(this).val() + '"]').remove();
+            }
+        });
+    }*/
 
     $(document).ready(function () {
         $('#numero_parcelas').mask('00', {reverse: true});

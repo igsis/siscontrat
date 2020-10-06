@@ -822,7 +822,7 @@ class FormacaoController extends FormacaoModel
                                                       WHERE p.publicado = 1 AND fc.ano = $ano")->fetchAll(PDO::FETCH_OBJ);
         else:
             $pedido_id = MainModel::decryption($pedido_id);
-            return DbModel::consultaSimples("SELECT p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
+            return DbModel::consultaSimples("SELECT p.id, p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
                                                          p.forma_pagamento, p.justificativa, p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome 
                                                   FROM pedidos AS p
                                                   INNER JOIN pedido_status AS s ON s.id = p.status_pedido_id 
@@ -907,7 +907,6 @@ class FormacaoController extends FormacaoModel
     {
         unset($post['_method']);
         $post['origem_id'] = MainModel::decryption($post['origem_id']);
-
         $consultaLocais = DbModel::consultaSimples("SELECT * FROM formacao_locais WHERE form_pre_pedido_id = " . $post['origem_id'])->rowCount();
         if ($consultaLocais > 0) :
             DbModel::deleteEspecial('formacao_locais', 'form_pre_pedido_id', $post['origem_id']);
@@ -925,7 +924,6 @@ class FormacaoController extends FormacaoModel
 
         unset($post['local_id']);
         $dados = MainModel::limpaPost($post);
-        var_dump($dados);
 
         $insert = DbModel::insert('pedidos', $dados);
         if ($insert->rowCount() >= 1) {
@@ -1274,6 +1272,8 @@ class FormacaoController extends FormacaoModel
         $insert = DbModel::insert('formacao_contratacoes', $dados);
         if ($insert->rowCount() >= 1) {
             $contratacao_id = DbModel::connection()->lastInsertId();
+            $protocolo = geraProtocoloEFE($contratacao_id) . '-F';
+            DbModel::update("formacao_contratacoes", $protocolo, $contratacao_id);
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Dados de contratação Cadastrados',
@@ -1357,7 +1357,7 @@ class FormacaoController extends FormacaoModel
 
     public function recuperaEnderecoPf($idPf){
         $idPf = MainModel::decryption($idPf);
-       
+
         $testaEnderecos = DbModel::consultaSimples("SELECT * FROM pf_enderecos WHERE pessoa_fisica_id = $idPf");
 
         if ($testaEnderecos->rowCount() > 0) {
