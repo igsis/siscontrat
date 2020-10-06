@@ -61,16 +61,39 @@
                 <p>Vigência</p>
             </a>
         </li>
+    </ul>
+</li>
+<li class="nav-item has-treeview">
+    <a href="#" class="nav-link active">
+        <i class="far fa-circle nav-icon"></i>
+        <p>
+            Gerenciar CAPAC
+            <i class="right fas fa-angle-left"></i>
+        </p>
+    </a>
+    <ul class="nav nav-treeview">
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="far fa-dot-circle nav-icon"></i>
-                <p>Habilitar / Desabilitar CAPAC</p>
+                <p>Cadastrar abertura</p>
             </a>
         </li>
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="far fa-dot-circle nav-icon"></i>
-                <p>Inscritos no CAPAC</p>
+                <p>Lista de documentos</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="far fa-dot-circle nav-icon"></i>
+                <p>Listar inscritos</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="far fa-dot-circle nav-icon"></i>
+                <p>Exportar inscritos</p>
             </a>
         </li>
     </ul>
