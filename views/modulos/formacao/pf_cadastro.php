@@ -246,7 +246,7 @@ if ($type == 1){
                                 <button type="button" class="btn btn-default pull-left">Voltar</button>
                             </a>
 
-                            <button type="submit" class="btn btn-info float-right">Gravar</button>
+                            <button type="submit" class="btn btn-primary float-right">Gravar</button>
                         </div>
                         
                         <!-- /.card-footer -->
