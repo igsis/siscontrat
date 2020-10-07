@@ -18,23 +18,14 @@ $nome_arquivo = "pedidos_formacao_" . $ano . ".xls";
 // Podemos renomear o nome das planilha atual, lembrando que um único arquivo pode ter várias planilhas
 $objPHPExcel->getProperties()->setCreator("Sistema SisContrat");
 $objPHPExcel->getProperties()->setLastModifiedBy("Sistema SisContrat");
-$objPHPExcel->getProperties()->setTitle("Relatório de Inscritos Aprovados");
-$objPHPExcel->getProperties()->setSubject("Relatório de Inscritos Aprovados");
+$objPHPExcel->getProperties()->setTitle("Relatório de Pedidos");
+$objPHPExcel->getProperties()->setSubject("Relatório de Pedidos");
 $objPHPExcel->getProperties()->setDescription("Gerado automaticamente a partir do Sistema SisContrat");
 $objPHPExcel->getProperties()->setKeywords("office 2007 openxml php");
-$objPHPExcel->getProperties()->setCategory("Fomentos");
+$objPHPExcel->getProperties()->setCategory("Formação");
 
-$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:H1')
-    ->setCellValue("A1","Lista de Inscristos Edital ");
-
-$objPHPExcel->setActiveSheetIndex(0)
-    ->setCellValue("A1")
-    ->setCellValue("B1")
-    ->setCellValue("C1")
-    ->setCellValue("D1")
-    ->setCellValue("E1", "PEDIDO DE CONTRATAÇÃO")
-    ->setCellValue("F1")
-    ->setCellValue("G1");
+$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:I1')
+    ->setCellValue("A1","Lista de Pedidos da Formacação");
 
 //Colorir o header
 $objPHPExcel->getActiveSheet()->getStyle("A1:I1")->applyFromArray
@@ -49,11 +40,21 @@ $objPHPExcel->getActiveSheet()->getStyle("A1:I1")->applyFromArray
     )
 );
 
+$objPHPExcel->setActiveSheetIndex(0)
+    ->setCellValue("A1")
+    ->setCellValue("B1")
+    ->setCellValue("C1")
+    ->setCellValue("D1")
+    ->setCellValue("E1", "PEDIDOS DE CONTRATAÇÃO")
+    ->setCellValue("F1")
+    ->setCellValue("G1")
+    ->setCellValue("I1");
+
 //ajustando tamanho do cabeçalho e centralizando o texto
-$objPHPExcel->getActiveSheet()->getStyle('A' . '1' . ':G' . '1')->getFont()->setBold(true);
-$objPHPExcel->getActiveSheet()->getStyle('A' . '1' . ':G' . '1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A' . '1' . ':I' . '1')->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle('A' . '1' . ':I' . '1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
-$objPHPExcel->getActiveSheet()->getStyle('A' . '1' . ':G' . '1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A' . '1' . ':I' . '1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 //criar colunas
 $objPHPExcel->setActiveSheetIndex(0)
@@ -68,7 +69,7 @@ $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue("I2", "Status do Pedido");
 
 // Definimos o estilo da fonte das colunas
-$objPHPExcel->getActiveSheet()->getStyle('A2:G2')->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle('A2:I2')->getFont()->setBold(true);
 
 //define o tamanho de cada célula de cada coluna
 $objPHPExcel->getActiveSheet()->getStyle('A' . '2' . ':I' . '2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -126,8 +127,8 @@ for ($col = 'A'; $col !== 'I'; $col++) {
 }
 
 //Consertando a coluna referente ao telefone
-$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(125);
+$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(50);
 
 //Consertando a coluna referente ao status
 $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(false);

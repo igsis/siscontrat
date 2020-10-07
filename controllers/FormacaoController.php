@@ -795,7 +795,13 @@ class FormacaoController extends FormacaoModel
 
     public function listaPedidos()
     {
-        return parent::getPedidos();
+        return DbModel::consultaSimples("SELECT p.id, p.origem_id,fc.protocolo, fc.ano, p.numero_processo,fc.num_processo_pagto, pf.nome, v.verba, fs.status, fc.form_status_id 
+            FROM pedidos p 
+            INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id 
+            INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
+            INNER JOIN verbas v on p.verba_id = v.id 
+            INNER JOIN formacao_status fs on fc.form_status_id = fs.id
+            WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2")->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function retornaLocaisFormacao($contratacao_id, $obj = NULL)
@@ -819,7 +825,7 @@ class FormacaoController extends FormacaoModel
                                                       INNER JOIN formacao_cargos AS c ON fc.form_cargo_id = c.id
                                                       INNER JOIN linguagens AS l ON fc.linguagem_id = l.id
                                                       INNER JOIN formacao_status AS s ON fc.form_status_id = s.id
-                                                      WHERE p.publicado = 1 AND fc.ano = $ano")->fetchAll(PDO::FETCH_OBJ);
+                                                      WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 AND fc.ano = $ano")->fetchAll(PDO::FETCH_OBJ);
         else:
             $pedido_id = MainModel::decryption($pedido_id);
             return DbModel::consultaSimples("SELECT p.id, p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
