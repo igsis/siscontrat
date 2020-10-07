@@ -41,8 +41,8 @@
                                     <th>Verba</th>
                                     <th>Edital</th>
                                     <th>Descrição</th>
-                                    <th width="15%">Editar</th>
-                                    <th width="15%">Apagar</th>
+                                    <th>Editar</th>
+                                    <th>Apagar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,8 +76,8 @@
                                     <th>Verba</th>
                                     <th>Edital</th>
                                     <th>Descrição</th>
-                                    <th width="15%">Editar</th>
-                                    <th width="15%">Apagar</th>
+                                    <th>Editar</th>
+                                    <th>Apagar</th>
                                 </tr>
                             </tfoot>
                         </table>

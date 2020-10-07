@@ -39,8 +39,8 @@
                             <thead>
                                 <tr>
                                     <th>Subprefeitura</th>
-                                    <th width="15%">Editar</th>
-                                    <th width="15%">Apagar</th>
+                                    <th>Editar</th>
+                                    <th>Apagar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,7 +48,7 @@
                                 <tr>
                                     <td><?=$subprefeitura->subprefeitura?></td>
                                     <td>
-                                        <a href="<?= SERVERURL . "formacao/subprefeitura_cadastro&id=" . $subprefeituraObj->encryption($subprefeitura->id) ?>"
+                                        <a href="<?= SERVERURL . "formacao/subprefeitura_cadastro&id=" . $subprefeituraObj->encryption($subprefeitura->id) ?>">
                                         <button type="submit" class="btn bg-gradient-primary btn-sm">
                                             <i class="fas fa-user-edit"></i> Editar
                                         </button>
@@ -70,8 +70,8 @@
                             <tfoot>
                                 <tr>
                                     <th>Subprefeitura</th>
-                                    <th width="15%">Editar</th>
-                                    <th width="15%">Apagar</th>
+                                    <th>Editar</th>
+                                    <th>Apagar</th>
                                 </tr>
                             </tfoot>
                         </table>
