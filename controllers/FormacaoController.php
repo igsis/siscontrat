@@ -20,9 +20,9 @@ class FormacaoController extends FormacaoModel
     {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $insert = DbModel::insert('formacao_cargos', $dados, false);
+        $insert = DbModel::insert('formacao_cargos', $dados);
         if ($insert->rowCount() >= 1) {
-            $cargo_id = DbModel::connection(true)->lastInsertId();
+            $cargo_id = DbModel::connection()->lastInsertId();
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Cargo Cadastrado!',
@@ -44,7 +44,7 @@ class FormacaoController extends FormacaoModel
     public function recuperaCargo($cargo_id)
     {
         $cargo_id = MainModel::decryption($cargo_id);
-        return DbModel::getInfo('formacao_cargos', $cargo_id, false)->fetchObject();
+        return DbModel::getInfo('formacao_cargos', $cargo_id)->fetchObject();
     }
 
     public function editaCargo($post)
@@ -53,7 +53,7 @@ class FormacaoController extends FormacaoModel
         unset($post['id']);
         unset ($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $update = DbModel::update('formacao_cargos', $dados, $cargo_id, false);
+        $update = DbModel::update('formacao_cargos', $dados, $cargo_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -76,7 +76,7 @@ class FormacaoController extends FormacaoModel
     public function apagaCargo($id)
     {
         $id = MainModel::decryption($id['id']);
-        $apaga = DbModel::apaga("formacao_cargos", $id, false);
+        $apaga = DbModel::apaga("formacao_cargos", $id);
         if ($apaga) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -106,9 +106,9 @@ class FormacaoController extends FormacaoModel
     {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $insert = DbModel::insert('coordenadorias', $dados, false);
+        $insert = DbModel::insert('coordenadorias', $dados);
         if ($insert->rowCount() >= 1) {
-            $coordenadoria_id = DbModel::connection(true)->lastInsertId();
+            $coordenadoria_id = DbModel::connection()->lastInsertId();
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Coordenadoria Cadastrada!',
@@ -130,7 +130,7 @@ class FormacaoController extends FormacaoModel
     public function recuperaCoordenadoria($coordenadoria_id)
     {
         $coordenadoria_id = MainModel::decryption($coordenadoria_id);
-        return DbModel::getInfo('coordenadorias', $coordenadoria_id, false)->fetchObject();
+        return DbModel::getInfo('coordenadorias', $coordenadoria_id)->fetchObject();
     }
 
 
@@ -140,7 +140,7 @@ class FormacaoController extends FormacaoModel
         unset($post['id']);
         unset ($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $update = DbModel::update('coordenadorias', $dados, $coordenadoria_id, false);
+        $update = DbModel::update('coordenadorias', $dados, $coordenadoria_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -163,7 +163,7 @@ class FormacaoController extends FormacaoModel
     public function apagaCoordenadoria($id)
     {
         $id = MainModel::decryption($id['id']);
-        $apaga = DbModel::apaga("coordenadorias", $id, false);
+        $apaga = DbModel::apaga("coordenadorias", $id);
         if ($apaga) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -197,16 +197,16 @@ class FormacaoController extends FormacaoModel
     public function recuperaPrograma($programa_id)
     {
         $programa_id = MainModel::decryption($programa_id);
-        return DbModel::getInfo('programas', $programa_id, false)->fetchObject();
+        return DbModel::getInfo('programas', $programa_id)->fetchObject();
     }
 
     public function inserePrograma($post)
     {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $insert = DbModel::insert('programas', $dados, false);
+        $insert = DbModel::insert('programas', $dados);
         if ($insert->rowCount() >= 1) {
-            $programa_id = DbModel::connection(true)->lastInsertId();
+            $programa_id = DbModel::connection()->lastInsertId();
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Programa Cadastrado!',
@@ -232,7 +232,7 @@ class FormacaoController extends FormacaoModel
         unset($post['id']);
         unset ($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $update = DbModel::update('programas', $dados, $programa_id, false);
+        $update = DbModel::update('programas', $dados, $programa_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -255,7 +255,7 @@ class FormacaoController extends FormacaoModel
     public function apagaPrograma($id)
     {
         $id = MainModel::decryption($id['id']);
-        $apaga = DbModel::apaga("programas", $id, false);
+        $apaga = DbModel::apaga("programas", $id);
         if ($apaga) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -283,16 +283,16 @@ class FormacaoController extends FormacaoModel
     public function recuperaLinguagem($linguagem_id)
     {
         $linguagem_id = MainModel::decryption($linguagem_id);
-        return DbModel::getInfo('linguagens', $linguagem_id, false)->fetchObject();
+        return DbModel::getInfo('linguagens', $linguagem_id)->fetchObject();
     }
 
     public function insereLinguagem($post)
     {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $insert = DbModel::insert('linguagens', $dados, false);
+        $insert = DbModel::insert('linguagens', $dados);
         if ($insert->rowCount() >= 1) {
-            $linguagem_id = DbModel::connection(true)->lastInsertId();
+            $linguagem_id = DbModel::connection()->lastInsertId();
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Linguagem Cadastrada!',
@@ -317,7 +317,7 @@ class FormacaoController extends FormacaoModel
         unset($post['id']);
         unset ($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $update = DbModel::update('linguagens', $dados, $linguagem_id, false);
+        $update = DbModel::update('linguagens', $dados, $linguagem_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -340,7 +340,7 @@ class FormacaoController extends FormacaoModel
     public function apagaLinguagem($id)
     {
         $id = MainModel::decryption($id['id']);
-        $apaga = DbModel::apaga("linguagens", $id, false);
+        $apaga = DbModel::apaga("linguagens", $id);
         if ($apaga) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -368,16 +368,16 @@ class FormacaoController extends FormacaoModel
     public function recuperaProjeto($projeto_id)
     {
         $projeto_id = MainModel::decryption($projeto_id);
-        return DbModel::getInfo('projetos', $projeto_id, false)->fetchObject();
+        return DbModel::getInfo('projetos', $projeto_id,)->fetchObject();
     }
 
     public function insereProjeto($post)
     {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $insert = DbModel::insert('projetos', $dados, false);
+        $insert = DbModel::insert('projetos', $dados);
         if ($insert->rowCount() >= 1) {
-            $projeto_id = DbModel::connection(true)->lastInsertId();
+            $projeto_id = DbModel::connection()->lastInsertId();
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Projeto Cadastrado!',
@@ -402,7 +402,7 @@ class FormacaoController extends FormacaoModel
         unset($post['id']);
         unset ($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $update = DbModel::update('projetos', $dados, $projeto_id, false);
+        $update = DbModel::update('projetos', $dados, $projeto_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -425,7 +425,7 @@ class FormacaoController extends FormacaoModel
     public function apagaProjeto($id)
     {
         $id = MainModel::decryption($id['id']);
-        $apaga = DbModel::apaga("projetos", $id, false);
+        $apaga = DbModel::apaga("projetos", $id);
         if ($apaga) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -453,16 +453,16 @@ class FormacaoController extends FormacaoModel
     public function recuperaSubprefeitura($subprefeitura_id)
     {
         $subprefeitura_id = MainModel::decryption($subprefeitura_id);
-        return DbModel::getInfo('subprefeituras', $subprefeitura_id, false)->fetchObject();
+        return DbModel::getInfo('subprefeituras', $subprefeitura_id)->fetchObject();
     }
 
     public function insereSubprefeitura($post)
     {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $insert = DbModel::insert('subprefeituras', $dados, false);
+        $insert = DbModel::insert('subprefeituras', $dados);
         if ($insert->rowCount() >= 1) {
-            $subprefeitura_id = DbModel::connection(true)->lastInsertId();
+            $subprefeitura_id = DbModel::connection()->lastInsertId();
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Subprefeitura Cadastrada!',
@@ -487,7 +487,7 @@ class FormacaoController extends FormacaoModel
         unset($post['id']);
         unset ($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $update = DbModel::update('subprefeituras', $dados, $subprefeitura_id, false);
+        $update = DbModel::update('subprefeituras', $dados, $subprefeitura_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -510,7 +510,7 @@ class FormacaoController extends FormacaoModel
     public function apagaSubprefeitura($id)
     {
         $id = MainModel::decryption($id['id']);
-        $apaga = DbModel::apaga("subprefeituras", $id, false);
+        $apaga = DbModel::apaga("subprefeituras", $id);
         if ($apaga) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -539,16 +539,16 @@ class FormacaoController extends FormacaoModel
     public function recuperaTerritorio($territorio_id)
     {
         $territorio_id = MainModel::decryption($territorio_id);
-        return DbModel::getInfo('territorios', $territorio_id, false)->fetchObject();
+        return DbModel::getInfo('territorios', $territorio_id)->fetchObject();
     }
 
     public function insereTerritorio($post)
     {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $insert = DbModel::insert('territorios', $dados, false);
+        $insert = DbModel::insert('territorios', $dados);
         if ($insert->rowCount() >= 1) {
-            $territorio_id = DbModel::connection(true)->lastInsertId();
+            $territorio_id = DbModel::connection()->lastInsertId();
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Território Cadastrado!',
@@ -573,7 +573,7 @@ class FormacaoController extends FormacaoModel
         unset($post['id']);
         unset ($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $update = DbModel::update('territorios', $dados, $territorio_id, false);
+        $update = DbModel::update('territorios', $dados, $territorio_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -596,7 +596,7 @@ class FormacaoController extends FormacaoModel
     public function apagaTerritorio($id)
     {
         $id = MainModel::decryption($id['id']);
-        $apaga = DbModel::apaga("territorios", $id, false);
+        $apaga = DbModel::apaga("territorios", $id);
         if ($apaga) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -630,7 +630,7 @@ class FormacaoController extends FormacaoModel
     public function recuperaVigencia($vigencia_id)
     {
         $vigencia_id = MainModel::decryption($vigencia_id);
-        return DbModel::getInfo('formacao_vigencias', $vigencia_id, false)->fetchObject();
+        return DbModel::getInfo('formacao_vigencias', $vigencia_id)->fetchObject();
     }
 
     public function insereVigencia($post)
@@ -642,9 +642,9 @@ class FormacaoController extends FormacaoModel
             'descricao' => $post['descricao']
         ];
         $dados = MainModel::limpaPost($arrayVigencia);
-        $insert = DbModel::insert('formacao_vigencias', $dados, false);
+        $insert = DbModel::insert('formacao_vigencias', $dados);
         if ($insert->rowCount() >= 1) {
-            $vigencia_id = DbModel::connection(true)->lastInsertId();
+            $vigencia_id = DbModel::connection()->lastInsertId();
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Vigência Cadastrada!',
@@ -773,7 +773,7 @@ class FormacaoController extends FormacaoModel
     public function apagaVigencia($id)
     {
         $id = MainModel::decryption($id['id']);
-        $apaga = DbModel::apaga("formacao_vigencias", $id, false);
+        $apaga = DbModel::apaga("formacao_vigencias", $id);
         if ($apaga) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -1296,7 +1296,7 @@ class FormacaoController extends FormacaoModel
     public function recuperaDadosContratacao($contratacao_id)
     {
         $contratacao_id = MainModel::decryption($contratacao_id);
-        return DbModel::getInfo('formacao_contratacoes', $contratacao_id, false)->fetchObject();
+        return DbModel::getInfo('formacao_contratacoes', $contratacao_id)->fetchObject();
     }
 
     public function editaDadosContratacao($post)
@@ -1305,7 +1305,7 @@ class FormacaoController extends FormacaoModel
         unset($post['id']);
         unset ($post['_method']);
         $dados = MainModel::limpaPost($post);
-        $update = DbModel::update('formacao_contratacoes', $dados, $contratacao_id, false);
+        $update = DbModel::update('formacao_contratacoes', $dados, $contratacao_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
