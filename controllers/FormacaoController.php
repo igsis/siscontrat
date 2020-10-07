@@ -1457,5 +1457,103 @@ class FormacaoController extends FormacaoModel
 
         return MainModel::sweetAlert($alerta);
     }
+
+    public function listaDocumentos()
+    {
+        return $this->listaPublicado("formacao_lista_documentos",null);
+    }
+
+    public function recuperaDocumento($id)
+    {
+        $id = $this->decryption($id);
+        return $this->getInfo("formacao_lista_documentos",$id)->fetch(PDO::FETCH_OBJ);
+    }
+
+    public function insereDocumento($post)
+    {
+        $dados = [];
+        unset($post['_method']);
+        foreach ($post as $campo => $valor) {
+            $dados[$campo] = MainModel::limparString($valor);
+            unset($post[$campo]);
+        }
+
+        $insere = DbModel::insert("formacao_lista_documentos",$dados,false);
+
+        if ($insere || DbModel::connection()->errorCode() == 0){
+            $documento_id = $this->encryption(DbModel::connection()->lastInsertId());
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Documento',
+                'texto' => 'Cadastro realizado com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/documento_cadastro&id=' . $documento_id
+            ];
+        } else{
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Erro!',
+                'texto' => 'Erro ao salvar!',
+                'tipo' => 'error',
+                'location' => SERVERURL . 'formacao/documento_cadastro'
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+    public function editaDocumento($post)
+    {
+        $id = MainModel::decryption($post['id']);
+        $dados = [];
+        unset($post['_method']);
+        unset($post['id']);
+        foreach ($post as $campo => $valor) {
+            $dados[$campo] = MainModel::limparString($valor);
+            unset($post[$campo]);
+        }
+
+        $edita = $this->update("formacao_lista_documentos",$dados, $id);
+
+        if ($edita || DbModel::connection()->errorCode() == 0){
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Documento',
+                'texto' => 'Alteração realizada com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/documento_cadastro&id=' . MainModel::encryption($id)
+            ];
+        } else{
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Erro!',
+                'texto' => 'Erro ao salvar!',
+                'tipo' => 'error',
+                'location' => SERVERURL . 'formacao/documento_cadastro' . MainModel::encryption($id)
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function apagaDocumento($post)
+    {
+        $id = MainModel::decryption($post['id']);
+        $apaga = DbModel::apaga("formacao_lista_documentos", $id);
+        if ($apaga || DbModel::connection()->errorCode() == 0){
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Documento Deletado!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/documento_lista'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao apagar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
 }
 
