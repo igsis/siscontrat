@@ -79,7 +79,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/documento_lista" class="nav-link">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Lista de documentos</p>
             </a>

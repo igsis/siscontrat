@@ -134,6 +134,16 @@ if (isset($_POST['_method'])) {
         case "removerArquivo":
             echo $insForm->excluirArquivo($_POST);
             break;
+        case "cadastrarDocumento":
+            echo $insForm->insereDocumento($_POST);
+            break;
+        case "editarDocumento":
+            echo $insForm->editaDocumento($_POST);
+            break;
+        case "apagarDocumento":
+            echo $insForm->apagaDocumento($_POST);
+            break;
+
     }
     if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
         echo $insForm->listaDocumento($_POST['search'], $_POST['where']);
