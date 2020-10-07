@@ -178,7 +178,7 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                         </div>
                     <?php endif; ?>
 
-                    <form class="form-horizontal formulario-ajax" method="POST"
+                    <form class="form-horizontal formulario-ajax" method="POST" id="formulario"
                           action="<?= SERVERURL ?>ajax/formacaoAjax.php" role="form"
                           data-form="<?= ($pedido_id) ? "update" : "save" ?>">
                         <input type="hidden" name="_method"
@@ -263,13 +263,18 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                                 endif; ?>
                                 <div class="form-group col-md-4">
                                     <label for="local_id[]">Local #<?= $i + 1 ?>: <?= $i == 0 ? " *" : "" ?></label>
-                                    <select name="local_id[]" class="form-control locais" onchange="removeLocal()"
-                                            id="local<?= $i ?>">
+                                    <select name="local_id[]" class="form-control" onchange="bloqueandoLocais()">
                                         <option value="0">Selecione uma opção...</option>
                                         <?php $pedidoObj->geraOpcao('locais', $local) ?>
                                     </select>
                                 </div>
                             <?php endfor; ?>
+                        </div>
+
+                        <div class="row" id="msgEsconde" style="display: none;">
+                            <div class="col-md">
+                                <span style="color: red;"><b>Selecione locais diferentes!</b></span>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -309,7 +314,7 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
                         <?php endif; ?>
 
                         <div class="col-md">
-                            <button type="submit" class="btn btn-info float-right">
+                            <button type="submit" class="btn btn-info float-right" id="finaliza">
                                 <?= $pedido_id == NULL ? "Cadastrar" : "Editar" ?>
                             </button>
                         </div>
@@ -342,6 +347,31 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
         $('#pf').attr('value', $('#pf_id').val())
     }
 
+    function bloqueandoLocais() {
+        let local = document.getElementsByName("local_id[]");
+        var isMsg = $('#msgEsconde');
+        isMsg.hide();
+
+        let count = false;
+
+        if (local[0].value == local[1].value)
+            count = true;
+
+        if (local[0].value == local[2].value)
+            count = true;
+
+        if (local[1].value == local[2].value)
+            count = true;
+
+        if (count == true) {
+            isMsg.show();
+            $('#finaliza').attr('disabled', true);
+        } else {
+            isMsg.hide();
+            $('#finaliza').attr('disabled', false);
+        }
+    }
+
     /*function removeLocal() {
         $('.locais option:selected').each(function () {
             console.log($('#local0').val());
@@ -356,5 +386,6 @@ $contratacao = $pedidoObj->recuperaContratacao($contratacao_id);
         $('#numero_parcelas').mask('00', {reverse: true});
         getCamposParcela();
         popularPf();
+        bloqueandoLocais();
     });
 </script>

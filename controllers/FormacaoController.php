@@ -1272,8 +1272,8 @@ class FormacaoController extends FormacaoModel
         $insert = DbModel::insert('formacao_contratacoes', $dados);
         if ($insert->rowCount() >= 1) {
             $contratacao_id = DbModel::connection()->lastInsertId();
-            $protocolo = geraProtocoloEFE($contratacao_id) . '-F';
-            DbModel::update("formacao_contratacoes", $protocolo, $contratacao_id);
+            $protocolo = MainModel::geraProtocoloEFE($contratacao_id) . '-F';
+            DbModel::consultaSimples("UPDATE formacao_contratacoes SET protocolo = '$protocolo' WHERE id = $contratacao_id");
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Dados de contratação Cadastrados',
