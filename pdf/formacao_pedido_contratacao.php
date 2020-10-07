@@ -11,6 +11,7 @@ $pedido_id = $_GET['id'];
 
 $pedido = $formObj->recuperaPedido($pedido_id);
 
+
 $periodo = $formObj->retornaPeriodoFormacao($pedido_id);
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $contratacao = $formObj->recuperaContratacao($pedido_id);
@@ -60,7 +61,7 @@ $ano = date('Y');
         "<p><strong>Sr(a) </strong></p>" .
         "<p>Solicitamos a contratação a seguir:</p>" .
         "<p>&nbsp;</p>" .
-        "<p><strong>Protocolo nº:</strong> " . $contratacao->protocolo . "</p>" .
+        "<p><strong>Pedido de Contratação nº:</strong> " . $ano . '-' . $pedido->id . "</p>" .
         "<p><strong>Processo SEI nº:</strong> " . MainModel::checaCampo($pedido->numero_processo) . "</p>" .
         "<p><strong>Setor  solicitante:</strong> Supervisão de Formação Cultural</p>" .
         "<p>&nbsp;</p>" .

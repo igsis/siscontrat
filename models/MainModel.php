@@ -737,6 +737,14 @@ class MainModel extends DbModel
         return date("Ymd") . "." . $id . "-" . $edit;
     }
 
+    //gerar protocolo para evento, formação e emia
+    function geraProtocoloEFE($id)
+    {
+        $date = date('Ymd');
+        $preencheZeros = str_pad($id, 5, '0', STR_PAD_LEFT);
+        return $date . '.' . $preencheZeros;
+    }
+
     public function formataValidacaoErros($erros)
     {
         $erro = MainModel::in_array_r(true, $erros, true);

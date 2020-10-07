@@ -230,6 +230,21 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
 $pdf->MultiCell(0, 4, utf8_decode($penalidades), 0, 'J', 0);
 
+$pdf->Ln(5);
+
+$pdf->SetX($x);
+$pdf->SetFont('Arial','B', 10);
+$pdf->Cell(22,4,'Regime emergencial:',0,1,'L');
+
+$pdf->SetX($x);
+$pdf->SetFont('Arial','', 10);
+$pdf->MultiCell(180,4,utf8_decode("
+Durante o período em que os equipamentos Culturais e da Educação estiverem fechados, é do intuito da SMC tornar pública e acessível a formação a partir de suas diversas linguagens artísticas, pesquisas, mantendo como destinatário o publico-alvo do Programa.
+Será da atribuição dos Artistas Educadores/Orientadores:
+- A criação de materiais artístico pedagógicos em diversos suportes: vídeo, imagem, som e texto; que podem ser conteúdos ao vivo ou gravados, na forma de aulas, vivências, ações artísticas alinhados aos princípios do Programa.
+- A criação e apresentação prévia da programação, cronograma e periodicidade de publicação dos materiais.
+- A avaliação do alcance e impacto das ações e organização de novas estratégias de publicação devidamente alinhadas com a equipe técnica e coordenação do Programa."));
+
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(180, $l, utf8_decode("Data: _________ / _________ / " . $ano) . ".", 0, 0, 'L');
