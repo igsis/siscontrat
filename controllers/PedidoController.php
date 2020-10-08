@@ -198,36 +198,10 @@ class PedidoController extends PedidoModel
         return $proponente;
     }
 
-    public function getParcelasPedido($pedido_id, $unica = 0, $parcela_id = NULL)
+    public function getParcelasPedido($pedido_id)
     {
         $pedido_id = MainModel::decryption($pedido_id);
-        if($unica == 1 && $parcela_id != NULL):
-            return DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1 AND id = $parcela_id")->fetchObject();
-        else:
-            return DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
-        endif;
-    }
-
-    public function getParcelasPedidoComplementos($pedido_id, $unica = 0, $parcela_id = NULL){
-        $pedido_id = MainModel::decryption($pedido_id);
-        if($unica == 1 && $parcela_id != NULL):
-            return DbModel::consultaSimples("SELECT * FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND p.id = $parcela_id AND pc.publicado = 1")->fetchObject();
-        else:
-            return DbModel::consultaSimples("SELECT * FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND pc.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
-        endif;
-    }
-
-    public function retornaCargaHoraria($pedido_id, $decryption = 0){
-        if($decryption == 1){
-            $pedido_id = MainModel::decryption($pedido_id);
-        }
-
-        $carga = 0;
-        $consultaParcelas = DbModel::consultaSimples("SELECT pc.carga_horaria FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND pc.publicado = 1")->fetchAll();
-        foreach ($consultaParcelas as $consultaParcela) {
-            $carga = $carga + $consultaParcela['carga_horaria'];
-        }
-        return $carga;
+        return DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function retornaPenalidades($penal_id){

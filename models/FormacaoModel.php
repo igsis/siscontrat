@@ -56,37 +56,6 @@ class FormacaoModel extends MainModel
         return DbModel::consultaSimples("SELECT * FROM formacao_vigencias where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
     }
 
-    //retorna uma string ou um objeto com todos os locais que o pedido possui
-    protected function getLocaisFormacao($contratacao_id, $obj = NULL)
-    {
-        $locais = "";
-        $locaisArrays = DbModel::consultaSimples("SELECT l.id, l.local FROM formacao_locais AS fl INNER JOIN locais AS l ON fl.local_id = l.id WHERE form_pre_pedido_id = $contratacao_id")->fetchAll();
-        if ($obj != NULL):
-            return $locaisArrays;
-        else:
-            foreach ($locaisArrays as $locaisArray) {
-                $locais = $locais . $locaisArray['local'] . '; ';
-            }
-            return substr($locais, 0, -2);
-        endif;
-    }
-
-    protected function getValorTotalVigencia($vigencia_id)
-    {
-        $valor = 0;
-        $consultaValores = DbModel::consultaSimples("SELECT valor FROM formacao_parcelas WHERE formacao_vigencia_id = '$vigencia_id' AND publicado = 1 AND valor != 0.00");
-        $count = $consultaValores->rowCount();
-        if ($count > 0) {
-            $arrayValores = $consultaValores->fetchAll(PDO::FETCH_OBJ);
-            for ($i = 0; $i < $count; $i++):
-                $valor = $valor + $arrayValores[$i]->valor;
-            endfor;
-        }
-        return $valor;
-    }
-
-
-
     protected function getVerbas()
     {
         return DbModel::consultaSimples("SELECT * FROM verbas where publicado = 1")->fetchAll(PDO::FETCH_OBJ);
