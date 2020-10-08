@@ -368,7 +368,7 @@ class FormacaoController extends FormacaoModel
     public function recuperaProjeto($projeto_id)
     {
         $projeto_id = MainModel::decryption($projeto_id);
-        return DbModel::getInfo('projetos', $projeto_id,)->fetchObject();
+        return DbModel::getInfo('projetos', $projeto_id)->fetchObject();
     }
 
     public function insereProjeto($post)
