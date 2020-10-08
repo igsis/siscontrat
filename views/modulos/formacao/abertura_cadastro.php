@@ -50,17 +50,15 @@ $abertura = $formacaoObj->recuperaAbertura($id);
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-4">
-                                    <label for="data_abertura">Ano de referência: *</label>
+                                    <label for="data_abertura">Ano de referência: </label>
                                     <input type="number" class="form-control" id="ano_referencia" name="ano_referencia" maxlength="4" min="2020"                                 name="data_abertura"
-                                           value="<?= isset($abertura->ano_referencia) ? $abertura->ano_referencia : "" ?>"
-                                           required>
+                                           value="<?= isset($abertura->ano_referencia) ? $abertura->ano_referencia : "" ?>">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="data_abertura">Data de abertura: *</label>
+                                    <label for="data_abertura">Data de abertura: </label>
                                     <input type="text" class="form-control date-picker" id="data_abertura"
                                            name="data_abertura"
-                                           value="<?= isset($abertura->data_abertura) ? $formacaoObj->dataHora($abertura->data_abertura) : "" ?>"
-                                           required>
+                                           value="<?= isset($abertura->data_abertura) ? $formacaoObj->dataHora($abertura->data_abertura) : "" ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="data_encerramento">Data de encerramento: </label>
