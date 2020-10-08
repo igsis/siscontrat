@@ -52,12 +52,7 @@ $listaVerba = $verbaObj->listaVerbas();
                                             <label for="verba">Verba: *</label>
                                             <select name="verba_id" id="verba_id" required class="form-control select2bs4">
                                                 <option value="">Selecione uma opção</option>
-                                                <?php foreach ($listaVerba as $linha) : ?>
-                                                    <option value="<?= $linha->id ?>" <?= isset($programa->verba_id) && ($linha->id == $programa->verba_id) ? "selected" : "" ?>>
-                                                        <?php echo $linha->verba ?>
-                                                    </option>
-
-                                                <?php endforeach ?>
+                                                <?php $programaObj->geraOpcao("verbas", $programa->verba_id ?? "") ?>
                                             </select>
                                         </div>
                                     </div>
