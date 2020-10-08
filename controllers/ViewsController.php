@@ -3,7 +3,8 @@ require_once "./models/ViewsModel.php";
 
 class ViewsController extends ViewsModel
 {
-    private function recuperaViewAtiva(){
+    private function recuperaViewAtiva()
+    {
         $url = explode("/", $_GET['views']);
 
         $rota = [
@@ -14,23 +15,28 @@ class ViewsController extends ViewsModel
         return $rota;
     }
 
-    public function exibirTemplate() {
+    public function exibirTemplate()
+    {
         include "views/template/master.php";
     }
 
-    public function navbar() {
+    public function navbar()
+    {
         include "views/template/navbar.php";
     }
 
-    public function sidebar() {
+    public function sidebar()
+    {
         return "views/template/sidebar.php";
     }
 
-    public function footer() {
+    public function footer()
+    {
         include "views/template/footer.php";
     }
 
-    public function exibirViewController() {
+    public function exibirViewController()
+    {
         if (isset($_GET['views'])) {
             $url = explode("/", $_GET['views']);
 
@@ -46,7 +52,8 @@ class ViewsController extends ViewsModel
         return $resposta;
     }
 
-    public function exibirMenuController() {
+    public function exibirMenuController()
+    {
         if (isset($_GET['views'])) {
             $url = explode("/", $_GET['views']);
 
@@ -62,7 +69,8 @@ class ViewsController extends ViewsModel
         return $resposta;
     }
 
-    public function retornaMenuAtivo() {
+    public function retornaMenuAtivo()
+    {
         $rota = self::recuperaViewAtiva();
         if ($rota['view'] == "") {
             $ativo = "inicio";
@@ -72,23 +80,35 @@ class ViewsController extends ViewsModel
 
         $script = "<script type='application/javascript'>
                         $(document).ready(function () {
+                        let alvo = $('#$ativo');
+                        let elemPai = alvo.parent().parent().parent();
+                        
                         $('.nav-link').removeClass('active');
-                        $('#$ativo').addClass('active');
+                        
+                        if (elemPai.children('a .nav-link')) {
+                            elemPai.addClass('menu-open');
+                            elemPai.children('a').addClass('active');    
+                        }
+                        
+                        alvo.addClass('active');
                     });
                     </script>";
 
         return $script;
     }
 
-    public function listaModulos($perfil_id){
+    public function listaModulos($perfil_id)
+    {
         return parent::recuperaModulos($perfil_id);
     }
 
-    public function getCor($cor_id){
+    public function getCor($cor_id)
+    {
         return (new DbModel)->consultaSimples("SELECT `text-color` FROM cores WHERE id = '$cor_id'")->fetch(PDO::FETCH_ASSOC)['text-color'];
     }
 
-    public function listaAvisos(){
+    public function listaAvisos()
+    {
         return (new DbModel)->consultaSimples("SELECT * FROM avisos WHERE publicado = '1'")->fetchAll(PDO::FETCH_OBJ);
     }
 }

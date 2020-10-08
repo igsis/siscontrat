@@ -5,7 +5,7 @@
     </a>
 </li>
 <li class="nav-item has-treeview">
-    <a href="#" class="nav-link active">
+    <a href="#" class="nav-link">
         <i class="nav-icon fas fa-tachometer-alt"></i>
         <p>
             Acesso Administrativo
@@ -20,43 +20,43 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= SERVERURL ?>formacao/coordenadoria_lista" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/coordenadoria_lista" class="nav-link" id="coordenadoria_lista">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Coordenadoria</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= SERVERURL ?>formacao/programa_lista" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/programa_lista" class="nav-link" id="programa_lista">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Programa</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= SERVERURL ?>formacao/linguagem_lista" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/linguagem_lista" class="nav-link" id="linguagem_lista">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Linguagem</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= SERVERURL ?>formacao/projeto_lista" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/projeto_lista" class="nav-link" id="projeto_lista">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Projeto</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= SERVERURL ?>formacao/subprefeitura_lista" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/subprefeitura_lista" class="nav-link" id="subprefeitura_lista">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Subprefeitura</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= SERVERURL ?>formacao/territorio_lista" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/territorio_lista" class="nav-link" id="territorio_lista">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Território</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= SERVERURL ?>formacao/vigencia_lista" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/vigencia_lista" class="nav-link" id="vigencia_lista">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Vigência</p>
             </a>
@@ -64,7 +64,7 @@
     </ul>
 </li>
 <li class="nav-item has-treeview">
-    <a href="#" class="nav-link active">
+    <a href="#" class="nav-link">
         <i class="far fa-circle nav-icon"></i>
         <p>
             Gerenciar CAPAC
@@ -85,13 +85,13 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link" id="listar_inscritos">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Listar inscritos</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link" id="exportar_inscritos">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Exportar inscritos</p>
             </a>
@@ -117,13 +117,13 @@
     </a>
 </li>
 <li class="nav-item">
-    <a href="<?= SERVERURL ?>formacao/pagamento_busca" class="nav-link">
+    <a href="<?= SERVERURL ?>formacao/pagamento_busca" class="nav-link" id="pagamento_busca">
         <i class="far fa-circle nav-icon"></i>
         <p>Pagamento</p>
     </a>
 </li>
 <li class="nav-item">
-    <a href="<?= SERVERURL ?>formacao/conclusao_busca" class="nav-link">
+    <a href="<?= SERVERURL ?>formacao/conclusao_busca" class="nav-link" id="conclusao_busca">
         <i class="far fa-circle nav-icon"></i>
         <p>Concluir Processo</p>
     </a>
