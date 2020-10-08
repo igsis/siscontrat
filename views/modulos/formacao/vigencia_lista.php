@@ -36,44 +36,43 @@ $vigencias = $vigenciaObj->listaVigencias();
                     <div class="card-body">
                         <table id="tabela" class="table table-bordered table-striped">
                             <thead>
-                            <tr>
-                                <th>Ano</th>
-                                <th>Descrição</th>
-                                <th>Editar</th>
-                                <th>Apagar</th>
-                            </tr>
+                                <tr>
+                                    <th>Ano</th>
+                                    <th>Descrição</th>
+                                    <th>Quantidade de Parcelas</th>
+                                    <th>Ações</th>
+                                </tr>
                             </thead>
                             <tbody>
                             <?php foreach ($vigencias as $vigencia): ?>
                                 <tr>
                                     <td><?=$vigencia->ano?></td>
                                     <td><?=$vigencia->descricao?></td>
-                                    <td>
-                                        <a href="<?= SERVERURL . "formacao/vigencia_cadastro&id=" . $vigenciaObj->encryption($vigencia->id) ?>"  class="btn bg-gradient-primary btn-sm">
-                                            <i class="fas fa-user-edit"></i> Editar
-                                        </a>
-                                    </td>
-                                    <td>
+                                    <td><?=$vigencia->numero_parcelas?> parcela(s)</td>
+                                    <td style='width: 20%'>
                                         <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
+                                            <a href="<?= SERVERURL . "formacao/vigencia_cadastro&id=" . $vigenciaObj->encryption($vigencia->id) ?>" class="btn bg-gradient-primary btn-sm">
+                                                <i class="fas fa-user-edit"></i> Editar
+                                            </a>
+
                                             <input type="hidden" name="_method" value="apagarVigencia">
                                             <input type="hidden" name="id" value="<?= $vigenciaObj->encryption($vigencia->id)?>">
                                             <button type="submit" class="btn bg-gradient-danger btn-sm">
-                                                <i class="fas fa-trash"></i> Apagar
+                                                <i class="fas fa-trash"></i> Aeoo2
                                             </button>
                                             <div class="resposta-ajax"></div>
                                         </form>
                                     </td>
-
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
                             <tfoot>
-                            <tr>
-                                <th>Ano</th>
-                                <th>Descrição</th>
-                                <th>Editar</th>
-                                <th>Apagar</th>
-                            </tr>
+                                <tr>
+                                    <th>Ano</th>
+                                    <th>Descrição</th>
+                                    <th>Quantidade de Parcelas</th>
+                                    <th>Ações</th>
+                                </tr>
                             </tfoot>
                         </table>
                     </div>
