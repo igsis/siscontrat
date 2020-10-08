@@ -143,6 +143,15 @@ if (isset($_POST['_method'])) {
         case "apagarDocumento":
             echo $insForm->apagaDocumento($_POST);
             break;
+        case "cadastrarAbertura":
+            echo $insForm->insereAbertura($_POST);
+            break;
+        case "editarAbertura":
+            echo $insForm->editaAbertura($_POST);
+            break;
+        case "apagarAbertura":
+            echo $insForm->apagaAbertura($_POST);
+            break;
 
     }
     if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {

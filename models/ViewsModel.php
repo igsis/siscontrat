@@ -100,7 +100,9 @@ class ViewsModel
             'pesquisa_pf',
             'detalhes_contratacao',
             'pf_demais_anexos',
-            'dados_contratacao_cadastro'
+            'dados_contratacao_cadastro',
+            'abertura_lista',
+            'abertura_cadastro'
             
         ];
         if (self::verificaModulo($modulo)) {

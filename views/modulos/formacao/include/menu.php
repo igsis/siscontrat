@@ -73,13 +73,13 @@
     </a>
     <ul class="nav nav-treeview">
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/abertura_lista" class="nav-link" id="abertura_lista">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Cadastrar abertura</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="<?= SERVERURL ?>formacao/documento_lista" class="nav-link">
+            <a href="<?= SERVERURL ?>formacao/documento_lista" class="nav-link" id="documento_lista">
                 <i class="far fa-dot-circle nav-icon"></i>
                 <p>Lista de documentos</p>
             </a>

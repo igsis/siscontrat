@@ -1479,10 +1479,7 @@ class FormacaoController extends FormacaoModel
     {
         $dados = [];
         unset($post['_method']);
-        foreach ($post as $campo => $valor) {
-            $dados[$campo] = MainModel::limparString($valor);
-            unset($post[$campo]);
-        }
+        $dados = MainModel::limpaPost($post);
 
         $insere = DbModel::insert("formacao_lista_documentos",$dados,false);
 
@@ -1512,10 +1509,8 @@ class FormacaoController extends FormacaoModel
         $dados = [];
         unset($post['_method']);
         unset($post['id']);
-        foreach ($post as $campo => $valor) {
-            $dados[$campo] = MainModel::limparString($valor);
-            unset($post[$campo]);
-        }
+
+        $dados = MainModel::limpaPost($post);
 
         $edita = $this->update("formacao_lista_documentos",$dados, $id);
 
@@ -1561,5 +1556,106 @@ class FormacaoController extends FormacaoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
+    public function listaAbertura()
+    {
+        $abertura = DbModel::listaPublicado("form_aberturas", null,true);
+        return $abertura;
+
+    }
+    public function recuperaAbertura($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::getInfo('form_aberturas', $id, true)->fetchObject();
+    }
+
+    public function insereAbertura($post)
+    {
+        $dados = [];
+        unset($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+        $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
+        $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
+
+        $insere = DbModel::insert("form_aberturas", $dados,true);
+
+        if ($insere || DbModel::connection()->errorCode() == 0){
+            $abertura_id = $this->encryption(DbModel::connection()->lastInsertId());
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Abertura',
+                'texto' => 'Cadastro realizado com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/abertura_cadastro&id=' . $abertura_id
+            ];
+        } else{
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Erro!',
+                'texto' => 'Erro ao salvar!',
+                'tipo' => 'error',
+                'location' => SERVERURL . 'formacao/abertura_cadastro'
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+    public function editaAbertura($post)
+    {
+        $id = MainModel::decryption($post['id']);
+        $dados = [];
+        unset($post['_method']);
+        unset($post['id']);
+
+        $dados = MainModel::limpaPost($post);
+        $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
+        $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
+
+        $edita = $this->update("form_aberturas",$dados, $id, true);
+
+        if ($edita || DbModel::connection()->errorCode() == 0){
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Abertura',
+                'texto' => 'Alteração realizada com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/abertura_cadastro&id=' . MainModel::encryption($id)
+            ];
+        } else{
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Erro!',
+                'texto' => 'Erro ao salvar!',
+                'tipo' => 'error',
+                'location' => SERVERURL . 'formacao/abertura_cadastro' . MainModel::encryption($id)
+            ];
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function apagaAbertura($post)
+    {
+        $id = MainModel::decryption($post['id']);
+        $apaga = DbModel::apaga("form_aberturas", $id, true);
+        if ($apaga || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Abertura Deletada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/abertura_lista'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao apagar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
 }
+
 
