@@ -1166,6 +1166,36 @@ class FormacaoController extends FormacaoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+    
+    public function editarNotaEmpenho($post)
+    {
+        unset($post['_method']);
+        $pedido_id = MainModel::decryption($post['pedido_id']);
+        $post['pedido_id'] = $pedido_id;
+        $dados = MainModel::limpaPost($post);
+
+        $update = DbModel::updateEspecial('pagamentos', $dados, "pedido_id", $pedido_id);
+
+        if ($update || DbModel::connection()->errorCode() == 0){
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Nota de Empenho',
+                'texto' => 'Alteração realizada com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/empenho_cadastro&id=' . MainModel::encryption($pedido_id)
+            ];
+        } else{
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Erro!',
+                'texto' => 'Erro ao salvar!',
+                'tipo' => 'error',
+                'location' => SERVERURL . 'formacao/empenho_cadastro&id=' . MainModel::encryption($pedido_id)
+            ];
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
 
     public function pesquisas($post, $where)
     {

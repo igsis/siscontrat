@@ -31,15 +31,15 @@ $link_empenho = SERVERURL . "pdf/formacao_ne.php";
 
                 <div class="card-body">
                     <form action="<?= SERVERURL ?>ajax/formacaoAjax.php" class="form-horizontal formulario-ajax"
-                          method="POST" data-form="save">
-                        <input type="hidden" name="_method" value="cadastrarNotaEmpenho">
+                          method="POST" data-form="save" id="formulario">
+                        <input type="hidden" name="_method" value="<?= ($nota) ? "editarNotaEmpenho" : "cadastrarNotaEmpenho" ?>">
                         <input type="hidden" name="pedido_id" value="<?= $pedido_id ?? NULL ?>">
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label for="nota_empenho">Número da Nota de Empenho:</label>
-                                <input type="text" name="nota_empenho" maxlength="6"
+                                <input type="text" name="nota_empenho" id="nota_empenho" maxlength="6"
                                        value="<?= isset($nota->nota_empenho) ? $nota->nota_empenho : "" ?>"
-                                       class="form-control" <?= $readonly ?>>
+                                       class="form-control" <?= $readonly ?> required>
                             </div>
 
                             <div class="form-group col-md-4">
@@ -47,7 +47,7 @@ $link_empenho = SERVERURL . "pdf/formacao_ne.php";
                                 <input type="date" name="emissao_nota_empenho" id="data_emissao"
                                        placeholder="DD/MM/AAAA" class="form-control"
                                        value="<?= isset($nota->emissao_nota_empenho) ? $nota->emissao_nota_empenho : "" ?>"
-                                       onchange="comparaData()" <?= $readonly ?>>
+                                       onchange="comparaData()" <?= $readonly ?> required>
                             </div>
 
                             <div class="form-group col-md-4">
@@ -55,7 +55,7 @@ $link_empenho = SERVERURL . "pdf/formacao_ne.php";
                                 <input type="date" name="entrega_nota_empenho" id="data_entrega"
                                        placeholder="DD/MM/AAAA" class="form-control"
                                        value="<?= isset($nota->entrega_nota_empenho) ? $nota->entrega_nota_empenho : "" ?>"
-                                       onchange="comparaData()" <?= $readonly ?>>
+                                       onchange="comparaData()" <?= $readonly ?> required>
                             </div>
                         </div>
                         <div class="row" id="msg">
@@ -63,6 +63,12 @@ $link_empenho = SERVERURL . "pdf/formacao_ne.php";
                                 <span class="float-right" style="color: red;"><b>Data de entrega precisa ser maior ou igual a de emissão!</b></span>
                             </div>
                         </div>
+                        <?php if (isset($nota->nota_empenho)): ?>
+                            <button type="button" class="btn btn-primary float-right" id="btnEditar" onclick="habilitarEdicao()">
+                                Editar nota de empenho
+                            </button>
+                        <?php endif; ?>
+
                         <div class="resposta-ajax"></div>
                 </div>
                 <input type="hidden" name="usuario_pagamento_id" value="<?= $_SESSION['usuario_id_s'] ?>">
@@ -73,7 +79,7 @@ $link_empenho = SERVERURL . "pdf/formacao_ne.php";
                     </a>
                     <?php if (isset($nota->nota_empenho)): ?>
                         <a href="<?= SERVERURL ?>pdf/formacao_ne.php?id=<?= $pedido_id ?>" target="_blank">
-                            <button type="button" class="btn btn-warning float-right" id="btn">
+                            <button type="button" class="btn btn-warning float-right" id="btnEmitir">
                                 Emitir nota de empenho
                             </button>
                         </a>
@@ -116,4 +122,20 @@ $link_empenho = SERVERURL . "pdf/formacao_ne.php";
     }
 
     $(document).ready(comparaData());
+
+    function habilitarEdicao() {
+        var notaEmpenho = document.getElementById('nota_empenho');
+        var dataEmissao = document.getElementById('data_emissao');
+        var dataEntrega = document.getElementById('data_entrega');
+        var btnEmitir  = document.getElementById('btnEmitir');
+
+        if (notaEmpenho.readOnly == true){
+            notaEmpenho.readOnly = false;
+            dataEmissao.readOnly = false;
+            dataEntrega.readOnly = false;
+            btnEmitir.disabled = true;
+        } else {
+            document.getElementById("formulario").submit();
+        }
+    }
 </script>
