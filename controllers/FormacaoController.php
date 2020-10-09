@@ -792,21 +792,49 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function listaPedidos()
+    public function listaPedidos($ano = 0, $pedido = 0)
     {
-        return DbModel::consultaSimples("SELECT p.id, p.origem_id,fc.protocolo, fc.ano, p.numero_processo,fc.num_processo_pagto, pf.nome, v.verba, fs.status, fc.form_status_id 
+        $whereAno = "";
+        if ($ano) {
+            $whereAno = "AND fc.ano = {$ano}";
+        }
+
+        $whereStatusPedido = "";
+        if ($pedido) {
+            if ($pedido == 2) {
+                $whereStatusPedido = "AND p.status_pedido_id = 2";
+            } else {
+                $whereStatusPedido = "AND p.status_pedido_id != 2";
+            }
+        }
+
+        $sql = "SELECT p.id, p.origem_id,fc.protocolo, fc.ano, p.numero_processo,fc.num_processo_pagto, pf.nome, v.verba, fs.status, fc.form_status_id 
             FROM pedidos p 
             INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id 
             INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
             INNER JOIN verbas v on p.verba_id = v.id 
             INNER JOIN formacao_status fs on fc.form_status_id = fs.id
-            WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2")->fetchAll(PDO::FETCH_OBJ);
+            WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 {$whereAno} {$whereStatusPedido}";
+
+        return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function anosPedido()
+    {
+        $sql = "SELECT MIN(ano) AS min, MAX(ano) AS max                                              
+            FROM pedidos p                                                           
+            INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id               
+            INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id              
+            INNER JOIN verbas v on p.verba_id = v.id                                 
+            INNER JOIN formacao_status fs on fc.form_status_id = fs.id               
+            WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2";
+        return DbModel::consultaSimples($sql)->fetchObject();
     }
 
     //retorna uma string ou um objeto com todos os locais que o pedido possui
     public function retornaLocaisFormacao($contratacao_id, $obj = 0, $decryption = 0)
     {
-        if($decryption != 0){
+        if ($decryption != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
         $locais = "";
@@ -823,7 +851,7 @@ class FormacaoController extends FormacaoModel
 
     public function retornaValorTotalVigencia($contratacao_id, $decryption = 0)
     {
-        if($decryption != 0){
+        if ($decryption != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
@@ -839,17 +867,19 @@ class FormacaoController extends FormacaoModel
         return $valor;
     }
 
-    public function getParcelasPedidoComplementos($pedido_id, $unica = 0, $parcela_id = NULL){
+    public function getParcelasPedidoComplementos($pedido_id, $unica = 0, $parcela_id = NULL)
+    {
         $pedido_id = MainModel::decryption($pedido_id);
-        if($unica == 1 && $parcela_id != NULL):
+        if ($unica == 1 && $parcela_id != NULL):
             return DbModel::consultaSimples("SELECT * FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND p.id = $parcela_id AND pc.publicado = 1")->fetchObject();
         else:
             return DbModel::consultaSimples("SELECT * FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND pc.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
         endif;
     }
 
-    public function retornaCargaHoraria($contratacao_id, $decryption = 0){
-        if($decryption != 0){
+    public function retornaCargaHoraria($contratacao_id, $decryption = 0)
+    {
+        if ($decryption != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
@@ -863,7 +893,7 @@ class FormacaoController extends FormacaoModel
 
     public function recuperaPedido($pedido_id, $excel = 0, $ano = 0)
     {
-        if($excel != 0 && $ano != 0):
+        if ($excel != 0 && $ano != 0):
             return DbModel::consultaSimples("SELECT p.numero_processo, fc.protocolo, pf.id, pf.nome, pro.programa, c.cargo AS 'funcao', l.linguagem, pf.email, s.status
                                                       FROM pedidos AS p
                                                       INNER JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
@@ -927,7 +957,7 @@ class FormacaoController extends FormacaoModel
 
     function retornaPeriodoFormacao($contratacao_id, $decryption = 0)
     {
-        if($decryption != 0){
+        if ($decryption != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
@@ -1165,7 +1195,7 @@ class FormacaoController extends FormacaoModel
         }
         return MainModel::sweetAlert($alerta);
     }
-    
+
     public function editarNotaEmpenho($post)
     {
         unset($post['_method']);
@@ -1175,7 +1205,7 @@ class FormacaoController extends FormacaoModel
 
         $update = DbModel::updateEspecial('pagamentos', $dados, "pedido_id", $pedido_id);
 
-        if ($update || DbModel::connection()->errorCode() == 0){
+        if ($update || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Nota de Empenho',
@@ -1183,7 +1213,7 @@ class FormacaoController extends FormacaoModel
                 'tipo' => 'success',
                 'location' => SERVERURL . 'formacao/empenho_cadastro&id=' . MainModel::encryption($pedido_id)
             ];
-        } else{
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Erro!',
@@ -1240,7 +1270,7 @@ class FormacaoController extends FormacaoModel
 
     public function retornaObjetoFormacao($contratacao_id, $decryption = 0)
     {
-        if($decryption != 0){
+        if ($decryption != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
@@ -1422,7 +1452,8 @@ class FormacaoController extends FormacaoModel
         return parent::getDocumento($documento, $tipo_documento);
     }
 
-    public function recuperaEnderecoPf($idPf){
+    public function recuperaEnderecoPf($idPf)
+    {
         $idPf = MainModel::decryption($idPf);
 
         $testaEnderecos = DbModel::consultaSimples("SELECT * FROM pf_enderecos WHERE pessoa_fisica_id = $idPf");
@@ -1437,7 +1468,8 @@ class FormacaoController extends FormacaoModel
         return $endereco;
     }
 
-    public function recuperaTelefonePf($idPf){
+    public function recuperaTelefonePf($idPf)
+    {
         $idPf = MainModel::decryption($idPf);
         $sqlTelefone = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPf' AND publicado = 1");
         $telefones = $sqlTelefone->fetch(PDO::FETCH_ASSOC);
@@ -1446,7 +1478,8 @@ class FormacaoController extends FormacaoModel
         return $telefones;
     }
 
-    public function recuperaTelefonePf2($idPf){
+    public function recuperaTelefonePf2($idPf)
+    {
         $idPf = MainModel::decryption($idPf);
         return DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPf' AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
         //$telefones = $sqlTelefone->fetch(PDO::FETCH_ASSOC);
@@ -1489,7 +1522,7 @@ class FormacaoController extends FormacaoModel
 
         $anexosExistentes = DbModel::consultaSimples("SELECT * FROM arquivos WHERE lista_documento_id = '$idDoc' AND origem_id = '$idPf' AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
 
-        if ($anexosExistentes != null){
+        if ($anexosExistentes != null) {
             return $anexosExistentes;
         } else {
             return false;
@@ -1527,13 +1560,13 @@ class FormacaoController extends FormacaoModel
 
     public function listaDocumentos()
     {
-        return $this->listaPublicado("formacao_lista_documentos",null);
+        return $this->listaPublicado("formacao_lista_documentos", null);
     }
 
     public function recuperaDocumento($id)
     {
         $id = $this->decryption($id);
-        return $this->getInfo("formacao_lista_documentos",$id)->fetch(PDO::FETCH_OBJ);
+        return $this->getInfo("formacao_lista_documentos", $id)->fetch(PDO::FETCH_OBJ);
     }
 
     public function insereDocumento($post)
@@ -1542,9 +1575,9 @@ class FormacaoController extends FormacaoModel
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
 
-        $insere = DbModel::insert("formacao_lista_documentos",$dados,false);
+        $insere = DbModel::insert("formacao_lista_documentos", $dados, false);
 
-        if ($insere || DbModel::connection()->errorCode() == 0){
+        if ($insere || DbModel::connection()->errorCode() == 0) {
             $documento_id = $this->encryption(DbModel::connection()->lastInsertId());
             $alerta = [
                 'alerta' => 'sucesso',
@@ -1553,7 +1586,7 @@ class FormacaoController extends FormacaoModel
                 'tipo' => 'success',
                 'location' => SERVERURL . 'formacao/documento_cadastro&id=' . $documento_id
             ];
-        } else{
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Erro!',
@@ -1564,6 +1597,7 @@ class FormacaoController extends FormacaoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
     public function editaDocumento($post)
     {
         $id = MainModel::decryption($post['id']);
@@ -1573,9 +1607,9 @@ class FormacaoController extends FormacaoModel
 
         $dados = MainModel::limpaPost($post);
 
-        $edita = $this->update("formacao_lista_documentos",$dados, $id);
+        $edita = $this->update("formacao_lista_documentos", $dados, $id);
 
-        if ($edita || DbModel::connection()->errorCode() == 0){
+        if ($edita || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Documento',
@@ -1583,7 +1617,7 @@ class FormacaoController extends FormacaoModel
                 'tipo' => 'success',
                 'location' => SERVERURL . 'formacao/documento_cadastro&id=' . MainModel::encryption($id)
             ];
-        } else{
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Erro!',
@@ -1599,7 +1633,7 @@ class FormacaoController extends FormacaoModel
     {
         $id = MainModel::decryption($post['id']);
         $apaga = DbModel::apaga("formacao_lista_documentos", $id);
-        if ($apaga || DbModel::connection()->errorCode() == 0){
+        if ($apaga || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Documento Deletado!',
@@ -1620,10 +1654,11 @@ class FormacaoController extends FormacaoModel
 
     public function listaAbertura()
     {
-        $abertura = DbModel::listaPublicado("form_aberturas", null,true);
+        $abertura = DbModel::listaPublicado("form_aberturas", null, true);
         return $abertura;
 
     }
+
     public function recuperaAbertura($id)
     {
         $id = MainModel::decryption($id);
@@ -1639,9 +1674,9 @@ class FormacaoController extends FormacaoModel
         $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
         $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
 
-        $insere = DbModel::insert("form_aberturas", $dados,true);
+        $insere = DbModel::insert("form_aberturas", $dados, true);
 
-        if ($insere || DbModel::connection()->errorCode() == 0){
+        if ($insere || DbModel::connection()->errorCode() == 0) {
             $abertura_id = $this->encryption(DbModel::connection()->lastInsertId());
             $alerta = [
                 'alerta' => 'sucesso',
@@ -1650,7 +1685,7 @@ class FormacaoController extends FormacaoModel
                 'tipo' => 'success',
                 'location' => SERVERURL . 'formacao/abertura_cadastro&id=' . $abertura_id
             ];
-        } else{
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Erro!',
@@ -1661,6 +1696,7 @@ class FormacaoController extends FormacaoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
     public function editaAbertura($post)
     {
         $id = MainModel::decryption($post['id']);
@@ -1672,9 +1708,9 @@ class FormacaoController extends FormacaoModel
         $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
         $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
 
-        $edita = $this->update("form_aberturas",$dados, $id, true);
+        $edita = $this->update("form_aberturas", $dados, $id, true);
 
-        if ($edita || DbModel::connection()->errorCode() == 0){
+        if ($edita || DbModel::connection()->errorCode() == 0) {
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Abertura',
@@ -1682,7 +1718,7 @@ class FormacaoController extends FormacaoModel
                 'tipo' => 'success',
                 'location' => SERVERURL . 'formacao/abertura_cadastro&id=' . MainModel::encryption($id)
             ];
-        } else{
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Erro!',
