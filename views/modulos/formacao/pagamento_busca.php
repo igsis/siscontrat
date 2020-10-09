@@ -232,6 +232,7 @@
         a.classList.add('btn-sm');
         a.classList.add('text-light');
         a.href = `<?=SERVERURL?>formacao/empenho_cadastro&id=${id}`;
+        a.setAttribute('target', '_blank');
         a.textContent = 'Empenho';
         return a;
     }
