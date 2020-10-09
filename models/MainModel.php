@@ -471,6 +471,21 @@ class MainModel extends DbModel
         }
     }
 
+    public function geraOpcaoVigencia($tabela, $selected = "", $capac = false)
+    {
+        $sql = "SELECT * FROM $tabela WHERE publicado = 1";
+        $consulta = DbModel::consultaSimples($sql, $capac);
+        if ($consulta->rowCount() >= 1) {
+            foreach ($consulta->fetchAll() as $option) {
+                if ($option[0] == $selected) {
+                    echo "<option value='" . $option[0] . "' selected >" . $option[2] . "</option>";
+                } else {
+                    echo "<option value='" . $option[0] . "'>" . $option[2] . "</option>";
+                }
+            }
+        }
+    }
+
     public function geraOpcaoUsuario($selected = "", $fiscal, $orderPorId = false, $capac = false)
     {
         $order = $orderPorId ? 1 : 2;

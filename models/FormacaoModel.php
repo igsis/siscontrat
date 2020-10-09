@@ -30,19 +30,9 @@ class FormacaoModel extends MainModel
         return DbModel::consultaSimples("SELECT * FROM pessoa_fisicas")->fetchAll(PDO::FETCH_OBJ);
     }
 
-    protected function getClassificacao()
-    {
-        return DbModel::consultaSimples("SELECT * FROM classificacao_indicativas")->fetchAll(PDO::FETCH_OBJ);
-    }
-
     protected function getRegiaoPreferencial()
     {
         return DbModel::consultaSimples("SELECT * FROM regiao_preferencias")->fetchAll(PDO::FETCH_OBJ);
-    }
-
-    protected function getFiscalSuplente()
-    {
-        return DbModel::consultaSimples("SELECT * FROM usuarios")->fetchAll(PDO::FETCH_OBJ);
     }
 
 }

@@ -3,10 +3,8 @@ $pedido_id = isset($_GET['pedido_id']) ? $_GET['pedido_id'] : "";
 require_once "./controllers/FormacaoController.php";
 
 $formObj = new FormacaoController();
-
-if ($pedido_id != NULL):
+if ($pedido_id != ''):
     $pedido = $formObj->recuperaPedido($pedido_id);
-    $consulta = $formObj->consultaParcela($pedido_id);
     $contratacao_id = $pedido->origem_id;
     $contratacao = $formObj->recuperaContratacao($contratacao_id);
 else:
@@ -34,7 +32,7 @@ endif;
                 </div>
 
                 <div class="card-body">
-                    <form class="form-horizontal formulario-ajax" method="POST" id="formulario"
+                    <form class="form-horizontal formulario-ajax" method="POST"
                           action="<?= SERVERURL ?>ajax/formacaoAjax.php" role="form"
                           data-form="<?= ($pedido_id) ? "update" : "save" ?>">
                         <input type="hidden" name="_method"
@@ -125,7 +123,7 @@ endif;
                         <div class="row">
                             <div class="col-md">
                                 <label for="observacao">Observação:</label>
-                                <textarea name="observacao" rows="8" class="form-control"></textarea>
+                                <textarea name="observacao" rows="4" class="form-control"><?= isset($pedido->observacao) ? $pedido->observacao : "" ?></textarea>
                             </div>
                         </div>
 
@@ -190,37 +188,3 @@ endif;
     </div>
 </div>
 
-<?php MainModel::exibeModalClassificacaoIndicativa() ?>
-
-<script>
-
-    function bloqueandoLocais() {
-        let local = document.getElementsByName("local_id[]");
-        var isMsg = $('#msgEsconde');
-        isMsg.hide();
-
-        let count = false;
-
-        if (local[0].value == local[1].value)
-            count = true;
-
-        if (local[0].value == local[2].value)
-            count = true;
-
-        if (local[1].value == local[2].value)
-            count = true;
-
-        if (count == true) {
-            isMsg.show();
-            $('#finaliza').attr('disabled', true);
-        } else {
-            isMsg.hide();
-            $('#finaliza').attr('disabled', false);
-        }
-    }
-
-    $(document).ready(function () {
-        $('#numero_parcelas').mask('00', {reverse: true});
-        bloqueandoLocais();
-    });
-</script>

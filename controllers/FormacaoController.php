@@ -192,7 +192,6 @@ class FormacaoController extends FormacaoModel
                     WHERE p.publicado = 1");
     }
 
-    
     public function recuperaPrograma($programa_id)
     {
         $programa_id = MainModel::decryption($programa_id);
@@ -921,11 +920,12 @@ class FormacaoController extends FormacaoModel
         if ($decription != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
+
         return DbModel::consultaSimples("SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.pessoa_fisica_id,
                                                          fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente'                                                                   
                                                   FROM formacao_contratacoes AS fc
                                                   INNER JOIN programas AS pro ON pro.id = fc.programa_id
-                                                  INNER JOIN usuarios AS fiscal ON fiscal.id = fc.fiscal_id
+                                                  LEFT JOIN usuarios AS fiscal ON fiscal.id = fc.fiscal_id
                                                   LEFT JOIN usuarios AS suplente ON suplente.id = fc.suplente_id      
                                                   WHERE fc.id = $contratacao_id AND fc.publicado = 1")->fetchObject();
     }
@@ -1156,11 +1156,11 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function consultaParcela($pedido_id)
+    public function consultaPedido($contratacao_id)
     {
-        $pedido_id = MainModel::decryption($pedido_id);
-        $testaParcelas = DbModel::consultaSimples("SELECT id FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->rowCount();
-        $consulta = $testaParcelas > 0;
+        $contratacao_id = MainModel::decryption($contratacao_id);
+        $testaPedido = DbModel::consultaSimples("SELECT id FROM pedidos WHERE origem_id = $contratacao_id AND publicado = 1 AND origem_tipo_id = 2")->rowCount();
+        $consulta = $testaPedido > 0;
         return $consulta;
     }
 
@@ -1345,24 +1345,16 @@ class FormacaoController extends FormacaoModel
         return parent::getPF();
     }
 
-    public function listaClassificacao()
-    {
-        return parent::getClassificacao();
-    }
-
     public function listaRegiaoPrefencial()
     {
         return parent::getRegiaoPreferencial();
     }
 
-    public function listaFiscalSuplente()
-    {
-        return parent::getFiscalSuplente();
-    }
-
     public function insereDadosContratacao($post)
     {
         unset($post['_method']);
+        $locais_id = $post['local_id'];
+        unset($post['local_id']);
 
         $dados = MainModel::limpaPost($post);
 
@@ -1371,6 +1363,15 @@ class FormacaoController extends FormacaoModel
             $contratacao_id = DbModel::connection()->lastInsertId();
             $protocolo = MainModel::geraProtocoloEFE($contratacao_id) . '-F';
             DbModel::consultaSimples("UPDATE formacao_contratacoes SET protocolo = '$protocolo' WHERE id = $contratacao_id");
+            for ($i = 0; $i < count($locais_id); $i++):
+                if ($locais_id[$i] > 0):
+                    $array = [
+                        'form_pre_pedido_id' => $contratacao_id,
+                        'local_id' => $locais_id[$i]
+                    ];
+                    DbModel::insert('formacao_locais', $array);
+                endif;
+            endfor;
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Dados de contratação Cadastrados',
@@ -1401,6 +1402,23 @@ class FormacaoController extends FormacaoModel
         $contratacao_id = MainModel::decryption($post['id']);
         unset($post['id']);
         unset ($post['_method']);
+
+        $consultaLocais = DbModel::consultaSimples("SELECT * FROM formacao_locais WHERE form_pre_pedido_id = $contratacao_id")->rowCount();
+        if ($consultaLocais > 0) :
+            DbModel::deleteEspecial('formacao_locais', 'form_pre_pedido_id', $contratacao_id);
+        endif;
+
+        for ($i = 0; $i < count($post['local_id']); $i++):
+            if ($post['local_id'][$i] > 0):
+                $array = [
+                    'form_pre_pedido_id' => $contratacao_id,
+                    'local_id' => $post['local_id'][$i]
+                ];
+                DbModel::insert('formacao_locais', $array);
+            endif;
+        endfor;
+        unset ($post['local_id']);
+
         $dados = MainModel::limpaPost($post);
         $update = DbModel::update('formacao_contratacoes', $dados, $contratacao_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
