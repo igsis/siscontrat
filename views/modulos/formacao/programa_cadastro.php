@@ -29,14 +29,15 @@ $programa = $programaObj->recuperaPrograma($id);
                     <div class="card-header">
                         <h3 class="card-title">Dados</h3>
                     </div><!-- /.card-header -->
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
-                                    <input type="hidden" name="_method" value="<?= ($id) ? "editarPrograma" : "cadastrarPrograma" ?>">
-                                    <?php if ($id) : ?>
-                                        <input type="hidden" name="id" id="modulo_id" value="<?= $id ?>">
-                                    <?php endif; ?>
+                    <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
+                        <input type="hidden" name="_method" value="<?= ($id) ? "editarPrograma" : "cadastrarPrograma" ?>">
+                        <?php if ($id) : ?>
+                            <input type="hidden" name="id" id="modulo_id" value="<?= $id ?>">
+                        <?php endif; ?>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+
                                     <div class="row">
                                         <div class="form-group col-md-4">
                                             <label for="programa">Programa: *</label>
@@ -61,18 +62,19 @@ $programa = $programaObj->recuperaPrograma($id);
                                             <textarea name="descricao" id="descricao" rows="3" required class="form-control"><?= $programa->descricao ?? "" ?></textarea>
                                         </div>
                                     </div>
-                                    <div class="resposta-ajax"></div>
+
+                                </div>
                             </div>
+                        </div><!-- /.card-body -->
+                        <div class="card-footer">
+                            <a href="<?= SERVERURL ?>formacao/programa_lista">
+                                <button type="button" class="btn btn-default pull-left">Voltar</button>
+                            </a>
+                            <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary float-right">
+                                Gravar
+                            </button>
                         </div>
-                    </div><!-- /.card-body -->
-                    <div class="card-footer">
-                        <a href="<?= SERVERURL ?>formacao/programa_lista">
-                            <button type="button" class="btn btn-default pull-left">Voltar</button>
-                        </a>
-                        <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary float-right">
-                            Gravar
-                        </button>
-                    </div>
+                        <div class="resposta-ajax"></div>
                     </form>
                 </div><!-- /.card-info-->
             </div>
