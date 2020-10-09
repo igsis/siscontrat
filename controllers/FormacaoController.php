@@ -192,10 +192,6 @@ class FormacaoController extends FormacaoModel
                     WHERE p.publicado = 1");
     }
 
-    public function listaVerbas()
-    {
-        return DbModel::listaPublicado("verbas", null);
-    }
     
     public function recuperaPrograma($programa_id)
     {
@@ -1262,7 +1258,20 @@ class FormacaoController extends FormacaoModel
 
     public function listaDadosContratacao()
     {
-        return parent::getDadosContratacao();
+        return DbModel::consultaSimples("SELECT
+                                        c.id AS 'id',
+                                        c.protocolo AS 'protocolo',
+                                        pf.nome AS 'pessoa',
+                                        c.ano AS 'ano',
+                                        p.programa AS 'programa',
+                                        l.linguagem AS 'linguagem',
+                                        fc.cargo AS 'cargo'
+                                        FROM formacao_contratacoes AS c
+                                        INNER JOIN pessoa_fisicas AS pf ON pf.id = c.pessoa_fisica_id
+                                        INNER JOIN programas AS p ON p.id = c.programa_id
+                                        INNER JOIN linguagens AS l ON l.id = c.linguagem_id
+                                        INNER JOIN formacao_cargos AS fc ON fc.id = c.form_cargo_id
+                                        WHERE c.publicado = 1");
     }
 
 

@@ -5,8 +5,7 @@ require_once "./controllers/FormacaoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $programaObj = new FormacaoController();
 $programa = $programaObj->recuperaPrograma($id);
-$verbaObj = new FormacaoController();
-$listaVerba = $verbaObj->listaVerbas();
+
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
