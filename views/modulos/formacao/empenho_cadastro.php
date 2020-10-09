@@ -135,7 +135,7 @@ $link_empenho = SERVERURL . "pdf/formacao_ne.php";
             dataEntrega.readOnly = false;
             btnEmitir.disabled = true;
         } else {
-            document.getElementById("formulario").submit();
+            document.getElementById('btnEditar').type = 'submit';
         }
     }
 </script>
