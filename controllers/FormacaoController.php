@@ -13,7 +13,7 @@ class FormacaoController extends FormacaoModel
 {
     public function listaCargos()
     {
-        return parent::getCargos();
+        return DbModel::listaPublicado("formacao_cargos", null);
     }
 
     public function insereCargo($post)
@@ -99,7 +99,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaCoordenadorias()
     {
-        return parent::getCoordenadorias();
+        return DbModel::listaPublicado("coordenadorias", null);
     }
 
     public function insereCoordenadoria($post)
@@ -185,15 +185,18 @@ class FormacaoController extends FormacaoModel
 
     public function listaProgramas()
     {
-        return parent::getProgramas();
+        return DbModel::consultaSimples(
+            "SELECT p.id as id, p.programa as programa, p.verba_id as verba_id, p.edital as edital, p.descricao as descricao, p.publicado, v.verba as nome_verba 
+                    FROM programas p
+                    INNER JOIN verbas v ON p.verba_id = v.id
+                    WHERE p.publicado = 1");
     }
 
     public function listaVerbas()
     {
-        return parent::getVerbas();
+        return DbModel::listaPublicado("verbas", null);
     }
-
-
+    
     public function recuperaPrograma($programa_id)
     {
         $programa_id = MainModel::decryption($programa_id);
@@ -277,7 +280,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaLinguagens()
     {
-        return parent::getLinguagens();
+        return DbModel::listaPublicado("linguagens", null);
     }
 
     public function recuperaLinguagem($linguagem_id)
@@ -362,7 +365,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaProjetos()
     {
-        return parent::getProjetos();
+        return DbModel::listaPublicado("projetos", null);
     }
 
     public function recuperaProjeto($projeto_id)
@@ -447,7 +450,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaSubprefeituras()
     {
-        return parent::getSubprefeituras();
+        return DbModel::listaPublicado("subprefeituras", null);
     }
 
     public function recuperaSubprefeitura($subprefeitura_id)
@@ -533,7 +536,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaTerritorios()
     {
-        return parent::getTerritorios();
+        return DbModel::listaPublicado("territorios", null);
     }
 
     public function recuperaTerritorio($territorio_id)
@@ -618,7 +621,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaVigencias()
     {
-        return parent::getVigencias();
+        return DbModel::listaPublicado("formacao_vigencias", null);
     }
 
     public function recuperaParcelasVigencias($id_parcela_vigencia)
