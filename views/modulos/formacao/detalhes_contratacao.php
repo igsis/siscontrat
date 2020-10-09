@@ -34,77 +34,77 @@
                         <div class="table-responsive">
                             <table class="table">
                                 <tr>
-                                    <th width="30%">Ano:</th>
+                                    <th style="width:30%">Ano:</th>
                                     <td><?= $detalhe->ano ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Chamado:</th>
+                                    <th style="width:30%">Chamado:</th>
                                     <td><?= $detalhe->chamado ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Classificacao Indicativa:</th>
+                                    <th style="width:30%">Classificacao Indicativa:</th>
                                     <td><?= $detalhe->classificacao_indicativa ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Território:</th>
+                                    <th style="width:30%">Território:</th>
                                     <td><?= $detalhe->territorio ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Coordenadoria:</th>
+                                    <th style="width:30%">Coordenadoria:</th>
                                     <td><?= $detalhe->coordenadoria ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Subprefeitura:</th>
+                                    <th style="width:30%">Subprefeitura:</th>
                                     <td><?= $detalhe->subprefeitura ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Programa:</th>
+                                    <th style="width:30%">Programa:</th>
                                     <td><?= $detalhe->programa ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Linguagem:</th>
+                                    <th style="width:30%">Linguagem:</th>
                                     <td><?= $detalhe->linguagem ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Projeto:</th>
+                                    <th style="width:30%">Projeto:</th>
                                     <td><?= $detalhe->projeto ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Cargo:</th>
+                                    <th style="width:30%">Cargo:</th>
                                     <td><?= $detalhe->cargo ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Vigência:</th>
+                                    <th style="width:30%">Vigência:</th>
                                     <td><?= $detalhe->vigencia ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Observação:</th>
+                                    <th style="width:30%">Observação:</th>
                                     <td><?= $detalhe->observacao ?? 'Não Cadastrado' ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Fiscal:</th>
+                                    <th style="width:30%">Fiscal:</th>
                                     <td><?= $detalhe->fiscal ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Suplente:</th>
+                                    <th style="width:30%">Suplente:</th>
                                     <td><?= $detalhe->suplente ?? "Não cadastrado" ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th width="30%">Número do Processo de Pagamento:</th>
+                                    <th style="width:30%">Número do Processo de Pagamento:</th>
                                     <td><?= $detalhe->numpgt ?? "Não cadastrado" ?></td>
                                 </tr>
                             </table>

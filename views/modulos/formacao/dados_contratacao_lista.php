@@ -45,8 +45,8 @@
                                     <th>Programa</th>
                                     <th>Linguagem</th>
                                     <th>Cargo</th>
-                                    <th width="15%">Visualizar</th>
-                                    <th width="15%">Editar</th>
+                                    <th style="width:15%">Visualizar</th>
+                                    <th style="width:15%">Editar</th>
                                     
                                 </tr>
                             </thead>
@@ -83,8 +83,8 @@
                                     <th>Programa</th>
                                     <th>Linguagem</th>
                                     <th>Cargo</th>
-                                    <th width="15%">Visualizar</th>
-                                    <th width="15%">Editar</th>
+                                    <th style="width:15%">Visualizar</th>
+                                    <th style="width:15%">Editar</th>
 
                                 </tr>
                             </tfoot>

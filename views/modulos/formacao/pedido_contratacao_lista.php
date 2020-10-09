@@ -49,7 +49,7 @@ $ano = date("Y");
                                 <th>Ano</th>
                                 <th>Verba</th>
                                 <th>Status</th>
-                                <th width="17%">Ações</th>
+                                <th style="width:17%">Ações</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -91,7 +91,7 @@ $ano = date("Y");
                                 <th>Ano</th>
                                 <th>Verba</th>
                                 <th>Status</th>
-                                <th width="17%">Ações</th>
+                                <th style="width:17%">Ações</th>
                             </tr>
                             </tfoot>
                         </table>

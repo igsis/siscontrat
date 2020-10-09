@@ -45,8 +45,8 @@
                                 <th>CPF / Passaporte</th>
                                 <th>Data de Nascimento</th>
                                 <th>E-mail</th>
-                                <th width="15%">Demais Anexos</th>
-                                <th width="15%">Editar</th>
+                                <th style="width:15%">Demais Anexos</th>
+                                <th style="width:15%">Editar</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -83,8 +83,8 @@
                                     <th>CPF / Passaporte</th>
                                     <th>Data de Nascimento</th>
                                     <th>E-mail</th>
-                                    <th width="15%">Demais Anexos</th>
-                                    <th width="15%">Editar</th>
+                                    <th style="width:15%">Demais Anexos</th>
+                                    <th style="width:15%">Editar</th>
                                 </tr>
                             </tfoot>
                         </table>
