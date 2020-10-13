@@ -1674,9 +1674,7 @@ class FormacaoController extends FormacaoModel
 
     public function listaAbertura()
     {
-        $abertura = DbModel::listaPublicado("form_aberturas", null, true);
-        return $abertura;
-
+        return DbModel::listaPublicado("form_aberturas", null, true);
     }
 
     public function recuperaAbertura($id)
@@ -1691,8 +1689,20 @@ class FormacaoController extends FormacaoModel
         unset($post['_method']);
 
         $dados = MainModel::limpaPost($post);
-        $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
-        $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
+
+        //validação para forçar null em campos vazios
+        if ($dados['ano_referencia'] == "")
+            $dados['ano_referencia'] = null;
+
+        if($dados['data_abertura'] != "")
+            $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
+        else
+            $dados['data_abertura'] = null;
+
+        if($dados['data_encerramento'] != "")
+            $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
+        else
+            $dados['data_encerramento'] = null;
 
         $insere = DbModel::insert("form_aberturas", $dados, true);
 
@@ -1725,8 +1735,20 @@ class FormacaoController extends FormacaoModel
         unset($post['id']);
 
         $dados = MainModel::limpaPost($post);
-        $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
-        $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
+
+        //validação para forçar null em campos vazios
+        if ($dados['ano_referencia'] == "")
+            $dados['ano_referencia'] = null;
+
+        if($dados['data_abertura'] != "")
+            $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
+        else
+            $dados['data_abertura'] = null;
+
+        if($dados['data_encerramento'] != "")
+            $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
+        else
+            $dados['data_encerramento'] = null;
 
         $edita = $this->update("form_aberturas", $dados, $id, true);
 

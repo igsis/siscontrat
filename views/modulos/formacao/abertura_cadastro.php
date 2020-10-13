@@ -5,6 +5,11 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
 $formacaoObj =  new FormacaoController();
 $abertura = $formacaoObj->recuperaAbertura($id);
 
+//para js
+$dataAbertura = isset($abertura->data_abertura) ? 1 : null;
+$dataEncerramento = isset($abertura->data_encerramento) ? 1 : null;
+
+
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -34,9 +39,10 @@ $abertura = $formacaoObj->recuperaAbertura($id);
                           action="<?= SERVERURL ?>ajax/formacaoAjax.php" role="form"
                           data-form="<?= ($id) ? "update" : "save" ?>">
                         <input type="hidden" name="_method" value="<?= ($id) ? "editarAbertura" : "cadastrarAbertura" ?>">
-                        <input type="hidden" name="data_publicacao" value="<?= date('Y-m-d H:i:s') ?>">
                         <?php if ($id): ?>
                             <input type="hidden" name="id" id="abertura_id" value="<?= $id ?>">
+                        <?php else: ?>
+                            <input type="hidden" name="data_publicacao" value="<?= date('Y-m-d H:i:s') ?>">
                         <?php endif; ?>
                         <div class="card-body">
                             <div class="row">
@@ -52,7 +58,7 @@ $abertura = $formacaoObj->recuperaAbertura($id);
                                 <div class="form-group col-md-4">
                                     <label for="data_abertura">Ano de referência: </label>
                                     <input type="number" class="form-control" id="ano_referencia" name="ano_referencia" maxlength="4" min="2020"                                 name="data_abertura"
-                                           value="<?= isset($abertura->ano_referencia) ? $abertura->ano_referencia : "" ?>">
+                                           value="<?= isset($abertura->ano_referencia) ? $abertura->ano_referencia : "" ?>" >
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="data_abertura">Data de abertura: </label>
@@ -134,12 +140,31 @@ $abertura = $formacaoObj->recuperaAbertura($id);
             "timePicker24Hour": true,
             "timePickerSeconds": true,
         });
+        //
+        // if (!$('#abertura_id').length) {
+        //     datePicker.val('');
+        //     datePicker.attr("placeholder", "Selecione o Dia / hora");
+        // }
 
-        if (!$('#abertura_id').length) {
-            datePicker.val('');
-            datePicker.attr("placeholder", "Selecione o Dia / hora");
-        }
     });
+
+    $(function () {
+        let dataAbertura = $("#data_abertura");
+        let dataEncerramento = $("#data_encerramento");
+
+        <?php if ($dataAbertura == null): ?>
+            dataAbertura.val('')
+            dataAbertura.attr("placeholder", "Selecione o Dia / hora");
+        <?php endif; ?>
+
+        <?php if ($dataEncerramento == null): ?>
+            dataEncerramento.val('')
+            dataEncerramento.attr("placeholder", "Selecione o Dia / hora");
+        <?php endif; ?>
+
+
+    });
+
 
     $(function () {
         // Summernote

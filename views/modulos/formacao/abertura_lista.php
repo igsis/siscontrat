@@ -37,30 +37,37 @@ $aberturas = $formacaoObj->listaAbertura();
                             <thead>
                                 <tr>
                                     <th>Título</th>
-                                    <th>Descrição</th>
-                                    <th>Data da abertura</th>
-                                    <th colspan="2">Ação</th>
+                                    <th>Data de abertura</th>
+                                    <th>Data de encerramento</th>
+                                    <th>Data de publicação</th>
+                                    <th>Ação</th>
                                 </tr>
                             </thead>
                             <tbody>
                             <?php foreach ($aberturas as $abertura): ?>
                                 <tr>
                                     <td><?=$abertura->titulo?></td>
-                                    <td><?=$abertura->descricao?></td>
-                                    <td ><?=$formacaoObj->dataHora($abertura->data_abertura)?></td>
+                                    <td> <?= isset($abertura->data_abertura) ? $formacaoObj->dataHora($abertura->data_abertura) : "" ?> </td>
+                                    <td> <?= isset($abertura->data_encerramento) ? $formacaoObj->dataHora($abertura->data_encerramento) : "" ?> </td>
+                                    <td ><?=$formacaoObj->dataHora($abertura->data_publicacao) ?? "-"?></td>
                                     <td>
-                                       <a href="<?= SERVERURL . "formacao/abertura_cadastro&id=" . $formacaoObj->encryption($abertura->id) ?>"
-                                                   class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
-                                    </td>
-                                    <td>
-                                        <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
-                                            <input type="hidden" name="_method" value="apagarAbertura">
-                                            <input type="hidden" name="id" value="<?= $formacaoObj->encryption($abertura->id)?>">
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                <i class="fas fa-trash"></i> Apagar
-                                            </button>
-                                            <div class="resposta-ajax"></div>
-                                        </form>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <a href="<?= SERVERURL . "formacao/abertura_cadastro&id=" . $formacaoObj->encryption($abertura->id) ?>"
+                                                   class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar
+                                                </a>
+                                            </div>
+                                            <div class="col-md">
+                                                <form class="form-horizontal formulario-ajax" method="POST" action="<?=SERVERURL?>ajax/formacaoAjax.php" role="form" data-form="update">
+                                                    <input type="hidden" name="_method" value="apagarAbertura">
+                                                    <input type="hidden" name="id" value="<?= $formacaoObj->encryption($abertura->id)?>">
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i> Apagar
+                                                    </button>
+                                                    <div class="resposta-ajax"></div>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -68,8 +75,9 @@ $aberturas = $formacaoObj->listaAbertura();
                             <tfoot>
                                 <tr>
                                     <th>Título</th>
-                                    <th>Descrição</th>
-                                    <th>Data da abertura</th>
+                                    <th>Data de abertura</th>
+                                    <th>Data de encerramento</th>
+                                    <th>Data de publicação</th>
                                     <th>Ação</th>
                                 </tr>
                             </tfoot>
