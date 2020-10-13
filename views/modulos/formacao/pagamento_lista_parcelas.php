@@ -1,13 +1,15 @@
 <?php
 $pedido_id = isset($_GET['id']) ? $_GET['id'] : "";
 require_once "./controllers/FormacaoController.php";
+require_once "./controllers/PedidoController.php";
 
 $formObj = new FormacaoController();
+$pedObj = new PedidoController();
 
 $pedido = $formObj->recuperaPedido($pedido_id);
 $pessoa = $formObj->recuperaPf($pedido->pessoa_fisica_id);
-$contratacao = $formObj->recuperaContratacao(MainModel::encryption($pedido->origem_id),1);
-$parcelas = $formObj->retornaDadosParcelas($pedido->origem_id);
+$contratacao = $formObj->recuperaContratacao(MainModel::encryption($pedido->origem_id), 1);
+$parcelas = $pedObj->getParcelarPedidoFomentos($pedido_id);
 
 //contador de parcelas
 $i = 1;
@@ -54,90 +56,76 @@ $i = 1;
                         </div>
                         <div class="row">
                             <div class="col-md">
-                                <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= MainModel::encryption($pedido->pessoa_fisica_id) ?>" target="_blank">
+                                <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= MainModel::encryption($pedido->pessoa_fisica_id) ?>"
+                                   target="_blank">
                                     <button class="btn btn-primary float-right">Gerar FACC</button>
                                 </a>
                             </div>
                         </div>
 
                         <hr>
+                        <table class="table table-striped table-bordered p-0">
+                            <thead>
+                            <tr>
+                                <th>Nº Parcela</th>
+                                <th>Período</th>
+                                <th>Valor</th>
+                                <th>Pagamento</th>
+                                <th style="text-align:center">Gerar</th>
+                            </tr>
+                            </thead>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Parcela</th>
-                                        <th>Período</th>
-                                        <th>Valor</th>
-                                        <th>Pagamento</th>
-                                        <th></th>
-                                        <th></th>
-                                        <th style="text-align:center">Gerar</th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
+                            <tbody>
+                            <?php foreach ($parcelas as $parcela): ?>
+                                <tr>
+                                    <td><?= $i ?></td>
+                                    <td><?= $parcela->periodo ?></td>
+                                    <td><?= "R$" . MainModel::dinheiroParaBr($parcela->valor) ?></td>
+                                    <td><?= MainModel::dataParaBR($parcela->data_pagamento) ?></td>
 
-                                    <tbody>
-                                    <?php foreach ($parcelas as $parcela): ?>
-                                        <tr>
-                                            <td><?= $i ?></td>
-                                            <td><?= $formObj->retornaPeriodoFormacao($pedido->origem_id, '', '1', $parcela->id) ?></td>
-                                            <td><?= "R$" . MainModel::dinheiroParaBr($parcela->valor) ?></td>
-                                            <td><?= MainModel::dataParaBR($parcela->data_pagamento) ?></td>
+                                    <th>
+                                        <a href="<?= SERVERURL ?>pdf/formacao_pagamento.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
+                                           target="_blank">
+                                            <button type="button" class="btn btn-sm btn-primary">Pagamento</button>
+                                        </a>
 
-                                            <th style="text-align:center">
-                                                <a href="<?= SERVERURL ?>pdf/formacao_pagamento.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
-                                                    target="_blank">
-                                                    <button type="button" class="btn btn-primary">Pedido</button>
-                                                </a>
-                                            </th>
+                                        <a href="<?= SERVERURL ?>pdf/formacao_recibo.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
+                                           target="_blank">
+                                            <button type="button" class="btn btn-sm btn-primary">Recibo</button>
+                                        </a>
 
-                                            <th style="text-align:center">
-                                                <a href="<?= SERVERURL ?>pdf/formacao_recibo.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>" target="_blank">
-                                                    <button type="button" class="btn btn-primary">Recibo</button>
-                                                </a>
-                                            </th>
+                                        <a href="<?= SERVERURL ?>pdf/formacao_confirmacao_servicos.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
+                                           target="_blank">
+                                            <button type="button" class="btn btn-sm btn-primary">Atestado Serviço
+                                            </button>
+                                        </a>
 
-                                            <th style="text-align:center">
-                                                <a href="<?= SERVERURL ?>pdf/formacao_confirmacao_servicos.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>" target="_blank">
-                                                    <button type="button" class="btn btn-primary">Atestado Serviço</button>
-                                                </a>
-                                            </th>
+                                        <a href="<?= SERVERURL ?>pdf/formacao_horas.php?id=<?= $pedido_id ?>"
+                                           target="_blank">
+                                            <button type="button" class="btn btn-sm btn-primary">Relatório Horas
+                                            </button>
+                                        </a>
 
-                                            <th style="text-align:center">
-                                                <a href="<?= SERVERURL ?>pdf/formacao_chefia_gab.php" target="_blank">
-                                                    <button type="button" class="btn btn-primary">Chefia/Gab</button>
-                                                </a>
-                                            </th>
+                                        <a href="<?= SERVERURL ?>pdf/formacao_contabilidade.php?id=<?= $pedido_id ?>"
+                                           target="_blank">
+                                            <button type="button" class="btn btn-sm btn-primary">Contabilidade</button>
+                                        </a>
+                                    </th>
+                                </tr>
 
-                                            <th style="text-align:center">
-                                                <a href="<?= SERVERURL ?>pdf/formacao_contabilidade.php?id=<?= $pedido_id ?>" target="_blank">
-                                                    <button type="button" class="btn btn-primary">Contabilidade</button>
-                                                </a>
-                                            </th>
-                                        </tr>
+                                <?php $i++; endforeach; ?>
+                            </tbody>
 
-                                        <?php $i++; endforeach; ?>
-                                    </tbody>
-
-                                    <tfoot>
-                                    <tr>
-                                        <th>Parcela</th>
-                                        <th>Período</th>
-                                        <th>Valor</th>
-                                        <th>Pagamento</th>
-                                        <th></th>
-                                        <th></th>
-                                        <th style="text-align:center">Gerar</th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
+                            <tfoot>
+                            <tr>
+                                <th>Nº Parcela</th>
+                                <th>Período</th>
+                                <th>Valor</th>
+                                <th>Pagamento</th>
+                                <th style="text-align:center">Gerar</th>
+                            </tr>
+                            </tfoot>
+                        </table>
                     </div>
 
                     <div class="card-footer">
