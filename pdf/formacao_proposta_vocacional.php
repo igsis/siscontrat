@@ -5,6 +5,7 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
 require_once "../controllers/FormacaoController.php";
+require_once "../controllers/PedidoController.php";
 
 $formObj = new FormacaoController();
 
@@ -26,12 +27,12 @@ class PDF extends FPDF
 }
 
 $pedido = $formObj->recuperaPedido($pedido_id);
-$contratacao = $formObj->recuperaContratacao($pedido->origem_id, '0');
+$contratacao = $formObj->recuperaContratacao($pedido->origem_id);
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $telPf = $formObj->recuperaTelPf($pedido->pessoa_fisica_id);
 $Observacao = "Todas as atividades dos programas da Supervisão de Formação são inteiramente gratuitas e é terminantemente proibido cobrar por elas sob pena de multa e rescisão de contrato.";
 $penalidades = PedidoController::retornaPenalidades(20);
-$dadosParcelas = PedidoController::getParcelasPedidoComplementos($pedido_id);
+$dadosParcelas = $formObj->retornaDadosParcelas($pedido->origem_id);
 
 $ano = date('Y');
 
@@ -159,7 +160,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(15, $l, utf8_decode('Período:'), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(180, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido_id)), 0, 0, 'L');
+$pdf->Cell(180, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido->origem_id)), 0, 0, 'L');
 
 $pdf->Ln(6);
 
@@ -167,7 +168,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(25, $l, utf8_decode("Carga Horária:"), '0', '0', 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(168, $l, utf8_decode(PedidoController::retornaCargaHoraria($pedido_id, '1') . " hora(s)"), 0, 0, 'L');
+$pdf->Cell(168, $l, utf8_decode($formObj->retornaCargaHoraria($pedido->origem_id) . " hora(s)"), 0, 0, 'L');
 
 $pdf->Ln(7);
 
@@ -181,7 +182,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(11, $l, 'Valor:', '0', '0', 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(168, $l, utf8_decode("R$ " . MainModel::dinheiroParaBr($pedido->valor_total) . " (" . MainModel::valorPorExtenso($pedido->valor_total) . " )"), 0, 'L', 0);
+$pdf->MultiCell(168, $l, utf8_decode("R$ " . MainModel::dinheiroParaBr($pedido->valor_total) . " ( " . MainModel::valorPorExtenso($pedido->valor_total) . ")"), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -299,8 +300,8 @@ $pdf->Ln(5);
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
 $pdf->MultiCell(160, $l, utf8_decode("O prestador de serviços acima citado é contratado nos termos do Edital " . $contratacao->edital
-    . ", no período " . $formObj->retornaPeriodoFormacao($pedido_id)
-    . ", com carga horária total de até: " . PedidoController::retornaCargaHoraria($pedido_id, 1)
+    . ", no período " . $formObj->retornaPeriodoFormacao($pedido->origem_id)
+    . ", com carga horária total de até: " . $formObj->retornaCargaHoraria($pedido->origem_id)
     . " hora(s), na forma abaixo descrita:"), 0, 'L', 0);
 
 $pdf->Ln(5);

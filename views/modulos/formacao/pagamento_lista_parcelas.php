@@ -1,15 +1,13 @@
 <?php
 $pedido_id = isset($_GET['id']) ? $_GET['id'] : "";
 require_once "./controllers/FormacaoController.php";
-require_once "./controllers/PedidoController.php";
 
 $formObj = new FormacaoController();
-$pedObj = new PedidoController();
 
 $pedido = $formObj->recuperaPedido($pedido_id);
 $pessoa = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $contratacao = $formObj->recuperaContratacao(MainModel::encryption($pedido->origem_id),1);
-$parcelas = $pedObj->getParcelasPedido($pedido_id);
+$parcelas = $formObj->retornaDadosParcelas($pedido->origem_id);
 
 //contador de parcelas
 $i = 1;
@@ -70,6 +68,7 @@ $i = 1;
                                     <thead>
                                     <tr>
                                         <th>Parcela</th>
+                                        <th>Período</th>
                                         <th>Valor</th>
                                         <th>Pagamento</th>
                                         <th></th>
@@ -84,13 +83,14 @@ $i = 1;
                                     <?php foreach ($parcelas as $parcela): ?>
                                         <tr>
                                             <td><?= $i ?></td>
+                                            <td><?= $formObj->retornaPeriodoFormacao($pedido->origem_id, '', '1', $parcela->id) ?></td>
                                             <td><?= "R$" . MainModel::dinheiroParaBr($parcela->valor) ?></td>
                                             <td><?= MainModel::dataParaBR($parcela->data_pagamento) ?></td>
 
                                             <th style="text-align:center">
                                                 <a href="<?= SERVERURL ?>pdf/formacao_pagamento.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
                                                     target="_blank">
-                                                    <button type="button" class="btn btn-primary">Pagamento</button>
+                                                    <button type="button" class="btn btn-primary">Pedido</button>
                                                 </a>
                                             </th>
 
@@ -107,8 +107,8 @@ $i = 1;
                                             </th>
 
                                             <th style="text-align:center">
-                                                <a href="<?= SERVERURL ?>pdf/formacao_horas.php?id=<?= $pedido_id ?>" target="_blank">
-                                                    <button type="button" class="btn btn-primary">Relatório Horas</button>
+                                                <a href="<?= SERVERURL ?>pdf/formacao_chefia_gab.php" target="_blank">
+                                                    <button type="button" class="btn btn-primary">Chefia/Gab</button>
                                                 </a>
                                             </th>
 
@@ -125,6 +125,7 @@ $i = 1;
                                     <tfoot>
                                     <tr>
                                         <th>Parcela</th>
+                                        <th>Período</th>
                                         <th>Valor</th>
                                         <th>Pagamento</th>
                                         <th></th>

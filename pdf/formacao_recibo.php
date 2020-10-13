@@ -18,7 +18,7 @@ class PDF extends FPDF
 $pedido = $formObj->recuperaPedido($pedido_id);
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $telPf = $formObj->recuperaTelPf($pedido->pessoa_fisica_id);
-$parcelaDados = PedidoController::getParcelasPedidoComplementos($pedido_id, '1', $parcela_id);
+$parcelaDados = $formObj->retornaDadosParcelas($pedido->origem_id, '', '1', $parcela_id);
 
 $ano = date('Y', strtotime("now"));
 
@@ -98,7 +98,7 @@ $pdf->MultiCell(168, $l, utf8_decode($pf->email), 0, 'L', 0);
 $pdf->Ln(16);
 
 $pdf->SetX($x);
-$pdf->MultiCell(170, $l, utf8_decode("Atesto que recebi da Prefeitura do Múnicípio de São Paulo - Secretaria Municipal de Cultura a importância de R$ " . MainModel::dinheiroParaBr($parcelaDados->valor) . " ( " . MainModel::valorPorExtenso($parcelaDados->valor) . ")  referente ao período " . $formObj->retornaPeriodoFormacao($pedido_id) . " da " . $formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 'L', 0);
+$pdf->MultiCell(170, $l, utf8_decode("Atesto que recebi da Prefeitura do Múnicípio de São Paulo - Secretaria Municipal de Cultura a importância de R$ " . MainModel::dinheiroParaBr($parcelaDados->valor) . " ( " . MainModel::valorPorExtenso($parcelaDados->valor) . ")  referente ao período " . $formObj->retornaPeriodoFormacao($pedido->origem_id, '', '1', $parcela_id) . " da " . $formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 'L', 0);
 
 $pdf->Ln(16);
 

@@ -866,13 +866,16 @@ class FormacaoController extends FormacaoModel
         return $valor;
     }
 
-    public function getParcelasPedidoComplementos($pedido_id, $unica = 0, $parcela_id = NULL)
+    public function retornaDadosParcelas($contratacao_id, $decryption = 0, $unica = 0, $parcela_id = NULL)
     {
-        $pedido_id = MainModel::decryption($pedido_id);
-        if ($unica == 1 && $parcela_id != NULL):
-            return DbModel::consultaSimples("SELECT * FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND p.id = $parcela_id AND pc.publicado = 1")->fetchObject();
+        if ($decryption != 0) {
+            $contratacao_id = MainModel::decryption($contratacao_id);
+        }
+
+        if ($unica != 0 && $parcela_id != NULL):
+            return DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 AND fp.id = $parcela_id")->fetchObject();
         else:
-            return DbModel::consultaSimples("SELECT * FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND pc.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+            return DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
         endif;
     }
 
@@ -921,13 +924,16 @@ class FormacaoController extends FormacaoModel
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
-        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id,
-                                                         fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente'                                                                   
-                                                  FROM formacao_contratacoes AS fc
-                                                  INNER JOIN programas AS pro ON pro.id = fc.programa_id
-                                                  LEFT JOIN usuarios AS fiscal ON fiscal.id = fc.fiscal_id
-                                                  LEFT JOIN usuarios AS suplente ON suplente.id = fc.suplente_id      
-                                                  WHERE fc.id = {$contratacao_id} AND fc.publicado = 1";
+        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, 
+                       c.cargo, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente'                                                                   
+                FROM formacao_contratacoes AS fc
+                INNER JOIN programas AS pro ON pro.id = fc.programa_id
+                INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
+                INNER JOIN linguagens AS l ON l.id = fc.linguagem_id
+                INNER JOIN coordenadorias AS cor ON cor.id = fc.coordenadoria_id
+                LEFT JOIN usuarios AS fiscal ON fiscal.id = fc.fiscal_id
+                LEFT JOIN usuarios AS suplente ON suplente.id = fc.suplente_id      
+                WHERE fc.id = {$contratacao_id} AND fc.publicado = 1";
 
         return DbModel::consultaSimples($sql)->fetchObject();
     }
@@ -957,24 +963,35 @@ class FormacaoController extends FormacaoModel
         endif;
     }
 
-    function retornaPeriodoFormacao($contratacao_id, $decryption = 0)
+    function retornaPeriodoFormacao($contratacao_id, $decryption = 0, $unico = 0, $parcela_id = NULL)
     {
         if ($decryption != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
-        $testaDataInicio = DbModel::consultaSimples("SELECT fp.data_inicio FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 ORDER BY fp.data_inicio ASC LIMIT 0,1");
-        if ($testaDataInicio->rowCount() > 0) {
-            $data_inicio = $testaDataInicio->fetchObject()->data_inicio;
-            $data_fim = DbModel::consultaSimples("SELECT fp.data_fim FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 ORDER BY fp.data_fim DESC LIMIT 0,1")->fetchObject()->data_fim;
-            /*if ($data_inicio == $data_fim || $data_fim == "0000-00-00") {
-                return MainModel::dataParaBR($data_inicio);
-            } else {
+        if ($unico != 0 && $parcela_id != NULL) {
+            $testaDataInicio = DbModel::consultaSimples("SELECT fp.data_inicio FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 AND fp.id = $parcela_id");
+            if ($testaDataInicio->rowCount() > 0) {
+                $data_inicio = $testaDataInicio->fetchObject()->data_inicio;
+                $data_fim = DbModel::consultaSimples("SELECT fp.data_fim FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 AND fp.id = $parcela_id")->fetchObject()->data_fim;
                 return "de " . MainModel::dataParaBR($data_inicio) . " à " . MainModel::dataParaBR($data_fim);
-            }*/
-            return "de " . MainModel::dataParaBR($data_inicio) . " à " . MainModel::dataParaBR($data_fim);
+            } else {
+                return "(Parcelas não cadastradas)";
+            }
         } else {
-            return "(Parcelas não cadastradas)";
+            $testaDataInicio = DbModel::consultaSimples("SELECT fp.data_inicio FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 ORDER BY fp.data_inicio ASC LIMIT 0,1");
+            if ($testaDataInicio->rowCount() > 0) {
+                $data_inicio = $testaDataInicio->fetchObject()->data_inicio;
+                $data_fim = DbModel::consultaSimples("SELECT fp.data_fim FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 ORDER BY fp.data_fim DESC LIMIT 0,1")->fetchObject()->data_fim;
+                /*if ($data_inicio == $data_fim || $data_fim == "0000-00-00") {
+                    return MainModel::dataParaBR($data_inicio);
+                } else {
+                    return "de " . MainModel::dataParaBR($data_inicio) . " à " . MainModel::dataParaBR($data_fim);
+                }*/
+                return "de " . MainModel::dataParaBR($data_inicio) . " à " . MainModel::dataParaBR($data_fim);
+            } else {
+                return "(Parcelas não cadastradas)";
+            }
         }
 
     }
@@ -1093,7 +1110,7 @@ class FormacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function editarParcela($post)
+    /*public function editarParcela($post)
     {
         unset($post['_method']);
         $pedido_id = MainModel::decryption($post['pedido_id']);
@@ -1156,7 +1173,7 @@ class FormacaoController extends FormacaoModel
             ];
         }
         return MainModel::sweetAlert($alerta);
-    }
+    }*/
 
     public function consultaPedido($contratacao_id)
     {
@@ -1694,12 +1711,12 @@ class FormacaoController extends FormacaoModel
         if ($dados['ano_referencia'] == "")
             $dados['ano_referencia'] = null;
 
-        if($dados['data_abertura'] != "")
+        if ($dados['data_abertura'] != "")
             $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
         else
             $dados['data_abertura'] = null;
 
-        if($dados['data_encerramento'] != "")
+        if ($dados['data_encerramento'] != "")
             $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
         else
             $dados['data_encerramento'] = null;
@@ -1740,12 +1757,12 @@ class FormacaoController extends FormacaoModel
         if ($dados['ano_referencia'] == "")
             $dados['ano_referencia'] = null;
 
-        if($dados['data_abertura'] != "")
+        if ($dados['data_abertura'] != "")
             $dados['data_abertura'] = MainModel::dataHoraParaSQL($dados['data_abertura']);
         else
             $dados['data_abertura'] = null;
 
-        if($dados['data_encerramento'] != "")
+        if ($dados['data_encerramento'] != "")
             $dados['data_encerramento'] = MainModel::dataHoraParaSQL($dados['data_encerramento']);
         else
             $dados['data_encerramento'] = null;

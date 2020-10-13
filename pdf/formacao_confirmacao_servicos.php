@@ -11,8 +11,9 @@ $parcela_id = $_GET['parcela'];
 $pedido_id = $_GET['id'];
 
 $dataAtual = date('d/m/Y');
-$dadosParcela = PedidoController::getParcelasPedidoComplementos($pedido_id, '1', $parcela_id);
-$periodo = $formObj->retornaPeriodoFormacao($pedido_id);
+$contratacao_id = $formObj->recuperaPedido($pedido_id)->origem_id;
+$dadosParcela = $formObj->retornaDadosParcelas($contratacao_id, '', '1', $parcela_id);
+$periodo = $formObj->retornaPeriodoFormacao($contratacao_id, '', '1', $parcela_id);
 
 $data_inicio = MainModel::dataParaBR($dadosParcela->data_inicio);
 $data_fim = MainModel::dataParaBR($dadosParcela->data_fim);
@@ -42,6 +43,7 @@ $ano = date('Y');
     <link rel="stylesheet" href="<?= SERVERURL ?>views/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= SERVERURL ?>views/dist/css/adminlte.min.css">
+    <title>Atestado de Serviço</title>
 </head>
 
 <br>
@@ -50,7 +52,7 @@ $ano = date('Y');
 
 <?php
 
-$sei =
+$texto =
     "<p><strong><u><center>Anexo I da Portaria SF nº 170, de 31 agosto de 2020</strong></p></u></center>" .
     "<p>&nbsp;</p>" .
     "<p><strong>Recebimento da Documentação </strong></p>" .
@@ -82,7 +84,7 @@ equivalente) no dia $data_fim, com atraso de ____dias.<br>O prazo contratual é 
 ?>
 
 <div align="center">
-    <div id="texto" class="texto"><?php echo $sei; ?></div>
+    <div id="texto" class="texto"><?php echo $texto; ?></div>
 </div>
 
 <div align="center">

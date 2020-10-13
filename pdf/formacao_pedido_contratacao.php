@@ -11,11 +11,7 @@ $pedido_id = $_GET['id'];
 
 $pedido = $formObj->recuperaPedido($pedido_id);
 
-
-$periodo = $formObj->retornaPeriodoFormacao($pedido_id);
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
-$contratacao = $formObj->recuperaContratacao($pedido_id);
-
 
 if ($pf->passaporte != NULL) {
     $cpf_passaporte = "<strong>Passaporte: </strong> " . $pf->passaporte . "<br />";
@@ -71,9 +67,9 @@ $ano = date('Y');
         "<strong>E-mail:</strong> " . $pf->email . "</p>" .
         "<p>&nbsp;</p>" .
         "<p><strong>Objeto:</strong> " . $formObj->retornaObjetoFormacao($pedido->origem_id) . "</p>" .
-        "<p><strong>Data / Período:</strong> " . $formObj->retornaPeriodoFormacao($pedido_id) . " - conforme Proposta/Cronograma</p>" .
-        "<p><strong>Carga Horária:</strong> " . PedidoController::retornaCargaHoraria($pedido_id, '1') . " hora(s)" . "</p>" .
-        "<p align='justify'><strong>Local:</strong> " . $formObj->retornaLocaisFormacao($pedido->origem_id) . "</p>" .
+        "<p><strong>Data / Período:</strong> " . $formObj->retornaPeriodoFormacao($pedido->origem_id) . " - conforme Proposta/Cronograma</p>" .
+        "<p><strong>Carga Horária:</strong> " . $formObj->retornaCargaHoraria($pedido->origem_id) . " hora(s)" . "</p>" .
+        "<p align='justify'><strong>Local(ais):</strong> " . $formObj->retornaLocaisFormacao($pedido->origem_id) . "</p>" .
         "<p><strong>Valor: </strong> R$ " . MainModel::dinheiroParaBr($pedido->valor_total) . "  (" . MainModel::valorPorExtenso($pedido->valor_total) . " )</p>" .
         "<p align='justify'><strong>Forma de Pagamento:</strong> " . $pedido->forma_pagamento . "</p>" .
         "<p align='justify'><strong>Justificativa: </strong> " . $pedido->justificativa . "</p>" .

@@ -18,7 +18,7 @@ class PDF extends FPDF
 $pedido = $formObj->recuperaPedido($pedido_id);
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $telPf = $formObj->recuperaTelPf($pedido->pessoa_fisica_id);
-$parcelaDados = PedidoController::getParcelasPedidoComplementos($pedido_id, '1', $parcela_id);
+$parcelaDados = $formObj->retornaDadosParcelas($pedido->origem_id, '', '1', $parcela_id);
 
 $ano = date('Y');
 
@@ -56,7 +56,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(16, $l, utf8_decode("Assunto:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(140, $l, utf8_decode("Pedido de Pagamento de R$ " . MainModel::dinheiroParaBr($parcelaDados->valor) . " ( " . MainModel::valorPorExtenso($parcelaDados->valor) . " )"), 0, 'L', 0);
+$pdf->MultiCell(140, $l, utf8_decode("Pedido de Pagamento de R$ " . MainModel::dinheiroParaBr($parcelaDados->valor) . " ( " . MainModel::valorPorExtenso($parcelaDados->valor) . ")"), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -76,7 +76,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(35, $l, utf8_decode("Período de locação:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(120, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido_id)), 0, 'L', 0);
+$pdf->MultiCell(120, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido->origem_id, '', '1', $parcela_id)), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->MultiCell(200, $l, utf8_decode("PAGAMENTO LIBERÁVEL A PARTIR DE " . MainModel::dataParaBR($parcelaDados->data_inicio) . " MEDIANTE CONFIRMAÇÃO DA UNIDADE PROPONENTE."), 0, 'L', 0);
