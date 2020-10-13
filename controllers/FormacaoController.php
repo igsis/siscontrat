@@ -921,13 +921,15 @@ class FormacaoController extends FormacaoModel
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
-        return DbModel::consultaSimples("SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.pessoa_fisica_id,
+        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id,
                                                          fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente'                                                                   
                                                   FROM formacao_contratacoes AS fc
                                                   INNER JOIN programas AS pro ON pro.id = fc.programa_id
                                                   LEFT JOIN usuarios AS fiscal ON fiscal.id = fc.fiscal_id
                                                   LEFT JOIN usuarios AS suplente ON suplente.id = fc.suplente_id      
-                                                  WHERE fc.id = $contratacao_id AND fc.publicado = 1")->fetchObject();
+                                                  WHERE fc.id = {$contratacao_id} AND fc.publicado = 1";
+
+        return DbModel::consultaSimples($sql)->fetchObject();
     }
 
     //retorna um obj com os dados de uma determinada pessoa fisica

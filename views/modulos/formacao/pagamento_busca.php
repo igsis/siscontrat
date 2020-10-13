@@ -244,6 +244,7 @@
         a.classList.add('btn-sm');
         a.classList.add('text-light');
         a.href = `<?=SERVERURL?>formacao/pagamento_lista_parcelas&id=${id}`;
+        a.setAttribute('target', '_blank');
         a.textContent = 'Pagamento';
         return a;
     }

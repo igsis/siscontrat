@@ -1,13 +1,15 @@
 <?php
 $pedido_id = isset($_GET['id']) ? $_GET['id'] : "";
 require_once "./controllers/FormacaoController.php";
+require_once "./controllers/PedidoController.php";
 
 $formObj = new FormacaoController();
+$pedObj = new PedidoController();
 
 $pedido = $formObj->recuperaPedido($pedido_id);
 $pessoa = $formObj->recuperaPf($pedido->pessoa_fisica_id);
-$contratacao = $formObj->recuperaContratacao(MainModel::encryption($pedido->origem_id));
-$parcelas = PedidoController::getParcelasPedido($pedido_id);
+$contratacao = $formObj->recuperaContratacao(MainModel::encryption($pedido->origem_id),1);
+$parcelas = $pedObj->getParcelasPedido($pedido_id);
 
 //contador de parcelas
 $i = 1;
@@ -52,7 +54,6 @@ $i = 1;
                                        value="<?= $formObj->retornaLocaisFormacao($pedido->origem_id) ?>" disabled>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-md">
                                 <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= MainModel::encryption($pedido->pessoa_fisica_id) ?>" target="_blank">
