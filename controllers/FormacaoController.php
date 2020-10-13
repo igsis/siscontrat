@@ -807,7 +807,7 @@ class FormacaoController extends FormacaoModel
             }
         }
 
-        $sql = "SELECT p.id, p.origem_id,fc.protocolo, fc.ano, p.numero_processo,fc.num_processo_pagto, pf.nome, v.verba, fs.status, fc.form_status_id 
+        $sql = "SELECT p.id, p.origem_id,fc.protocolo, fc.ano, p.numero_processo,fc.num_processo_pagto, pf.nome, pf.cpf, pf.passaporte, v.verba, fs.status, fc.form_status_id 
             FROM pedidos p 
             INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id 
             INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
@@ -1794,6 +1794,11 @@ class FormacaoController extends FormacaoModel
             ];
         }
         return MainModel::sweetAlert($alerta);
+    }
+
+    public function recuperaAnoVigente()
+    {
+        return DbModel::consultaSimples("SELECT MAX(ano_referencia) as ano_vigente FROM capac_new.form_aberturas WHERE publicado != 0", true)->fetchObject();
     }
 }
 
