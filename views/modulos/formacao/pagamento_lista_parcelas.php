@@ -86,29 +86,29 @@ $i = 1;
                                     <th>
                                         <a href="<?= SERVERURL ?>pdf/formacao_pagamento.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
                                            target="_blank">
-                                            <button type="button" class="btn btn-sm btn-primary">Pagamento</button>
+                                            <button type="button" class="btn btn-sm btn-info">Pagamento</button>
                                         </a>
 
                                         <a href="<?= SERVERURL ?>pdf/formacao_recibo.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
                                            target="_blank">
-                                            <button type="button" class="btn btn-sm btn-primary">Recibo</button>
+                                            <button type="button" class="btn btn-sm btn-info">Recibo</button>
                                         </a>
 
                                         <a href="<?= SERVERURL ?>pdf/formacao_confirmacao_servicos.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
                                            target="_blank">
-                                            <button type="button" class="btn btn-sm btn-primary">Atestado Serviço
+                                            <button type="button" class="btn btn-sm btn-info">Atestado Serviço
                                             </button>
                                         </a>
 
                                         <a href="<?= SERVERURL ?>pdf/formacao_horas.php?id=<?= $pedido_id ?>"
                                            target="_blank">
-                                            <button type="button" class="btn btn-sm btn-primary">Relatório Horas
+                                            <button type="button" class="btn btn-sm btn-info">Relatório Horas
                                             </button>
                                         </a>
 
                                         <a href="<?= SERVERURL ?>pdf/formacao_contabilidade.php?id=<?= $pedido_id ?>"
                                            target="_blank">
-                                            <button type="button" class="btn btn-sm btn-primary">Contabilidade</button>
+                                            <button type="button" class="btn btn-sm btn-info">Contabilidade</button>
                                         </a>
                                     </th>
                                 </tr>
