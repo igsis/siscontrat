@@ -51,8 +51,8 @@ endif;
                             <div class="form-group col-md">
                                 <label for="pessoa_fisica_id">Proponente:</label>
                                 <select name="pessoa_fisica_id" id="pf_id" tabindex="-1" aria-disabled="true"
-                                        class="form-control"
-                                        style="background: #eee; pointer-events: none; touch-action: none;">
+                                        style="background: #eee; pointer-events: none; touch-action: none;"
+                                        class="form-control">
                                     <option value="">Selecione uma opção...</option>
                                     <?php $formObj->geraOpcao("pessoa_fisicas", $contratacao->pessoa_fisica_id ?? "") ?>
                                 </select>

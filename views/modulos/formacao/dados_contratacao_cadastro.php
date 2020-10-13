@@ -4,6 +4,8 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
 $contratacaoObj = new FormacaoController();
 $dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
 
+//caso haja um cadastro, torna a checkbox do proponente inalterável
+$id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #eee; pointer-events: none; touch-action: none;'" : $readonly = "";
 ?>
 
 <div class="content-header">
@@ -36,12 +38,18 @@ $dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
                                 <input type="hidden" name="id" value="<?= $id ?>">
                             <?php endif; ?>
                             <div class="row">
-                                <div class="form-group col-md">
+                                <div class="col-md">
                                     <label for="pessoa_fisica_id">Proponente: *</label>
-                                    <select name="pessoa_fisica_id" required class="form-control">
+                                    <select name="pessoa_fisica_id" required class="form-control" <?= $readonly ?>>
                                         <option value="">Selecione um proponente...</option>
                                         <?php $contratacaoObj->geraOpcao('pessoa_fisicas', $dados_contratacao->pessoa_fisica_id ?? "") ?>
                                     </select>
+                                    <?php if ($id): ?>
+                                        <a href="<?= SERVERURL ?>formacao/pf_cadastro&id=<?= $contratacaoObj->encryption($dados_contratacao->pessoa_fisica_id) ?>" target="_blank">
+                                            <button type="button" class="btn btn-primary float-right">Abrir Proponente
+                                            </button>
+                                        </a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
 
