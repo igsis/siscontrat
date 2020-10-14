@@ -58,7 +58,7 @@ $vigencias = $vigenciaObj->listaVigencias();
                                             <input type="hidden" name="_method" value="apagarVigencia">
                                             <input type="hidden" name="id" value="<?= $vigenciaObj->encryption($vigencia->id)?>">
                                             <button type="submit" class="btn bg-gradient-danger btn-sm">
-                                                <i class="fas fa-trash"></i> Aeoo2
+                                                <i class="fas fa-trash"></i> Apagar
                                             </button>
                                             <div class="resposta-ajax"></div>
                                         </form>
