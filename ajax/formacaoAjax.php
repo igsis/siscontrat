@@ -110,6 +110,9 @@ if (isset($_POST['_method'])) {
         case "cadastrarNotaEmpenho":
             echo $insForm->cadastrarNotaEmpenho($_POST);
             break;
+        case "editarNotaEmpenho":
+            echo $insForm->editarNotaEmpenho($_POST);
+            break;
         case "cadastrarPF":
             echo $insPessoaFisica->inserePessoaFisica($_POST['pagina']);
             break;
@@ -142,6 +145,15 @@ if (isset($_POST['_method'])) {
             break;
         case "apagarDocumento":
             echo $insForm->apagaDocumento($_POST);
+            break;
+        case "cadastrarAbertura":
+            echo $insForm->insereAbertura($_POST);
+            break;
+        case "editarAbertura":
+            echo $insForm->editaAbertura($_POST);
+            break;
+        case "apagarAbertura":
+            echo $insForm->apagaAbertura($_POST);
             break;
 
     }

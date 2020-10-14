@@ -10,7 +10,8 @@ $formObj = new FormacaoController();
 
 $pedido_id = $_GET['id'];
 
-class PDF extends FPDF{
+class PDF extends FPDF
+{
 }
 
 $ne = $formObj->retornaNotaEmpenho($pedido_id);
@@ -57,62 +58,62 @@ $pdf->MultiCell(120, $l, utf8_decode(MainModel::dataParaBR($ne->emissao_nota_emp
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
-$pdf->Cell(49,$l,utf8_decode("Referente ao processo nº:"),0,0,'L');
+$pdf->Cell(49, $l, utf8_decode("Referente ao processo nº:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(55,$l, utf8_decode($pedido->numero_processo),0,'L',0);
+$pdf->MultiCell(55, $l, utf8_decode($pedido->numero_processo), 0, 'L', 0);
 
 $pdf->Ln(9);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 11);
-$pdf->Cell(40,$l, utf8_decode("São Paulo, " . MainModel::dataParaBR($data)));
+$pdf->Cell(40, $l, utf8_decode("São Paulo, " . MainModel::dataParaBR($data)));
 
 $pdf->Ln(75);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
-$pdf->Cell(165,$l,utf8_decode($pf->nome),'T',0,'L');
+$pdf->Cell(165, $l, utf8_decode($pf->nome), 'T', 0, 'L');
 
 $pdf->Ln();
 
 $pdf->SetX($x);
 
-if($pf->passaporte != NULL){
-    $pdf->Cell(23,$l,utf8_decode("Passaporte:"),0,0,'L');
-    $pdf->SetFont('Arial', '',11);
-    $pdf->Cell(40,$l,utf8_decode($pf->passaporte),0,0,'L');
+if ($pf->passaporte != NULL) {
+    $pdf->Cell(23, $l, utf8_decode("Passaporte:"), 0, 0, 'L');
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->Cell(40, $l, utf8_decode($pf->passaporte), 0, 0, 'L');
 
     $pdf->Ln();
-}else{
+} else {
     $pdf->SetX($x);
-    $pdf->Cell(8,$l,utf8_decode("RG:"),0,0,'L');
-    $pdf->SetFont('Arial', '',11);
-    $pdf->Cell(40,$l,utf8_decode(MainModel::checaCampo($pf->rg)),0,0,'L');
+    $pdf->Cell(8, $l, utf8_decode("RG:"), 0, 0, 'L');
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->Cell(40, $l, utf8_decode(MainModel::checaCampo($pf->rg)), 0, 0, 'L');
 
     $pdf->Ln();
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial', 'B', 11);
-    $pdf->Cell(10,$l,utf8_decode("CPF:"),0,0,'L');
-    $pdf->SetFont('Arial', '',11);
-    $pdf->Cell(40,$l,utf8_decode($pf->cpf),0,0,'L');
+    $pdf->Cell(10, $l, utf8_decode("CPF:"), 0, 0, 'L');
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->Cell(40, $l, utf8_decode($pf->cpf), 0, 0, 'L');
 
     $pdf->Ln();
 }
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
-$pdf->Cell(13,$l,utf8_decode("E-mail:"),0,0,'L');
-$pdf->SetFont('Arial', '',11);
-$pdf->Cell(40,$l,utf8_decode($pf->email),0,0,'L');
+$pdf->Cell(14, $l, utf8_decode("E-mail:"), 0, 0, 'L');
+$pdf->SetFont('Arial', '', 11);
+$pdf->Cell(40, $l, utf8_decode($pf->email), 0, 0, 'L');
 
 $pdf->Ln(7);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
-$pdf->Cell(14,$l,"Objeto:",0,0,'L');
+$pdf->Cell(15, $l, "Objeto:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->Cell(23,$l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0,0,'L');
+$pdf->Cell(23, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 0, 'L');
 
 $pdf->Output('formacao_ne.pdf', 'I');
 ?>

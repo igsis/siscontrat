@@ -1,10 +1,9 @@
 <?php
-    require_once "./controllers/FormacaoController.php";
-    $id = isset($_GET['id']) ? $_GET['id'] : null;
-    $dados_contratacaoObj = new FormacaoController();
-    
-    $dados_contratacao = $dados_contratacaoObj->listaDadosContratacao();
-    //var_dump($dados_contratacao);
+require_once "./controllers/FormacaoController.php";
+$id = isset($_GET['id']) ? $_GET['id'] : null;
+$dados_contratacaoObj = new FormacaoController();
+
+$dados_contratacao = $dados_contratacaoObj->listaDadosContratacao();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -29,7 +28,7 @@
                         <h3 class="card-title">Listagem</h3>
                         <div class="card-tools">
                             <!-- button with a dropdown -->
-                            <a href="<?= SERVERURL ?>formacao/dados_contratacao_cadastro" class="btn btn-success btn-sm" >
+                            <a href="<?= SERVERURL ?>formacao/dados_contratacao_cadastro" class="btn btn-success btn-sm">
                                 <i class="fas fa-plus"></i> Cadastrar Novo
                             </a>
                         </div>
@@ -45,35 +44,38 @@
                                     <th>Programa</th>
                                     <th>Linguagem</th>
                                     <th>Cargo</th>
-                                    <th width="15%">Visualizar</th>
-                                    <th width="15%">Editar</th>
-                                    
+                                    <th>Editar</th>
+                                    <th>Apagar</th>
+
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($dados_contratacao as $contratacao): ?>
-                                <tr>
-                                    <td><?=$contratacao['protocolo']?></td>
-                                    <td><?=$contratacao['pessoa']?></td>
-                                    <td><?=$contratacao['ano']?></td>
-                                    <td><?=$contratacao['programa']?></td>
-                                    <td><?=$contratacao['linguagem']?></td>
-                                    <td><?=$contratacao['cargo']?></td>
-                                    <td>
-                                        <a href="<?= SERVERURL . "formacao/detalhes_contratacao&id=" . $dados_contratacaoObj->encryption($contratacao['id']) ?>">
-                                            <button type="submit" class="btn bg-gradient-info btn-sm float-left mr-2">
-                                                <i class="fas fa-user-edit"></i> Visualizar
-                                            </button>
-                                        </a>
-                                    </td>
-                                    <td>
-                                    <a href="<?= SERVERURL . "formacao/dados_contratacao_cadastro&id=" . $dados_contratacaoObj->encryption($contratacao['id']) ?>">
-                                        <button type="submit" class="btn bg-gradient-primary btn-sm">
-                                            <i class="fas fa-user-edit"></i> Editar
-                                        </button>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?> 
+                                <?php foreach ($dados_contratacao as $contratacao) : ?>
+                                    <tr>
+                                        <td><?= $contratacao['protocolo'] ?></td>
+                                        <td><?= $contratacao['pessoa'] ?></td>
+                                        <td><?= $contratacao['ano'] ?></td>
+                                        <td><?= $contratacao['programa'] ?></td>
+                                        <td><?= $contratacao['linguagem'] ?></td>
+                                        <td><?= $contratacao['cargo'] ?></td>
+                                        <td>
+                                            <a href="<?= SERVERURL . "formacao/dados_contratacao_cadastro&id=" . $dados_contratacaoObj->encryption($contratacao['id']) ?>">
+                                                <button type="submit" class="btn bg-gradient-primary btn-sm">
+                                                    <i class="fas fa-user-edit"></i> Editar
+                                                </button>
+                                        </td>
+                                        <td>
+                                            <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/formacaoAjax.php" role="form" data-form="update">
+                                                <input type="hidden" name="_method" value="apagarDadosContratacao">
+                                                <input type="hidden" name="id" value="<?= $dados_contratacaoObj->encryption($contratacao['id']) ?>">
+                                                <button type="submit" class="btn bg-gradient-danger btn-sm  float-right">
+                                                    <i class="fas fa-trash"></i> Apagar
+                                                </button>
+                                                <div class="resposta-ajax"></div>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -83,20 +85,18 @@
                                     <th>Programa</th>
                                     <th>Linguagem</th>
                                     <th>Cargo</th>
-                                    <th width="15%">Visualizar</th>
-                                    <th width="15%">Editar</th>
+                                    <th>Editar</th>
+                                    <th>Apagar</th>
 
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                     <!-- /.card-body -->
-
                 </div>
                 <!-- /.card -->
             </div>
-        </div>
-        <!-- /.row -->
+        </div>  <!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->

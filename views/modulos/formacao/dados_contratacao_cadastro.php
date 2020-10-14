@@ -1,259 +1,237 @@
 <?php
+require_once "./controllers/FormacaoController.php";
+$id = isset($_GET['id']) ? $_GET['id'] : null;
+$contratacaoObj = new FormacaoController();
+$dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
 
-    require_once "./controllers/FormacaoController.php";
-    $id = isset($_GET['id']) ? $_GET['id'] : null;
-    $contratacaoObj = new FormacaoController();
-    $dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
-    //var_dump($dados_contratacao);
-    $pf = $contratacaoObj->listaPF();
-    $classificacao = $contratacaoObj->listaClassificacao();
-    $territorio = $contratacaoObj->listaTerritorios();
-    $coordenadoria = $contratacaoObj->listaCoordenadorias();
-    $subprefeitura = $contratacaoObj->listaSubprefeituras();
-    $programa = $contratacaoObj->listaProgramas();
-    $linguagem = $contratacaoObj->listaLinguagens();
-    $projeto = $contratacaoObj->listaProjetos();
-    $cargo = $contratacaoObj->listaCargos();
-    $regiao = $contratacaoObj->listaRegiaoPrefencial();
-    $ficalSuplente = $contratacaoObj->listaFiscalSuplente();
-    $vigencia = $contratacaoObj->listaVigencias();
-    $id_user = $_SESSION['usuario_id_s'];
-
+//caso haja um cadastro, torna a checkbox do proponente inalterável
+$id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #eee; pointer-events: none; touch-action: none;'" : $readonly = "";
 ?>
 
-<!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark">Dados para contratação</h1>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+            </div>
+        </div>
+    </div>
 </div>
-<!-- /.content-header -->
 
-<!-- Main content -->
 <div class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <!-- Horizontal Form -->
                 <div class="card card-info">
                     <div class="card-header">
                         <h3 class="card-title">Dados</h3>
                     </div>
-                    <!-- /.card-header -->
-                    <!-- form start -->
+
                     <div class="card-body">
-                        <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" 
-                            method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
-                            <input type="hidden" name="_method" value="<?= ($id) ? "editarDadosContratacao" : "cadastrarDadosContratacao" ?>">
-                            <input type="hidden" name="form_status_id" value="1">
-                            <input type="hidden" name="usuario_id" value="<?= $id_user ?>">
+                        <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php"
+                              method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
+                            <input type="hidden" name="_method"
+                                   value="<?= ($id) ? "editarDadosContratacao" : "cadastrarDadosContratacao" ?>">
+                            <input type="hidden" name="usuario_id"
+                                   value="<?= isset($_SESSION['usuario_id_s']) ? $_SESSION['usuario_id_s'] : "" ?>">
                             <?php if ($id): ?>
-                                <input type="hidden" name="id" id="modulo_id" value="<?= $id ?>">
+                                <input type="hidden" name="id" value="<?= $id ?>">
                             <?php endif; ?>
                             <div class="row">
-                                <div class="form-group col-md-6">
+                                <div class="col-md">
+                                    <label for="pessoa_fisica_id">Proponente: *</label>
+                                    <select name="pessoa_fisica_id" required class="form-control" <?= $readonly ?>>
+                                        <option value="">Selecione um proponente...</option>
+                                        <?php $contratacaoObj->geraOpcao('pessoa_fisicas', $dados_contratacao->pessoa_fisica_id ?? "") ?>
+                                    </select>
+                                    <?php if ($id): ?>
+                                        <a href="<?= SERVERURL ?>formacao/pf_cadastro&id=<?= $contratacaoObj->encryption($dados_contratacao->pessoa_fisica_id) ?>" target="_blank">
+                                            <button type="button" class="btn btn-primary float-right">Abrir Proponente
+                                            </button>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md">
                                     <label for="ano">Ano: *</label>
-                                    <input type="number" min="2018" id="ano" name="ano"  value="<?= $dados_contratacao->ano ?? "" ?>" required class="form-control">
+                                    <input type="number" min="2018" id="ano" name="ano"
+                                           value="<?= $dados_contratacao->ano ?? "" ?>" required class="form-control">
                                 </div>
 
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md">
                                     <label for="chamado">Chamado: *</label>
-                                    <input type="number" min="1" max="127" id="chamado" name="chamado" max="127" value="<?= $dados_contratacao->chamado ?? "" ?>" required class="form-control">
+                                    <input type="number" min="0" max="127" name="chamado"
+                                           value="<?= $dados_contratacao->chamado ?? "" ?>" required
+                                           class="form-control">
+                                </div>
+
+                                <div class="form-group col-md">
+                                    <label for="classificacao">Classificação: *</label>
+                                    <input type="number" min="0" name="classificacao"
+                                           value="<?= $dados_contratacao->classificacao ?? "" ?>" required
+                                           class="form-control">
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="from-group col-md-12">
-                                    <label for="pf">Pessoa Física: *</label>
-                                    <select required value="" name="pessoa_fisica_id" id="pessoa_fisica_id" class="form-control">
-                                        <option>Selecione a pessoa física...</option>
-                                        <?php foreach ($pf as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->pessoa_fisica_id) && ($linha->id == $dados_contratacao->pessoa_fisica_id) ? "selected" : "" ?>>
-                                                <?php echo $linha->nome ?>
-                                            </option>
-                                        <?php endforeach ?>
-                                    </select>
-                                    <br>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-md-12">
-                                    <label for="classificacao">Classificação Indicativa: *</label>
-                                    <button type="button" class="btn bg-gradient-primary btn-sm" data-toggle="modal" data-target="#modal-default"><i class="fa fa-info"></i></button>
-                                    <select required class="form-control" name="classificacao" id="classificacao">
-                                        <option value="">Selecione uma classificação indicativa...</option>
-                                        <?php foreach ($classificacao as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->classificacao) && ($linha->id == $dados_contratacao->classificacao) ? "selected" : "" ?>>
-                                                <?php echo $linha->classificacao_indicativa ?>
-                                            </option>
-                                        <?php endforeach ?>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-md-3">
-                                    <label for="territorio">Território: *</label>
-                                    <select class="form-control" name="territorio_id" id="territorio_id" required>
-                                    <option value="">Selecione o território...</option>
-                                        <?php foreach ($territorio as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->territorio_id) && ($linha->id == $dados_contratacao->territorio_id) ? "selected" : "" ?>>
-                                                <?php echo $linha->territorio ?>
-                                            </option>
-                                        <?php endforeach ?>
+                                <div class="form-group col-md">
+                                    <label for="territorio_id">Território: *</label>
+                                    <select name="territorio_id" required class="form-control">
+                                        <option value="">Selecione um território...</option>
+                                        <?php $contratacaoObj->geraOpcao('territorios', $dados_contratacao->territorio_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-3">
-                                    <label for="coordenadoria">Coordenadoria: *</label>
-                                    <select class="form-control" name="coordenadoria_id" id="coordenadoria_id" required>
-                                        <option value="">Selecione a coordenadoria...</option>
-                                        <?php foreach ($coordenadoria as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->coordenadoria_id) && ($linha->id == $dados_contratacao->coordenadoria_id) ? "selected" : "" ?>>
-                                                <?php echo $linha->coordenadoria ?>
-                                            </option>
-                                        <?php endforeach ?>
+                                <div class="form-group col-md">
+                                    <label for="coordenadoria_id">Coordenadoria: *</label>
+                                    <select name="coordenadoria_id" required class="form-control">
+                                        <option value="">Selecione uma coordenadoria...</option>
+                                        <?php $contratacaoObj->geraOpcao('coordenadorias', $dados_contratacao->coordenadoria_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-3">
-                                    <label for="subprefeitura">Subprefeitura: *</label>
-                                    <select class="form-control" name="subprefeitura_id" id="subprefeitura_id" required>
-                                        <option value="">Selecione a subprefeitura...</option>
-                                        <?php foreach ($subprefeitura as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->subprefeitura_id) && ($linha->id == $dados_contratacao->subprefeitura_id) ? "selected" : "" ?>>
-                                                <?php echo $linha->subprefeitura ?>
-                                            </option>
-                                        <?php endforeach ?>
+                                <div class="form-group col-md">
+                                    <label for="subprefeitura_id">Subprefeitura: *</label>
+                                    <select name="subprefeitura_id" required class="form-control">
+                                        <option value="">Selecione uma subprefeitura...</option>
+                                        <?php $contratacaoObj->geraOpcao('subprefeituras', $dados_contratacao->subprefeitura_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-3">
-                                    <label for="programa">Programa: *</label>
-                                    <select class="form-control" name="programa_id" id="programa_id" required>
-                                        <option value="">Selecione o programa...</option>
-                                        <?php foreach ($programa as $linha): ?>
-                                            <option value="<?= $linha['id'] ?>" <?= isset($dados_contratacao->programa_id) && ($linha['id'] == $dados_contratacao->programa_id) ? "selected" : "" ?>>
-                                                <?php echo $linha['programa'] ?>
-                                            </option>
-                                        <?php endforeach ?>
+                                <div class="form-group col-md">
+                                    <label for="programa_id">Programa: *</label>
+                                    <select name="programa_id" required class="form-control">
+                                        <option value="">Selecione um programa...</option>
+                                        <?php $contratacaoObj->geraOpcao('programas', $dados_contratacao->programa_id ?? "", '1') ?>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-md-3">
-                                    <label for="linguagem">Linguagem: *</label>
-                                    <select class="form-control" name="linguagem_id" id="linguagem_id" required>
-                                        <option value="">Selecione a linguagem...</option>
-                                        <?php foreach ($linguagem as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->linguagem_id) && ($linha->id == $dados_contratacao->linguagem_id) ? "selected" : "" ?>>
-                                                <?php echo $linha->linguagem ?>
-                                            </option>
-                                        <?php endforeach ?>
+                                <div class="form-group col-md">
+                                    <label for="linguagem_id">Linguagem: *</label>
+                                    <select name="linguagem_id" required class="form-control">
+                                        <option value="">Selecione uma linguagem...</option>
+                                        <?php $contratacaoObj->geraOpcao('linguagens', $dados_contratacao->linguagem_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-3">
-                                    <label for="projeto">Projeto: *</label>
-                                    <select class="form-control" name="projeto_id" id="projeto_id" required>
-                                        <option value="">Selecione o projeto...</option>
-                                        <?php foreach ($projeto as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->projeto_id) && ($linha->id == $dados_contratacao->projeto_id) ? "selected" : "" ?>>
-                                                <?php echo $linha->projeto ?>
-                                            </option>
-                                        <?php endforeach ?>
+                                <div class="form-group col-md">
+                                    <label for="projeto_id">Projeto: *</label>
+                                    <select name="projeto_id" required class="form-control">
+                                        <option value="">Selecione um projeto...</option>
+                                        <?php $contratacaoObj->geraOpcao('projetos', $dados_contratacao->projeto_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-3">
-                                    <label for="cargo">Cargo: *</label>
-                                    <select class="form-control" name="form_cargo_id" id="form_cargo_id" required>
-                                        <option value="">Selecione o cargo...</option>
-                                        <?php foreach ($cargo as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->form_cargo_id) && ($linha->id == $dados_contratacao->form_cargo_id) ? "selected" : "" ?>>
-                                                <?php echo $linha->cargo ?>
-                                            </option>
-                                        <?php endforeach ?>
+                                <div class="form-group col-md">
+                                    <label for="form_cargo_id">Cargo: *</label>
+                                    <select name="form_cargo_id" required class="form-control">
+                                        <option value="">Selecione uma coordenadoria...</option>
+                                        <?php $contratacaoObj->geraOpcao('formacao_cargos', $dados_contratacao->form_cargo_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-3">
-                                    <label for="cargo">Vigência: *</label>
-                                    <select class="form-control" name="form_vigencia_id" id="form_vigencia_id" required>
-                                        <option value="">Selecione a vigência...</option>
-                                        <?php foreach ($vigencia as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->form_vigencia_id) && ($linha->id == $dados_contratacao->form_vigencia_id) ? "selected" : "" ?>>
-                                                <?php echo $linha->ano . ' (' . $linha->descricao . ')'?>
-                                            </option>
-                                        <?php endforeach ?>
+                                <div class="form-group col-md">
+                                    <label for="programa_id">Vigencia: *</label>
+                                    <select name="form_vigencia_id" required class="form-control">
+                                        <option value="">Selecione uma vigencia...</option>
+                                        <?php $contratacaoObj->geraOpcaoVigencia('formacao_vigencias', $dados_contratacao->form_vigencia_id ?? "") ?>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-md-4" id="msgEscondeAno">
-                                    <span style="color: red;"><b>Ano escolhido é maior que a vigência!</b></span>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-md-12">
-                                    <label for="regiao">Região Preferencial: *</label>
-                                    <select class="form-control" name="regiao_preferencia_id" id="regiao_preferencia_id" required>
+                                <div class="form-group col-md">
+                                    <label for="regiao_preferencia_id">Região Preferencial: *</label>
+                                    <select name="regiao_preferencia_id" required class="form-control">
                                         <option value="">Selecione uma região...</option>
-                                        <?php foreach ($regiao as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->regiao_preferencia_id) && ($linha->id == $dados_contratacao->regiao_preferencia_id) ? "selected" : "" ?>>
-                                                <?php echo $linha->regiao ?>
-                                            </option>
-                                        <?php endforeach ?>
+                                        <?php $contratacaoObj->geraOpcao('regiao_preferencias', $dados_contratacao->regiao_preferencia_id ?? "") ?>
                                     </select>
                                 </div>
+                                <?php if ($id != ""): ?>
+                                    <div class="form-group col-md">
+                                        <label for="form_status_id">Status: *</label>
+                                        <select name="form_status_id" required class="form-control">
+                                            <option value="">Selecione um status...</option>
+                                            <?php $contratacaoObj->geraOpcao('formacao_status', $dados_contratacao->form_status_id ?? "") ?>
+                                        </select>
+                                    </div>
+                                <?php else: ?>
+                                    <input type="hidden" name="form_status_id" value="1">
+                                <?php endif; ?>
                             </div>
 
-                            <div class="row">
-                                <div class="form-group col-md-12">
-                                    <label for="observacao">Observação: </label>
-                                    <textarea name="observacao" id="observacao" rows="3" class="form-control"><?= $dados_contratacao->observacao ?? "" ?></textarea>
+                            <!-- gera 3 campos de instituições para 3 campos de locais, populando os mesmos com javascript caso necessário -->
+                            <?php for ($i = 0; $i < 3; $i++) : ?>
+                                <div class="row">
+                                    <div class="form-group col-md">
+                                        <label>Instituição #<?= $i + 1 ?>
+                                            : <?= $i == 0 || $i == 1 ? " *" : "" ?></label>
+                                        <select class="form-control" <?= $i == 0 || $i == 1 ? "required" : "" ?>
+                                                id="instituicao<?= $i + 1 ?>">
+                                            <option value="0">Selecione uma opção...</option>
+                                            <?php $contratacaoObj->geraOpcao('instituicoes') ?>
+                                        </select>
+                                    </div>
+
+                                    <?php if ($id != ""):
+                                        $local = $contratacaoObj->retornaLocaisFormacao($id, '1', '1')[$i]['id'] ?? "";
+                                    else:
+                                        $local = "";
+                                    endif; ?>
+                                    <div class="form-group col-md">
+                                        <label for="local_id[]">Local #<?= $i + 1 ?>
+                                            : <?= $i == 0 || $i == 1 ? " *" : "" ?></label>
+                                        <select name="local_id[]" class="form-control" onchange="bloqueandoLocais()"
+                                                id="local<?= $i + 1 ?>" <?= $i == 0 || $i == 1 ? "required" : "" ?>>
+                                            <?php isset($local) && $local != "" ? $contratacaoObj->geraOpcao('locais', $local) : "" ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            <?php endfor; ?>
+
+                            <div class="row" id="msgEsconde" style="display: none;">
+                                <div class="col-md">
+                                    <span style="color: red;"><b>Selecione locais diferentes!</b></span>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="fiscal">Fiscal: *</label>
-                                    <select name="fiscal_id" id="fiscal_id" class="form-control" required>
+                                <div class="col-md">
+                                    <label for="observacao">Observação:</label>
+                                    <textarea name="observacao" rows="3"
+                                              class="form-control"><?= isset($pedido->observacao) ? $pedido->observacao : "" ?></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md">
+                                    <label for="fiscal_id">Fiscal: *</label>
+                                    <select name="fiscal_id" required class="form-control">
                                         <option value="">Selecione um fiscal...</option>
-                                        <?php foreach ($ficalSuplente as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->fiscal_id) && ($linha->id == $dados_contratacao->fiscal_id) ? "selected" : "" ?>>
-                                                <?php echo $linha->nome_completo?>
-                                            </option>
-                                        <?php endforeach ?>
+                                        <?php $contratacaoObj->geraOpcaoUsuario($dados_contratacao->fiscal_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-6">
-                                    <label for="fiscal">Suplente: </label>
-                                    <select name="suplente_id" id="suplente_id" class="form-control">
+                                <div class="form-group col-md">
+                                    <label for="suplente_id">Suplente:</label>
+                                    <select name="suplente_id" class="form-control">
                                         <option value="">Selecione um suplente...</option>
-                                        <?php foreach ($ficalSuplente as $linha): ?>
-                                            <option value="<?= $linha->id ?>" <?= isset($dados_contratacao->suplente_id) && ($linha->id == $dados_contratacao->suplente_id) ? "selected" : "" ?>>
-                                                <?php echo $linha->nome_completo?>
-                                            </option>
-                                        <?php endforeach ?>
+                                        <?php $contratacaoObj->geraOpcaoUsuario($dados_contratacao->suplente_id ?? "", '1') ?>
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="resposta-ajax"></div>
-                            <?php if ($id): ?>
-                                <div class="col align-self-center">
-                                <hr>
-                                    <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&contratacao_id=" . $contratacaoObj->encryption($dados_contratacao->id) ?>" class="btn btn-success">
+                            <!-- caso tenha exista o id da contratação e não haja pedido publicado com este id é exibido o botão para gerar um pedido-->
+                            <?php if ($id && !$contratacaoObj->consultaPedido($id)): ?>
+                                <div class="col" style="text-align: center;">
+                                    <hr>
+                                    <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&contratacao_id=" . $contratacaoObj->encryption($dados_contratacao->id) ?>"
+                                       class="btn btn-success">
                                         Gerar pedido de contratação
                                     </a>
                                 </div>
@@ -266,22 +244,131 @@
                         <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary float-right">
                             Gravar
                         </button>
-                    </div >
+                    </div>
                     </form>
-                    
                 </div>
             </div>
-
         </div>
-        <!-- /.card -->
     </div>
 </div>
 
-
-<?php MainModel::exibeModalClassificacaoIndicativa() ?>
-
 <script>
-    let ano = $('#ano');
+    const url = "<?= SERVERURL ?>api/locais_espacos.php/";
+
+    let instituicao1 = document.querySelector('#instituicao1');
+    let instituicao2 = document.querySelector('#instituicao2');
+    let instituicao3 = document.querySelector('#instituicao3');
+
+    instituicao1.addEventListener('change', async e => {
+        let idInstituicao = $('#instituicao1 option:checked').val();
+        fetch(`${url}?instituicao_id=${idInstituicao}`)
+            .then(response => response.json())
+            .then(locais => {
+                $('#local1 option').remove();
+                $('#local1').append('<option value="">Selecione uma opção...</option>');
+
+                for (const local of locais) {
+                    $('#local1').append(`<option value='${local.id}'>${local.local}</option>`).focus();
+
+                }
+
+                if (idInstituicao == 1) {
+                    let locais = document.querySelector('#local1');
+                    locais.value = 2;
+                    $('#local1').attr('readonly', true);
+                    $('#local1').on('mousedown', function (e) {
+                        e.preventDefault();
+                    });
+                } else {
+                    $('#local1').unbind('mousedown');
+                    $('#local1').removeAttr('readonly');
+                }
+            })
+    });
+
+    instituicao2.addEventListener('change', async e => {
+        let idInstituicao = $('#instituicao2 option:checked').val();
+        fetch(`${url}?instituicao_id=${idInstituicao}`)
+            .then(response => response.json())
+            .then(locais => {
+                $('#local2 option').remove();
+                $('#local2').append('<option value="">Selecione uma opção...</option>');
+
+                for (const local of locais) {
+                    $('#local2').append(`<option value='${local.id}'>${local.local}</option>`).focus();
+
+                }
+
+                if (idInstituicao == 1) {
+                    let locais = document.querySelector('#local2');
+                    locais.value = 2;
+                    $('#local2').attr('readonly', true);
+                    $('#local2').on('mousedown', function (e) {
+                        e.preventDefault();
+                    });
+                } else {
+                    $('#local2').unbind('mousedown');
+                    $('#local2').removeAttr('readonly');
+                }
+            })
+    });
+
+    instituicao3.addEventListener('change', async e => {
+        let idInstituicao = $('#instituicao3 option:checked').val();
+        fetch(`${url}?instituicao_id=${idInstituicao}`)
+            .then(response => response.json())
+            .then(locais => {
+                $('#local3 option').remove();
+                $('#local3').append('<option value="">Selecione uma opção...</option>');
+
+                for (const local of locais) {
+                    $('#local3').append(`<option value='${local.id}'>${local.local}</option>`).focus();
+
+                }
+
+                if (idInstituicao == 1) {
+                    let locais = document.querySelector('#local3');
+                    locais.value = 2;
+                    $('#local3').attr('readonly', true);
+                    $('#local3').on('mousedown', function (e) {
+                        e.preventDefault();
+                    });
+                } else {
+                    $('#local3').unbind('mousedown');
+                    $('#local3').removeAttr('readonly');
+                }
+            })
+    });
+
+    function bloqueandoLocais() {
+        let local1 = $('#local1 option:selected').text()
+        let local2 = $('#local2 option:selected').text()
+        let local3 = $('#local3 option:selected').text()
+        var isMsg = $('#msgEsconde');
+        isMsg.hide();
+        let count = false;
+
+        if (local1 == local2)
+            count = true;
+
+        if (local1 == local3)
+            count = true;
+
+        if (local2 == local3)
+            count = true;
+
+        if (count == true) {
+            isMsg.show();
+            $('#cadastra').attr('disabled', true);
+        } else {
+            isMsg.hide();
+            $('#cadastra').attr('disabled', false);
+        }
+    }
+
+    $(document).ready(bloqueandoLocais());
+
+    /*let ano = $('#ano');
     let vigencia = $('#form_vigencia_id');
     let botao = $('#cadastra');
     var isMsgAno = $('#msgEscondeAno');
@@ -289,7 +376,7 @@
 
     function maior() {
         let valorVigencia = $('#form_vigencia_id option:selected').text();
-        valorVigencia = parseInt(valorVigencia.substring(0,80))
+        valorVigencia = parseInt(valorVigencia.substring(0, 80))
         if (ano.val() > valorVigencia) {
             botao.prop('disabled', true);
             isMsgAno.show();
@@ -302,5 +389,5 @@
     ano.on('change', maior);
     vigencia.on('change', maior);
 
-    $(document).ready(maior);
+    $(document).ready(maior);*/
 </script>

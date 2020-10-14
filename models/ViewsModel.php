@@ -68,6 +68,7 @@ class ViewsModel
             'pedido_contratacao_lista',
             'pedido_contratacao_cadastro',
             'pedido_edita_parcelas',
+            'pedido_visualizar',
             'pf_cadastro',
             'pf_lista',
             'pj_cadastro',
@@ -100,7 +101,9 @@ class ViewsModel
             'pesquisa_pf',
             'detalhes_contratacao',
             'pf_demais_anexos',
-            'dados_contratacao_cadastro'
+            'dados_contratacao_cadastro',
+            'abertura_lista',
+            'abertura_cadastro'
             
         ];
         if (self::verificaModulo($modulo)) {

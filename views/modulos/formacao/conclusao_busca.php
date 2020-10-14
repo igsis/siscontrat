@@ -71,7 +71,7 @@
                                 <th>Processo</th>
                                 <th>Protocolo</th>
                                 <th>Status</th>
-                                <th width="5%">Conclusão</th>
+                                <th style="width:5%">Conclusão</th>
                             </tr>
                             </thead>
 

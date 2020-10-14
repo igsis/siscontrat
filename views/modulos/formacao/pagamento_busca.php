@@ -71,8 +71,8 @@
                                 <th>Processo</th>
                                 <th>Protocolo</th>
                                 <th>Proponente</th>
-                                <th width="5%">Nota empenho</th>
-                                <th width="5%">Pagamento</th>
+                                <th style="width:5%">Nota empenho</th>
+                                <th style="width:5%">Pagamento</th>
                             </tr>
                             </thead>
 
@@ -232,6 +232,7 @@
         a.classList.add('btn-sm');
         a.classList.add('text-light');
         a.href = `<?=SERVERURL?>formacao/empenho_cadastro&id=${id}`;
+        a.setAttribute('target', '_blank');
         a.textContent = 'Empenho';
         return a;
     }
@@ -243,6 +244,7 @@
         a.classList.add('btn-sm');
         a.classList.add('text-light');
         a.href = `<?=SERVERURL?>formacao/pagamento_lista_parcelas&id=${id}`;
+        a.setAttribute('target', '_blank');
         a.textContent = 'Pagamento';
         return a;
     }

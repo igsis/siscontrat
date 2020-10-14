@@ -471,6 +471,38 @@ class MainModel extends DbModel
         }
     }
 
+    public function geraOpcaoVigencia($tabela, $selected = "", $capac = false)
+    {
+        $sql = "SELECT * FROM $tabela WHERE publicado = 1";
+        $consulta = DbModel::consultaSimples($sql, $capac);
+        if ($consulta->rowCount() >= 1) {
+            foreach ($consulta->fetchAll() as $option) {
+                if ($option[0] == $selected) {
+                    echo "<option value='" . $option[0] . "' selected >" . $option[2] . "</option>";
+                } else {
+                    echo "<option value='" . $option[0] . "'>" . $option[2] . "</option>";
+                }
+            }
+        }
+    }
+
+    public function geraOpcaoUsuario($selected = "", $fiscal, $orderPorId = false, $capac = false)
+    {
+        $order = $orderPorId ? 1 : 2;
+        $fiscal = isset($fiscal) ? "AND fiscal = 1" : "";
+        $sql = "SELECT * FROM usuarios WHERE publicado = 1 $fiscal ORDER BY $order";
+        $consulta = DbModel::consultaSimples($sql, $capac);
+        if ($consulta->rowCount() >= 1) {
+            foreach ($consulta->fetchAll() as $option) {
+                if ($option[0] == $selected) {
+                    echo "<option value='" . $option[0] . "' selected >" . $option[1] . "</option>";
+                } else {
+                    echo "<option value='" . $option[0] . "'>" . $option[1] . "</option>";
+                }
+            }
+        }
+    }
+
     /**
      * <p>Transforma os registros de uma tabela em inputs tipo checkbox, ajustados em duas colunas</p>
      * @param string $tabela

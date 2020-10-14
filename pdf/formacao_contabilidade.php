@@ -11,9 +11,8 @@ $pedido_id = $_GET['id'];
 
 $pedido = $formObj->recuperaPedido($pedido_id);
 
-$periodo = $formObj->retornaPeriodoFormacao($pedido_id);
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
-$coordenaria = $formObj->recuperaContratacao($pedido_id)->coordenadoria;
+$coordenaria = $formObj->recuperaContratacao($pedido->origem_id)->coordenadoria;
 
 $data = date('d/m/Y');
 $dia = date('d');
@@ -40,6 +39,7 @@ $ano = date('Y');
     <link rel="stylesheet" href="<?= SERVERURL ?>views/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= SERVERURL ?>views/dist/css/adminlte.min.css">
+    <title>Contabilidade</title>
 </head>
 
 <body>
@@ -87,7 +87,7 @@ $ano = date('Y');
     </button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="http://sei.prefeitura.sp.gov.br" target="_blank">
-        <button class="btn btn-primary">CLIQUE AQUI PARA ACESSAR O <img src="../visual/images/logo_sei.jpg"></button>
+        <button class="btn btn-primary">CLIQUE AQUI PARA ACESSAR O <img src="../views/dist/img/logo_sei.jpg"></button>
     </a>
 </div>
 

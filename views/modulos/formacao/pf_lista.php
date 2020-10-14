@@ -1,9 +1,11 @@
 <?php
     require_once "./controllers/FormacaoController.php";
-    $listaPfObj = new FormacaoController();
+    $formacaoObj = new FormacaoController();
     
-    $lista_pf = $listaPfObj->listaPF();
-    //var_dump($lista_pf);
+    $lista_pf = $formacaoObj->listaPedidos();
+
+    $anoVigencia = $formacaoObj->recuperaAnoVigente()->ano_vigente;
+
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -41,17 +43,21 @@
                         <table id="tabela" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Nome</th>
-                                <th>CPF / Passaporte</th>
-                                <th>Data de Nascimento</th>
-                                <th>E-mail</th>
-                                <th width="15%">Demais Anexos</th>
-                                <th width="15%">Editar</th>
+
+                                <th>Número Processo</th>
+                                <th>Código do Pedido</th>
+                                <th>Proponente</th>
+                                <th>CPF/Passaporte</th>
+                                <th>Ano</th>
+                                <th>Status</th>
+                                <th style="width:15%">Ação</th>
                             </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($lista_pf as $pf): ?>
                                 <tr>
+                                    <td><?= $pf->numero_processo?></td>
+                                    <td><?= $pf->protocolo?></td>
                                     <td><?=$pf->nome?></td>
                                     <td>
                                         <?php
@@ -62,29 +68,31 @@
                                         }
                                         ?>
                                     </td>
-                                    <td><?=$pf->data_nascimento?></td>
-                                    <td><?=$pf->email?></td>
+                                    <td><?= $pf->ano?></td>
+                                    <td><?= $pf->status?></td>
                                     <td>
-                                        <a href="<?= SERVERURL . "formacao/pf_demais_anexos&id=" . $listaPfObj->encryption($pf->id) ?>" class="btn bg-gradient-info btn-sm float-left mr-2">
-                                            <i class="fas fa-file-archive"></i> Anexos
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="<?= SERVERURL . "formacao/pf_cadastro&id=" . $listaPfObj->encryption($pf->id) ?>" class="btn bg-gradient-primary btn-sm">
-                                            <i class="fas fa-user-edit"></i> Editar
-                                        </a>
+                                        <?php if ($pf->ano >= $anoVigencia): ?>
+                                            <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&pedido_id=" . $formacaoObj->encryption($pf->id) ?>" class="btn bg-gradient-primary btn-sm">
+                                                <i class="fas fa-user-edit"></i> &nbsp; Editar &nbsp; &nbsp;
+                                            </a>
+                                        <?php else: ?>
+                                            <a href="<?= SERVERURL . "formacao/pedido_visualizar&pedido_id=" . $formacaoObj->encryption($pf->id) ?>" class="btn bg-gradient-primary btn-sm">
+                                                <i class="fas fa-list"></i> &nbsp; Visualizar
+                                            </a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>  
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Nome</th>
-                                    <th>CPF / Passaporte</th>
-                                    <th>Data de Nascimento</th>
-                                    <th>E-mail</th>
-                                    <th width="15%">Demais Anexos</th>
-                                    <th width="15%">Editar</th>
+                                    <th>Número Processo</th>
+                                    <th>Código do Pedido</th>
+                                    <th>Proponente</th>
+                                    <th>CPF/Passaporte</th>
+                                    <th>Ano</th>
+                                    <th>Status</th>
+                                    <th style="width:15%">Ação</th>
                                 </tr>
                             </tfoot>
                         </table>

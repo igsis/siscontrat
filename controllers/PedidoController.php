@@ -198,36 +198,30 @@ class PedidoController extends PedidoModel
         return $proponente;
     }
 
-    public function getParcelasPedido($pedido_id, $unica = 0, $parcela_id = NULL)
+    public function getParcelasPedido($pedido_id)
     {
         $pedido_id = MainModel::decryption($pedido_id);
-        if($unica == 1 && $parcela_id != NULL):
-            return DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1 AND id = $parcela_id")->fetchObject();
-        else:
-            return DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
-        endif;
+        return DbModel::consultaSimples("SELECT * FROM parcelas WHERE pedido_id = $pedido_id AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function getParcelasPedidoComplementos($pedido_id, $unica = 0, $parcela_id = NULL){
-        $pedido_id = MainModel::decryption($pedido_id);
-        if($unica == 1 && $parcela_id != NULL):
-            return DbModel::consultaSimples("SELECT * FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND p.id = $parcela_id AND pc.publicado = 1")->fetchObject();
-        else:
-            return DbModel::consultaSimples("SELECT * FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND pc.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
-        endif;
-    }
+    public function getParcelarPedidoFomentos($id)
+    {
+        $pedido_id = MainModel::decryption($id);
 
-    public function retornaCargaHoraria($pedido_id, $decryption = 0){
-        if($decryption == 1){
-            $pedido_id = MainModel::decryption($pedido_id);
-        }
+        $sql = "SELECT  fp.id,
+                        CONCAT(DATE_FORMAT(fp.data_inicio,'%d/%m/%Y'),' à ', DATE_FORMAT(fp.data_fim,'%d/%m/%Y')) AS periodo, 
+                        fp.numero_parcelas,
+                        fp.data_inicio, 
+                        fp.data_fim, 
+                        fp.data_pagamento, 
+                        fp.valor, fc.pedido_id
+                FROM formacao_contratacoes AS fc
+                INNER JOIN formacao_vigencias AS fv ON fc.form_vigencia_id = fv.id
+                INNER JOIN formacao_parcelas AS fp ON fv.id = fp.formacao_vigencia_id
+                WHERE fc.pedido_id = $pedido_id AND fp.publicado = 1";
 
-        $carga = 0;
-        $consultaParcelas = DbModel::consultaSimples("SELECT pc.carga_horaria FROM parcelas AS p LEFT JOIN parcela_complementos pc ON p.id = pc.parcela_id WHERE p.pedido_id = $pedido_id AND p.publicado = 1 AND pc.publicado = 1")->fetchAll();
-        foreach ($consultaParcelas as $consultaParcela) {
-            $carga = $carga + $consultaParcela['carga_horaria'];
-        }
-        return $carga;
+        return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
+
     }
 
     public function retornaPenalidades($penal_id){

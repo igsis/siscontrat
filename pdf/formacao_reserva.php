@@ -12,9 +12,8 @@ $tipo = $_GET['tipo'];
 
 $pedido = $formObj->recuperaPedido($pedido_id);
 
-$periodo = $formObj->retornaPeriodoFormacao($pedido_id);
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
-$contratacao = $formObj->recuperaContratacao($pedido->origem_id, '0');
+$contratacao = $formObj->recuperaContratacao($pedido->origem_id);
 
 switch ($tipo) {
     case "pia":
@@ -67,7 +66,7 @@ switch ($tipo) {
         "<p><strong>CONTABILIDADE</strong></p>" .
         "<p><strong>Sr(a). Responsável</strong></p>" .
         "<p>&nbsp;</p>" .
-        "<p>O presente processo trata de " . $pf->nome . ", " . $contratacao->programa . ", " . $contratacao->linguagem . " NOS TERMOS DO EDITAL - " . $contratacao->programa . ", no valor de " . "R$ " . "  " . MainModel::dinheiroParaBr($pedido->valor_total) . " ( ". MainModel::valorPorExtenso($pedido->valor_total) . " )" .  ", conforme solicitação (link da solicitação), foram anexados os documentos necessários exigidos no edital, no período de " . $formObj->retornaPeriodoFormacao($pedido_id) . " </p>" .
+        "<p>O presente processo trata de " . $pf->nome . ", " . $contratacao->programa . ", " . $contratacao->linguagem . " NOS TERMOS DO EDITAL - " . $contratacao->programa . ", no valor de " . "R$ " . "  " . MainModel::dinheiroParaBr($pedido->valor_total) . " ( ". MainModel::valorPorExtenso($pedido->valor_total) . ")" .  ", conforme solicitação (link da solicitação), foram anexados os documentos necessários exigidos no edital, no período de " . $formObj->retornaPeriodoFormacao($pedido->origem_id) . " </p>" .
         "<p>&nbsp;</p>" .
         $topico .
         "<p>&nbsp;</p>" .
@@ -85,7 +84,7 @@ switch ($tipo) {
     </button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="http://sei.prefeitura.sp.gov.br" target="_blank">
-        <button class="btn btn-primary">CLIQUE AQUI PARA ACESSAR O <img src="../visual/images/logo_sei.jpg"></button>
+        <button class="btn btn-primary">CLIQUE AQUI PARA ACESSAR O <img src="../views/dist/img/logo_sei.jpg"></button>
     </a>
 </div>
 
