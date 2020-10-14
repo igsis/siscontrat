@@ -58,7 +58,12 @@ $i = 1;
                             <div class="col-md">
                                 <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= MainModel::encryption($pedido->pessoa_fisica_id) ?>"
                                    target="_blank">
-                                    <button class="btn btn-primary float-right">Gerar FACC</button>
+                                    <button class="btn btn-primary">Gerar FACC</button>
+                                </a>
+
+                                <a href="<?= SERVERURL ?>formacao/concluir_pedido&id=<?= $pedido_id ?>"
+                                   target="_blank">
+                                    <button class="btn btn-primary float-right">Concluir Processo</button>
                                 </a>
                             </div>
                         </div>

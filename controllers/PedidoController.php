@@ -218,7 +218,7 @@ class PedidoController extends PedidoModel
                 FROM formacao_contratacoes AS fc
                 INNER JOIN formacao_vigencias AS fv ON fc.form_vigencia_id = fv.id
                 INNER JOIN formacao_parcelas AS fp ON fv.id = fp.formacao_vigencia_id
-                WHERE fc.pedido_id = 76 AND fp.publicado = 1";
+                WHERE fc.pedido_id = $pedido_id AND fp.publicado = 1";
 
         return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
 
