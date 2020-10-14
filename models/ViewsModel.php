@@ -68,6 +68,7 @@ class ViewsModel
             'pedido_contratacao_lista',
             'pedido_contratacao_cadastro',
             'pedido_edita_parcelas',
+            'pedido_visualizar',
             'pf_cadastro',
             'pf_lista',
             'pj_cadastro',

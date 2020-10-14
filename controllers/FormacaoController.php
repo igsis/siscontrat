@@ -924,13 +924,15 @@ class FormacaoController extends FormacaoModel
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
-        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, 
-                       c.cargo, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente'                                                                   
+        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', 
+                       c.cargo, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', vb.verba                                                                   
                 FROM formacao_contratacoes AS fc
                 INNER JOIN programas AS pro ON pro.id = fc.programa_id
                 INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
                 INNER JOIN linguagens AS l ON l.id = fc.linguagem_id
                 INNER JOIN coordenadorias AS cor ON cor.id = fc.coordenadoria_id
+                INNER JOIN pessoa_fisicas AS pf ON pf.id = fc.pessoa_fisica_id
+                INNER JOIN verbas AS vb ON vb.id = pro.verba_id
                 LEFT JOIN usuarios AS fiscal ON fiscal.id = fc.fiscal_id
                 LEFT JOIN usuarios AS suplente ON suplente.id = fc.suplente_id      
                 WHERE fc.id = {$contratacao_id} AND fc.publicado = 1";
