@@ -31,7 +31,10 @@ $vigencia = $vigenciaObj->recuperaVigencia($id);
                     </div>
                     <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" method="POST" role="form" data-form="<?= ($id) ? "update" : "save" ?>">
                         <div class="card-body">
-                            <input type="hidden" name="_method" value="<?= ($id) ? "editarParcelaVigencia" : "cadastrarVigencia" ?>">
+                            <input type="hidden" name="_method" value="<?= ($id) ? "editarVigencia" : "cadastrarVigencia" ?>">
+                            <?php if ($id): ?>
+                                <input type="hidden" name="id" value="<?= $id ?>">
+                            <?php endif ?>
                             <div class="row">
                                 <div class="form-group col-md-2">
                                     <label for="sigla">Ano*: </label>
@@ -39,7 +42,7 @@ $vigencia = $vigenciaObj->recuperaVigencia($id);
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="sigla">Qnt. Parcelas*: </label>
-                                    <input type="number" class="form-control" id="numero_parcelas" name="quantidade_parcelas" maxlength="70" value="<?= $vigencia->numero_parcelas ?? "" ?>" min="0" required>
+                                    <input type="number" class="form-control" id="numero_parcelas" name="numero_parcelas" maxlength="70" value="<?= $vigencia->numero_parcelas ?? "" ?>" min="0" required>
                                 </div>
                                 <div class="form-group col-md-8">
                                     <label for="sigla">Descricao*: </label>
@@ -57,21 +60,25 @@ $vigencia = $vigenciaObj->recuperaVigencia($id);
                 </div>
 
                 <?php if ($id) : ?>
-                    <div class="card card-info">
+                    <?php
+                    $parcela_vigencia = $vigenciaObj->recuperaParcelasVigencias($id);
+                    ?>
+                    <div class="card <?= (!$parcela_vigencia) ? "card-danger" : "card-info"?>">
                         <div class="card-header">
-                            <h3 class="card-title">Dados das Parcelas</h3>
+                            <h3 class="card-title">Dados das Parcelas <?= (!$parcela_vigencia) ? "- <strong>Ainda não Cadastrados<strong>" : ""?></h3>
                         </div>
                         <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php"
-                              method="POST" role="form" data-form="update">
+                              method="POST" role="form" data-form="<?= $parcela_vigencia ? "update" : "save" ?>">
                             <input type="hidden" name="id" value="<?= $id ?>">
-                            <input type="hidden" name="parcela_id[]" value="<?= $id ?>">
                             <div class="card-body">
-                                <input type="hidden" name="_method" value="editarParcelaVigencia">
+                                <input type="hidden" name="_method" value="<?= $parcela_vigencia ? "editarParcelaVigencia" : "cadastrarParcelaVigencia" ?>">
                                 <?php
-                                $parcela_vigencia = $vigenciaObj->recuperaParcelasVigencias($id);
                                 $i = $vigencia->numero_parcelas;
                                 for ($i = 0; $i < $vigencia->numero_parcelas; $i++) {
                                     ?>
+                                    <?php if ($parcela_vigencia): ?>
+                                        <input type="hidden" name="parcela_id[]" value="<?= $parcela_vigencia[$i]->id ?>">
+                                    <?php endif ?>
                                     <div class="row">
                                         <div class="form-group col-md-2">
                                             <label for="parcela[]">Parcela:</label>
@@ -100,7 +107,7 @@ $vigencia = $vigenciaObj->recuperaVigencia($id);
 
                                         <div class="form-group col-md-2">
                                             <label for="carga[]">Carga horária: </label>
-                                            <input type="number" name="carga[]" class="form-control" id="carga<?= $i ?>" value="<?= $parcela_vigencia[$i]->carga_horaria ?? "" ?>" min="1">
+                                            <input type="number" name="carga_horaria[]" class="form-control" id="carga<?= $i ?>" value="<?= $parcela_vigencia[$i]->carga_horaria ?? "" ?>" min="1">
                                         </div>
                                     </div>
                                 <?php } ?>
