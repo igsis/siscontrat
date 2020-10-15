@@ -45,6 +45,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                         <?php $contratacaoObj->geraOpcao('pessoa_fisicas', $dados_contratacao->pessoa_fisica_id ?? "") ?>
                                     </select>
                                     <?php if ($id): ?>
+                                        <br>
                                         <a href="<?= SERVERURL ?>formacao/pf_cadastro&id=<?= $contratacaoObj->encryption($dados_contratacao->pessoa_fisica_id) ?>" target="_blank">
                                             <button type="button" class="btn btn-primary float-right">Abrir Proponente
                                             </button>
@@ -228,6 +229,14 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                             <div class="resposta-ajax"></div>
                             <!-- caso tenha exista o id da contratação e não haja pedido publicado com este id é exibido o botão para gerar um pedido-->
                             <?php if ($id && !$contratacaoObj->consultaPedido($id)): ?>
+                            <div class="row">
+                                <div class="col-md">
+                                    <a href="<?= SERVERURL . "formacao/anexos&id=" . $contratacaoObj->encryption($dados_contratacao->id)?>" class="btn btn-warning  float-right">
+                                         Anexos para contratação
+                                    </a>
+                                </div>
+                            </div>
+
                                 <div class="col" style="text-align: center;">
                                     <hr>
                                     <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&contratacao_id=" . $contratacaoObj->encryption($dados_contratacao->id) ?>"

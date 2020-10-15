@@ -59,6 +59,7 @@ $ano = date("Y");
                                 <th>Programa</th>
                                 <th>Linguagem</th>
                                 <th>Cargo</th>
+                                <th>Anexos</th>
                                 <th>Editar</th>
                                 <th>Apagar</th>
 
@@ -73,6 +74,11 @@ $ano = date("Y");
                                     <td><?= $contratacao['programa'] ?></td>
                                     <td><?= $contratacao['linguagem'] ?></td>
                                     <td><?= $contratacao['cargo'] ?></td>
+                                    <td>
+                                        <a href="<?= SERVERURL . "formacao/anexos&id=" . $dados_contratacaoObj->encryption($contratacao['id'])?>" class="btn bg-gradient-warning btn-sm">
+                                            <i class="far fa-file-alt"></i> Anexos
+                                        </a>
+                                    </td>
                                     <td>
                                         <a href="<?= SERVERURL . "formacao/dados_contratacao_cadastro&id=" . $dados_contratacaoObj->encryption($contratacao['id']) ?>">
                                             <button type="submit" class="btn bg-gradient-primary btn-sm">

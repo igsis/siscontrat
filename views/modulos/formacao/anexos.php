@@ -180,6 +180,11 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
             </div>
         </div>
         <!-- /.row -->
+        <div class="card-footer">
+            <a href="<?= SERVERURL . "formacao/dados_contratacao_cadastro&id=" . $id ?>" class="btn btn-default pull-left">
+                Voltar
+            </a>
+        </div>
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
