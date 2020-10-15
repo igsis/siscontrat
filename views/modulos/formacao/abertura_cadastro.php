@@ -140,18 +140,24 @@ $dataEncerramento = isset($abertura->data_encerramento) ? 1 : null;
             "timePicker24Hour": true,
             "timePickerSeconds": true,
         });
-        //
-        // if (!$('#abertura_id').length) {
-        //     datePicker.val('');
-        //     datePicker.attr("placeholder", "Selecione o Dia / hora");
-        // }
-
     });
 
     $(function () {
         let dataAbertura = $("#data_abertura");
         let dataEncerramento = $("#data_encerramento");
 
+        //apagar campo ao cancelat dataPicker
+        dataAbertura.on('cancel.daterangepicker', function() {
+            dataAbertura.val('');
+            dataAbertura.attr("placeholder", "Selecione o Dia / hora");
+        });
+
+        dataEncerramento.on('cancel.daterangepicker', function() {
+            dataEncerramento.val('');
+            dataEncerramento.attr("placeholder", "Selecione o Dia / hora");
+        });
+
+        //verificar se veio vazio do banco
         <?php if ($dataAbertura == null): ?>
             dataAbertura.val('')
             dataAbertura.attr("placeholder", "Selecione o Dia / hora");
