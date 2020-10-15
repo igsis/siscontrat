@@ -13,6 +13,9 @@ if (isset($_POST['_method'])) {
     } elseif ($_POST['_method'] == "removerArquivo") {
         echo $arquivoObj->apagarArquivo($_POST['arquivo_id'], $_POST['pagina']);
     }
+    elseif ($_POST['_method'] == "removerArquivoFormacao") {
+        echo $arquivoObj->apagarArquivo($_POST['arquivo_id'], $_POST['pagina'], $_POST['origem_id']);
+    }
 } else {
     include_once "../config/destroySession.php";
 }

@@ -88,32 +88,29 @@ $i = 1;
                                     <td><?= "R$" . MainModel::dinheiroParaBr($parcela->valor) ?></td>
                                     <td><?= MainModel::dataParaBR($parcela->data_pagamento) ?></td>
 
-                                    <th>
+                                    <th class="d-flex justify-content-between align-items-md-center">
                                         <a href="<?= SERVERURL ?>pdf/formacao_pagamento.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
-                                           target="_blank">
-                                            <button type="button" class="btn btn-sm btn-info">Pagamento</button>
+                                           target="_blank" class="btn btn-sm btn-info">
+                                            Pagamento
                                         </a>
 
                                         <a href="<?= SERVERURL ?>pdf/formacao_recibo.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
-                                           target="_blank">
-                                            <button type="button" class="btn btn-sm btn-info">Recibo</button>
+                                           target="_blank" class="btn btn-sm btn-info">
+                                            Recibo
                                         </a>
 
                                         <a href="<?= SERVERURL ?>pdf/formacao_confirmacao_servicos.php?id=<?= $pedido_id ?>&parcela=<?= $parcela->id ?>"
-                                           target="_blank">
-                                            <button type="button" class="btn btn-sm btn-info">Atestado Serviço
-                                            </button>
+                                           target="_blank" class="btn btn-sm btn-info">
+                                            Atestado Serviço
                                         </a>
 
-                                        <a href="<?= SERVERURL ?>pdf/formacao_horas.php?id=<?= $pedido_id ?>"
-                                           target="_blank">
-                                            <button type="button" class="btn btn-sm btn-info">Relatório Horas
-                                            </button>
+                                        <a href="<?= SERVERURL ?>pdf/formacao_chefia_gab.php" target="_blank" class="btn btn-sm btn-info">
+                                            Chefia/Gab
                                         </a>
 
                                         <a href="<?= SERVERURL ?>pdf/formacao_contabilidade.php?id=<?= $pedido_id ?>"
-                                           target="_blank">
-                                            <button type="button" class="btn btn-sm btn-info">Contabilidade</button>
+                                           target="_blank" class="btn btn-sm btn-info">
+                                            Contabilidade
                                         </a>
                                     </th>
                                 </tr>

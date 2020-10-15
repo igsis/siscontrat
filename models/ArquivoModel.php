@@ -30,7 +30,7 @@ class ArquivoModel extends MainModel
      * @param $validaPDF
      * @return mixed
      */
-    protected function enviaArquivos($arquivos, $origem_id, $tamanhoMaximo, $validaPDF = false, $fomento = false) {
+    protected function enviaArquivos($arquivos, $origem_id, $tamanhoMaximo, $validaPDF = false, $fomento = false, $formacao = false) {
         foreach ($arquivos as $key => $arquivo) {
             $erros[$key]['bol'] = false;
             if ($arquivo['error'] != 4) {
@@ -54,17 +54,24 @@ class ArquivoModel extends MainModel
 
                 if ($tamanhoArquivo < $maximoPermitido) {
                     if (move_uploaded_file($arquivoTemp, UPLOADDIR . $novoNome)) {
-                        if (!$fomento) {
-                            $tabela = "arquivos";
-                            $dadosInsertArquivo = [
-                                'origem_id' => $origem_id,
-                                'lista_documento_id' => $lista_documento_id,
-                            ];
-                        } else {
+                        if ($fomento) {
                             $tabela = "fom_arquivos";
                             $dadosInsertArquivo = [
                                 'fom_projeto_id' => $origem_id,
                                 'fom_lista_documento_id' => $lista_documento_id,
+                            ];
+                        } elseif ($formacao) {
+                        $tabela = "formacao_arquivos";
+                        $dadosInsertArquivo = [
+                            'formacao_contratacao_id' => $origem_id,
+                            'formacao_lista_documento_id' => $lista_documento_id,
+                        ];
+                        }
+                        else {
+                            $tabela = "arquivos";
+                            $dadosInsertArquivo = [
+                                'origem_id' => $origem_id,
+                                'lista_documento_id' => $lista_documento_id,
                             ];
                         }
 
