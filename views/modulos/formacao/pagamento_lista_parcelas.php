@@ -104,11 +104,9 @@ $i = 1;
                                             <button type="button" class="btn btn-sm btn-info">Atestado Serviço
                                             </button>
                                         </a>
-
-                                        <a href="<?= SERVERURL ?>pdf/formacao_horas.php?id=<?= $pedido_id ?>"
-                                           target="_blank">
-                                            <button type="button" class="btn btn-sm btn-info">Relatório Horas
-                                            </button>
+                                        
+                                        <a href="<?= SERVERURL ?>pdf/formacao_chefia_gab.php" target="_blank">
+                                            <button type="button" class="btn btn-primary">Chefia/Gab</button>
                                         </a>
 
                                         <a href="<?= SERVERURL ?>pdf/formacao_contabilidade.php?id=<?= $pedido_id ?>"
