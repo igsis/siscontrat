@@ -84,11 +84,7 @@ class ArquivoController extends ArquivoModel
     public function listarArquivosEnviados($origem_id, $lista_documentos_ids, $fomentos = false) {
         $origem_id = MainModel::decryption($origem_id);
         $documentos = implode(", ", $lista_documentos_ids);
-        if (!$fomentos) {
-            $sql = "SELECT a.id, a.arquivo, a.data, ld.documento FROM arquivos AS a
-                    INNER JOIN lista_documentos AS ld on a.lista_documento_id = ld.id
-                    WHERE `origem_id` = '$origem_id' AND lista_documento_id IN ($documentos) AND a.publicado = '1'";
-        } else {
+        if ($fomentos) {
             $sql = "SELECT fa.id, fa.arquivo, fa.data, fld.documento, cd.anexo FROM fom_arquivos AS fa
                     INNER JOIN fom_lista_documentos AS fld on fa.fom_lista_documento_id = fld.id
                     INNER JOIN contratacao_documentos AS cd on cd.fom_lista_documento_id = fa.fom_lista_documento_id
@@ -97,8 +93,15 @@ class ArquivoController extends ArquivoModel
                       AND fa.publicado = '1'
                       AND cd.tipo_contratacao_id = '$fomentos'
                       ORDER BY ordem";
+
+            return DbModel::consultaSimples($sql,true);
+        } else {
+            $sql = "SELECT a.id, a.arquivo, a.data, ld.documento FROM arquivos AS a
+                    INNER JOIN lista_documentos AS ld on a.lista_documento_id = ld.id
+                    WHERE `origem_id` = '$origem_id' AND lista_documento_id IN ($documentos) AND a.publicado = '1'";
+            return DbModel::consultaSimples($sql);
         }
-        return DbModel::consultaSimples($sql,true);
+
     }
 
     public function enviarArquivo($origem_id, $pagina) {
@@ -112,10 +115,8 @@ class ArquivoController extends ArquivoModel
         $erros = ArquivoModel::enviaArquivos($_FILES, $origem_id,6, true, $fomentos, $formacao);
         $erro = MainModel::in_array_r(true, $erros, true);
 
-        if ($formacao){
-            $pagina = 'formacao/anexos&id=' . MainModel::encryption($origem_id);
-        }
-        
+        $pagina = $pagina . '&id=' . MainModel::encryption($origem_id);
+
         if ($erro) {
             foreach ($erros as $erro) {
                 if ($erro['bol']){
@@ -142,16 +143,19 @@ class ArquivoController extends ArquivoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function apagarArquivo ($arquivo_id, $pagina, $origem_id){
+    public function apagarArquivo ($arquivo_id, $pagina, $origem_id = false){
         $fomentos = $pagina == "fomentos/anexos" ? true : false;
         $formacao = $pagina == "formacao/anexos" ? true : false;
+
+        if($origem_id){
+            $pagina = $pagina . '&id=' . $origem_id;
+        }
 
         $arquivo_id = MainModel::decryption($arquivo_id);
         if ($fomentos) {
             $remover = DbModel::apaga('fom_arquivos', $arquivo_id);
         } elseif ($formacao) {
             $remover = DbModel::apaga('formacao_arquivos', $arquivo_id);
-            $pagina = 'formacao/anexos&id=' . $origem_id;
         } else {
             $remover = DbModel::apaga('arquivos', $arquivo_id);
         }

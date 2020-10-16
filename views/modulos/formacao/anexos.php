@@ -152,7 +152,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                         <td>
                                             <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/arquivosAjax.php"
                                                   method="POST" data-form="delete">
-                                                <input type="hidden" name="_method" value="removerArquivoFormacao">
+                                                <input type="hidden" name="_method" value="removerArquivo">
                                                 <input type="hidden" name="pagina" value="<?= $_GET['views'] ?>">
                                                 <input type="hidden" name="origem_id" value="<?= $id ?>">
                                                 <input type="hidden" name="arquivo_id"

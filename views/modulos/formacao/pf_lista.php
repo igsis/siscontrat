@@ -69,7 +69,7 @@
                                         ?>
                                     </td>
                                     <td><?= $pf->ano?></td>
-                                    <td><?= $pf->pedido_status?></td>
+                                    <td><?= $pf->status?></td>
                                     <td>
                                         <?php if ($pf->ano >= $anoVigencia): ?>
                                             <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&pedido_id=" . $formacaoObj->encryption($pf->id) ?>" class="btn bg-gradient-primary btn-sm">
