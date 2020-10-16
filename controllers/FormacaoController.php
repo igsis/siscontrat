@@ -838,11 +838,12 @@ class FormacaoController extends FormacaoModel
             }
         }
 
-        $sql = "SELECT p.id, p.origem_id,fc.protocolo, fc.ano, p.numero_processo,fc.num_processo_pagto, pf.nome, pf.cpf, pf.passaporte, v.verba, fs.status, fc.form_status_id 
+        $sql = "SELECT p.id, p.origem_id,fc.protocolo, fc.ano, p.numero_processo,fc.num_processo_pagto, pf.nome, pf.cpf, pf.passaporte, v.verba, fs.status, fc.form_status_id, ps.status as pedido_status
             FROM pedidos p 
             INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id 
             INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
             INNER JOIN verbas v on p.verba_id = v.id 
+            INNER JOIN pedido_status ps on ps.id = p.status_pedido_id
             INNER JOIN formacao_status fs on fc.form_status_id = fs.id
             WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 {$whereAno} {$whereStatusPedido}";
 

@@ -27,7 +27,7 @@
                 <!-- Horizontal Form -->
                 <div class="card card-info card-outline">
                     <div class="card-header">
-                        <h3 class="card-title">Pessoas Físicas Cadastradas</h3>
+                        <h3 class="card-title">Listagem de pedidos de Pessoas Físicas</h3>
                         <div class="card-tools">
                             <!-- button with a dropdown -->
                             <a href="<?= SERVERURL ?>formacao/pesquisa_pf" class="btn btn-success btn-sm" >
@@ -69,7 +69,7 @@
                                         ?>
                                     </td>
                                     <td><?= $pf->ano?></td>
-                                    <td><?= $pf->status?></td>
+                                    <td><?= $pf->pedido_status?></td>
                                     <td>
                                         <?php if ($pf->ano >= $anoVigencia): ?>
                                             <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&pedido_id=" . $formacaoObj->encryption($pf->id) ?>" class="btn bg-gradient-primary btn-sm">
