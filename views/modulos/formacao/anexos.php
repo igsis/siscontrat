@@ -67,7 +67,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                 $arquivos = $arquivosObj->listarArquivosFormacao()->fetchAll(PDO::FETCH_OBJ);
                                 foreach ($arquivos as $arquivo) {
                                     $obrigatorio = $arquivo->obrigatorio == 0 ? "[Opcional]" : "*";
-                                    if ($arquivosObj->consultaArquivoEnviadoFormacao($arquivo->id, $id)) {
+                                    if ($arquivosObj->consultaArquivoEnviado($arquivo->id, $id, false, true)) {
                                         ?>
 
                                         <tr>
@@ -139,7 +139,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                             </thead>
                             <tbody>
                             <?php
-                            $arquivosEnviados = $arquivosObj->listarArquivosEnviadosFormacao($id)->fetchAll(PDO::FETCH_OBJ);
+                            $arquivosEnviados = $arquivosObj->listarArquivosEnviados($id, false, false, true)->fetchAll(PDO::FETCH_OBJ);
                             if (count($arquivosEnviados) != 0) {
                                 foreach ($arquivosEnviados as $arquivo) {
                                     ?>

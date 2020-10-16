@@ -134,9 +134,6 @@ if (isset($_POST['_method'])) {
         case "concluirPedido":
             echo $insForm->concluirPedido($_POST);
             break;
-        case "removerArquivo":
-            echo $insForm->excluirArquivo($_POST);
-            break;
         case "cadastrarDocumento":
             echo $insForm->insereDocumento($_POST);
             break;
