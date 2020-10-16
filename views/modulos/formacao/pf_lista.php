@@ -45,7 +45,7 @@
                             <tr>
 
                                 <th>Número Processo</th>
-                                <th>Código do Pedido</th>
+                                <th>Protocolo</th>
                                 <th>Proponente</th>
                                 <th>CPF/Passaporte</th>
                                 <th>Ano</th>
@@ -87,7 +87,7 @@
                             <tfoot>
                                 <tr>
                                     <th>Número Processo</th>
-                                    <th>Código do Pedido</th>
+                                    <th>Protocolo</th>
                                     <th>Proponente</th>
                                     <th>CPF/Passaporte</th>
                                     <th>Ano</th>
