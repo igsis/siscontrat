@@ -60,6 +60,7 @@ class ViewsModel
             'login',
             'logout',
             'area_impressao',
+            'exportar_inscritos_capac',
             'conclusao_busca',
             'concluir_pedido',
             'pagamento_busca',

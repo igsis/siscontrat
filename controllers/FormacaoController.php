@@ -953,13 +953,28 @@ class FormacaoController extends FormacaoModel
 
     }
 
-    public function recuperaContratacao($contratacao_id, $decription = 0)
+    public function recuperaContratacao($contratacao_id, $decription = 0, $capac = 0, $ano = 0)
     {
         if ($decription != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
-        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', 
+        if ($capac != 0 && $ano != 0):
+            $sql = "SELECT fc.id, pro.programa, fc.protocolo, fc.pessoa_fisica_id, pf.nome, pf.email, 
+                       c.cargo, fc2.cargo AS 'cargo2', fc3.cargo AS 'cargo3', l.linguagem                                                                   
+                FROM capac_new.form_cadastros AS fc
+                INNER JOIN programas AS pro ON pro.id = fc.programa_id
+                INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
+		        LEFT JOIN capac_new.form_cargos_adicionais AS fca ON fc.id = fca.form_cadastro_id
+	            LEFT JOIN formacao_cargos AS fc2 ON fca.form_cargo2_id = fc2.id
+		        LEFT JOIN formacao_cargos AS fc3 ON fca.form_cargo3_id = fc3.id
+                INNER JOIN linguagens AS l ON l.id = fc.linguagem_id
+                INNER JOIN capac_new.pessoa_fisicas AS pf ON pf.id = fc.pessoa_fisica_id
+                WHERE fc.ano = $ano AND fc.publicado = 1 ORDER BY fc.id";
+
+            return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
+        else:
+            $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', 
                        c.cargo, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', vb.verba                                                                   
                 FROM formacao_contratacoes AS fc
                 INNER JOIN programas AS pro ON pro.id = fc.programa_id
@@ -972,7 +987,9 @@ class FormacaoController extends FormacaoModel
                 LEFT JOIN usuarios AS suplente ON suplente.id = fc.suplente_id      
                 WHERE fc.id = {$contratacao_id} AND fc.publicado = 1";
 
-        return DbModel::consultaSimples($sql)->fetchObject();
+            return DbModel::consultaSimples($sql)->fetchObject();
+        endif;
+
     }
 
     //retorna um obj com os dados de uma determinada pessoa fisica
@@ -986,17 +1003,27 @@ class FormacaoController extends FormacaoModel
                                                   WHERE pf.id = $pessoa_fisica_id")->fetchObject();
     }
 
-    public function recuperaTelPf($pesquisa_fisica_id, $obj = 0)
+    public function recuperaTelPf($pesquisa_fisica_id, $obj = 0, $capac = 0)
     {
         $tel = "";
-        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id")->fetchAll();
-        if ($obj != NULL):
-            return $telArrays;
-        else:
+
+        if ($capac != 0):
+            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id", '1')->fetchAll();
+
             foreach ($telArrays as $telArrays) {
                 $tel = $tel . $telArrays['telefone'] . '; ';
             }
             return substr($tel, 0, -2);
+        else:
+            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id")->fetchAll();
+            if ($obj != NULL):
+                return $telArrays;
+            else:
+                foreach ($telArrays as $telArrays) {
+                    $tel = $tel . $telArrays['telefone'] . '; ';
+                }
+                return substr($tel, 0, -2);
+            endif;
         endif;
     }
 

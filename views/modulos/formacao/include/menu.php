@@ -91,7 +91,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link" id="exportar_inscritos">
+            <a href="<?= SERVERURL ?>formacao/exportar_inscritos_capac" class="nav-link" id="exportar_inscritos">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Exportar inscritos</p>
             </a>
