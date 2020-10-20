@@ -4,6 +4,9 @@
         <p>Home</p>
     </a>
 </li>
+<?php
+if ($_SESSION['perfil_s'] == 1){
+?>
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -63,6 +66,9 @@
         </li>
     </ul>
 </li>
+<?php
+}
+?>
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
         <i class="fas fa-copyright"></i>
@@ -84,6 +90,9 @@
                 <p>Lista de documentos</p>
             </a>
         </li>
+        <?php
+        if ($_SESSION['perfil_s'] == 1){
+        ?>
         <li class="nav-item">
             <a href="#" class="nav-link" id="listar_inscritos">
                 <i class="far fa-circle nav-icon"></i>
@@ -96,8 +105,14 @@
                 <p>Exportar inscritos</p>
             </a>
         </li>
+        <?php
+        }
+        ?>
     </ul>
 </li>
+<?php
+if ($_SESSION['perfil_s'] == 1){
+?>
 <li class="nav-item">
     <a href="<?= SERVERURL ?>formacao/pf_lista" class="nav-link" id="pf_lista">
         <i class="fas fa-user-friends"></i>
@@ -128,3 +143,6 @@
         <p>Concluir Processo</p>
     </a>
 </li>
+<?php
+}
+?>
