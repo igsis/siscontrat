@@ -15,6 +15,13 @@ $ano = $_GET['ano'];
 $dadosContratacoes = $formacaoObj->recuperaContratacao('', '', 1, $ano);
 $nome_arquivo = "formacao_inscritos_capac" . $ano . ".xls";
 
+$linkStyle = [
+    'font' => [
+        'underline' => PHPExcel_Style_Font::UNDERLINE_SINGLE,
+        'color' => ['rgb' => '17a2b8']
+    ]
+];
+
 // Podemos renomear o nome das planilha atual, lembrando que um único arquivo pode ter várias planilhas
 $objPHPExcel->getProperties()->setCreator("Sistema SisContrat");
 $objPHPExcel->getProperties()->setLastModifiedBy("Sistema SisContrat");
@@ -58,7 +65,7 @@ $objPHPExcel->getActiveSheet()->getStyle('A1:I1')->getFont()->setBold(true);
 $objPHPExcel->getActiveSheet()->mergeCells('A1:J1');
 $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->applyFromArray(
     array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-          'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER)
+        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER)
 );
 $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
 
@@ -114,8 +121,18 @@ foreach ($dadosContratacoes as $dadosContratacao) {
     $i = "I" . $contador;
     $j = "J" . $contador;
 
+    $testa = DbModel::consultaSimples("SELECT * FROM form_arquivos WHERE form_cadastro_id = $dadosContratacao->id AND publicado = 1", TRUE)->rowCount();
+    if ($testa > 0):
+        $zip = SERVERURL . "api/downloadInscritos.php?id=" . $dadosContratacao->id . "&formacao=1";
+        $objPHPExcel->getActiveSheet()->getCell($j)->getHyperlink()->setUrl($zip);
+        $objPHPExcel->getActiveSheet()->getCell($j)->getStyle()->applyFromArray($linkStyle);
+        $texto = "Download";
+    else:
+        $texto = "Não possuí anexos";
+    endif;
+
     $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue($a, $dadosContratacao->protocolo)
+        ->setCellValue($a, $dadosContratacao->protocolo ?? "Não Possuí")
         ->setCellValue($b, $dadosContratacao->nome)
         ->setCellValue($c, $dadosContratacao->programa)
         ->setCellValue($d, $dadosContratacao->cargo)
@@ -124,7 +141,7 @@ foreach ($dadosContratacoes as $dadosContratacao) {
         ->setCellValue($g, $dadosContratacao->linguagem)
         ->setCellValue($h, $dadosContratacao->email)
         ->setCellValue($i, $tel)
-        ->setCellValue($j, 'Download');
+        ->setCellValue($j, $texto);
 
     $contador++;
 }

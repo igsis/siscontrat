@@ -204,7 +204,7 @@ class ArquivoController extends ArquivoModel
         return $arquivo > 0 ? true : false;
     }
 
-    public function downloadArquivos($fom_projeto_id)
+    public function downloadArquivos($fom_projeto_id, $formacao = 0, $form_cadastro_id = 0)
     {
         $path = "../../capac/uploads/";
         $data = date('YmdHis');
@@ -214,7 +214,12 @@ class ArquivoController extends ArquivoModel
 
         if ($zip->open($nome_arquivo, ZipArchive::CREATE) === true) {
 
-            $query = DbModel::consultaSimples(" SELECT * FROM fom_arquivos WHERE publicado = 1 AND fom_projeto_id = '$fom_projeto_id'",true)->fetchAll(PDO::FETCH_ASSOC);
+            if($formacao != 0 && $form_cadastro_id != 0):
+                $query = DbModel::consultaSimples("SELECT * FROM form_arquivos WHERE form_cadastro_id = '$form_cadastro_id' AND publicado = 1", TRUE)->fetchAll(PDO::FETCH_ASSOC);
+            else:
+                $query = DbModel::consultaSimples(" SELECT * FROM fom_arquivos WHERE publicado = 1 AND fom_projeto_id = '$fom_projeto_id'",true)->fetchAll(PDO::FETCH_ASSOC);
+            endif;
+
             foreach ($query as $arquivo) {
                 $file = $path . $arquivo['arquivo'];
                 $file2 = $arquivo['arquivo'];

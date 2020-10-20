@@ -16,7 +16,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Escolha o ano</h3>
                     </div>
-                    <form class="form-horizontal" action="<?= SERVERURL ?>pdf/formacao_capac_inscritos_excel.php" method="GET">
+                    <form class="form-horizontal" action="<?= SERVERURL ?>pdf/formacao_capac_inscritos_excel.php" method="GET" target="_blank">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md">
