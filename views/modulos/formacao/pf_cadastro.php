@@ -146,28 +146,33 @@ if ($type == 1){
                                     <input type="button" class="btn btn-primary" value="Carregar">
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-md-3">
+                            <div class="row align-items-end">
+                                <div class="form-group col-3">
                                     <label for="rua">Rua: *</label>
                                     <input type="text" class="form-control" name="en_logradouro" id="rua" placeholder="Digite a rua" maxlength="200" value="<?= $pf['logradouro'] ?? "" ?>" readonly>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <label for="numero">Número: *</label> <i>(Caso não houver colocar 0)</i>
+                                <div class="form-group col-2">
+                                    <label for="numero">
+                                        Número: *
+                                        <button type="button" class="btn btn-sm btn-default rounded-circle"  data-toggle="popover" data-content="Caso não houver colocar 0" data-placement="top">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </label>
                                     <input type="number" name="en_numero" class="form-control" placeholder="Ex.: 10" value="<?= $pf['numero'] ?? "" ?>" required>
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-2">
                                     <label for="complemento">Complemento:</label>
                                     <input type="text" name="en_complemento" class="form-control" maxlength="20" placeholder="Digite o complemento" value="<?= $pf['complemento'] ??""?>">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-2">
                                     <label for="bairro">Bairro: *</label>
                                     <input type="text" class="form-control" name="en_bairro" id="bairro" placeholder="Digite o Bairro" maxlength="80" value="<?= $pf['bairro'] ?? ""?>" readonly>
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-2">
                                     <label for="cidade">Cidade: *</label>
                                     <input type="text" class="form-control" name="en_cidade" id="cidade" placeholder="Digite a cidade" maxlength="50" value="<?= $pf['cidade'] ?? "" ?>" readonly>
                                 </div>
-                                <div class="form-group col-md-1">
+                                <div class="form-group col-1">
                                     <label for="estado">Estado: *</label>
                                     <input type="text" class="form-control" name="en_uf" id="estado" maxlength="2" placeholder="Ex.: SP" value="<?= $pf['uf'] ?? "" ?>" readonly>
                                 </div>
@@ -298,5 +303,7 @@ if ($type == 1){
     $(document).ready(function () {
         $('.nav-link').removeClass('active');
         $('#dados_cadastrais').addClass('active');
+
+        $('[data-toggle="popover"]').popover();
     })
 </script>
