@@ -152,6 +152,9 @@ if (isset($_POST['_method'])) {
         case "apagarAbertura":
             echo $insForm->apagaAbertura($_POST);
             break;
+        case "vinculaCargo":
+            echo $insForm->vincularCargo($_POST);
+            break;
 
     }
     if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {

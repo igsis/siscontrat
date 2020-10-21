@@ -23,6 +23,12 @@ if ($_SESSION['perfil_s'] == 1){
             </a>
         </li>
         <li class="nav-item">
+            <a href="<?= SERVERURL ?>formacao/cargo_programa" class="nav-link active" id="cargo_programa">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Vincular Cargo</p>
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="<?= SERVERURL ?>formacao/coordenadoria_lista" class="nav-link" id="coordenadoria_lista">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Coordenadoria</p>

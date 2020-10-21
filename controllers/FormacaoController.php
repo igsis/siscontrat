@@ -1027,7 +1027,43 @@ class FormacaoController extends FormacaoModel
         endif;
     }
 
-    function retornaPeriodoFormacao($contratacao_id, $decryption = 0, $unico = 0, $parcela_id = NULL)
+    public function listaCargo_Programas($programa_id){
+        return DbModel::consultaSimples("SELECT c.id, c.cargo FROM cargo_programas AS cp
+                                                  INNER JOIN programas AS p ON cp.programa_id = p.id
+                                                  INNER JOIN formacao_cargos AS c ON cp.formacao_cargo_id = c.id
+                                                  WHERE p.publicado = 1 AND c.publicado = 1 AND cp.programa_id = $programa_id;")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function vincularCargo($post){
+        unset($post['_method']);
+
+        $testa = DbModel::consultaSimples("SELECT * FROM cargo_programas WHERE programa_id = " . $post['programa_id'] . " AND formacao_cargo_id = " . $post['formacao_cargo_id']);
+        if($testa->rowCount() > 0):
+            DbModel::consultaSimples("DELETE FROM cargo_programas WHERE programa_id = " . $post['programa_id'] . " AND formacao_cargo_id = " . $post['formacao_cargo_id']);
+        endif;
+
+        $dados = MainModel::limpaPost($post);
+        $update = DbModel::insert('cargo_programas', $dados);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Cargo Vinculado',
+                'texto' => 'Dados gravados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/cargo_programa'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function retornaPeriodoFormacao($contratacao_id, $decryption = 0, $unico = 0, $parcela_id = NULL)
     {
         if ($decryption != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);

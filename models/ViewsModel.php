@@ -84,6 +84,7 @@ class ViewsModel
             'representante_cadastro',
             'resete_senha',
             'cargo_lista',
+            'cargo_programa',
             'coordenadoria_lista',
             'programa_lista',
             'linguagem_lista',
