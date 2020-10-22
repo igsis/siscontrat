@@ -155,6 +155,9 @@ if (isset($_POST['_method'])) {
         case "vinculaCargo":
             echo $insForm->vincularCargo($_POST);
             break;
+        case "desvinculaCargo":
+            echo $insForm->desvincularCargo($_POST);
+            break;
 
     }
     if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
