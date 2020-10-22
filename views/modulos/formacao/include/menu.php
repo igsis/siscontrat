@@ -100,7 +100,7 @@ if ($_SESSION['perfil_s'] == 1){
         if ($_SESSION['perfil_s'] == 1){
         ?>
         <li class="nav-item">
-            <a href="#" class="nav-link" id="listar_inscritos">
+            <a href="<?= SERVERURL ?>formacao/listar_inscritos" class="nav-link" id="listar_inscritos">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Listar inscritos</p>
             </a>
