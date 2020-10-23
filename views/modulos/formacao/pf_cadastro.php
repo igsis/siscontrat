@@ -158,7 +158,7 @@ if ($type == 1){
                                             <i class="fas fa-info-circle"></i>
                                         </button>
                                     </label>
-                                    <input type="number" name="en_numero" class="form-control" placeholder="Ex.: 10" value="<?= $pf['numero'] ?? "" ?>" required>
+                                    <input type="number" min="0" name="en_numero" class="form-control" placeholder="Ex.: 10" value="<?= $pf['numero'] ?? "" ?>" required>
                                 </div>
                                 <div class="form-group col-2">
                                     <label for="complemento">Complemento:</label>

@@ -40,13 +40,15 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                             <div class="row">
                                 <div class="col-md">
                                     <label for="pessoa_fisica_id">Proponente: *</label>
-                                    <select name="pessoa_fisica_id" required class="form-control" <?= $readonly ?>>
+                                    <select name="pessoa_fisica_id" required
+                                            class="form-control select2bs4" <?= $readonly ?>>
                                         <option value="">Selecione um proponente...</option>
                                         <?php $contratacaoObj->geraOpcao('pessoa_fisicas', $dados_contratacao->pessoa_fisica_id ?? "") ?>
                                     </select>
                                     <?php if ($id): ?>
                                         <br>
-                                        <a href="<?= SERVERURL ?>formacao/pf_cadastro&id=<?= $contratacaoObj->encryption($dados_contratacao->pessoa_fisica_id) ?>" target="_blank">
+                                        <a href="<?= SERVERURL ?>formacao/pf_cadastro&id=<?= $contratacaoObj->encryption($dados_contratacao->pessoa_fisica_id) ?>"
+                                           target="_blank">
                                             <button type="button" class="btn btn-primary float-right">Abrir Proponente
                                             </button>
                                         </a>
@@ -79,7 +81,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                             <div class="row">
                                 <div class="form-group col-md">
                                     <label for="territorio_id">Território: *</label>
-                                    <select name="territorio_id" required class="form-control">
+                                    <select name="territorio_id" required class="form-control select2bs4">
                                         <option value="">Selecione um território...</option>
                                         <?php $contratacaoObj->geraOpcao('territorios', $dados_contratacao->territorio_id ?? "", '1') ?>
                                     </select>
@@ -87,7 +89,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
 
                                 <div class="form-group col-md">
                                     <label for="coordenadoria_id">Coordenadoria: *</label>
-                                    <select name="coordenadoria_id" required class="form-control">
+                                    <select name="coordenadoria_id" required class="form-control select2bs4">
                                         <option value="">Selecione uma coordenadoria...</option>
                                         <?php $contratacaoObj->geraOpcao('coordenadorias', $dados_contratacao->coordenadoria_id ?? "", '1') ?>
                                     </select>
@@ -95,17 +97,17 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
 
                                 <div class="form-group col-md">
                                     <label for="subprefeitura_id">Subprefeitura: *</label>
-                                    <select name="subprefeitura_id" required class="form-control">
+                                    <select name="subprefeitura_id" required class="form-control select2bs4">
                                         <option value="">Selecione uma subprefeitura...</option>
                                         <?php $contratacaoObj->geraOpcao('subprefeituras', $dados_contratacao->subprefeitura_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
                                 <div class="form-group col-md">
-                                    <label for="programa_id">Programa: *</label>
-                                    <select name="programa_id" required class="form-control">
-                                        <option value="">Selecione um programa...</option>
-                                        <?php $contratacaoObj->geraOpcao('programas', $dados_contratacao->programa_id ?? "", '1') ?>
+                                    <label for="projeto_id">Projeto: *</label>
+                                    <select name="projeto_id" required class="form-control select2bs4">
+                                        <option value="">Selecione um projeto...</option>
+                                        <?php $contratacaoObj->geraOpcao('projetos', $dados_contratacao->projeto_id ?? "", '1') ?>
                                     </select>
                                 </div>
                             </div>
@@ -113,31 +115,32 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                             <div class="row">
                                 <div class="form-group col-md">
                                     <label for="linguagem_id">Linguagem: *</label>
-                                    <select name="linguagem_id" required class="form-control">
+                                    <select name="linguagem_id" required class="form-control select2bs4">
                                         <option value="">Selecione uma linguagem...</option>
                                         <?php $contratacaoObj->geraOpcao('linguagens', $dados_contratacao->linguagem_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
                                 <div class="form-group col-md">
-                                    <label for="projeto_id">Projeto: *</label>
-                                    <select name="projeto_id" required class="form-control">
-                                        <option value="">Selecione um projeto...</option>
-                                        <?php $contratacaoObj->geraOpcao('projetos', $dados_contratacao->projeto_id ?? "", '1') ?>
+                                    <label for="programa_id">Programa: *</label>
+                                    <select name="programa_id" id="programa" required class="form-control select2bs4"
+                                            onchange="getCargos()">
+                                        <option value="">Selecione um programa...</option>
+                                        <?php $contratacaoObj->geraOpcao('programas', $dados_contratacao->programa_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
                                 <div class="form-group col-md">
                                     <label for="form_cargo_id">Cargo: *</label>
-                                    <select name="form_cargo_id" required class="form-control">
-                                        <option value="">Selecione uma coordenadoria...</option>
-                                        <?php $contratacaoObj->geraOpcao('formacao_cargos', $dados_contratacao->form_cargo_id ?? "", '1') ?>
+                                    <select name="form_cargo_id" id="cargo" required class="form-control select2bs4">
+                                        <option value="">Selecione um cargo...</option>
+                                        <?php if (isset($dados_contratacao->form_cargo_id)) $contratacaoObj->geraOpcao('formacao_cargos', $dados_contratacao->form_cargo_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
                                 <div class="form-group col-md">
                                     <label for="programa_id">Vigencia: *</label>
-                                    <select name="form_vigencia_id" required class="form-control">
+                                    <select name="form_vigencia_id" required class="form-control select2bs4">
                                         <option value="">Selecione uma vigencia...</option>
                                         <?php $contratacaoObj->geraOpcaoVigencia('formacao_vigencias', $dados_contratacao->form_vigencia_id ?? "") ?>
                                     </select>
@@ -147,7 +150,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                             <div class="row">
                                 <div class="form-group col-md">
                                     <label for="regiao_preferencia_id">Região Preferencial: *</label>
-                                    <select name="regiao_preferencia_id" required class="form-control">
+                                    <select name="regiao_preferencia_id" required class="form-control select2bs4">
                                         <option value="">Selecione uma região...</option>
                                         <?php $contratacaoObj->geraOpcao('regiao_preferencias', $dados_contratacao->regiao_preferencia_id ?? "") ?>
                                     </select>
@@ -155,7 +158,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 <?php if ($id != ""): ?>
                                     <div class="form-group col-md">
                                         <label for="form_status_id">Status: *</label>
-                                        <select name="form_status_id" required class="form-control">
+                                        <select name="form_status_id" required class="form-control select2bs4">
                                             <option value="">Selecione um status...</option>
                                             <?php $contratacaoObj->geraOpcao('formacao_status', $dados_contratacao->form_status_id ?? "") ?>
                                         </select>
@@ -171,8 +174,8 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                     <div class="form-group col-md">
                                         <label>Instituição #<?= $i + 1 ?>
                                             : <?= $i == 0 || $i == 1 ? " *" : "" ?></label>
-                                        <select class="form-control" <?= $i == 0 || $i == 1 ? "required" : "" ?>
-                                                id="instituicao<?= $i + 1 ?>">
+                                        <select class="form-control select2bs4" <?= $i == 0 || $i == 1 ? "required" : "" ?>
+                                                id="instituicao<?= $i ?>" onchange="popularLocal<?= $i + 1 ?>(<?= $i ?>)">
                                             <option value="0">Selecione uma opção...</option>
                                             <?php $contratacaoObj->geraOpcao('instituicoes') ?>
                                         </select>
@@ -186,7 +189,8 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                     <div class="form-group col-md">
                                         <label for="local_id[]">Local #<?= $i + 1 ?>
                                             : <?= $i == 0 || $i == 1 ? " *" : "" ?></label>
-                                        <select name="local_id[]" class="form-control" onchange="bloqueandoLocais()"
+                                        <select name="local_id[]" class="form-control select2bs4"
+                                                onchange="bloqueandoLocais()"
                                                 id="local<?= $i + 1 ?>" <?= $i == 0 || $i == 1 ? "required" : "" ?>>
                                             <?php isset($local) && $local != "" ? $contratacaoObj->geraOpcao('locais', $local) : "" ?>
                                         </select>
@@ -211,7 +215,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                             <div class="row">
                                 <div class="form-group col-md">
                                     <label for="fiscal_id">Fiscal: *</label>
-                                    <select name="fiscal_id" required class="form-control">
+                                    <select name="fiscal_id" required class="form-control select2bs4">
                                         <option value="">Selecione um fiscal...</option>
                                         <?php $contratacaoObj->geraOpcaoUsuario($dados_contratacao->fiscal_id ?? "", '1') ?>
                                     </select>
@@ -219,7 +223,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
 
                                 <div class="form-group col-md">
                                     <label for="suplente_id">Suplente:</label>
-                                    <select name="suplente_id" class="form-control">
+                                    <select name="suplente_id" class="form-control select2bs4">
                                         <option value="">Selecione um suplente...</option>
                                         <?php $contratacaoObj->geraOpcaoUsuario($dados_contratacao->suplente_id ?? "", '1') ?>
                                     </select>
@@ -229,13 +233,14 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                             <div class="resposta-ajax"></div>
                             <!-- caso tenha exista o id da contratação e não haja pedido publicado com este id é exibido o botão para gerar um pedido-->
                             <?php if ($id && !$contratacaoObj->consultaPedido($id)): ?>
-                            <div class="row">
-                                <div class="col-md">
-                                    <a href="<?= SERVERURL . "formacao/anexos&id=" . $contratacaoObj->encryption($dados_contratacao->id)?>" class="btn btn-warning  float-right">
-                                         Anexos para contratação
-                                    </a>
+                                <div class="row">
+                                    <div class="col-md">
+                                        <a href="<?= SERVERURL . "formacao/anexos&id=" . $contratacaoObj->encryption($dados_contratacao->id) ?>"
+                                           class="btn btn-warning  float-right">
+                                            Anexos para contratação
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
 
                                 <div class="col" style="text-align: center;">
                                     <hr>
@@ -261,24 +266,37 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
     </div>
 </div>
 
-<script>
+<script defer>
     const url = "<?= SERVERURL ?>api/locais_espacos.php/";
-
+    const urlCargoPrograma = "<?= SERVERURL ?>api/lista_cargo_programas.php";
+    
     let instituicao1 = document.querySelector('#instituicao1');
     let instituicao2 = document.querySelector('#instituicao2');
     let instituicao3 = document.querySelector('#instituicao3');
 
-    instituicao1.addEventListener('change', async e => {
-        let idInstituicao = $('#instituicao1 option:checked').val();
+    function getCargos() {
+        let idPrograma = $('#programa').select2('val');
+        fetch(`${urlCargoPrograma}?id=${idPrograma}&select=1`)
+            .then(response => response.json())
+            .then(cargos => {
+                $('#cargo option').remove();
+                $('#cargo').append('<option value="">Selecione um cargo...</option>');
+                for (const cargo of cargos) {
+                    $('#cargo').append(`<option value='${cargo.id}'>${cargo.cargo}</option>`).focus();
+                }
+            })
+    }
+
+    function popularLocal1(id) {
+        let instituicao = `#instituicao${id}`;
+        let idInstituicao = $(instituicao).select2('val');
         fetch(`${url}?instituicao_id=${idInstituicao}`)
             .then(response => response.json())
             .then(locais => {
                 $('#local1 option').remove();
-                $('#local1').append('<option value="">Selecione uma opção...</option>');
-
+                $('#local1').append(`<option value="">Selecione uma opção...</option>`);
                 for (const local of locais) {
                     $('#local1').append(`<option value='${local.id}'>${local.local}</option>`).focus();
-
                 }
 
                 if (idInstituicao == 1) {
@@ -293,9 +311,61 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                     $('#local1').removeAttr('readonly');
                 }
             })
-    });
+    }
 
-    instituicao2.addEventListener('change', async e => {
+    function popularLocal2(id) {
+        let instituicao = `#instituicao${id}`;
+        let idInstituicao = $(instituicao).select2('val');
+        fetch(`${url}?instituicao_id=${idInstituicao}`)
+            .then(response => response.json())
+            .then(locais => {
+                $('#local2 option').remove();
+                $('#local2').append(`<option value="">Selecione uma opção...</option>`);
+                for (const local of locais) {
+                    $('#local2').append(`<option value='${local.id}'>${local.local}</option>`).focus();
+                }
+
+                if (idInstituicao == 1) {
+                    let locais = document.querySelector('#local2');
+                    locais.value = 2;
+                    $('#local2').attr('readonly', true);
+                    $('#local2').on('mousedown', function (e) {
+                        e.preventDefault();
+                    });
+                } else {
+                    $('#local2').unbind('mousedown');
+                    $('#local2').removeAttr('readonly');
+                }
+            })
+    }
+
+    function popularLocal3(id) {
+        let instituicao = `#instituicao${id}`;
+        let idInstituicao = $(instituicao).select2('val');
+        fetch(`${url}?instituicao_id=${idInstituicao}`)
+            .then(response => response.json())
+            .then(locais => {
+                $('#local3 option').remove();
+                $('#local3').append(`<option value="">Selecione uma opção...</option>`);
+                for (const local of locais) {
+                    $('#local3').append(`<option value='${local.id}'>${local.local}</option>`).focus();
+                }
+
+                if (idInstituicao == 1) {
+                    let locais = document.querySelector('#local3');
+                    locais.value = 2;
+                    $('#local3').attr('readonly', true);
+                    $('#local3').on('mousedown', function (e) {
+                        e.preventDefault();
+                    });
+                } else {
+                    $('#local3').unbind('mousedown');
+                    $('#local3').removeAttr('readonly');
+                }
+            })
+    }
+
+    /*instituicao2.addEventListener('change', async e => {
         let idInstituicao = $('#instituicao2 option:checked').val();
         fetch(`${url}?instituicao_id=${idInstituicao}`)
             .then(response => response.json())
@@ -347,7 +417,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                     $('#local3').removeAttr('readonly');
                 }
             })
-    });
+    });*/
 
     function bloqueandoLocais() {
         let local1 = $('#local1 option:selected').text()

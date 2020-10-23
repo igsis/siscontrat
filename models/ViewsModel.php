@@ -84,6 +84,7 @@ class ViewsModel
             'representante_cadastro',
             'resete_senha',
             'cargo_lista',
+            'cargo_programa',
             'coordenadoria_lista',
             'programa_lista',
             'linguagem_lista',
@@ -104,8 +105,8 @@ class ViewsModel
             'pf_demais_anexos',
             'dados_contratacao_cadastro',
             'abertura_lista',
-            'abertura_cadastro'
-            
+            'abertura_cadastro',
+            'listar_inscritos',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
