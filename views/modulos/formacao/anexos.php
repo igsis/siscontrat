@@ -67,7 +67,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                 $arquivos = $arquivosObj->listarArquivosFormacao()->fetchAll(PDO::FETCH_OBJ);
                                 foreach ($arquivos as $arquivo) {
                                     $obrigatorio = $arquivo->obrigatorio == 0 ? "[Opcional]" : "*";
-                                    if ($arquivosObj->consultaArquivoEnviadoFormacao($arquivo->id, $id)) {
+                                    if ($arquivosObj->consultaArquivoEnviado($arquivo->id, $id, false, true)) {
                                         ?>
 
                                         <tr>
@@ -139,7 +139,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                             </thead>
                             <tbody>
                             <?php
-                            $arquivosEnviados = $arquivosObj->listarArquivosEnviadosFormacao($id)->fetchAll(PDO::FETCH_OBJ);
+                            $arquivosEnviados = $arquivosObj->listarArquivosEnviados($id, false, false, true)->fetchAll(PDO::FETCH_OBJ);
                             if (count($arquivosEnviados) != 0) {
                                 foreach ($arquivosEnviados as $arquivo) {
                                     ?>
@@ -152,7 +152,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
                                         <td>
                                             <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/arquivosAjax.php"
                                                   method="POST" data-form="delete">
-                                                <input type="hidden" name="_method" value="removerArquivoFormacao">
+                                                <input type="hidden" name="_method" value="removerArquivo">
                                                 <input type="hidden" name="pagina" value="<?= $_GET['views'] ?>">
                                                 <input type="hidden" name="origem_id" value="<?= $id ?>">
                                                 <input type="hidden" name="arquivo_id"
@@ -180,6 +180,11 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
             </div>
         </div>
         <!-- /.row -->
+        <div class="card-footer">
+            <a href="<?= SERVERURL . "formacao/dados_contratacao_cadastro&id=" . $id ?>" class="btn btn-default pull-left">
+                Voltar
+            </a>
+        </div>
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->

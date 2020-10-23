@@ -838,8 +838,12 @@ class FormacaoController extends FormacaoModel
             }
         }
 
-        $sql = "SELECT p.id, p.origem_id,fc.protocolo, fc.ano, p.numero_processo,fc.num_processo_pagto, pf.nome, pf.cpf, pf.passaporte, v.verba, fs.status, fc.form_status_id 
+        $sql = "SELECT   p.id, p.origem_id,fc.protocolo, fc.ano,
+                         p.numero_processo,fc.num_processo_pagto, 
+                         pf.nome, pf.cpf, pf.passaporte, v.verba, 
+                         ps.`status`, fc.form_status_id 
             FROM pedidos p 
+            LEFT JOIN pedido_status ps ON p.status_pedido_id = ps.id
             INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id 
             INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
             INNER JOIN verbas v on p.verba_id = v.id 
@@ -949,13 +953,28 @@ class FormacaoController extends FormacaoModel
 
     }
 
-    public function recuperaContratacao($contratacao_id, $decription = 0)
+    public function recuperaContratacao($contratacao_id, $decription = 0, $capac = 0, $ano = 0)
     {
         if ($decription != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
-        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', 
+        if ($capac != 0 && $ano != 0):
+            $sql = "SELECT fc.id, pro.programa, fc.protocolo, fc.pessoa_fisica_id, pf.nome, pf.email, 
+                       c.cargo, fc2.cargo AS 'cargo2', fc3.cargo AS 'cargo3', l.linguagem                                                                   
+                FROM capac_new.form_cadastros AS fc
+                INNER JOIN programas AS pro ON pro.id = fc.programa_id
+                INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
+		        LEFT JOIN capac_new.form_cargos_adicionais AS fca ON fc.id = fca.form_cadastro_id
+	            LEFT JOIN formacao_cargos AS fc2 ON fca.form_cargo2_id = fc2.id
+		        LEFT JOIN formacao_cargos AS fc3 ON fca.form_cargo3_id = fc3.id
+                INNER JOIN linguagens AS l ON l.id = fc.linguagem_id
+                INNER JOIN capac_new.pessoa_fisicas AS pf ON pf.id = fc.pessoa_fisica_id
+                WHERE fc.ano = $ano AND fc.publicado = 1 ORDER BY fc.id";
+
+            return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
+        else:
+            $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', 
                        c.cargo, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', vb.verba                                                                   
                 FROM formacao_contratacoes AS fc
                 INNER JOIN programas AS pro ON pro.id = fc.programa_id
@@ -968,7 +987,9 @@ class FormacaoController extends FormacaoModel
                 LEFT JOIN usuarios AS suplente ON suplente.id = fc.suplente_id      
                 WHERE fc.id = {$contratacao_id} AND fc.publicado = 1";
 
-        return DbModel::consultaSimples($sql)->fetchObject();
+            return DbModel::consultaSimples($sql)->fetchObject();
+        endif;
+
     }
 
     //retorna um obj com os dados de uma determinada pessoa fisica
@@ -982,21 +1003,86 @@ class FormacaoController extends FormacaoModel
                                                   WHERE pf.id = $pessoa_fisica_id")->fetchObject();
     }
 
-    public function recuperaTelPf($pesquisa_fisica_id, $obj = 0)
+    public function recuperaTelPf($pesquisa_fisica_id, $obj = 0, $capac = 0)
     {
         $tel = "";
-        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id")->fetchAll();
-        if ($obj != NULL):
-            return $telArrays;
-        else:
+
+        if ($capac != 0):
+            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id", '1')->fetchAll();
+
             foreach ($telArrays as $telArrays) {
                 $tel = $tel . $telArrays['telefone'] . '; ';
             }
             return substr($tel, 0, -2);
+        else:
+            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id")->fetchAll();
+            if ($obj != NULL):
+                return $telArrays;
+            else:
+                foreach ($telArrays as $telArrays) {
+                    $tel = $tel . $telArrays['telefone'] . '; ';
+                }
+                return substr($tel, 0, -2);
+            endif;
         endif;
     }
 
-    function retornaPeriodoFormacao($contratacao_id, $decryption = 0, $unico = 0, $parcela_id = NULL)
+    public function vincularCargo($post)
+    {
+        unset($post['_method']);
+
+        $testa = DbModel::consultaSimples("SELECT * FROM cargo_programas WHERE programa_id = " . $post['programa_id'] . " AND formacao_cargo_id = " . $post['formacao_cargo_id']);
+        if ($testa->rowCount() > 0):
+            DbModel::consultaSimples("DELETE FROM cargo_programas WHERE programa_id = " . $post['programa_id'] . " AND formacao_cargo_id = " . $post['formacao_cargo_id']);
+        endif;
+
+        $dados = MainModel::limpaPost($post);
+        $update = DbModel::insert('cargo_programas', $dados);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Cargo Vinculado',
+                'texto' => 'Dados gravados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/cargo_programa'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function desvincularCargo($post)
+    {
+        unset($post['_method']);
+
+        $update = DbModel::consultaSimples("DELETE FROM cargo_programas WHERE programa_id = " . $post['programa_id'] . " AND formacao_cargo_id = " . $post['formacao_cargo_id']);
+
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Cargo Desvinculado',
+                'texto' => 'Dados gravados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'formacao/cargo_programa'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function retornaPeriodoFormacao($contratacao_id, $decryption = 0, $unico = 0, $parcela_id = NULL)
     {
         if ($decryption != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
@@ -1562,76 +1648,6 @@ class FormacaoController extends FormacaoModel
         //$numTelefone = $sqlTelefone->rowCount();
 
         //return $telefones;
-    }
-
-    public function recuperaDocumentosEnviados($idPf, $tipoPessoa)
-    {
-        $idPf = MainModel::decryption($idPf, $tipoPessoa);
-        return DbModel::consultaSimples(
-            "SELECT *, arq.id as idArquivo  FROM lista_documentos as list
-                        INNER JOIN arquivos as arq ON arq.lista_documento_id = list.id
-                        WHERE arq.origem_id = '$idPf' AND list.tipo_documento_id = '$tipoPessoa'
-                        AND arq.publicado = '1' ORDER BY arq.id")->fetchAll(PDO::FETCH_OBJ);
-
-    }
-
-    public function listaDocumentoRestante($idPf, $tipoPessoa)
-    {
-        $idPf = MainModel::decryption($idPf);
-
-        $testaPassaporte = DbModel::consultaSimples("SELECT passaporte FROM pessoa_fisicas WHERE id = $idPf")->fetchAll(PDO::FETCH_OBJ);
-        if ($testaPassaporte != null) {
-            $doc = " AND id NOT IN (120,139,117)";
-
-        } else {
-            $doc = " AND id NOT IN (120,139)";
-        }
-
-        $arquivos = DbModel::consultaSimples("SELECT * FROM lista_documentos WHERE tipo_documento_id = '$tipoPessoa' and publicado = 1 $doc")->fetchAll(PDO::FETCH_OBJ);
-
-        return $arquivos;
-    }
-
-    public function checaEnviado($idPf, $idDoc)
-    {
-        $idPf = MainModel::decryption($idPf);
-
-        $anexosExistentes = DbModel::consultaSimples("SELECT * FROM arquivos WHERE lista_documento_id = '$idDoc' AND origem_id = '$idPf' AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
-
-        if ($anexosExistentes != null) {
-            return $anexosExistentes;
-        } else {
-            return false;
-        }
-    }
-
-    public function excluirArquivo($post)
-    {
-        unset($post['_method']);
-        $id = $post['id'];
-        unset($post['id']);
-        $arquivo_id = $post['arquivo_id'];
-        $remover = DbModel::consultaSimples("UPDATE arquivos SET publicado = 0 WHERE id = '$arquivo_id'");
-
-        var_dump($arquivo_id);
-        if ($remover->rowCount() > 0) {
-            $alerta = [
-                'alerta' => 'sucesso',
-                'titulo' => 'Arquivo Apagado!',
-                'texto' => 'Arquivo apagado com sucesso!',
-                'tipo' => 'success',
-                'location' => SERVERURL . 'formacao/pf_demais_anexos&id=' . $id
-            ];
-        } else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao remover o arquivo do servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-
-        return MainModel::sweetAlert($alerta);
     }
 
     public function listaDocumentos()

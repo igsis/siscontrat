@@ -134,9 +134,6 @@ if (isset($_POST['_method'])) {
         case "concluirPedido":
             echo $insForm->concluirPedido($_POST);
             break;
-        case "removerArquivo":
-            echo $insForm->excluirArquivo($_POST);
-            break;
         case "cadastrarDocumento":
             echo $insForm->insereDocumento($_POST);
             break;
@@ -154,6 +151,12 @@ if (isset($_POST['_method'])) {
             break;
         case "apagarAbertura":
             echo $insForm->apagaAbertura($_POST);
+            break;
+        case "vincularCargo":
+            echo $insForm->vincularCargo($_POST);
+            break;
+        case "desvincularCargo":
+            echo $insForm->desvincularCargo($_POST);
             break;
 
     }

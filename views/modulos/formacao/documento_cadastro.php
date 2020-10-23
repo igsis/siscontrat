@@ -38,7 +38,7 @@ $documento = $formacaoObj->recuperaDocumento($id);
                         <?php endif; ?>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-7">
                                     <div class="form-group">
                                         <label for="documento">Nome do documento: *</label>
                                         <input type="text" class="form-control" id="documento" name="documento" value="<?= $documento->documento ?? "" ?>" required maxlength="145">
@@ -48,6 +48,12 @@ $documento = $formacaoObj->recuperaDocumento($id);
                                     <div class="form-group">
                                         <label for="sigla">Sigla: *</label>
                                         <input type="text" class="form-control" id="sigla" name="sigla" value="<?= $documento->sigla ?? "" ?>" required maxlength="10">
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <label for="ordem">Ordem: *</label>
+                                        <input type="number" class="form-control" id="ordem" name="ordem" value="<?= $documento->ordem ?? "" ?>" required maxlength="2">
                                     </div>
                                 </div>
                                 <div class="col-md-2">

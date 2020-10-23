@@ -1,180 +1,176 @@
 <?php
-require_once "./controllers/FormacaoController.php";
-$listaPfObj = new FormacaoController();
-$id = isset($_GET['id']) ? $_GET['id'] : "";
-$tipo_documento_id = 6;
-$documentosPf = $listaPfObj->recuperaDocumentosEnviados($id, $tipo_documento_id);
-$documentosRestantes = $listaPfObj->listaDocumentoRestante($id, $tipo_documento_id);
+require_once "./controllers/ArquivoController.php";
+$arquivosObj = new ArquivoController();
 
+$tipo_documento_id = 1;
+$id = isset($_GET['id']) ? $_GET['id'] : null;
+$lista_documento_ids = $arquivosObj->recuperaIdListaDocumento($tipo_documento_id)->fetchAll(PDO::FETCH_COLUMN);
 ?>
-
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-9">
-                <h1 class="m-0 text-dark">Formação</h1>
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Anexos dos documentos</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
 
+<!-- Main content -->
 <div class="content">
     <div class="container-fluid">
-        <div class="card card-info card-outline">
-            <div class="card-header">
-                <h3 class="card-title">Upload de arquivos</h3>
-            </div>
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-md-12 col-md-offset-2 mt-3 text-center">
-                        <h5> <strong>Upload de arquivos somente em PDF!</strong></h5><br>
+        <div class="row">
+            <div class="offset-3 col-md-6">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Atenção!</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                        class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>Formato Permitido:</strong> PDF</li>
+                            <li><strong>Tamanho Máximo:</strong> 6Mb</li>
+                            <li>Clique nos arquivos após efetuar o upload e confira a exibição do documento!</li>
+                        </ul>
                     </div>
                 </div>
-
-                <div class="row ">
-                    <div class="col-md-12 mt-3 text-center">
-                        <div class="table-responsive list_info">
-                            <?php if ($documentosPf > null): ?>
-
-                                <table class='table text-center table-striped table-bordered table-condensed'>
-                                    <thead>
-                                    <tr class='bg-info text-bold'>
-                                        <td>Tipo de arquivo</td>
-                                        <td>Nome do documento</td>
-                                        <td>Data de envio</td>
-                                        <td width='15%'></td>
-                                    </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    <?php foreach ($documentosPf as $documentoPf): ?>
+                <!-- /.card -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Horizontal Form -->
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Lista de Arquivos</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- table start -->
+                    <div class="card-body p-0">
+                        <form class="formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/arquivosAjax.php"
+                              data-form="save" enctype="multipart/form-data">
+                            <input type="hidden" name="_method" value="enviarArquivo">
+                            <input type="hidden" name="origem_id" value="<?= $id ?>">
+                            <input type="hidden" name="pagina" value="<?= $_GET['views'] ?>">
+                            <table class="table table-striped">
+                                <tbody>
+                                <?php
+                                $arquivos = $arquivosObj->listarArquivos($tipo_documento_id)->fetchAll(PDO::FETCH_OBJ);
+                                foreach ($arquivos as $arquivo) {
+                                    if (!($arquivosObj->consultaArquivoEnviado($arquivo->id, $id))) {
+                                        ?>
                                         <tr>
-                                            <td><?= $documentoPf->documento?></td>
-                                            <td> <a href="#"> <?=mb_strimwidth($documentoPf->arquivo, 15, 25, "...") ?> </a></td>
-                                            <td><?= date("d/m/Y", strtotime($documentoPf->data))?></td>
                                             <td>
-                                                <button class="btn btn-danger" onclick="excluirArquivo('<?=$documentoPf->idArquivo?>', '<?= $documentoPf->arquivo?>')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                <div class="row">
+                                                    <div class="col-md">
+                                                        <label for=""><?= $arquivo->documento ?></label>
+                                                    </div>
+
+                                                    <div class="col-md">
+                                                        <input type="hidden" name="<?= $arquivo->sigla ?>"
+                                                               value="<?= $arquivo->id ?>">
+                                                        <input class="text-center" type='file'
+                                                               name='<?= $arquivo->sigla ?>'><br>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
-                                    <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-
-
-                            <?php else: ?>
-                                <p>Não há anexos disponíveis no momento.<p/>
-                            <?php endif; ?>
-
-                        </div>
-                    </div>
-                    <hr/>
-                    <div class="col-md-12 mt-3 text-center">
-                        <div class="table-responsive list_info">
-                            <div class="col-md-12 col-md-offset-2 mt-3 text-center">
-                                <h5> <strong>Envio de Arquivos</strong></h5><br>
-                                <h6 class="text-center">Nesta página, você envia documentos
-                                    digitalizados. O tamanho máximo do arquivo deve ser
-                                    05MB.</h6>
-                            </div>
-
-                            <form class="formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/arquivosAjax.php"
-                                  data-form="save" enctype="multipart/form-data">
-                                <input type="hidden" name="_method" value="enviarArquivo">
-                                <input type="hidden" name="origem_id" value="<?= $id ?>">
-                                <input type="hidden" name="pagina" value="formacao/pf_demais_anexos&id=<?= $id ?>">
-                                <table class="table text-center table-striped">
-                                    <tbody>
-                                    <?php
-                                    foreach ($documentosRestantes as $documento){
-                                        if (!$listaPfObj->checaEnviado($id, $documento->id)) {
-                                            ?>
-                                            <tr>
-                                                <td>
-                                                    <label for=""><?= "$documento->documento" ?></label>
-                                                </td>
-                                                <td>
-                                                    <input type="hidden" name="<?= $documento->sigla ?>"
-                                                           value="<?= $documento->id ?>">
-                                                    <input class="text-center" type='file'
-                                                           name='<?= $documento->sigla ?>'><br>
-                                                </td>
-                                            </tr>
-                                            <?php
-                                        }
+                                        <?php
                                     }
+                                }
+                                ?>
+                                </tbody>
+                            </table>
+                            <input type="submit" class="btn btn-success btn-md btn-block" name="enviar" value='Enviar'>
+
+                            <div class="resposta-ajax"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-md-6">
+                <!-- Horizontal Form -->
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Arquivos anexados</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- table start -->
+                    <div class="card-body p-0">
+                        <table class="table table-striped table-responsive">
+                            <thead>
+                            <tr>
+                                <th>Tipo do documento</th>
+                                <th>Nome do documento</th>
+                                <th style="width: 30%">Data de envio</th>
+                                <th style="width: 10%">Ação</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            $arquivosEnviados = $arquivosObj->listarArquivosEnviados($id, $lista_documento_ids)->fetchAll(PDO::FETCH_OBJ);
+                            if (count($arquivosEnviados) != 0) {
+                                foreach ($arquivosEnviados as $arquivo) {
                                     ?>
-                                    </tbody>
-                                </table>
-                                <center>
-                                    <div class="col-md-7 mt-3 text-center">
-                                        <input type="submit" class="btn btn-success btn-md btn-block" name="enviar" value='Enviar'>
-                                    </div>
-                                </center>
-
-
-                                <div class="resposta-ajax"></div>
-                            </form>
-                        </div>
+                                    <tr>
+                                        <td><?= $arquivo->documento ?></td>
+                                        <td><a href="<?= SERVERURL . "uploads/" . $arquivo->arquivo ?>"
+                                               target="_blank"><?= mb_strimwidth($arquivo->arquivo, '15', '25', '...') ?></a>
+                                        </td>
+                                        <td><?= $arquivosObj->dataParaBR($arquivo->data) ?></td>
+                                        <td>
+                                            <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/arquivosAjax.php"
+                                                  method="POST" data-form="delete">
+                                                <input type="hidden" name="_method" value="removerArquivo">
+                                                <input type="hidden" name="pagina" value="<?= $_GET['views'] ?>">
+                                                <input type="hidden" name="arquivo_id"
+                                                       value="<?= $arquivosObj->encryption($arquivo->id) ?>">
+                                                <input type="hidden" name="origem_id" value="<?= $id ?>">
+                                                <button type="submit" class="btn btn-sm btn-danger">Apagar</button>
+                                                <div class="resposta-ajax"></div>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                            } else {
+                                ?>
+                                <tr>
+                                    <td class="text-center" colspan="4">Nenhum arquivo enviado</td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-md-12 mt-3">
-                        <div class="card-footer">
-                            <form method="POST" action="<?= SERVERURL . "formacao/pf_lista"?>">
-                                <input type="hidden" value="<?= $id ?>" name="idPf">
-                                <button type="submit" name="Voltar" class="btn btn-default pull-left">Voltar</button>
-                            </form>
-                        </div >
-                    </div>
+
                 </div>
+                <!-- /.card -->
             </div>
         </div>
-    </div>
-</div>
-
-
-<!--.modal-->
-<div class="modal fade" id="exclusao">
-    <div class="modal-dialog">
-        <div class="modal-content bg-danger">
-            <div class="modal-header">
-                <h4 class="modal-title">Confirmação de exclusão</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form class="form-horizontal formulario-ajax" method="POST" action="<?= SERVERURL ?>ajax/formacaoAjax.php" role="form" data-form="update">
-                <input type="hidden" name="_method" value="removerArquivo">
-                <input type="hidden" name="arquivo_id" id="arquivo_id" value="">
-                <input type="hidden" name="id" value="<?= $id ?>">
-                <div class="modal-body">
-                    <p id="paragrafo"></p>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-                    <button type="submit" class="btn btn-default">Sim</button>
-                </div>
-                <div class="resposta-ajax"></div>
-            </form>
+        <!-- /.row -->
+        <div class="card-footer">
+            <a href="<?= SERVERURL . "formacao/pf_cadastro&id=" . $id ?>" class="btn btn-default pull-left">
+                Voltar
+            </a>
         </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+    </div><!-- /.container-fluid -->
 </div>
-<!-- /.modal -->
+<!-- /.content -->
 
-<script>
-    function excluirArquivo(idArquivo, arquivo){
-        limpaModal();
-        $( "#paragrafo" ).text("Deseja realmente excluir o arquivo " + arquivo + "?");
-        $( "#arquivo_id" ).val(idArquivo);
-        $('#exclusao').modal('show')
-    }
 
-    function limpaModal() {
-        $( "#paragrafo" ).text("");
-        $( "#arquivo_id" ).val("");
-    }
+<script type="application/javascript">
+    $(document).ready(function () {
+        $('.nav-link').removeClass('active');
+        $('#itens-proponente').addClass('menu-open');
+        $('#anexos-proponente').addClass('active');
+    })
 </script>

@@ -27,7 +27,7 @@
                 <!-- Horizontal Form -->
                 <div class="card card-info card-outline">
                     <div class="card-header">
-                        <h3 class="card-title">Pessoas Físicas Cadastradas</h3>
+                        <h3 class="card-title">Listagem de pedidos de Pessoas Físicas</h3>
                         <div class="card-tools">
                             <!-- button with a dropdown -->
                             <a href="<?= SERVERURL ?>formacao/pesquisa_pf" class="btn btn-success btn-sm" >
@@ -45,7 +45,7 @@
                             <tr>
 
                                 <th>Número Processo</th>
-                                <th>Código do Pedido</th>
+                                <th>Protocolo</th>
                                 <th>Proponente</th>
                                 <th>CPF/Passaporte</th>
                                 <th>Ano</th>
@@ -87,7 +87,7 @@
                             <tfoot>
                                 <tr>
                                     <th>Número Processo</th>
-                                    <th>Código do Pedido</th>
+                                    <th>Protocolo</th>
                                     <th>Proponente</th>
                                     <th>CPF/Passaporte</th>
                                     <th>Ano</th>

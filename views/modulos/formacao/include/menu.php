@@ -4,6 +4,9 @@
         <p>Home</p>
     </a>
 </li>
+<?php
+if ($_SESSION['perfil_s'] == 1){
+?>
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -17,6 +20,12 @@
             <a href="<?= SERVERURL ?>formacao/cargo_lista" class="nav-link active" id="cargo_lista">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Cargo</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= SERVERURL ?>formacao/cargo_programa" class="nav-link active" id="cargo_programa">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Vincular Cargo</p>
             </a>
         </li>
         <li class="nav-item">
@@ -63,6 +72,9 @@
         </li>
     </ul>
 </li>
+<?php
+}
+?>
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
         <i class="fas fa-copyright"></i>
@@ -72,6 +84,10 @@
         </p>
     </a>
     <ul class="nav nav-treeview">
+        <?php
+        if ($_SESSION['perfil_s'] != 16) //habilitar apenas listar inscritos
+        {
+        ?>
         <li class="nav-item">
             <a href="<?= SERVERURL ?>formacao/abertura_lista" class="nav-link" id="abertura_lista">
                 <i class="far fa-circle nav-icon"></i>
@@ -84,20 +100,40 @@
                 <p>Lista de documentos</p>
             </a>
         </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if ($_SESSION['perfil_s'] == 1 || $_SESSION['perfil_s'] == 16){
+        ?>
         <li class="nav-item">
-            <a href="#" class="nav-link" id="listar_inscritos">
+            <a href="<?= SERVERURL ?>formacao/listar_inscritos" class="nav-link" id="listar_inscritos">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Listar inscritos</p>
             </a>
         </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if ($_SESSION['perfil_s'] == 1){
+        ?>
         <li class="nav-item">
-            <a href="#" class="nav-link" id="exportar_inscritos">
+            <a href="<?= SERVERURL ?>formacao/exportar_inscritos_capac" class="nav-link" id="exportar_inscritos_capac">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Exportar inscritos</p>
             </a>
         </li>
+        <?php
+        }
+        ?>
     </ul>
 </li>
+<?php
+if ($_SESSION['perfil_s'] == 1){
+?>
 <li class="nav-item">
     <a href="<?= SERVERURL ?>formacao/pf_lista" class="nav-link" id="pf_lista">
         <i class="fas fa-user-friends"></i>
@@ -128,3 +164,6 @@
         <p>Concluir Processo</p>
     </a>
 </li>
+<?php
+}
+?>
