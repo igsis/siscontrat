@@ -11,7 +11,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: *');
 header('Content-Type: application/json');
 
-if(isset($_GET['todos'])):
+if (isset($_GET['todos'])):
     $consulta = "SELECT id, cargo FROM formacao_cargos WHERE publicado = 1";
     $res = $db->consultaSimples($consulta)->fetchAll();
     $cargos = json_encode($res);
@@ -26,9 +26,7 @@ if (isset($_GET['id'])):
                  INNER JOIN formacao_cargos AS c ON cp.formacao_cargo_id = c.id
                  WHERE p.publicado = 1 AND c.publicado = 1 AND cp.programa_id = $programa_id";
 
-    if(isset($_GET['select'])):
-        $res = $db->consultaSimples($consulta)->fetchAll();
-        $cargos = json_encode($res);
-        print_r($cargos);
-    endif;
+    $res = $db->consultaSimples($consulta)->fetchAll();
+    $cargos = json_encode($res);
+    print_r($cargos);
 endif;

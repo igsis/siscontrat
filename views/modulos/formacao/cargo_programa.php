@@ -41,14 +41,14 @@ $link_api = SERVERURL . "api/lista_cargo_programas.php";
                                     <td><?= $dado['programa'] ?></td>
                                     <td>
                                         <button type="button" class="btn btn-info btn-block" id="btnModalVincula"
-                                                onclick="listarCargo(<?= $dado['id'] ?>); mudarBotaoVincular()"
+                                                onclick="popularTodos(<?= $dado['id'] ?>); listarVinculados(<?= $dado['id'] ?>); mudarBotaoVincular()"
                                                 data-toggle="modal" data-target="#modalCargos">
                                             <i class="fas fa-plus"></i> Vincular
                                         </button>
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-block" id="btnModalDesvincula"
-                                                onclick="listarCargoCadastrados(<?= $dado['id'] ?>); mudarBotaoDesvincular()"
+                                                onclick="popularVinculados(<?= $dado['id'] ?>); mudarBotaoDesvincular()"
                                                 data-toggle="modal" data-target="#modalCargos">
                                             <i class="fas fa-trash"></i> Desvincular
                                         </button>
@@ -107,12 +107,12 @@ $link_api = SERVERURL . "api/lista_cargo_programas.php";
     let btnVincula = $('#btnVincula');
     let btnDesvincula = $('#btnDesvincula');
 
-    function listarCargoCadastrados(id) {
+    function popularVinculados(id) {
         $('#programa_id').attr('value', id);
         $('#modalCargos').find('#conteudoModal').empty();
         $.ajax({
             method: "GET",
-            url: link + "?id=" + id + "&select=1"
+            url: link + "?id=" + id
         })
             .done(function (cargos) {
                 $('#cargo option').remove();
@@ -123,7 +123,7 @@ $link_api = SERVERURL . "api/lista_cargo_programas.php";
             })
     }
 
-    function listarCargo(id) {
+    function popularTodos(id) {
         $('#programa_id').attr('value', id);
         $('#modalCargos').find('#conteudoModal').empty();
         $.ajax({
@@ -133,9 +133,22 @@ $link_api = SERVERURL . "api/lista_cargo_programas.php";
             .done(function (cargos) {
                 $('#cargo option').remove();
                 $('#cargo').append('<option value="">Selecione um cargo...</option>');
-                $('#modalCargos').find('#conteudoModal').append(`<tr><td>Cargos vinculados a este programa</td></tr>`);
                 for (const cargo of cargos) {
                     $('#cargo').append(`<option value='${cargo.id}'>${cargo.cargo}</option>`);
+                }
+            });
+    }
+
+    function listarVinculados(id) {
+        $('#programa_id').attr('value', id);
+        $('#modalCargos').find('#conteudoModal').empty();
+        $.ajax({
+            method: "GET",
+            url: link + "?id=" + id
+        })
+            .done(function (cargos) {
+                $('#modalCargos').find('#conteudoModal').append(`<tr><td>Cargos vinculados a este programa</td></tr>`);
+                for (const cargo of cargos) {
                     $('#modalCargos').find('#conteudoModal').append(` ${cargo.cargo} <br>`);
                 }
             });
@@ -154,7 +167,7 @@ $link_api = SERVERURL . "api/lista_cargo_programas.php";
         btnDesvincula.hide();
         btnVincula.show();
         btnVincula.attr('disabled', false);
-        $('#metodo').attr('value', 'vinculaCargo')
+        $('#metodo').attr('value', 'vincularCargo')
     }
 </script>
 

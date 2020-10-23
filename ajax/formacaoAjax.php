@@ -152,10 +152,10 @@ if (isset($_POST['_method'])) {
         case "apagarAbertura":
             echo $insForm->apagaAbertura($_POST);
             break;
-        case "vinculaCargo":
+        case "vincularCargo":
             echo $insForm->vincularCargo($_POST);
             break;
-        case "desvinculaCargo":
+        case "desvincularCargo":
             echo $insForm->desvincularCargo($_POST);
             break;
 
