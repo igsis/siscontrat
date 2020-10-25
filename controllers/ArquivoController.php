@@ -37,6 +37,11 @@ class ArquivoController extends ArquivoModel
         return parent::listaArquivosFomentos($tipo_contratacao_id);
     }
 
+    public function listarArquivosFormacao()
+    {
+        return MainModel::consultaSimples("SELECT * FROM formacao_lista_documentos WHERE publicado = 1 ORDER BY 'ordem'");
+    }
+
     public function listarArquivosLider() {
         $sql = "SELECT * FROM lista_documentos WHERE tipo_documento_id = '1' AND publicado = '1' AND id IN (1,2,47,89)";
         return ArquivoModel::consultaSimples($sql);
@@ -81,35 +86,47 @@ class ArquivoController extends ArquivoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function listarArquivosEnviados($origem_id, $lista_documentos_ids, $fomentos = false) {
+    public function listarArquivosEnviados($origem_id, $lista_documentos_ids, $fomentos = false, $formacao = false) {
         $origem_id = MainModel::decryption($origem_id);
-        $documentos = implode(", ", $lista_documentos_ids);
-        if (!$fomentos) {
-            $sql = "SELECT a.id, a.arquivo, a.data, ld.documento FROM arquivos AS a
-                    INNER JOIN lista_documentos AS ld on a.lista_documento_id = ld.id
-                    WHERE `origem_id` = '$origem_id' AND lista_documento_id IN ($documentos) AND a.publicado = '1'";
-        } else {
-            $sql = "SELECT fa.id, fa.arquivo, fa.data, fld.documento, cd.anexo FROM fom_arquivos AS fa
-                    INNER JOIN fom_lista_documentos AS fld on fa.fom_lista_documento_id = fld.id
-                    INNER JOIN contratacao_documentos AS cd on cd.fom_lista_documento_id = fa.fom_lista_documento_id
-                    WHERE `fom_projeto_id` = '$origem_id'
-                      AND fa.fom_lista_documento_id IN ($documentos)
-                      AND fa.publicado = '1'
-                      AND cd.tipo_contratacao_id = '$fomentos'
-                      ORDER BY ordem";
+        if ($lista_documentos_ids != ""){
+            $documentos = implode(", ", $lista_documentos_ids);
         }
-        return DbModel::consultaSimples($sql,true);
+        if ($fomentos) {
+            $sql = DbModel::consultaSimples(
+                "SELECT fa.id, fa.arquivo, fa.data, fld.documento, cd.anexo FROM fom_arquivos AS fa
+                        INNER JOIN fom_lista_documentos AS fld on fa.fom_lista_documento_id = fld.id
+                        INNER JOIN contratacao_documentos AS cd on cd.fom_lista_documento_id = fa.fom_lista_documento_id
+                        WHERE `fom_projeto_id` = '$origem_id'
+                          AND fa.fom_lista_documento_id IN ($documentos)
+                          AND fa.publicado = '1'
+                          AND cd.tipo_contratacao_id = '$fomentos'
+                          ORDER BY ordem", true);
+        } elseif ($formacao) {
+            $sql = DbModel::consultaSimples(
+                "SELECT a.id, a.arquivo, a.data, ld.documento FROM formacao_arquivos AS a
+                        INNER JOIN formacao_lista_documentos AS ld on a.formacao_lista_documento_id = ld.id
+                        WHERE formacao_contratacao_id = '$origem_id'  AND a.publicado = '1'");
+        } else {
+            $sql = DbModel::consultaSimples(
+                "SELECT a.id, a.arquivo, a.data, ld.documento FROM arquivos AS a
+                        INNER JOIN lista_documentos AS ld on a.lista_documento_id = ld.id
+                        WHERE `origem_id` = '$origem_id' AND lista_documento_id IN ($documentos) AND a.publicado = '1'");
+        }
+        return $sql;
     }
 
     public function enviarArquivo($origem_id, $pagina) {
         $fomentos = $pagina == "fomentos/anexos" ? true : false;
+        $formacao = $pagina == "formacao/anexos" ? true : false;
         unset($_POST['pagina']);
         $origem_id = MainModel::decryption($origem_id);
         foreach ($_FILES as $key => $arquivo){
             $_FILES[$key]['lista_documento_id'] = $_POST[$key];
         }
-        $erros = ArquivoModel::enviaArquivos($_FILES, $origem_id,6, true, $fomentos);
+        $erros = ArquivoModel::enviaArquivos($_FILES, $origem_id,6, true, $fomentos, $formacao);
         $erro = MainModel::in_array_r(true, $erros, true);
+
+        $pagina = $pagina . '&id=' . MainModel::encryption($origem_id);
 
         if ($erro) {
             foreach ($erros as $erro) {
@@ -137,14 +154,23 @@ class ArquivoController extends ArquivoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function apagarArquivo ($arquivo_id, $pagina){
+    public function apagarArquivo ($arquivo_id, $pagina, $origem_id = false){
         $fomentos = $pagina == "fomentos/anexos" ? true : false;
-        $arquivo_id = MainModel::decryption($arquivo_id);
-        if (!$fomentos) {
-            $remover = DbModel::apaga('arquivos', $arquivo_id);
-        } else {
-            $remover = DbModel::apaga('fom_arquivos', $arquivo_id);
+        $formacao = $pagina == "formacao/anexos" ? true : false;
+
+        if($origem_id){
+            $pagina = $pagina . '&id=' . $origem_id;
         }
+
+        $arquivo_id = MainModel::decryption($arquivo_id);
+        if ($fomentos) {
+            $remover = DbModel::apaga('fom_arquivos', $arquivo_id);
+        } elseif ($formacao) {
+            $remover = DbModel::apaga('formacao_arquivos', $arquivo_id);
+        } else {
+            $remover = DbModel::apaga('arquivos', $arquivo_id);
+        }
+
         if ($remover->rowCount() > 0) {
             $alerta = [
                 'alerta' => 'sucesso',
@@ -165,18 +191,20 @@ class ArquivoController extends ArquivoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function consultaArquivoEnviado($lista_documento_id, $origem_id, $fomentos = false) {
+    public function consultaArquivoEnviado($lista_documento_id, $origem_id, $fomentos = false, $formacao = false) {
         $origem_id = MainModel::decryption($origem_id);
-        if (!$fomentos) {
-            $sql = "SELECT * FROM arquivos WHERE lista_documento_id = '$lista_documento_id' AND origem_id = '$origem_id' AND publicado = '1'";
-        } else {
-            $sql = "SELECT * FROM fom_arquivos WHERE fom_lista_documento_id = '$lista_documento_id' AND fom_projeto_id = '$origem_id' AND publicado = '1'";
+        if ($fomentos) {
+            $sql = DbModel::consultaSimples("SELECT * FROM fom_arquivos WHERE fom_lista_documento_id = '$lista_documento_id' AND fom_projeto_id = '$origem_id' AND publicado = '1'", true);
+        } elseif ($formacao) {
+            $sql = DbModel::consultaSimples("SELECT * FROM formacao_arquivos WHERE formacao_lista_documento_id = '$lista_documento_id' AND formacao_contratacao_id = '$origem_id' AND publicado = '1'");
+        }else {
+            $sql = DbModel::consultaSimples("SELECT * FROM arquivos WHERE lista_documento_id = '$lista_documento_id' AND origem_id = '$origem_id' AND publicado = '1'");
         }
-        $arquivo = DbModel::consultaSimples($sql)->rowCount();
+        $arquivo = $sql->rowCount();
         return $arquivo > 0 ? true : false;
     }
 
-    public function downloadArquivos($fom_projeto_id)
+    public function downloadArquivos($fom_projeto_id, $formacao = 0, $form_cadastro_id = 0)
     {
         $path = "../../capac/uploads/";
         $data = date('YmdHis');
@@ -186,7 +214,12 @@ class ArquivoController extends ArquivoModel
 
         if ($zip->open($nome_arquivo, ZipArchive::CREATE) === true) {
 
-            $query = DbModel::consultaSimples(" SELECT * FROM fom_arquivos WHERE publicado = 1 AND fom_projeto_id = '$fom_projeto_id'",true)->fetchAll(PDO::FETCH_ASSOC);
+            if($formacao != 0 && $form_cadastro_id != 0):
+                $query = DbModel::consultaSimples("SELECT * FROM form_arquivos WHERE form_cadastro_id = '$form_cadastro_id' AND publicado = 1", TRUE)->fetchAll(PDO::FETCH_ASSOC);
+            else:
+                $query = DbModel::consultaSimples(" SELECT * FROM fom_arquivos WHERE publicado = 1 AND fom_projeto_id = '$fom_projeto_id'",true)->fetchAll(PDO::FETCH_ASSOC);
+            endif;
+
             foreach ($query as $arquivo) {
                 $file = $path . $arquivo['arquivo'];
                 $file2 = $arquivo['arquivo'];
@@ -216,4 +249,5 @@ class ArquivoController extends ArquivoModel
 
         unlink($data . ".zip");
     }
+
 }

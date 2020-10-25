@@ -65,9 +65,9 @@ class PessoaFisicaController extends PessoaFisicaModel
                 }
             }
 
-            if ($_SESSION['modulo_s'] == 6 || $_SESSION['modulo_s'] == 7){ //formação ou jovem monitor
-                $_SESSION['origem_id_s'] = MainModel::encryption($id);
-            }
+            // if ($_SESSION['modulo_s'] == 6 || $_SESSION['modulo_s'] == 7){ //formação ou jovem monitor
+            //     $_SESSION['origem_id_s'] = MainModel::encryption($id);
+            // }
 
             if($retornaId){
                 return $id;
@@ -191,9 +191,9 @@ class PessoaFisicaController extends PessoaFisicaModel
                 }
             }
 
-            if ($_SESSION['modulo_s'] == 6 || $_SESSION['modulo_s'] == 7){ //formação ou jovem monitor
-                $_SESSION['origem_id_s'] = $id;
-            }
+            // if ($_SESSION['modulo_s'] == 6 || $_SESSION['modulo_s'] == 7){ //formação ou jovem monitor
+            //     $_SESSION['origem_id_s'] = $id;
+            // }
 
             if($retornaId){
                 return $idDecryp;
@@ -224,7 +224,7 @@ class PessoaFisicaController extends PessoaFisicaModel
     public function recuperaPessoaFisica($id, $capac = false) {
         $id = MainModel::decryption($id);
         $pf = DbModel::consultaSimples(
-            "SELECT pf.*, pe.*, pb.*, po.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, r.regiao, gi.grau_instrucao
+            "SELECT pf.*, pe.*, pb.*, po.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, r.nome as regiao, gi.grau_instrucao
             FROM pessoa_fisicas AS pf
             LEFT JOIN pf_enderecos pe on pf.id = pe.pessoa_fisica_id
             LEFT JOIN pf_bancos pb on pf.id = pb.pessoa_fisica_id
