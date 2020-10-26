@@ -1,3 +1,8 @@
+<?php
+require_once "./models/DbModel.php";
+$dbObj = new DbModel();
+$ano = $dbObj->consultaSimples("SELECT ano FROM form_cadastros ORDER BY ano ASC LIMIT 0,1", TRUE)->fetchObject()->ano;
+?>
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -23,7 +28,7 @@
                                     <div class="row">
                                         <div class="form-group col-md">
                                             <label for="sigla">Ano: *</label>
-                                            <input type="number" class="form-control" name="ano" required
+                                            <input type="number" class="form-control" name="ano" required min="<?= $ano ?>"
                                                    data-mask="9999">
                                         </div>
                                     </div>

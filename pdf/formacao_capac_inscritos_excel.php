@@ -13,7 +13,7 @@ $formacaoObj = new FormacaoController();
 $ano = $_GET['ano'];
 
 $dadosContratacoes = $formacaoObj->recuperaContratacao('', '', 1, $ano);
-$nome_arquivo = "formacao_inscritos_capac" . $ano . ".xls";
+$nome_arquivo = "formacao_inscritos_capac_" . $ano . ".xls";
 
 $linkStyle = [
     'font' => [
@@ -35,7 +35,7 @@ $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue("A1", "Lista de Inscritos");
 
 //Colorir o header
-$objPHPExcel->getActiveSheet()->getStyle("A1:J1")->applyFromArray
+$objPHPExcel->getActiveSheet()->getStyle("A1:N1")->applyFromArray
 (
     array
     (
@@ -57,12 +57,16 @@ $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue("G1")
     ->setCellValue("H1")
     ->setCellValue("I1")
-    ->setCellValue("J1");
+    ->setCellValue("J1")
+    ->setCellValue("K1")
+    ->setCellValue("L1")
+    ->setCellValue("M1")
+    ->setCellValue("N1");
 
 //ajustando tamanho do cabeçalho e centralizando o texto
 $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, 1, "LISTA DE INSCRITOS");
-$objPHPExcel->getActiveSheet()->getStyle('A1:I1')->getFont()->setBold(true);
-$objPHPExcel->getActiveSheet()->mergeCells('A1:J1');
+$objPHPExcel->getActiveSheet()->getStyle('A1:N1')->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->mergeCells('A1:N1');
 $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->applyFromArray(
     array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
         'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER)
@@ -71,27 +75,31 @@ $objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
 
 //criar colunas
 $objPHPExcel->setActiveSheetIndex(0)
-    ->setCellValue("A2", "Protocolo")
-    ->setCellValue("B2", "Nome Completo")
-    ->setCellValue("C2", "Programa")
-    ->setCellValue("D2", "Cargo 1")
-    ->setCellValue("E2", "Cargo (2º opção)")
-    ->setCellValue("F2", "Cargo (3º opção)")
-    ->setCellValue("G2", "Linguagem")
-    ->setCellValue("H2", "E-mail")
-    ->setCellValue("I2", "Telefone(s) do Proponente")
-    ->setCellValue("J2", "Arquivos");
+    ->setCellValue("A2", "Nº Inscrição")
+    ->setCellValue("B2", "Nome")
+    ->setCellValue("C2", "CPF/Passaporte")
+    ->setCellValue("D2", "E-mail")
+    ->setCellValue("E2", "Data de Nascimento")
+    ->setCellValue("F2", "Função (1ª opção)")
+    ->setCellValue("G2", "Função (2º opção)")
+    ->setCellValue("H2", "Função (3º opção)")
+    ->setCellValue("I2", "Linguagem")
+    ->setCellValue("J2", "Etnia")
+    ->setCellValue("K2", "Região preferencial")
+    ->setCellValue("L2", "Trans")
+    ->setCellValue("M2", "PCD")
+    ->setCellValue("N2", "Arquivos");
 
 // Definimos o estilo da fonte das colunas
-$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle('A2:N2')->getFont()->setBold(true);
 
 //define o tamanho de cada célula de cada coluna
-$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A2:N2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(30);
-$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A2:N2')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 //colorir as primeiras células de cada coluna
-$objPHPExcel->getActiveSheet()->getStyle("A2:J2")->applyFromArray
+$objPHPExcel->getActiveSheet()->getStyle("A2:N2")->applyFromArray
 (
     array
     (
@@ -107,8 +115,6 @@ $objPHPExcel->getActiveSheet()->getStyle("A2:J2")->applyFromArray
 $contador = 3;
 
 foreach ($dadosContratacoes as $dadosContratacao) {
-    //recupera os telefones de cada pf
-    $tel = $formacaoObj->recuperaTelPf($dadosContratacao->pessoa_fisica_id, '', '1');
 
     $a = "A" . $contador;
     $b = "B" . $contador;
@@ -120,46 +126,50 @@ foreach ($dadosContratacoes as $dadosContratacao) {
     $h = "H" . $contador;
     $i = "I" . $contador;
     $j = "J" . $contador;
+    $k = "K" . $contador;
+    $l = "L" . $contador;
+    $m = "M" . $contador;
+    $n = "N" . $contador;
 
     $testa = DbModel::consultaSimples("SELECT * FROM form_arquivos WHERE form_cadastro_id = $dadosContratacao->id AND publicado = 1", TRUE)->rowCount();
     if ($testa > 0):
         $zip = SERVERURL . "api/downloadInscritos.php?id=" . $dadosContratacao->id . "&formacao=1";
-        $objPHPExcel->getActiveSheet()->getCell($j)->getHyperlink()->setUrl($zip);
-        $objPHPExcel->getActiveSheet()->getCell($j)->getStyle()->applyFromArray($linkStyle);
+        $objPHPExcel->getActiveSheet()->getCell($n)->getHyperlink()->setUrl($zip);
+        $objPHPExcel->getActiveSheet()->getCell($n)->getStyle()->applyFromArray($linkStyle);
         $texto = "Download";
     else:
         $texto = "Não possuí anexos";
     endif;
 
     $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue($a, $dadosContratacao->protocolo ?? "Não Possuí")
+        ->setCellValue($a, $dadosContratacao->protocolo == NULL ? "Não Possuí" : $dadosContratacao->protocolo)
         ->setCellValue($b, $dadosContratacao->nome)
-        ->setCellValue($c, $dadosContratacao->programa)
-        ->setCellValue($d, $dadosContratacao->cargo)
-        ->setCellValue($e, $dadosContratacao->cargo2)
-        ->setCellValue($f, $dadosContratacao->cargo3)
-        ->setCellValue($g, $dadosContratacao->linguagem)
-        ->setCellValue($h, $dadosContratacao->email)
-        ->setCellValue($i, $tel)
-        ->setCellValue($j, $texto);
+        ->setCellValue($c, $dadosContratacao->cpf == NULL ? $dadosContratacao->passaporte : $dadosContratacao->cpf)
+        ->setCellValue($d, $dadosContratacao->email)
+        ->setCellValue($e, MainModel::dataParaBR($dadosContratacao->data_nascimento))
+        ->setCellValue($f, $dadosContratacao->cargo)
+        ->setCellValue($g, $dadosContratacao->cargo2)
+        ->setCellValue($h, $dadosContratacao->cargo3)
+        ->setCellValue($i, $dadosContratacao->linguagem)
+        ->setCellValue($j, $dadosContratacao->etnia)
+        ->setCellValue($k, $dadosContratacao->regiao)
+        ->setCellValue($l, $dadosContratacao->trans == 1 ? "SIM" : "NÃO")
+        ->setCellValue($m, $dadosContratacao->pcd == 1 ? "SIM" : "NÃO")
+        ->setCellValue($n, $texto);
 
     $contador++;
 }
 
 //setando tamanho das colunas
-for ($col = 'A'; $col !== 'J'; $col++) {
+for ($col = 'A'; $col !== 'N'; $col++) {
     $objPHPExcel->getActiveSheet()
         ->getColumnDimension($col)
         ->setAutoSize(true);
 }
 
-//Consertando a coluna referente ao telefone
-$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(50);
-
-//Consertando a coluna referente ao telefone
-$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(30);
+//Consertando a coluna referente aos arquivos
+$objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(30);
 
 // Cabeçalho do arquivo para ele baixar(Excel2007)
 header('Content-Type: text/html; charset=ISO-8859-1');
