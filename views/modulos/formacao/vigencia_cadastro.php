@@ -154,7 +154,7 @@ $vigencia = $vigenciaObj->recuperaVigencia($id);
             if (key > 0) {
                 let data_pagamento_anterior = new Date($('#data_pagamento_' + (key-1)).val());
 
-                if (data_inicio.getTime() <= data_pagamento_anterior.getTime()) {
+                if (data_inicio.getTime() < data_pagamento_anterior.getTime()) {
                     $('#data_inicio_' + key).addClass('is-invalid');
                 } else {
                     $('#data_inicio_' + key).removeClass('is-invalid');
