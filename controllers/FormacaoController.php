@@ -960,17 +960,20 @@ class FormacaoController extends FormacaoModel
         }
 
         if ($capac != 0 && $ano != 0):
-            $sql = "SELECT fc.id, pro.programa, fc.protocolo, fc.pessoa_fisica_id, pf.nome, pf.email, 
-                       c.cargo, fc2.cargo AS 'cargo2', fc3.cargo AS 'cargo3', l.linguagem                                                                   
-                FROM capac_new.form_cadastros AS fc
-                INNER JOIN programas AS pro ON pro.id = fc.programa_id
-                INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
-		        LEFT JOIN capac_new.form_cargos_adicionais AS fca ON fc.id = fca.form_cadastro_id
-	            LEFT JOIN formacao_cargos AS fc2 ON fca.form_cargo2_id = fc2.id
-		        LEFT JOIN formacao_cargos AS fc3 ON fca.form_cargo3_id = fc3.id
-                INNER JOIN linguagens AS l ON l.id = fc.linguagem_id
-                INNER JOIN capac_new.pessoa_fisicas AS pf ON pf.id = fc.pessoa_fisica_id
-                WHERE fc.ano = $ano AND fc.publicado = 1 ORDER BY fc.id";
+            $sql = "SELECT fc.id, fc.protocolo, pf.nome, pf.email, pf.cpf, pf.passaporte, pf.data_nascimento,
+                           c.cargo, fc2.cargo AS 'cargo2', fc3.cargo AS 'cargo3', l.linguagem,
+                           e.descricao AS 'etnia', r.regiao, det.trans, det.pcd
+                    FROM capac_new.form_cadastros AS fc
+                    INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
+		            LEFT JOIN capac_new.form_cargos_adicionais AS fca ON fc.id = fca.form_cadastro_id
+ 	                LEFT JOIN formacao_cargos AS fc2 ON fca.form_cargo2_id = fc2.id
+	                LEFT JOIN formacao_cargos AS fc3 ON fca.form_cargo3_id = fc3.id
+                    INNER JOIN linguagens AS l ON l.id = fc.linguagem_id
+                    INNER JOIN capac_new.pessoa_fisicas AS pf ON pf.id = fc.pessoa_fisica_id
+                    INNER JOIN capac_new.pf_detalhes AS det ON det.pessoa_fisica_id = fc.pessoa_fisica_id
+                    INNER JOIN capac_new.etnias AS e ON e.id = det.etnia_id
+                    INNER JOIN capac_new.regiaos AS r ON fc.regiao_preferencial_id = r.id
+                    WHERE fc.ano = $ano AND fc.publicado = 1 ORDER BY fc.id;";
 
             return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
         else:
@@ -1003,27 +1006,18 @@ class FormacaoController extends FormacaoModel
                                                   WHERE pf.id = $pessoa_fisica_id")->fetchObject();
     }
 
-    public function recuperaTelPf($pesquisa_fisica_id, $obj = 0, $capac = 0)
+    public function recuperaTelPf($pesquisa_fisica_id, $obj = 0)
     {
         $tel = "";
 
-        if ($capac != 0):
-            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id", '1')->fetchAll();
-
+        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id")->fetchAll();
+        if ($obj != NULL):
+            return $telArrays;
+        else:
             foreach ($telArrays as $telArrays) {
                 $tel = $tel . $telArrays['telefone'] . '; ';
             }
             return substr($tel, 0, -2);
-        else:
-            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id")->fetchAll();
-            if ($obj != NULL):
-                return $telArrays;
-            else:
-                foreach ($telArrays as $telArrays) {
-                    $tel = $tel . $telArrays['telefone'] . '; ';
-                }
-                return substr($tel, 0, -2);
-            endif;
         endif;
     }
 
