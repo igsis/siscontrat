@@ -47,8 +47,8 @@
                                 <?php foreach ($cargos as $cargo): ?>
                                 <tr>
                                     <td><?=$cargo->cargo?></td>
-                                    <td><?=$cargo->justificativa?></td>
-                                                                        <td>
+                                    <td><?=nl2br($cargo->justificativa)?></td>
+                                    <td>
                                         <a href="<?= SERVERURL . "formacao/cargo_cadastro&id=" . $cargoObj->encryption($cargo->id) ?>" class="btn bg-gradient-primary btn-sm">
                                             <i class="fas fa-user-edit"></i> Editar
                                         </a>
