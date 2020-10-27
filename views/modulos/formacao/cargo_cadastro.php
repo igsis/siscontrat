@@ -48,9 +48,7 @@ $cargo = $cargoObj->recuperaCargo($id);
                                     <div class="row">
                                         <div class="form-group col-md">
                                             <label for="justificativa">Justificativa*: </label>
-                                            <textarea name="justificativa" id="justificativa" class="form-control textarea" rows="4" required>
-                                                <?= $cargo->justificativa ?? "" ?>
-                                            </textarea>
+                                            <textarea name="justificativa" id="justificativa" class="form-control textarea" rows="4" required><?= $cargo->justificativa ?? "" ?></textarea>
                                         </div>
 
                                     </div>
