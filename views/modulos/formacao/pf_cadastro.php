@@ -108,7 +108,7 @@ if ($type == 1){
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="nacionalidade">Nacionalidade: *</label>
-                                    <select class="form-control" id="nacionalidade" name="pf_nacionalidade_id" required>
+                                    <select class="form-control select2bs4" id="nacionalidade" name="pf_nacionalidade_id" required>
                                         <option value="">Selecione uma opção...</option>
                                         <?php
                                         $insPessoaFisica->geraOpcao("nacionalidades",$pf['nacionalidade_id']);
@@ -178,19 +178,28 @@ if ($type == 1){
                                 </div>
                             </div>
                             <hr/>
-                            <!-- <div class="row">
+                            <hr/>
+                            <div class="row">
                                 <div class="form-group col">
-                                    <label for="regiao_id">Região: *</label>
-                                    <select class="form-control" id="regiao_id" name="dt_regiao_id" required>
+                                    <label for="nit">NIT: *</label>
+                                    <input type="text" id="nit" name="ni_nit" class="form-control" maxlength="45" placeholder="Digite o NIT" required value="<?= $pf['nit'] ?? "" ?>">
+                                </div>
+                                <div class="form-group col">
+                                    <label for="drt">DRT: </label>
+                                    <input type="text" id="drt" name="dr_drt" class="form-control" maxlength="45" placeholder="Digite o DRT em caso de artes cênicas" value="<?= $pf['drt'] ?? "" ?>">
+                                </div>
+                                <div class="form-group col">
+                                    <label for="grau_instrucao_id">Grau de Instrução: *</label>
+                                    <select class="form-control select2bs4" id="grau_instrucao_id" name="dt_grau_instrucao_id" required>
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $insPessoaFisica->geraOpcao("regiaos",$pf['regiao_id']);
+                                        $insPessoaFisica->geraOpcao("grau_instrucoes",$pf['grau_instrucao_id']);
                                         ?>
                                     </select>
                                 </div>
                                 <div class="form-group col">
                                     <label for="etnia_id">Etnia: *</label>
-                                    <select class="form-control" id="etnia_id" name="dt_etnia_id" required>
+                                    <select class="form-control select2bs4" id="etnia_id" name="dt_etnia_id" required>
                                         <option value="">Selecione uma opção...</option>
                                         <?php
                                         $insPessoaFisica->geraOpcao("etnias",$pf['etnia_id']);
@@ -198,24 +207,37 @@ if ($type == 1){
                                     </select>
                                 </div>
                                 <div class="form-group col">
-                                    <label for="grau_instrucao_id">Grau de Instrução: *</label>
-                                    <select class="form-control" id="grau_instrucao_id" name="dt_grau_instrucao_id" required>
+                                    <label for="genero">Gênero: </label>
+                                    <select class="form-control select2bs4" id="genero" name="dt_genero_id" required>
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $insPessoaFisica->geraOpcao("grau_instrucoes",$pf['grau_instrucao_id']);
+                                        $insPessoaFisica->geraOpcao("generos",$pf['genero_id'] ?? '',true);
                                         ?>
                                     </select>
                                 </div>
-                            </div> 
-                            <hr/>-->
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="nit">NIT: *</label>
-                                    <input type="text" id="nit" name="ni_nit" class="form-control" maxlength="45" placeholder="Digite o NIT" required value="<?= $pf['nit'] ?? "" ?>">
+                                <div class="form-group col-md-1">
+                                    <label for="dt_trans">Trans?</label><br>
+                                    <input type="checkbox" class="form-control-sm checkbox-grid-2 float-left" id="dt_trans" name="dt_trans" value="1"
+                                        <?php
+                                        if (isset($pf['trans'])){
+                                            if ($pf['trans'] == 1){
+                                                echo 'checked';
+                                            }
+                                        }
+                                        ?>
+                                    >
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="drt">DRT: </label>
-                                    <input type="text" id="drt" name="dr_drt" class="form-control" maxlength="45" placeholder="Digite o DRT em caso de artes cênicas" value="<?= $pf['drt'] ?? "" ?>">
+                                <div class="form-group col-md-1">
+                                    <label for="dt_pcd">PCD?</label><br>
+                                    <input type="checkbox" class="form-control-sm checkbox-grid-2 float-left" id="dt_pcd" name="dt_pcd" value="1"
+                                        <?php
+                                        if (isset($pf['pcd'])){
+                                            if ($pf['pcd'] == 1){
+                                                echo 'checked';
+                                            }
+                                        }
+                                        ?>
+                                    >
                                 </div>
                             </div>
                             <hr/>
@@ -228,7 +250,7 @@ if ($type == 1){
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="banco">Banco:</label>
-                                    <select id="banco" name="bc_banco_id" class="form-control">
+                                    <select id="banco" name="bc_banco_id" class="form-control select2bs4">
                                         <option value="">Selecione um banco...</option>
                                         <?php
                                         $insPessoaFisica->geraOpcao("bancos", $pf['banco_id']);
