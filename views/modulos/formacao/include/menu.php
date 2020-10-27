@@ -4,9 +4,7 @@
         <p>Home</p>
     </a>
 </li>
-<?php
-if ($_SESSION['perfil_s'] == 1){
-?>
+
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -72,9 +70,7 @@ if ($_SESSION['perfil_s'] == 1){
         </li>
     </ul>
 </li>
-<?php
-}
-?>
+
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
         <i class="fas fa-copyright"></i>

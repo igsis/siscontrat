@@ -183,6 +183,8 @@ class PessoaFisicaController extends PessoaFisicaModel
                 if (count($dadosLimpos['dt']) > 0) {
                     $detalhe_existe = DbModel::consultaSimples("SELECT * FROM pf_detalhes WHERE pessoa_fisica_id = '$idDecryp'");
                     if ($detalhe_existe->rowCount() > 0) {
+                        $dadosLimpos['dt']['trans'] = isset($dadosLimpos['dt']['trans']) ? $dadosLimpos['dt']['trans'] : 0;
+                        $dadosLimpos['dt']['pcd'] = isset($dadosLimpos['dt']['pcd']) ? $dadosLimpos['dt']['pcd'] : 0;
                         DbModel::updateEspecial('pf_detalhes', $dadosLimpos['dt'], "pessoa_fisica_id", $idDecryp);
                     } else {
                         $dadosLimpos['dt']['pessoa_fisica_id'] = $idDecryp;
