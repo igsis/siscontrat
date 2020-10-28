@@ -19,7 +19,6 @@ if (isset($_GET['busca'])) {
 
     $resultados = $formacaoObj->listarIncritos($dados);
 
-    var_dump($resultados);
 }
 
 ?>
@@ -174,9 +173,15 @@ if (isset($_GET['busca'])) {
                                         <td><?= $resultado->descricao ?></td>
                                         <td><?= $resultado->pcd ? 'Sim' : 'Não' ?></td>
                                         <td><?= $resultado->trans ? 'Sim' : 'Não' ?></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+                                            <button class="btn btn-success btn-sm"> Listagem de arquivos </button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-success btn-sm"> Resumo </button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm"> Importar inscrito </button>
+                                        </td>
                                     <?php } ?>
                                 </tbody>
                                 <tfoot>
