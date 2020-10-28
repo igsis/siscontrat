@@ -37,6 +37,7 @@ class ViewsModel
             'cadastro',
             'complemento_oficina_cadastro',
             'dados_contratacao_lista',
+            'dados_contratacao_lista_capac',
             'demais_anexos',
             'detalhes_inscrito',
             'documento_cadastro',

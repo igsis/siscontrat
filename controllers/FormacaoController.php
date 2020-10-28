@@ -1421,6 +1421,28 @@ class FormacaoController extends FormacaoModel
         return DbModel::consultaSimples($sql);
     }
 
+    public function listaDadosContratacaoCapac($ano = 0)
+    {
+
+        $whereAno = "";
+        if ($ano) {
+            $whereAno = " AND fc.ano = {$ano}";
+        }
+
+        $sqlFormacao = "SELECT fc.*, pf.nome FROM form_cadastros fc
+                        INNER JOIN pessoa_fisicas pf on fc.pessoa_fisica_id = pf.id
+                        WHERE fc.protocolo IS NOT NULL AND fc.publicado = 1 {$whereAno}";
+
+        $formacoes = MainModel::consultaSimples($sqlFormacao, true)->fetchAll(PDO::FETCH_OBJ);
+
+        foreach ($formacoes as $key => $formacao) {
+            $formacoes[$key]->cargo = MainModel::getInfo('formacao_cargos', $formacao->form_cargo_id)->fetchObject()->cargo;
+            $formacoes[$key]->programa = MainModel::getInfo('programas', $formacao->programa_id)->fetchObject()->programa;
+            $formacoes[$key]->linguagem = MainModel::getInfo('linguagens', $formacao->linguagem_id)->fetchObject()->linguagem;
+        }
+        return $formacoes;
+    }
+
 
     public function recuperaDetalhesContratacao($contratacao_id)
     {
@@ -1512,6 +1534,12 @@ class FormacaoController extends FormacaoModel
     {
         $contratacao_id = MainModel::decryption($contratacao_id);
         return DbModel::getInfo('formacao_contratacoes', $contratacao_id)->fetchObject();
+    }
+
+    public function recuperaDadosContratacaoCapac($capac_id)
+    {
+        $capac_id = MainModel::decryption($capac_id);
+        return DbModel::getInfo('form_cadastros', $capac_id, true)->fetchObject();
     }
 
     public function editaDadosContratacao($post)
