@@ -158,7 +158,6 @@ if (isset($_POST['_method'])) {
         case "desvincularCargo":
             echo $insForm->desvincularCargo($_POST);
             break;
-
     }
     if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
         echo $insForm->listaDocumento($_POST['search'], $_POST['where']);

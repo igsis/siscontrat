@@ -1845,6 +1845,43 @@ class FormacaoController extends FormacaoModel
     {
         return DbModel::consultaSimples("SELECT MAX(ano_referencia) as ano_vigente FROM capac_new.form_aberturas WHERE publicado != 0", true)->fetchObject();
     }
+
+    public function listarIncritos($dados)
+    {
+        $where = " ";
+        if (count($dados)) {
+            foreach ($dados as $key => $value) {
+                if ($key != 'rangeDate') {
+                    $where .= " AND {$key} = {$value}";
+                } else {
+                    $datas = explode('-',$value);
+                    $where .= " AND (data_envio BETWEEN '{$datas[0]}' AND '{$datas[1]}') ";
+                }
+            }
+        }
+
+        $sql = "SELECT 	*
+                FROM form_cadastros fc
+                LEFT JOIN pessoa_fisicas					pf ON fc.pessoa_fisica_id = pf.id 
+                LEFT JOIN form_programas 	 				fp ON fc.programa_id = fp.id
+                LEFT JOIN form_regioes_preferenciais	    fr ON fc.regiao_preferencial_id = fr.id
+                LEFT JOIN form_linguagens					fl ON fc.linguagem_id= fl.id
+                LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
+                LEFT JOIN etnias							e  ON e.id = pd.etnia_id
+                LEFT JOIN generos							g  ON g.id = pd.genero_id
+                WHERE protocolo IS NOT NULL AND `fc`.`publicado` = 1 ";
+
+        $sql .= $where;
+
+        return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
+
+
+    }
+
+    public function limparData(string $data)
+    {
+        return str_replace('t', '-', $data);
+    }
 }
 
 
