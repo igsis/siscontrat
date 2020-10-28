@@ -4,15 +4,29 @@ setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../views/plugins/phpexcel/PHPExcel.php";
-require_once "../controllers/FormacaoController.php";
-
+require_once "../models/MainModel.php";
 
 $objPHPExcel = new PHPExcel();
-$formacaoObj = new FormacaoController();
+$mainObj = new MainModel();
 
 $ano = $_GET['ano'];
 
-$dadosContratacoes = $formacaoObj->recuperaContratacao('', '', 1, $ano);
+$sql = "SELECT fc.id AS 'contratacao_id', fc.protocolo, pf.nome, pf.email, pf.cpf, pf.passaporte, pf.data_nascimento,
+                           c.cargo, fc2.cargo AS 'cargo2', fc3.cargo AS 'cargo3', l.linguagem,
+                           e.descricao AS 'etnia', r.regiao, det.trans, det.pcd
+                    FROM form_cadastros AS fc
+                    INNER JOIN siscontrat.formacao_cargos AS c ON c.id = fc.form_cargo_id
+		            LEFT JOIN form_cargos_adicionais AS fca ON fc.id = fca.form_cadastro_id
+ 	                LEFT JOIN siscontrat.formacao_cargos AS fc2 ON fca.form_cargo2_id = fc2.id
+	                LEFT JOIN siscontrat.formacao_cargos AS fc3 ON fca.form_cargo3_id = fc3.id
+                    INNER JOIN siscontrat.linguagens AS l ON l.id = fc.linguagem_id
+                    INNER JOIN pessoa_fisicas AS pf ON pf.id = fc.pessoa_fisica_id
+                    INNER JOIN pf_detalhes AS det ON det.pessoa_fisica_id = fc.pessoa_fisica_id
+                    INNER JOIN etnias AS e ON e.id = det.etnia_id
+                    INNER JOIN regiaos AS r ON fc.regiao_preferencial_id = r.id
+                    WHERE fc.ano = $ano AND fc.publicado = 1";
+
+$dadosContratacoes = $mainObj->consultaSimples($sql, true)->fetchAll(PDO::FETCH_ASSOC);
 $nome_arquivo = "formacao_inscritos_capac_" . $ano . ".xls";
 
 $linkStyle = [
@@ -114,7 +128,9 @@ $objPHPExcel->getActiveSheet()->getStyle("A2:N2")->applyFromArray
 //contador de linhas, utilizado para que os dados comecem a ser preenchidos na linha 3, logo após o cabeçalho e a linha de colunas
 $contador = 3;
 
-foreach ($dadosContratacoes as $dadosContratacao) {
+foreach ($dadosContratacoes AS $dadosContratacao) {
+
+    $contratacao_id = $dadosContratacao['contratacao_id'];
 
     $a = "A" . $contador;
     $b = "B" . $contador;
@@ -131,9 +147,9 @@ foreach ($dadosContratacoes as $dadosContratacao) {
     $m = "M" . $contador;
     $n = "N" . $contador;
 
-    $testa = DbModel::consultaSimples("SELECT * FROM form_arquivos WHERE form_cadastro_id = $dadosContratacao->id AND publicado = 1", TRUE)->rowCount();
+    $testa = DbModel::consultaSimples("SELECT * FROM form_arquivos WHERE form_cadastro_id = $contratacao_id AND publicado = 1", TRUE)->rowCount();
     if ($testa > 0):
-        $zip = SERVERURL . "api/downloadInscritos.php?id=" . $dadosContratacao->id . "&formacao=1";
+        $zip = SERVERURL . "api/downloadInscritos.php?id=" . $contratacao_id . "&formacao=1";
         $objPHPExcel->getActiveSheet()->getCell($n)->getHyperlink()->setUrl($zip);
         $objPHPExcel->getActiveSheet()->getCell($n)->getStyle()->applyFromArray($linkStyle);
         $texto = "Download";
@@ -142,19 +158,19 @@ foreach ($dadosContratacoes as $dadosContratacao) {
     endif;
 
     $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue($a, $dadosContratacao->protocolo == NULL ? "Não Possuí" : $dadosContratacao->protocolo)
-        ->setCellValue($b, $dadosContratacao->nome)
-        ->setCellValue($c, $dadosContratacao->cpf == NULL ? $dadosContratacao->passaporte : $dadosContratacao->cpf)
-        ->setCellValue($d, $dadosContratacao->email)
-        ->setCellValue($e, MainModel::dataParaBR($dadosContratacao->data_nascimento))
-        ->setCellValue($f, $dadosContratacao->cargo)
-        ->setCellValue($g, $dadosContratacao->cargo2)
-        ->setCellValue($h, $dadosContratacao->cargo3)
-        ->setCellValue($i, $dadosContratacao->linguagem)
-        ->setCellValue($j, $dadosContratacao->etnia)
-        ->setCellValue($k, $dadosContratacao->regiao)
-        ->setCellValue($l, $dadosContratacao->trans == 1 ? "SIM" : "NÃO")
-        ->setCellValue($m, $dadosContratacao->pcd == 1 ? "SIM" : "NÃO")
+        ->setCellValue($a, $dadosContratacao['protocolo'] == NULL ? "Não Possuí" : $dadosContratacao['protocolo'])
+        ->setCellValue($b, $dadosContratacao['nome'])
+        ->setCellValue($c, $dadosContratacao['cpf'] == NULL ? $dadosContratacao['passaporte'] : $dadosContratacao['cpf'])
+        ->setCellValue($d, $dadosContratacao['email'])
+        ->setCellValue($e, $mainObj->dataParaBR($dadosContratacao['data_nascimento']))
+        ->setCellValue($f, $dadosContratacao['cargo'])
+        ->setCellValue($g, $dadosContratacao['cargo2'])
+        ->setCellValue($h, $dadosContratacao['cargo3'])
+        ->setCellValue($i, $dadosContratacao['linguagem'])
+        ->setCellValue($j, $dadosContratacao['etnia'])
+        ->setCellValue($k, $dadosContratacao['regiao'])
+        ->setCellValue($l, $dadosContratacao['trans'] == 1 ? "SIM" : "NÃO")
+        ->setCellValue($m, $dadosContratacao['pcd'] == 1 ? "SIM" : "NÃO")
         ->setCellValue($n, $texto);
 
     $contador++;

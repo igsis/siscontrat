@@ -953,31 +953,12 @@ class FormacaoController extends FormacaoModel
 
     }
 
-    public function recuperaContratacao($contratacao_id, $decription = 0, $capac = 0, $ano = 0)
+    public function recuperaContratacao($contratacao_id, $decription = 0)
     {
         if ($decription != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
-
-        if ($capac != 0 && $ano != 0):
-            $sql = "SELECT fc.id, fc.protocolo, pf.nome, pf.email, pf.cpf, pf.passaporte, pf.data_nascimento,
-                           c.cargo, fc2.cargo AS 'cargo2', fc3.cargo AS 'cargo3', l.linguagem,
-                           e.descricao AS 'etnia', r.regiao, det.trans, det.pcd
-                    FROM capac_new.form_cadastros AS fc
-                    INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
-		            LEFT JOIN capac_new.form_cargos_adicionais AS fca ON fc.id = fca.form_cadastro_id
- 	                LEFT JOIN formacao_cargos AS fc2 ON fca.form_cargo2_id = fc2.id
-	                LEFT JOIN formacao_cargos AS fc3 ON fca.form_cargo3_id = fc3.id
-                    INNER JOIN linguagens AS l ON l.id = fc.linguagem_id
-                    INNER JOIN capac_new.pessoa_fisicas AS pf ON pf.id = fc.pessoa_fisica_id
-                    INNER JOIN capac_new.pf_detalhes AS det ON det.pessoa_fisica_id = fc.pessoa_fisica_id
-                    INNER JOIN capac_new.etnias AS e ON e.id = det.etnia_id
-                    INNER JOIN capac_new.regiaos AS r ON fc.regiao_preferencial_id = r.id
-                    WHERE fc.ano = $ano AND fc.publicado = 1 ORDER BY fc.id;";
-
-            return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
-        else:
-            $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', 
+        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', 
                        c.cargo, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', vb.verba                                                                   
                 FROM formacao_contratacoes AS fc
                 INNER JOIN programas AS pro ON pro.id = fc.programa_id
@@ -990,9 +971,7 @@ class FormacaoController extends FormacaoModel
                 LEFT JOIN usuarios AS suplente ON suplente.id = fc.suplente_id      
                 WHERE fc.id = {$contratacao_id} AND fc.publicado = 1";
 
-            return DbModel::consultaSimples($sql)->fetchObject();
-        endif;
-
+        return DbModel::consultaSimples($sql)->fetchObject();
     }
 
     //retorna um obj com os dados de uma determinada pessoa fisica
@@ -1865,6 +1844,43 @@ class FormacaoController extends FormacaoModel
     public function recuperaAnoVigente()
     {
         return DbModel::consultaSimples("SELECT MAX(ano_referencia) as ano_vigente FROM capac_new.form_aberturas WHERE publicado != 0", true)->fetchObject();
+    }
+
+    public function listarIncritos($dados)
+    {
+        $where = " ";
+        if (count($dados)) {
+            foreach ($dados as $key => $value) {
+                if ($key != 'rangeDate') {
+                    $where .= " AND {$key} = {$value}";
+                } else {
+                    $datas = explode('-',$value);
+                    $where .= " AND (data_envio BETWEEN '{$datas[0]}' AND '{$datas[1]}') ";
+                }
+            }
+        }
+
+        $sql = "SELECT 	*
+                FROM form_cadastros fc
+                LEFT JOIN pessoa_fisicas					pf ON fc.pessoa_fisica_id = pf.id 
+                LEFT JOIN form_programas 	 				fp ON fc.programa_id = fp.id
+                LEFT JOIN form_regioes_preferenciais	    fr ON fc.regiao_preferencial_id = fr.id
+                LEFT JOIN form_linguagens					fl ON fc.linguagem_id= fl.id
+                LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
+                LEFT JOIN etnias							e  ON e.id = pd.etnia_id
+                LEFT JOIN generos							g  ON g.id = pd.genero_id
+                WHERE protocolo IS NOT NULL AND `fc`.`publicado` = 1 ";
+
+        $sql .= $where;
+
+        return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
+
+
+    }
+
+    public function limparData(string $data)
+    {
+        return str_replace('t', '-', $data);
     }
 }
 

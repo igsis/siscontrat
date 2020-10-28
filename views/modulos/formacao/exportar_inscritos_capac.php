@@ -1,7 +1,7 @@
 <?php
-require_once "./models/DbModel.php";
+/*require_once "./models/DbModel.php";
 $dbObj = new DbModel();
-$ano = $dbObj->consultaSimples("SELECT ano FROM form_cadastros ORDER BY ano ASC LIMIT 0,1", TRUE)->fetchObject()->ano;
+$ano = $dbObj->consultaSimples("SELECT ano FROM form_cadastros ORDER BY ano ASC LIMIT 0,1", TRUE)->fetchObject()->ano;*/
 ?>
 <div class="content-header">
     <div class="container-fluid">
@@ -28,7 +28,7 @@ $ano = $dbObj->consultaSimples("SELECT ano FROM form_cadastros ORDER BY ano ASC 
                                     <div class="row">
                                         <div class="form-group col-md">
                                             <label for="sigla">Ano: *</label>
-                                            <input type="number" class="form-control" name="ano" required min="<?= $ano ?>"
+                                            <input type="number" class="form-control" name="ano" required
                                                    data-mask="9999">
                                         </div>
                                     </div>
@@ -36,8 +36,7 @@ $ano = $dbObj->consultaSimples("SELECT ano FROM form_cadastros ORDER BY ano ASC 
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" name="cadastra" id="cadastra"
-                                    class="btn btn-success btn-sm float-right">
+                            <button type="submit" class="btn btn-success btn-sm float-right">
                                 <i class="fas fa-file-excel"></i> Exportar para Excel
                             </button>
                         </div>
