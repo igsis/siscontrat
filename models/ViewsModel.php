@@ -108,6 +108,7 @@ class ViewsModel
             'abertura_lista',
             'abertura_cadastro',
             'listar_inscritos',
+            'resumo_inscrito',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

@@ -1888,22 +1888,65 @@ class FormacaoController extends FormacaoModel
             }
         }
 
-        $sql = "SELECT 	*
-                FROM form_cadastros fc
-                LEFT JOIN pessoa_fisicas					pf ON fc.pessoa_fisica_id = pf.id 
-                LEFT JOIN form_programas 	 				fp ON fc.programa_id = fp.id
-                LEFT JOIN form_regioes_preferenciais	    fr ON fc.regiao_preferencial_id = fr.id
-                LEFT JOIN form_linguagens					fl ON fc.linguagem_id= fl.id
-                LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
-                LEFT JOIN etnias							e  ON e.id = pd.etnia_id
-                LEFT JOIN generos							g  ON g.id = pd.genero_id
-                WHERE protocolo IS NOT NULL AND `fc`.`publicado` = 1 ";
+        $sql = "SELECT 	    fc.id, fc.protocolo, pf.nome, pf.cpf, fc.ano, fr.regiao, 
+                            fp.programa, fc.form_cargo_id,  fl.linguagem, 
+                            e.descricao AS `etnia`, g.genero, 
+                            IF (pd.trans, 'Sim', 'Não') AS `trans`,
+                            IF (pd.pcd, 'Sim', 'Não') AS `pcd`
+                 FROM form_cadastros fc
+                 LEFT JOIN pessoa_fisicas					pf ON fc.pessoa_fisica_id = pf.id 
+                 LEFT JOIN form_programas 	 				fp ON fc.programa_id = fp.id
+                 LEFT JOIN form_regioes_preferenciais	    fr ON fc.regiao_preferencial_id = fr.id
+                 LEFT JOIN form_linguagens					fl ON fc.linguagem_id= fl.id
+                 LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
+                 LEFT JOIN etnias							e  ON e.id = pd.etnia_id
+                 LEFT JOIN generos							g  ON g.id = pd.genero_id
+                 WHERE protocolo IS NOT NULL AND `fc`.`publicado` = 1";
 
         $sql .= $where;
 
         return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
+    }
 
+    public function recuperaInscrito(string $id)
+    {
+        $id = $this->decryption($id);
 
+        $sql = "SELECT 	fc.protocolo, pf.nome, pf.rg, pf.passaporte, pf.ccm,pf.nome_artistico, pf.email,
+                        pf.cpf, pf.data_nascimento, fc.ano, na.nacionalidade, fr.regiao, fc.pessoa_fisica_id,
+                        pe.logradouro, pe.numero, pe.complemento, pe.bairro, pe.cidade, pe.uf, pe.cep,
+                        fp.programa, fc.form_cargo_id,  fl.linguagem,
+                        e.descricao AS `etnia`, g.genero, 
+                        IF (pd.trans, 'Sim', 'Não') AS `trans`,
+                        IF (pd.pcd, 'Sim', 'Não') AS `pcd`
+             FROM form_cadastros fc
+             LEFT JOIN pessoa_fisicas					pf ON fc.pessoa_fisica_id = pf.id
+             LEFT JOIN pf_enderecos						pe ON pf.id = pe.pessoa_fisica_id 
+             LEFT JOIN nacionalidades					na ON pf.nacionalidade_id = na.id
+             LEFT JOIN form_programas 	 				fp ON fc.programa_id = fp.id
+             LEFT JOIN form_regioes_preferenciais	fr ON fc.regiao_preferencial_id = fr.id
+             LEFT JOIN form_linguagens					fl ON fc.linguagem_id= fl.id
+             LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
+             LEFT JOIN etnias								e  ON e.id = pd.etnia_id
+             LEFT JOIN generos							g  ON g.id = pd.genero_id
+             WHERE protocolo IS NOT NULL AND fc.id = {$id}";
+
+        return $this->consultaSimples($sql, true)->fetchObject();
+    }
+
+    public function recuperaTelInscrito($pesquisa_fisica_id, $obj = 0)
+    {
+        $tel = "";
+
+        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id",true)->fetchAll(PDO::FETCH_ASSOC);
+        if ($obj != NULL):
+            return $telArrays;
+        else:
+            foreach ($telArrays as $telArrays) {
+                $tel = $tel . $telArrays['telefone'] . '/ ';
+            }
+            return substr($tel, 0, -2);
+        endif;
     }
 }
 
