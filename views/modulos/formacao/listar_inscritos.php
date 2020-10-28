@@ -148,45 +148,35 @@ if (isset($_GET['busca'])) {
                             <table id="tabela" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>Protocolo</th>
                                     <th>Nome</th>
                                     <th>CPF</th>
                                     <th>Programa</th>
                                     <th>Função</th>
                                     <th>Região preferencial</th>
-                                    <th>PCD</th>
                                     <th>Etnia</th>
+                                    <th>PCD</th>
                                     <th>Trans</th>
-                                    <th>Arquivos</th>
-                                    <th>Resumo</th>
-                                    <th>Ação</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($resultados as $resultado){ ?>
-                                        <td><?= $resultado->protocolo ?></td>
-                                        <td><?= $resultado->nome ?></td>
-                                        <td><?= $resultado->cpf ?></td>
-                                        <td><?= $resultado->programa ?></td>
-                                        <td></td>
-                                        <td><?= $resultado->regiao ?></td>
-                                        <td><?= $resultado->descricao ?></td>
-                                        <td><?= $resultado->pcd ? 'Sim' : 'Não' ?></td>
-                                        <td><?= $resultado->trans ? 'Sim' : 'Não' ?></td>
-                                        <td>
-                                            <button class="btn btn-success btn-sm"> Listagem de arquivos </button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-success btn-sm"> Resumo </button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm"> Importar inscrito </button>
-                                        </td>
-                                    <?php } ?>
+
+                                <?php foreach ($resultados as $resultado) { ?>
+                                    <td><?= $resultado->nome ?></td>
+                                    <td><?= $resultado->cpf ?></td>
+                                    <td><?= $resultado->programa ?></td>
+                                    <td><?= $formacaoObj->recuperaCargo($formacaoObj->encryption($resultado->form_cargo_id))->cargo ?></td>
+                                    <td><?= $resultado->regiao ?></td>
+                                    <td><?= $resultado->descricao ?></td>
+                                    <td><?= $resultado->pcd ? 'Sim' : 'Não' ?></td>
+                                    <td><?= $resultado->trans ? 'Sim' : 'Não' ?></td>
+                                    <td>
+                                        <a href="<?= SERVERURL ?>resumo_inscrito&id=<?= $resultado->id ?>" class="btn btn-success btn-sm"> Resumo</a>
+                                    </td>
+                                <?php } ?>
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th>Protocolo</th>
                                     <th>Nome</th>
                                     <th>CPF</th>
                                     <th>Programa</th>
@@ -195,9 +185,7 @@ if (isset($_GET['busca'])) {
                                     <th>Etnia</th>
                                     <th>PCD</th>
                                     <th>Trans</th>
-                                    <th>Arquivos</th>
-                                    <th>Resumo</th>
-                                    <th>Ação</th>
+                                    <th></th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -211,90 +199,64 @@ if (isset($_GET['busca'])) {
 </div>
 <!-- /.content -->
 
-<script>
+<script defer>
     const url_cargos = '<?= $apiCargos ?>';
-    const url_inscritos = '<?= $apiInscritos ?>';
 
-    let pesquisa = document.querySelector("#pesquisa");
-    let programa = document.querySelector("#programa_id");
-    let resultados = document.querySelector("#resultPesquisa");
+    let pesquisa = document.querySelector('#pesquisa');
+    let programa = document.querySelector('#programa_id');
+    let resultados = document.querySelector('#resultPesquisa');
 
-    <?php if (isset($_GET['busca'])): ?>
-        getFuncao('<?= $dados['programa_id']?>', '<?= isset($dados['form_cargo_id']) ? $dados['form_cargo_id'] : '' ?>');
-    <?php endif; ?>
-
-
-    programa.addEventListener('change', (event) => {
+    programa.addEventListener('change', function (){
         getFuncao(this.value);
     });
 
-    pesquisa.addEventListener('click', function (event) {
+    pesquisa.addEventListener('click', function (event){
         event.preventDefault();
-        dados = createArray();
 
-        window.location.href = montaUrl(dados);
-        // console.log(montaUrl(dados))
-    });
+        let inputs = document.querySelectorAll('.inputs');
+        let dados = [] ;
 
-    function montaUrl(dados) {
-        let url = '<?= SERVERURL ?>/formacao/listar_inscritos&busca=1';
-        dados.forEach((dado) => {
-            url = `${url}&${dado.id}=${dado.dado}`;
+        inputs.forEach(input => {
+            let dado = {};
+
+            dado.id = input.id;
+            dado.val = input.value;
+
+            dados.push(dado);
         })
 
-        return url;
+        console.log(dados);
+
+    });
+
+    function checkValue(id){
+        let input = document.querySelector(id).value;
+        return  input != '' ? input : false;
     }
 
-    function createArray() {
-        let inputs = document.querySelectorAll('.inputs');
-        let checks = document.querySelectorAll('.check');
-        let dados = [];
-        for (let input of inputs) {
-            let elemento = {}
-            if (input.value != "") {
-                if (input.id != "rangeDate") {
-                    elemento.id = input.id;
-                    elemento.dado = input.value;
-                } else {
-                    elemento.id = input.id;
-                    elemento.dado = alterDate(input.value);
-                }
-                dados.push(elemento);
-            }
-        }
+    function createObj(dados){
 
-        for (let check of checks) {
-            let elemento = {};
-            if (check.checked) {
-                elemento.id = check.id
-                elemento.dado = 1
-
-                dados.push(elemento)
-            }
-        }
-
-        return dados;
     }
 
-    function getFuncao(idPrograma, funcao = '') {
-
+    function getFuncao(idPrograma, funcao = ''){
         fetch(`${url_cargos}?busca=1&programa_id=${idPrograma}`)
             .then(response => response.json())
             .then(cargos => {
-                $('#funcao option').remove();
-                $('#funcao').append('<option value="">Selecione uma opção...</option>');
+                console.log(cargos)
+                $('#form_cargo_id option').remove();
+                $('#form_cargo_id').append('<option value="">Selecione uma opção...</option>');
 
                 for (const cargo of cargos) {
                     if (cargo.id == funcao) {
-                        $('#funcao').append(`<option value='${cargo.id}' selected>${cargo.cargo}</option>`).focus();
+                        $('#form_cargo_id').append(`<option value='${cargo.id}' selected>${cargo.cargo}</option>`).focus();
                     }
-                    $('#funcao').append(`<option value='${cargo.id}'>${cargo.cargo}</option>`).focus();
+                    $('#form_cargo_id').append(`<option value='${cargo.id}'>${cargo.cargo}</option>`).focus();
                 }
             });
     }
 
-    function alterDate(date) {
-        date = date.replace(date.substr(10, 3), 't');
-        return date.split('/').join('b');
-    }
+    <?php if (isset($_GET['programa_id'])): ?>
+    getFuncao('<?= $dados['programa_id']?>', '<?= isset($dados['form_cargo_id']) ? $dados['form_cargo_id'] : '' ?>');
+    <?php endif; ?>
+
 </script>

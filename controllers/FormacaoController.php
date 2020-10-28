@@ -1877,11 +1877,6 @@ class FormacaoController extends FormacaoModel
 
 
     }
-
-    public function limparData(string $data)
-    {
-        return str_replace('t', '-', $data);
-    }
 }
 
 
