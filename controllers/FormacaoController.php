@@ -1912,11 +1912,11 @@ class FormacaoController extends FormacaoModel
     {
         $id = $this->decryption($id);
 
-        $sql = "SELECT 	fc.protocolo, pf.nome, pf.rg, pf.passaporte, pf.ccm,pf.nome_artistico, pf.email,
+        $sql = "SELECT 	fc.id, fc.protocolo, pf.nome, pf.rg, pf.passaporte, pf.ccm,pf.nome_artistico, pf.email,
                         pf.cpf, pf.data_nascimento, fc.ano, na.nacionalidade, fr.regiao, fc.pessoa_fisica_id,
                         pe.logradouro, pe.numero, pe.complemento, pe.bairro, pe.cidade, pe.uf, pe.cep,
-                        fp.programa, fc.form_cargo_id,  fl.linguagem,
-                        e.descricao AS `etnia`, g.genero, 
+                        fp.programa, fc.form_cargo_id,  fl.linguagem, gi.grau_instrucao,
+                        e.descricao AS `etnia`, g.genero, ba.banco, pb.agencia, pb.conta,
                         IF (pd.trans, 'Sim', 'Não') AS `trans`,
                         IF (pd.pcd, 'Sim', 'Não') AS `pcd`
              FROM form_cadastros fc
@@ -1927,7 +1927,10 @@ class FormacaoController extends FormacaoModel
              LEFT JOIN form_regioes_preferenciais	fr ON fc.regiao_preferencial_id = fr.id
              LEFT JOIN form_linguagens					fl ON fc.linguagem_id= fl.id
              LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
-             LEFT JOIN etnias								e  ON e.id = pd.etnia_id
+             LEFT JOIN pf_bancos                        pb ON pf.id = pb.pessoa_fisica_id
+             LEFT JOIN bancos                           ba ON ba.id = pb.banco_id
+             LEFT JOIN grau_instrucoes					gi ON pd.grau_instrucao_id = gi.grau_instrucao
+             LEFT JOIN etnias							e  ON e.id = pd.etnia_id
              LEFT JOIN generos							g  ON g.id = pd.genero_id
              WHERE protocolo IS NOT NULL AND fc.id = {$id}";
 
@@ -1947,6 +1950,16 @@ class FormacaoController extends FormacaoModel
             }
             return substr($tel, 0, -2);
         endif;
+    }
+
+    public function recuperaArquivosCapacInscritos($id)
+    {
+        $sql = "SELECT fl.documento, far.arquivo
+                FROM form_arquivos far
+                LEFT JOIN form_lista_documentos AS fl ON far.form_lista_documento_id = fl.id
+                WHERE far.publicado = 1 AND far.form_cadastro_id = {$id}";
+
+        return $this->consultaSimples($sql,true)->fetchAll(PDO::FETCH_OBJ);
     }
 }
 
