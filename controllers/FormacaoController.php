@@ -1429,7 +1429,7 @@ class FormacaoController extends FormacaoModel
             $whereAno = " AND fc.ano = {$ano}";
         }
 
-        $sqlFormacao = "SELECT fc.*, pf.nome FROM form_cadastros fc
+        $sqlFormacao = "SELECT fc.*, pf.id AS 'pf_id', pf.nome, pf.cpf FROM form_cadastros fc
                         INNER JOIN pessoa_fisicas pf on fc.pessoa_fisica_id = pf.id
                         WHERE fc.protocolo IS NOT NULL AND fc.publicado = 1 {$whereAno}";
 

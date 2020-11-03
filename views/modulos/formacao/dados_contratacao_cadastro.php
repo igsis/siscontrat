@@ -142,7 +142,7 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                     <label for="form_cargo_id">Cargo: *</label>
                                     <select name="form_cargo_id" id="cargo" required class="form-control select2bs4">
                                         <option value="">Selecione um cargo...</option>
-                                        <?php if (isset($dados_contratacao->form_cargo_id)) $contratacaoObj->geraOpcao('formacao_cargos', $dados_contratacao->form_cargo_id ?? "", '1') ?>
+                                        <?php $contratacaoObj->geraOpcao('formacao_cargos', $dados_contratacao->form_cargo_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
