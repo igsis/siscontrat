@@ -6,13 +6,30 @@ require_once "../config/configGeral.php";
 require_once "../views/plugins/phpexcel/PHPExcel.php";
 require_once "../controllers/FormacaoController.php";
 
-
 $objPHPExcel = new PHPExcel();
 $formacaoObj = new FormacaoController();
 
 $ano = $_GET['ano'];
 
-$dadosContratacoes = $formacaoObj->recuperaContratacao('', '', 1, $ano);
+$dadosContratacoes = $formacaoObj->consultaSimples("SELECT fc.id AS 'contratacao_id', fc.protocolo, pf.nome, pf.email, pf.cpf, pf.passaporte, pf.data_nascimento,
+                                                                    fc.form_cargo_id, fca.form_cargo2_id, fca.form_cargo3_id, fc.linguagem_id, 
+                                                                    e.descricao AS 'etnia', r.regiao, det.trans, det.pcd
+                                                             FROM form_cadastros AS fc
+		                                                     LEFT JOIN form_cargos_adicionais AS fca ON fc.id = fca.form_cadastro_id
+                                                             LEFT JOIN pessoa_fisicas AS pf ON pf.id = fc.pessoa_fisica_id
+                                                             LEFT JOIN pf_detalhes AS det ON det.pessoa_fisica_id = fc.pessoa_fisica_id
+                                                             LEFT JOIN etnias AS e ON e.id = det.etnia_id
+                                                             LEFT JOIN regiaos AS r ON fc.regiao_preferencial_id = r.id
+                                                             WHERE fc.ano = $ano AND fc.publicado = 1 AND fc.protocolo IS NOT NULL", TRUE)->fetchAll(PDO::FETCH_OBJ);
+if(count($dadosContratacoes) != NULL){
+    foreach ($dadosContratacoes AS $key=>$dadosContratacao){
+        $dadosContratacoes[$key]->cargo1 = $formacaoObj->consultaSimples("SELECT cargo FROM formacao_cargos WHERE id = '{$dadosContratacao->form_cargo_id}'")->fetchColumn();
+        $dadosContratacoes[$key]->cargo2 = $formacaoObj->consultaSimples("SELECT cargo FROM formacao_cargos WHERE id = '{$dadosContratacao->form_cargo2_id}'")->fetchColumn();
+        $dadosContratacoes[$key]->cargo3 = $formacaoObj->consultaSimples("SELECT cargo FROM formacao_cargos WHERE id = '{$dadosContratacao->form_cargo3_id}'")->fetchColumn();
+        $dadosContratacoes[$key]->linguagem = $formacaoObj->consultaSimples("SELECT linguagem FROM linguagens WHERE id = '{$dadosContratacao->linguagem_id}'")->fetchColumn();
+    }
+}
+
 $nome_arquivo = "formacao_inscritos_capac_" . $ano . ".xls";
 
 $linkStyle = [
@@ -114,7 +131,9 @@ $objPHPExcel->getActiveSheet()->getStyle("A2:N2")->applyFromArray
 //contador de linhas, utilizado para que os dados comecem a ser preenchidos na linha 3, logo após o cabeçalho e a linha de colunas
 $contador = 3;
 
-foreach ($dadosContratacoes as $dadosContratacao) {
+foreach ($dadosContratacoes AS $dadosContratacao) {
+
+    $contratacao_id = $dadosContratacao->contratacao_id;
 
     $a = "A" . $contador;
     $b = "B" . $contador;
@@ -131,9 +150,9 @@ foreach ($dadosContratacoes as $dadosContratacao) {
     $m = "M" . $contador;
     $n = "N" . $contador;
 
-    $testa = DbModel::consultaSimples("SELECT * FROM form_arquivos WHERE form_cadastro_id = $dadosContratacao->id AND publicado = 1", TRUE)->rowCount();
+    $testa = DbModel::consultaSimples("SELECT * FROM form_arquivos WHERE form_cadastro_id = $contratacao_id AND publicado = 1", TRUE)->rowCount();
     if ($testa > 0):
-        $zip = SERVERURL . "api/downloadInscritos.php?id=" . $dadosContratacao->id . "&formacao=1";
+        $zip = SERVERURL . "api/downloadInscritos.php?id=" . $contratacao_id . "&formacao=1";
         $objPHPExcel->getActiveSheet()->getCell($n)->getHyperlink()->setUrl($zip);
         $objPHPExcel->getActiveSheet()->getCell($n)->getStyle()->applyFromArray($linkStyle);
         $texto = "Download";
@@ -142,12 +161,12 @@ foreach ($dadosContratacoes as $dadosContratacao) {
     endif;
 
     $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue($a, $dadosContratacao->protocolo == NULL ? "Não Possuí" : $dadosContratacao->protocolo)
+        ->setCellValue($a, $dadosContratacao->protocolo)
         ->setCellValue($b, $dadosContratacao->nome)
         ->setCellValue($c, $dadosContratacao->cpf == NULL ? $dadosContratacao->passaporte : $dadosContratacao->cpf)
         ->setCellValue($d, $dadosContratacao->email)
-        ->setCellValue($e, MainModel::dataParaBR($dadosContratacao->data_nascimento))
-        ->setCellValue($f, $dadosContratacao->cargo)
+        ->setCellValue($e, $formacaoObj->dataParaBR($dadosContratacao->data_nascimento))
+        ->setCellValue($f, $dadosContratacao->cargo1)
         ->setCellValue($g, $dadosContratacao->cargo2)
         ->setCellValue($h, $dadosContratacao->cargo3)
         ->setCellValue($i, $dadosContratacao->linguagem)

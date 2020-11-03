@@ -1,11 +1,19 @@
 <?php
 require_once "./controllers/FormacaoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
+$capacId = isset($_GET['capac']) ? $_GET['capac'] : null;
 $contratacaoObj = new FormacaoController();
-$dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
+
+if($id){
+    $dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
+}
+elseif($capacId){
+    $dados_contratacao = $contratacaoObj->recuperaDadosContratacaoCapac($capacId);
+}
 
 //caso haja um cadastro, torna a checkbox do proponente inalterável
 $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #eee; pointer-events: none; touch-action: none;'" : $readonly = "";
+$capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #eee; pointer-events: none; touch-action: none;'" : $readonly = "";
 ?>
 
 <div class="content-header">
@@ -56,7 +64,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="form-group col-md">
                                     <label for="ano">Ano: *</label>
                                     <input type="number" min="2018" id="ano" name="ano"
@@ -78,7 +86,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="form-group col-md">
                                     <label for="territorio_id">Território: *</label>
                                     <select name="territorio_id" required class="form-control select2bs4">
@@ -112,7 +120,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="form-group col-md">
                                     <label for="linguagem_id">Linguagem: *</label>
                                     <select name="linguagem_id" required class="form-control select2bs4">
@@ -147,7 +155,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="form-group col-md">
                                     <label for="regiao_preferencia_id">Região Preferencial: *</label>
                                     <select name="regiao_preferencia_id" required class="form-control select2bs4">
@@ -170,7 +178,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
 
                             <!-- gera 3 campos de instituições para 3 campos de locais, populando os mesmos com javascript caso necessário -->
                             <?php for ($i = 0; $i < 3; $i++) : ?>
-                                <div class="row">
+                                <div class="row mt-3">
                                     <div class="form-group col-md">
                                         <label>Instituição #<?= $i + 1 ?>
                                             : <?= $i == 0 || $i == 1 ? " *" : "" ?></label>
@@ -204,7 +212,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="col-md">
                                     <label for="observacao">Observação:</label>
                                     <textarea name="observacao" rows="3"
@@ -212,7 +220,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="form-group col-md">
                                     <label for="fiscal_id">Fiscal: *</label>
                                     <select name="fiscal_id" required class="form-control select2bs4">
