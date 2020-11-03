@@ -16,7 +16,7 @@ if ($id && $type == null) {
 if (isset($_POST['pf_cpf'])){
     $documento = $_POST['pf_cpf'];
     $pf = $insPessoaFisica->getCPF($documento)->fetch();
-    if ($pf['cpf'] != ''){
+    if ($pf){
         $id = MainModel::encryption($pf['id']);
         $pf = $insPessoaFisica->recuperaPessoaFisica($id);
         $documento = $pf['cpf'];
@@ -76,32 +76,19 @@ if ($type == 1){
                             </div>
 
                             <div class="row">
-                                <?php
-                                    if((isset($pf['cpf']) && $pf['cpf'] != "") || ($type == 1)){
-                                    ?>
-                                    <div class="form-group col-md-2">
-                                        <label for="rg">RG: *</label>
-                                        <input type="text" class="form-control" name="pf_rg" placeholder="Digite o RG" maxlength="20" value="<?= $pf['rg'] ?? ""?>" required>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="cpf">CPF: </label>
-                                        <input type="text" name="pf_cpf" class="form-control" id="cpf" value="<?= $documento ?? $doc ?> " readonly>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="ccm">CCM:</label>
-                                        <input type="text" id="ccm" name="pf_ccm" class="form-control" placeholder="Digite o CCM" maxlength="11" value="<?= $pf['ccm'] ?? ""?>">
-                                    </div>
-                                    <?php
-                                }
-                                else{
-                                    ?>
-                                    <div class="form-group col-md-6">
-                                        <label for="passaporte" id="documento">Passaporte: </label>
-                                        <input type="text" id="passaporte" name="pf_passaporte" class="form-control" value="<?= $pf['passaporte'] ?? $doc ?>" readonly>
-                                    </div>
-                                    <?php
-                                }
-                                ?>
+                                <div class="form-group col-md-2">
+                                    <label for="rg">RG: *</label>
+                                    <input type="text" class="form-control" name="pf_rg" placeholder="Digite o RG" maxlength="20" value="<?= $pf['rg'] ?? ""?>" required>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="cpf">CPF: </label>
+                                    <input type="text" name="pf_cpf" class="form-control" id="cpf" value="<?= $documento ?? $doc ?> " readonly>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="ccm">CCM:</label>
+                                    <input type="text" id="ccm" name="pf_ccm" class="form-control" placeholder="Digite o CCM" maxlength="11" value="<?= $pf['ccm'] ?? ""?>">
+                                </div>
+
                                 <div class="form-group col-md-3">
                                     <label for="dataNascimento">Data de Nascimento: *</label>
                                     <input type="date" class="form-control" id="data_nascimento" name="pf_data_nascimento" onkeyup="barraData(this);" value="<?= $pf['data_nascimento'] ?? "" ?>" required/>
