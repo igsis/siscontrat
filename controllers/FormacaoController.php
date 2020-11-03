@@ -1421,6 +1421,28 @@ class FormacaoController extends FormacaoModel
         return DbModel::consultaSimples($sql);
     }
 
+    public function listaDadosContratacaoCapac($ano = 0)
+    {
+
+        $whereAno = "";
+        if ($ano) {
+            $whereAno = " AND fc.ano = {$ano}";
+        }
+
+        $sqlFormacao = "SELECT fc.*, pf.nome FROM form_cadastros fc
+                        INNER JOIN pessoa_fisicas pf on fc.pessoa_fisica_id = pf.id
+                        WHERE fc.protocolo IS NOT NULL AND fc.publicado = 1 {$whereAno}";
+
+        $formacoes = MainModel::consultaSimples($sqlFormacao, true)->fetchAll(PDO::FETCH_OBJ);
+
+        foreach ($formacoes as $key => $formacao) {
+            $formacoes[$key]->cargo = MainModel::getInfo('formacao_cargos', $formacao->form_cargo_id)->fetchObject()->cargo;
+            $formacoes[$key]->programa = MainModel::getInfo('programas', $formacao->programa_id)->fetchObject()->programa;
+            $formacoes[$key]->linguagem = MainModel::getInfo('linguagens', $formacao->linguagem_id)->fetchObject()->linguagem;
+        }
+        return $formacoes;
+    }
+
 
     public function recuperaDetalhesContratacao($contratacao_id)
     {
@@ -1512,6 +1534,12 @@ class FormacaoController extends FormacaoModel
     {
         $contratacao_id = MainModel::decryption($contratacao_id);
         return DbModel::getInfo('formacao_contratacoes', $contratacao_id)->fetchObject();
+    }
+
+    public function recuperaDadosContratacaoCapac($capac_id)
+    {
+        $capac_id = MainModel::decryption($capac_id);
+        return DbModel::getInfo('form_cadastros', $capac_id, true)->fetchObject();
     }
 
     public function editaDadosContratacao($post)
@@ -1860,27 +1888,78 @@ class FormacaoController extends FormacaoModel
             }
         }
 
-        $sql = "SELECT 	*
-                FROM form_cadastros fc
-                LEFT JOIN pessoa_fisicas					pf ON fc.pessoa_fisica_id = pf.id 
-                LEFT JOIN form_programas 	 				fp ON fc.programa_id = fp.id
-                LEFT JOIN form_regioes_preferenciais	    fr ON fc.regiao_preferencial_id = fr.id
-                LEFT JOIN form_linguagens					fl ON fc.linguagem_id= fl.id
-                LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
-                LEFT JOIN etnias							e  ON e.id = pd.etnia_id
-                LEFT JOIN generos							g  ON g.id = pd.genero_id
-                WHERE protocolo IS NOT NULL AND `fc`.`publicado` = 1 ";
+        $sql = "SELECT 	    fc.id, fc.protocolo, pf.nome, pf.cpf, fc.ano, fr.regiao, 
+                            fp.programa, fc.form_cargo_id,  fl.linguagem, 
+                            e.descricao AS `etnia`, g.genero, 
+                            IF (pd.trans, 'Sim', 'Não') AS `trans`,
+                            IF (pd.pcd, 'Sim', 'Não') AS `pcd`
+                 FROM form_cadastros fc
+                 LEFT JOIN pessoa_fisicas					pf ON fc.pessoa_fisica_id = pf.id 
+                 LEFT JOIN form_programas 	 				fp ON fc.programa_id = fp.id
+                 LEFT JOIN form_regioes_preferenciais	    fr ON fc.regiao_preferencial_id = fr.id
+                 LEFT JOIN form_linguagens					fl ON fc.linguagem_id= fl.id
+                 LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
+                 LEFT JOIN etnias							e  ON e.id = pd.etnia_id
+                 LEFT JOIN generos							g  ON g.id = pd.genero_id
+                 WHERE protocolo IS NOT NULL AND `fc`.`publicado` = 1";
 
         $sql .= $where;
 
         return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
-
-
     }
 
-    public function limparData(string $data)
+    public function recuperaInscrito(string $id)
     {
-        return str_replace('t', '-', $data);
+        $id = $this->decryption($id);
+
+        $sql = "SELECT 	fc.id, fc.protocolo, pf.nome, pf.rg, pf.passaporte, pf.ccm,pf.nome_artistico, pf.email,
+                        pf.cpf, pf.data_nascimento, fc.ano, na.nacionalidade, fr.regiao, fc.pessoa_fisica_id,
+                        pe.logradouro, pe.numero, pe.complemento, pe.bairro, pe.cidade, pe.uf, pe.cep,
+                        fp.programa, fc.form_cargo_id,  fl.linguagem, gi.grau_instrucao,
+                        e.descricao AS `etnia`, g.genero, ba.banco, pb.agencia, pb.conta,
+                        IF (pd.trans, 'Sim', 'Não') AS `trans`,
+                        IF (pd.pcd, 'Sim', 'Não') AS `pcd`
+             FROM form_cadastros fc
+             LEFT JOIN pessoa_fisicas					pf ON fc.pessoa_fisica_id = pf.id
+             LEFT JOIN pf_enderecos						pe ON pf.id = pe.pessoa_fisica_id 
+             LEFT JOIN nacionalidades					na ON pf.nacionalidade_id = na.id
+             LEFT JOIN form_programas 	 				fp ON fc.programa_id = fp.id
+             LEFT JOIN form_regioes_preferenciais	fr ON fc.regiao_preferencial_id = fr.id
+             LEFT JOIN form_linguagens					fl ON fc.linguagem_id= fl.id
+             LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
+             LEFT JOIN pf_bancos                        pb ON pf.id = pb.pessoa_fisica_id
+             LEFT JOIN bancos                           ba ON ba.id = pb.banco_id
+             LEFT JOIN grau_instrucoes					gi ON pd.grau_instrucao_id = gi.grau_instrucao
+             LEFT JOIN etnias							e  ON e.id = pd.etnia_id
+             LEFT JOIN generos							g  ON g.id = pd.genero_id
+             WHERE protocolo IS NOT NULL AND fc.id = {$id}";
+
+        return $this->consultaSimples($sql, true)->fetchObject();
+    }
+
+    public function recuperaTelInscrito($pesquisa_fisica_id, $obj = 0)
+    {
+        $tel = "";
+
+        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id",true)->fetchAll(PDO::FETCH_ASSOC);
+        if ($obj != NULL):
+            return $telArrays;
+        else:
+            foreach ($telArrays as $telArrays) {
+                $tel = $tel . $telArrays['telefone'] . '/ ';
+            }
+            return substr($tel, 0, -2);
+        endif;
+    }
+
+    public function recuperaArquivosCapacInscritos($id)
+    {
+        $sql = "SELECT fl.documento, far.arquivo
+                FROM form_arquivos far
+                LEFT JOIN form_lista_documentos AS fl ON far.form_lista_documento_id = fl.id
+                WHERE far.publicado = 1 AND far.form_cadastro_id = {$id}";
+
+        return $this->consultaSimples($sql,true)->fetchAll(PDO::FETCH_OBJ);
     }
 }
 
