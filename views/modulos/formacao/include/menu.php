@@ -112,19 +112,12 @@
         <?php
         }
         ?>
-
-        <?php
-        if ($_SESSION['perfil_s'] == 1){
-        ?>
         <li class="nav-item">
             <a href="<?= SERVERURL ?>formacao/exportar_inscritos_capac" class="nav-link" id="exportar_inscritos_capac">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Exportar inscritos</p>
             </a>
         </li>
-        <?php
-        }
-        ?>
     </ul>
 </li>
 <?php
