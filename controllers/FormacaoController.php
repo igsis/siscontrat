@@ -988,8 +988,14 @@ class FormacaoController extends FormacaoModel
     public function recuperaTelPf($pesquisa_fisica_id, $obj = 0)
     {
         $tel = "";
+        //consulta no banco do siscontrat, caso não tenha resultados, realiza a busca no banco do capac, como o campo de telefone é obrigatório, em algum dos bancos terá registro
+        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id");
+        if ($telArrays->rowCount() > 0):
+            $telArrays->fetchAll();
+        else:
+            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id", '1')->fetchAll();
+        endif;
 
-        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id")->fetchAll();
         if ($obj != NULL):
             return $telArrays;
         else:
@@ -2047,7 +2053,7 @@ class FormacaoController extends FormacaoModel
                 $alerta = [
                     'alerta' => 'simples',
                     'titulo' => 'Erro!',
-                    'texto' => 'Erro ao importar!<br>'.$e->getMessage(),
+                    'texto' => 'Erro ao importar!<br>' . $e->getMessage(),
                     'tipo' => 'error',
                     'location' => SERVERURL . '/formacao'
                 ];
