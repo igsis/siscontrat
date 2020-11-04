@@ -33,9 +33,9 @@
                             <a href="<?= SERVERURL ?>formacao/pesquisa_pf" class="btn btn-success btn-sm" >
                                 <i class="fas fa-plus"></i> Cadastrar Novo
                             </a>
-                            <button type="button" class="btn btn-info btn-sm">
+                            <a href="<?= SERVERURL ?>formacao/pf_lista_capac" class="btn btn-info btn-sm">
                                 <i class="fas fa-arrow-alt-circle-down"></i> Importar do CAPAC
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -50,7 +50,7 @@
                                 <th>CPF/Passaporte</th>
                                 <th>Ano</th>
                                 <th>Status</th>
-                                <th style="width:15%">Ação</th>
+                                <th>Ação</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -92,7 +92,7 @@
                                     <th>CPF/Passaporte</th>
                                     <th>Ano</th>
                                     <th>Status</th>
-                                    <th style="width:15%">Ação</th>
+                                    <th>Ação</th>
                                 </tr>
                             </tfoot>
                         </table>

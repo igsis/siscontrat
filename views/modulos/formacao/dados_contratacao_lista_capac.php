@@ -3,7 +3,7 @@ require_once "./controllers/FormacaoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $getAno = isset($_GET['ano']) ? $_GET['ano'] : 0;
 $dados_contratacaoObj = new FormacaoController();
-
+$pfObj = new PessoaFisicaController();
 
 if ($getAno) {
     $dados_contratacao = $dados_contratacaoObj->listaDadosContratacaoCapac($getAno);
@@ -68,7 +68,15 @@ $ano = date("Y");
                                     <td><?= $contratacao->linguagem ?></td>
                                     <td><?= $contratacao->cargo ?></td>
                                     <td>
-                                        <a href="<?= SERVERURL . "formacao/dados_contratacao_cadastro&capac=" . $dados_contratacaoObj->encryption($contratacao->id) ?>" class="btn bg-gradient-info btn-sm">
+                                        <?php
+                                        $buscaCpf = $pfObj->getCPF($contratacao->cpf)->rowCount();
+                                            if ($buscaCpf > 0){
+                                                $onClick = "href=". SERVERURL . "formacao/dados_contratacao_cadastro&capac=" . $dados_contratacaoObj->encryption($contratacao->id);
+                                            } else {
+                                                $idPf =  $dados_contratacaoObj->encryption($contratacao->pf_id);
+                                                $onClick = "onclick='importarPf(\"". $idPf ."\")'";                                            }
+                                        ?>
+                                        <a <?= $onClick ?> class="btn bg-gradient-info btn-sm" >
                                             <i class="fas fa-arrow-alt-circle-down"></i> Importar
                                         </a>
                                     </td>
@@ -140,5 +148,23 @@ $ano = date("Y");
         let ano = document.querySelector('#ano').value;
         window.location.href = `${url}&ano=${ano}`;
     });
+
+    function importarPf(idPf) {
+        Swal.fire({
+            title: '<strong>Importar Proponente</strong>',
+            type: 'info',
+            html:
+                '<h6>O proponente deste cadastro precisa ser importado antes de continuar este processo.</h6>',
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: true,
+            reverseButtons: true,
+            confirmButtonText: 'Importar',
+            cancelButtonText: 'Cancelar',
+        }).then(function () {
+
+            window.location.href = 'http://localhost/siscontrat/formacao/pf_cadastro&capac=' + idPf;
+        });
+    }
 
 </script>

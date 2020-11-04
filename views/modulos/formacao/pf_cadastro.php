@@ -5,6 +5,8 @@ $doc = isset($_GET['doc']) ? $_GET['doc'] : null;
 
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 
+$idCapac = isset($_GET['capac']) ? $_GET['capac'] : null; //id do pf
+
 require_once "./controllers/PessoaFisicaController.php";
 $insPessoaFisica = new PessoaFisicaController();
 
@@ -26,6 +28,11 @@ if (isset($_POST['pf_cpf'])){
 if ($type == 1){
     $documento = str_replace('p','.',$doc);
     $documento = str_replace('t','-',$documento);
+}
+
+if ($idCapac){
+    $pf = $insPessoaFisica->recuperaPessoaFisicaCapac($idCapac);
+    $documento = $pf['cpf'];
 }
 
 ?>

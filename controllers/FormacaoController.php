@@ -988,8 +988,14 @@ class FormacaoController extends FormacaoModel
     public function recuperaTelPf($pesquisa_fisica_id, $obj = 0)
     {
         $tel = "";
+        //consulta no banco do siscontrat, caso não tenha resultados, realiza a busca no banco do capac, como o campo de telefone é obrigatório, em algum dos bancos terá registro
+        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id");
+        if ($telArrays->rowCount() > 0):
+            $telArrays->fetchAll();
+        else:
+            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id", '1')->fetchAll();
+        endif;
 
-        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id")->fetchAll();
         if ($obj != NULL):
             return $telArrays;
         else:
@@ -1429,7 +1435,7 @@ class FormacaoController extends FormacaoModel
             $whereAno = " AND fc.ano = {$ano}";
         }
 
-        $sqlFormacao = "SELECT fc.*, pf.nome FROM form_cadastros fc
+        $sqlFormacao = "SELECT fc.*, pf.id AS 'pf_id', pf.nome, pf.cpf FROM form_cadastros fc
                         INNER JOIN pessoa_fisicas pf on fc.pessoa_fisica_id = pf.id
                         WHERE fc.protocolo IS NOT NULL AND fc.publicado = 1 {$whereAno}";
 
@@ -1882,7 +1888,7 @@ class FormacaoController extends FormacaoModel
                 if ($key != 'rangeDate') {
                     $where .= " AND {$key} = {$value}";
                 } else {
-                    $datas = explode('-',$value);
+                    $datas = explode('-', $value);
                     $where .= " AND (data_envio BETWEEN '{$datas[0]}' AND '{$datas[1]}') ";
                 }
             }
@@ -1897,7 +1903,7 @@ class FormacaoController extends FormacaoModel
                  LEFT JOIN pessoa_fisicas					pf ON fc.pessoa_fisica_id = pf.id 
                  LEFT JOIN form_programas 	 				fp ON fc.programa_id = fp.id
                  LEFT JOIN form_regioes_preferenciais	    fr ON fc.regiao_preferencial_id = fr.id
-                 LEFT JOIN form_linguagens					fl ON fc.linguagem_id= fl.id
+                 LEFT JOIN form_linguagens					fl ON fc.linguagem_id = fl.id
                  LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
                  LEFT JOIN etnias							e  ON e.id = pd.etnia_id
                  LEFT JOIN generos							g  ON g.id = pd.genero_id
@@ -1912,11 +1918,13 @@ class FormacaoController extends FormacaoModel
     {
         $id = $this->decryption($id);
 
-        $sql = "SELECT 	fc.id, fc.protocolo, pf.nome, pf.rg, pf.passaporte, pf.ccm,pf.nome_artistico, pf.email,
-                        pf.cpf, pf.data_nascimento, fc.ano, na.nacionalidade, fr.regiao, fc.pessoa_fisica_id,
-                        pe.logradouro, pe.numero, pe.complemento, pe.bairro, pe.cidade, pe.uf, pe.cep,
-                        fp.programa, fc.form_cargo_id,  fl.linguagem, gi.grau_instrucao,
-                        e.descricao AS `etnia`, g.genero, ba.banco, pb.agencia, pb.conta,
+        $sql = "SELECT 	fc.id, fc.protocolo, pf.nome, pf.rg, pf.passaporte, pf.ccm, pf.nome_artistico, pf.email,
+                        pf.cpf, pf.data_nascimento, fc.ano, pf.nacionalidade_id, na.nacionalidade, fr.regiao,
+                        fc.pessoa_fisica_id, pe.logradouro, pe.numero, pe.complemento, pe.bairro, pe.cidade,
+                        fp.programa, fc.form_cargo_id,  fl.linguagem, gi.grau_instrucao, pe.uf, pe.cep,
+                        e.descricao AS `etnia`, g.genero, ba.banco, pb.agencia, pb.conta, fc.programa_id,
+                        fc.regiao_preferencial_id, fc.linguagem_id, pb.banco_id, pd.grau_instrucao_id,            
+                        pd.etnia_id, pd.genero_id,                        
                         IF (pd.trans, 'Sim', 'Não') AS `trans`,
                         IF (pd.pcd, 'Sim', 'Não') AS `pcd`
              FROM form_cadastros fc
@@ -1924,12 +1932,12 @@ class FormacaoController extends FormacaoModel
              LEFT JOIN pf_enderecos						pe ON pf.id = pe.pessoa_fisica_id 
              LEFT JOIN nacionalidades					na ON pf.nacionalidade_id = na.id
              LEFT JOIN form_programas 	 				fp ON fc.programa_id = fp.id
-             LEFT JOIN form_regioes_preferenciais	fr ON fc.regiao_preferencial_id = fr.id
-             LEFT JOIN form_linguagens					fl ON fc.linguagem_id= fl.id
+             LEFT JOIN form_regioes_preferenciais	    fr ON fc.regiao_preferencial_id = fr.id
+             LEFT JOIN form_linguagens					fl ON fc.linguagem_id = fl.id
              LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
              LEFT JOIN pf_bancos                        pb ON pf.id = pb.pessoa_fisica_id
              LEFT JOIN bancos                           ba ON ba.id = pb.banco_id
-             LEFT JOIN grau_instrucoes					gi ON pd.grau_instrucao_id = gi.grau_instrucao
+             LEFT JOIN grau_instrucoes					gi ON pd.grau_instrucao_id = gi.id
              LEFT JOIN etnias							e  ON e.id = pd.etnia_id
              LEFT JOIN generos							g  ON g.id = pd.genero_id
              WHERE protocolo IS NOT NULL AND fc.id = {$id}";
@@ -1941,7 +1949,7 @@ class FormacaoController extends FormacaoModel
     {
         $tel = "";
 
-        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id",true)->fetchAll(PDO::FETCH_ASSOC);
+        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id", true)->fetchAll(PDO::FETCH_ASSOC);
         if ($obj != NULL):
             return $telArrays;
         else:
@@ -1959,7 +1967,99 @@ class FormacaoController extends FormacaoModel
                 LEFT JOIN form_lista_documentos AS fl ON far.form_lista_documento_id = fl.id
                 WHERE far.publicado = 1 AND far.form_cadastro_id = {$id}";
 
-        return $this->consultaSimples($sql,true)->fetchAll(PDO::FETCH_OBJ);
+        return $this->consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function insereInscrito($id)
+    {
+        $inscrito = $this->recuperaInscrito($id);
+
+        $phones = $this->recuperaTelInscrito($inscrito->id, 1);
+
+        //Tabela pessoa_fisicas
+        $pessoaFisica = [];
+        $pessoaFisica['nome'] = $inscrito->nome;
+        $pessoaFisica['nome_artistico'] = $inscrito->nome_artistico;
+        $pessoaFisica['rg'] = $inscrito->rg;
+        $pessoaFisica['passaporte'] = $inscrito->passaporte;
+        $pessoaFisica['cpf'] = $inscrito->cpf;
+        $pessoaFisica['ccm'] = $inscrito->ccm;
+        $pessoaFisica['data_nascimento'] = $inscrito->data_nascimento;
+        $pessoaFisica['nacionalidade_id'] = $inscrito->nacionalidade_id;
+        $pessoaFisica['email'] = $inscrito->email;
+
+        //Tabela pf_detalhes
+        $pfDetalhes = [];
+        $pfDetalhes['etnia_id'] = $inscrito->etnia_id;
+        $pfDetalhes['genero_id'] = $inscrito->genero_id;
+        $pfDetalhes['regiao_id'] = $inscrito->regiao_preferencial_id;
+        $pfDetalhes['grau_instrucao_id'] = $inscrito->grau_instrucao_id;
+        $pfDetalhes['curriculo'] = NULL;
+        $pfDetalhes['trans'] = $inscrito->trans == 'Sim' ? 1 : 0;
+        $pfDetalhes['pcd'] = $inscrito->pcd == 'Sim' ? 1 : 0;
+
+        //Tabela pf_enderecos
+        $pfEndereco = [];
+        $pfEndereco['logradouro'] = $inscrito->logradouro;
+        $pfEndereco['numero'] = $inscrito->numero;
+        $pfEndereco['complemento'] = $inscrito->complemento;
+        $pfEndereco['bairro'] = $inscrito->bairro;
+        $pfEndereco['cidade'] = $inscrito->cidade;
+        $pfEndereco['uf'] = $inscrito->uf;
+        $pfEndereco['cep'] = $inscrito->cep;
+
+        //Tabela pf_bancos
+        $pfBanco = [];
+        $pfBanco['banco_id'] = $inscrito->banco_id;
+        $pfBanco['agencia'] = $inscrito->agencia;
+        $pfBanco['conta'] = $inscrito->conta;
+
+
+        $insertPf = DbModel::insert('pessoa_fisicas', $pessoaFisica);
+        if ($insertPf || DbModel::connection()->errorCode() == 0) {
+            $pessoaFisica_id = DbModel::connection()->lastInsertId();
+            $pfDetalhes['pessoa_fisica_id'] = $pessoaFisica_id;
+            $pfEndereco['pessoa_fisica_id'] = $pessoaFisica_id;
+            $pfBanco['pessoa_fisica_id'] = $pessoaFisica_id;
+
+            try {
+                $insertDetalhes = DbModel::insert('pf_detalhes', $pfDetalhes);
+                if ($insertDetalhes || DbModel::connection()->errorCode() == 0) {
+                    $insertEndereco = DbModel::insert('pf_enderecos', $pfEndereco);
+                    if ($insertEndereco || DbModel::connection()->errorCode() == 0) {
+                        $insertBanco = DbModel::insert('pf_bancos', $pfBanco);
+                        if ($insertBanco || DbModel::connection()->errorCode() == 0) {
+                            foreach ($phones as $phone) {
+                                $pfPhone = [];
+                                $pfPhone['pessoa_fisica_id'] = $pessoaFisica_id;
+                                $pfPhone['telefone'] = $phone['telefone'];
+
+                                DbModel::insert('pf_telefones', $pfPhone);
+                            }
+                            if (DbModel::connection()->errorCode() == 0) {
+                                $alerta = [
+                                    'alerta' => 'sucesso',
+                                    'titulo' => 'Importação de inscrito',
+                                    'texto' => 'Importação de inscrito realizada com sucesso!',
+                                    'tipo' => 'success',
+                                    'location' => SERVERURL . 'formacao/resumo_inscrito&id=' . $id
+                                ];
+                                return MainModel::sweetAlert($alerta);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                $alerta = [
+                    'alerta' => 'simples',
+                    'titulo' => 'Erro!',
+                    'texto' => 'Erro ao importar!<br>' . $e->getMessage(),
+                    'tipo' => 'error',
+                    'location' => SERVERURL . '/formacao'
+                ];
+                return MainModel::sweetAlert($alerta);
+            }
+        }
     }
 }
 
