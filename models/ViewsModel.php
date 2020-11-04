@@ -73,6 +73,7 @@ class ViewsModel
             'pedido_visualizar',
             'pf_cadastro',
             'pf_lista',
+            'pf_lista_capac',
             'pj_cadastro',
             'produtor_cadastro',
             'programa',

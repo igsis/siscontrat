@@ -172,7 +172,7 @@ if (isset($_GET['busca'])) {
                                     <td><?= $resultado->trans ?></td>
                                     <td>
                                         <a href="<?= SERVERURL ?>formacao/resumo_inscrito&id=<?= $formacaoObj->encryption($resultado->id) ?>"
-                                           class="btn btn-success btn-sm"> Resumo</a>
+                                           target="_blank" class="btn btn-success btn-sm"> Resumo</a>
                                     </td>
                                 <?php } ?>
                                 </tbody>
