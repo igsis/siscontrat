@@ -172,67 +172,91 @@ if ($idCapac){
                                 </div>
                             </div>
                             <hr/>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <div class="row">
+                                        <div class="form-group col">
+                                            <label for="regiao_id">Região: *</label>
+                                            <select class="form-control select2bs4" id="regiao_id" name="dt_regiao_id" required>
+                                                <option value="">Selecione uma opção...</option>
+                                                <?php
+                                                $insPessoaFisica->geraOpcao("regiaos",$pf['regiao_id']);
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col">
+                                            <label for="nit">NIT: *</label>
+                                            <input type="text" id="nit" name="ni_nit" class="form-control" maxlength="45" placeholder="Digite o NIT" required value="<?= $pf['nit'] ?? "" ?>">
+                                        </div>
+                                        <div class="form-group col">
+                                            <label for="drt">DRT: </label>
+                                            <input type="text" id="drt" name="dr_drt" class="form-control" maxlength="45" placeholder="Digite o DRT em caso de artes cênicas" value="<?= $pf['drt'] ?? "" ?>">
+                                        </div>
+                                        <div class="form-group col">
+                                            <label for="grau_instrucao_id">Grau Instrução: *</label>
+                                            <select class="form-control select2bs4" id="grau_instrucao_id" name="dt_grau_instrucao_id" required>
+                                                <option value="">Selecione uma opção...</option>
+                                                <?php
+                                                $insPessoaFisica->geraOpcao("grau_instrucoes",$pf['grau_instrucao_id']);
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col">
+                                            <label for="etnia_id">Etnia: *</label>
+                                            <select class="form-control select2bs4" id="etnia_id" name="dt_etnia_id" required>
+                                                <option value="">Selecione uma opção...</option>
+                                                <?php
+                                                $insPessoaFisica->geraOpcao("etnias",$pf['etnia_id']);
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col">
+                                            <label for="genero">Gênero: </label>
+                                            <select class="form-control select2bs4" id="genero" name="dt_genero_id" required>
+                                                <option value="">Selecione uma opção...</option>
+                                                <?php
+                                                $insPessoaFisica->geraOpcao("generos",$pf['genero_id'] ?? '',true);
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-1">
+                                            <label for="dt_trans">Trans?</label><br>
+                                            <input type="checkbox" class="form-control-sm checkbox-grid-2 float-left" id="dt_trans" name="dt_trans" value="1"
+                                                <?php
+                                                if (isset($pf['trans'])){
+                                                    if ($pf['trans'] == 1){
+                                                        echo 'checked';
+                                                    }
+                                                }
+                                                ?>
+                                            >
+                                        </div>
+                                        <div class="form-group col-md-1">
+                                            <label for="dt_pcd">PCD?</label><br>
+                                            <input type="checkbox" class="form-control-sm checkbox-grid-2 float-left" id="dt_pcd" name="dt_pcd" value="1"
+                                                <?php
+                                                if (isset($pf['pcd'])){
+                                                    if ($pf['pcd'] == 1){
+                                                        echo 'checked';
+                                                    }
+                                                }
+                                                ?>
+                                            >
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="curriculo">Currículo:</label>
+                                    <textarea class="form-control" id="curriculo" name="dt_curriculo" rows="5"><?= $pf['curriculo'] ?></textarea>
+                                </div>
+                            </div>
                             <hr/>
                             <div class="row">
-                                <div class="form-group col">
-                                    <label for="nit">NIT: *</label>
-                                    <input type="text" id="nit" name="ni_nit" class="form-control" maxlength="45" placeholder="Digite o NIT" required value="<?= $pf['nit'] ?? "" ?>">
-                                </div>
-                                <div class="form-group col">
-                                    <label for="drt">DRT: </label>
-                                    <input type="text" id="drt" name="dr_drt" class="form-control" maxlength="45" placeholder="Digite o DRT em caso de artes cênicas" value="<?= $pf['drt'] ?? "" ?>">
-                                </div>
-                                <div class="form-group col">
-                                    <label for="grau_instrucao_id">Grau de Instrução: *</label>
-                                    <select class="form-control select2bs4" id="grau_instrucao_id" name="dt_grau_instrucao_id" required>
-                                        <option value="">Selecione uma opção...</option>
-                                        <?php
-                                        $insPessoaFisica->geraOpcao("grau_instrucoes",$pf['grau_instrucao_id']);
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="form-group col">
-                                    <label for="etnia_id">Etnia: *</label>
-                                    <select class="form-control select2bs4" id="etnia_id" name="dt_etnia_id" required>
-                                        <option value="">Selecione uma opção...</option>
-                                        <?php
-                                        $insPessoaFisica->geraOpcao("etnias",$pf['etnia_id']);
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="form-group col">
-                                    <label for="genero">Gênero: </label>
-                                    <select class="form-control select2bs4" id="genero" name="dt_genero_id" required>
-                                        <option value="">Selecione uma opção...</option>
-                                        <?php
-                                        $insPessoaFisica->geraOpcao("generos",$pf['genero_id'] ?? '',true);
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label for="dt_trans">Trans?</label><br>
-                                    <input type="checkbox" class="form-control-sm checkbox-grid-2 float-left" id="dt_trans" name="dt_trans" value="1"
-                                        <?php
-                                        if (isset($pf['trans'])){
-                                            if ($pf['trans'] == 1){
-                                                echo 'checked';
-                                            }
-                                        }
-                                        ?>
-                                    >
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label for="dt_pcd">PCD?</label><br>
-                                    <input type="checkbox" class="form-control-sm checkbox-grid-2 float-left" id="dt_pcd" name="dt_pcd" value="1"
-                                        <?php
-                                        if (isset($pf['pcd'])){
-                                            if ($pf['pcd'] == 1){
-                                                echo 'checked';
-                                            }
-                                        }
-                                        ?>
-                                    >
-                                </div>
+
+
                             </div>
                             <hr/>
                             <div class="alert alert-warning alert-dismissible">
