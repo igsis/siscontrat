@@ -74,7 +74,7 @@ if (isset($_GET['busca'])) {
                                     <select name="programa" id="programa_id" class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $formacaoObj->geraOpcao("form_programas", isset($dados['programa_id']) ? $dados['programa_id'] : '', false, false, true)
+                                        $formacaoObj->geraOpcao("programas", isset($dados['programa_id']) ? $dados['programa_id'] : '')
                                         ?>
                                     </select>
                                 </div>
@@ -101,7 +101,7 @@ if (isset($_GET['busca'])) {
                                     <select name="linguagem" id="linguagem_id" class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $formacaoObj->geraOpcao("form_linguagens", isset($dados['linguagem']) ? $dados['linguagem'] : '', false, false, true);
+                                        $formacaoObj->geraOpcao("linguagens", isset($dados['linguagem']) ? $dados['linguagem'] : '');
                                         ?>
                                     </select>
                                 </div>
