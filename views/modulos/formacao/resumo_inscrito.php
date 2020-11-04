@@ -96,7 +96,7 @@ $verifCpf = $pfObjeto->getCPF($inscrito->cpf)->fetchObject();
                                         <span class="font-weight-bold">Nacionalidade: </span> <?= $inscrito->nacionalidade ?>
                                     </li>
                                     <li class="list-group-item">
-                                        <span class="font-weight-bold">Programa Selecionado: </span> <?= $inscrito->programa ?>
+                                        <span class="font-weight-bold">Programa Selecionado: </span> <?= $formacaoObj->recuperaPrograma($formacaoObj->encryption($inscrito->programa_id))->programa ?>
                                     </li>
                                 </ul>
                             </div>
@@ -151,7 +151,7 @@ $verifCpf = $pfObjeto->getCPF($inscrito->cpf)->fetchObject();
                                         <span class="font-weight-bold">Grau Instituição: </span> <?= $inscrito->grau_instrucao ?>
                                     </li>
                                     <li class="list-group-item">
-                                        <span class="font-weight-bold">Linguagem: </span> <?= $inscrito->linguagem ?>
+                                        <span class="font-weight-bold">Linguagem: </span> <?= $formacaoObj->recuperaLinguagem($formacaoObj->encryption($inscrito->linguagem_id))->linguagem ?>
                                     </li>
                                     <li class="list-group-item">
                                         <span class="font-weight-bold">Função: </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo_id))->cargo ?>

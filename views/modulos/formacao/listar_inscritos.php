@@ -151,6 +151,7 @@ if (isset($_GET['busca'])) {
                                     <th>Nome</th>
                                     <th>CPF</th>
                                     <th>Programa</th>
+                                    <th>Linguagem</th>
                                     <th>Função</th>
                                     <th>Região preferencial</th>
                                     <th>Etnia</th>
@@ -164,7 +165,8 @@ if (isset($_GET['busca'])) {
                                 <?php foreach ($resultados as $resultado) { ?>
                                     <td><?= $resultado->nome ?></td>
                                     <td><?= $resultado->cpf ?></td>
-                                    <td><?= $resultado->programa ?></td>
+                                    <td><?= $formacaoObj->recuperaPrograma($formacaoObj->encryption($resultado->programa_id))->programa ?></td>
+                                    <td><?= $formacaoObj->recuperaLinguagem($formacaoObj->encryption($resultado->linguagem_id))->linguagem ?></td>
                                     <td><?= $formacaoObj->recuperaCargo($formacaoObj->encryption($resultado->form_cargo_id))->cargo ?></td>
                                     <td><?= $resultado->regiao ?></td>
                                     <td><?= $resultado->etnia ?></td>
@@ -181,6 +183,7 @@ if (isset($_GET['busca'])) {
                                     <th>Nome</th>
                                     <th>CPF</th>
                                     <th>Programa</th>
+                                    <th>Linguagem</th>
                                     <th>Função</th>
                                     <th>Região preferencial</th>
                                     <th>Etnia</th>
