@@ -18,7 +18,6 @@ if (isset($_GET['busca'])) {
     array_splice($dados, 0, 2);
 
     $resultados = $formacaoObj->listarIncritos($dados);
-
 }
 
 ?>
@@ -148,6 +147,7 @@ if (isset($_GET['busca'])) {
                             <table id="tabela" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
+                                    <th>Protocolo</th>
                                     <th>Nome</th>
                                     <th>CPF</th>
                                     <th>Programa</th>
@@ -157,29 +157,38 @@ if (isset($_GET['busca'])) {
                                     <th>Etnia</th>
                                     <th>PCD</th>
                                     <th>Trans</th>
+                                    <th>Arquivos</th>
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 <?php foreach ($resultados as $resultado) { ?>
-                                    <td><?= $resultado->nome ?></td>
-                                    <td><?= $resultado->cpf ?></td>
-                                    <td><?= $formacaoObj->recuperaPrograma($formacaoObj->encryption($resultado->programa_id))->programa ?></td>
-                                    <td><?= $formacaoObj->recuperaLinguagem($formacaoObj->encryption($resultado->linguagem_id))->linguagem ?></td>
-                                    <td><?= $formacaoObj->recuperaCargo($formacaoObj->encryption($resultado->form_cargo_id))->cargo ?></td>
-                                    <td><?= $resultado->regiao ?></td>
-                                    <td><?= $resultado->etnia ?></td>
-                                    <td><?= $resultado->pcd ?></td>
-                                    <td><?= $resultado->trans ?></td>
-                                    <td>
-                                        <a href="<?= SERVERURL ?>formacao/resumo_inscrito&id=<?= $formacaoObj->encryption($resultado->id) ?>"
-                                           target="_blank" class="btn btn-success btn-sm"> Resumo</a>
-                                    </td>
+                                    <tr>
+                                        <td><?= $resultado->protocolo ?></td>
+                                        <td><?= $resultado->nome ?></td>
+                                        <td><?= $resultado->cpf ?></td>
+                                        <td><?= $formacaoObj->recuperaPrograma($formacaoObj->encryption($resultado->programa_id))->programa ?></td>
+                                        <td><?= $formacaoObj->recuperaLinguagem($formacaoObj->encryption($resultado->linguagem_id))->linguagem ?></td>
+                                        <td><?= $formacaoObj->recuperaCargo($formacaoObj->encryption($resultado->form_cargo_id))->cargo ?></td>
+                                        <td><?= $resultado->regiao ?></td>
+                                        <td><?= $resultado->etnia ?></td>
+                                        <td><?= $resultado->pcd ?></td>
+                                        <td><?= $resultado->trans ?></td>
+                                        <td>
+                                            <a href="<?= SERVERURL ?>api/downloadInscritos.php?id=<?= $resultado->id ?>&formacao=1"
+                                               target="_blank"
+                                               class="btn bg-gradient-purple btn-sm rounded-bottom">Arquivos</a>
+                                        </td>
+                                        <td>
+                                            <a href="<?= SERVERURL ?>formacao/resumo_inscrito&id=<?= $formacaoObj->encryption($resultado->id) ?>"
+                                               target="_blank" class="btn btn-success btn-sm"> Resumo</a>
+                                        </td>
+                                    </tr>
                                 <?php } ?>
                                 </tbody>
                                 <tfoot>
                                 <tr>
+                                    <th>Protocolo</th>
                                     <th>Nome</th>
                                     <th>CPF</th>
                                     <th>Programa</th>
@@ -189,6 +198,7 @@ if (isset($_GET['busca'])) {
                                     <th>Etnia</th>
                                     <th>PCD</th>
                                     <th>Trans</th>
+                                    <th>Arquivos</th>
                                     <th></th>
                                 </tr>
                                 </tfoot>
@@ -205,6 +215,9 @@ if (isset($_GET['busca'])) {
 
 <script defer>
     const url_cargos = '<?= $apiCargos ?>';
+
+    document.querySelector('body').classList.toggle('sidebar-open');
+    document.querySelector('body').classList.toggle('sidebar-collapse');
 
     let pesquisa = document.querySelector('#pesquisa');
     let programa = document.querySelector('#programa_id');
