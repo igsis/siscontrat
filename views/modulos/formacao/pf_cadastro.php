@@ -250,7 +250,7 @@ if ($idCapac){
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="curriculo">Currículo:</label>
-                                    <textarea class="form-control" id="curriculo" name="dt_curriculo" rows="5"><?= $pf['curriculo'] ?></textarea>
+                                    <textarea class="form-control" id="curriculo" name="dt_curriculo" rows="5"><?= $pf['curriculo'] ?? "" ?></textarea>
                                 </div>
                             </div>
                             <hr/>

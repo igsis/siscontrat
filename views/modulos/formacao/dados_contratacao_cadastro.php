@@ -9,10 +9,11 @@ if($id){
     $dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
 }
 elseif($capacId){
-    $dados_contratacao = $contratacaoObj->recuperaDadosContratacaoCapac($capacId);
     $arquivosObj =  new ArquivoController();
-    $arquivos = $arquivosObj->listarArquivosCapac($capacId)->fetchAll(PDO::FETCH_OBJ);
     $pfObj =  new PessoaFisicaController();
+    $dados_contratacao = $contratacaoObj->recuperaDadosContratacaoCapac($capacId);
+    $arquivos = $arquivosObj->listarArquivosCapac($capacId)->fetchAll(PDO::FETCH_OBJ);
+    $idPf = $pfObj->recuperaIdPfCapac($dados_contratacao->pessoa_fisica_id);
 }
 
 //caso haja um cadastro, torna a checkbox do proponente inalterável
@@ -57,7 +58,6 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                         <option value="">Selecione um proponente...</option>
                                         <?php
                                         if ($capacId){
-                                            $idPf = $pfObj->recuperaIdPfCapac($dados_contratacao->pessoa_fisica_id);
                                             $contratacaoObj->geraOpcao('pessoa_fisicas', $idPf ?? "", false, false, false);
                                         } else {
                                             $contratacaoObj->geraOpcao('pessoa_fisicas', $dados_contratacao->pessoa_fisica_id ?? "");
@@ -71,6 +71,16 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                             <button type="button" class="btn btn-primary float-right">Abrir Proponente
                                             </button>
                                         </a>
+                                    <?php endif; ?>
+
+                                    <?php if ($capacId): ?>
+                                        <br>
+                                        <a href="<?= SERVERURL ?>formacao/pf_cadastro&id=<?= $contratacaoObj->encryption($idPf) ?>"
+                                           target="_blank">
+                                            <button type="button" class="btn btn-primary float-right">Abrir Proponente
+                                            </button>
+                                        </a>
+                                        <input type="hidden" name="protocolo" value="<?= $dados_contratacao->protocolo?>">
                                     <?php endif; ?>
                                 </div>
                             </div>

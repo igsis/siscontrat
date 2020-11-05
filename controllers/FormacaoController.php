@@ -1449,6 +1449,12 @@ class FormacaoController extends FormacaoModel
         return $formacoes;
     }
 
+    public function chegaProtocolo($protocolo)
+    {
+        $protocolo = DbModel::consultaSimples("SELECT * FROM formacao_contratacoes WHERE protocolo = '$protocolo'")->rowCount();
+        return $protocolo > 0 ? true : false;
+    }
+
 
     public function recuperaDetalhesContratacao($contratacao_id)
     {
@@ -1506,7 +1512,12 @@ class FormacaoController extends FormacaoModel
         $insert = DbModel::insert('formacao_contratacoes', $dados);
         if ($insert->rowCount() >= 1) {
             $contratacao_id = DbModel::connection()->lastInsertId();
-            $protocolo = MainModel::geraProtocoloEFE($contratacao_id) . '-F';
+            if (isset($post['protocolo'])){
+                //caso seja importação do capac, pegar o protocolo ja exixtente
+                $protocolo = $post['protocolo'];
+            } else {
+                $protocolo = MainModel::geraProtocoloEFE($contratacao_id) . '-F';
+            }
             DbModel::consultaSimples("UPDATE formacao_contratacoes SET protocolo = '$protocolo' WHERE id = $contratacao_id");
             for ($i = 0; $i < count($locais_id); $i++):
                 if ($locais_id[$i] > 0):
