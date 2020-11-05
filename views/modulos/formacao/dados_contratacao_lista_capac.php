@@ -60,6 +60,7 @@ $ano = date("Y");
                             </thead>
                             <tbody>
                             <?php foreach ($dados_contratacao as $contratacao) : ?>
+                                <?php if (! $dados_contratacaoObj->chegaProtocolo($contratacao->protocolo)) : ?>
                                 <tr>
                                     <td><?= $contratacao->protocolo ?></td>
                                     <td><?= $contratacao->nome ?></td>
@@ -81,6 +82,7 @@ $ano = date("Y");
                                         </a>
                                     </td>
                                 </tr>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                             </tbody>
                             <tfoot>
@@ -161,10 +163,11 @@ $ano = date("Y");
             reverseButtons: true,
             confirmButtonText: 'Importar',
             cancelButtonText: 'Cancelar',
-        }).then(function () {
-
-            window.location.href = 'http://localhost/siscontrat/formacao/pf_cadastro&capac=' + idPf;
-        });
+        }).then(function (result) {
+            if (result.value) {
+                window.location.href =  "<?= SERVERURL ?>formacao/pf_cadastro&capac=" + idPf;
+            }
+        })
     }
 
 </script>

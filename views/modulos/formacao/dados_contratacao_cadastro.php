@@ -1,5 +1,6 @@
 <?php
 require_once "./controllers/FormacaoController.php";
+require_once "./controllers/ArquivoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $capacId = isset($_GET['capac']) ? $_GET['capac'] : null;
 $contratacaoObj = new FormacaoController();
@@ -8,7 +9,11 @@ if($id){
     $dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
 }
 elseif($capacId){
+    $arquivosObj =  new ArquivoController();
+    $pfObj =  new PessoaFisicaController();
     $dados_contratacao = $contratacaoObj->recuperaDadosContratacaoCapac($capacId);
+    $arquivos = $arquivosObj->listarArquivosCapac($capacId)->fetchAll(PDO::FETCH_OBJ);
+    $idPf = $pfObj->recuperaIdPfCapac($dados_contratacao->pessoa_fisica_id);
 }
 
 //caso haja um cadastro, torna a checkbox do proponente inalterável
@@ -51,7 +56,13 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                     <select name="pessoa_fisica_id" required
                                             class="form-control select2bs4" <?= $readonly ?>>
                                         <option value="">Selecione um proponente...</option>
-                                        <?php $contratacaoObj->geraOpcao('pessoa_fisicas', $dados_contratacao->pessoa_fisica_id ?? "") ?>
+                                        <?php
+                                        if ($capacId){
+                                            $contratacaoObj->geraOpcao('pessoa_fisicas', $idPf ?? "", false, false, false);
+                                        } else {
+                                            $contratacaoObj->geraOpcao('pessoa_fisicas', $dados_contratacao->pessoa_fisica_id ?? "");
+                                        }
+                                        ?>
                                     </select>
                                     <?php if ($id): ?>
                                         <br>
@@ -60,6 +71,16 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                             <button type="button" class="btn btn-primary float-right">Abrir Proponente
                                             </button>
                                         </a>
+                                    <?php endif; ?>
+
+                                    <?php if ($capacId): ?>
+                                        <br>
+                                        <a href="<?= SERVERURL ?>formacao/pf_cadastro&id=<?= $contratacaoObj->encryption($idPf) ?>"
+                                           target="_blank">
+                                            <button type="button" class="btn btn-primary float-right">Abrir Proponente
+                                            </button>
+                                        </a>
+                                        <input type="hidden" name="protocolo" value="<?= $dados_contratacao->protocolo?>">
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -259,6 +280,52 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                 </div>
                             <?php endif; ?>
                     </div>
+
+                    <?php if ($capacId && $arquivos): ?>
+                        <div class="row" >
+                            <div class="col-md-9" style="float:none;margin:auto;">
+                                <div class="card card-warning">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Anexos CAPAC</h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                                        class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mt-2 mb-3">
+                                            <div class="col-12">
+                                                <small> <strong>Atenção: a opção de recuperar arquivos presentes no CAPAC só estará disponível antes da importação ser concluída. </strong> </small>
+                                            </div>
+                                        </div>
+
+                                        <?php foreach ($arquivos as $arquivo): ?>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <div>
+                                                    <?= $arquivo->documento ?>
+                                                </div>
+                                                <div>
+                                                    <a href="<?= CAPACURL ?>capac/uploads/<?= $arquivo->arquivo ?>"
+                                                       class="btn btn-sm btn-primary">
+                                                        Baixar
+                                                    </a>
+                                                </div>
+                                            </li>
+                                        <?php endforeach; ?>
+
+                                        <li class="list-group-item">
+                                            <a href="<?= SERVERURL ?>api/downloadCapac.php?id=<?= $dados_contratacao->id ?>&formacao=1"
+                                               target="_blank"
+                                               class="btn bg-gradient-purple btn-lg btn-block rounded-bottom"><i
+                                                        class="fas fa-file-archive"></i> Baixar todos os arquivos</a>
+                                        </li>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="card-footer">
                         <a href="<?= SERVERURL ?>formacao/dados_contratacao_lista">
                             <button type="button" class="btn btn-default pull-left">Voltar</button>
