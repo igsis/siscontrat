@@ -11,12 +11,6 @@ if (isset($_POST['_method'])) {
     $insPessoaFisica = new PessoaFisicaController();
 
     switch ($_POST['_method']) {
-        case "cadastrarPf":
-            // echo $insForm->insereFormacao();
-            break;
-        case "editarPf":
-            // echo $insForm->editaFormacao($_POST['id']);
-            break;
         case "cadastrarCargo":
             echo $insForm->insereCargo($_POST);
             break;
