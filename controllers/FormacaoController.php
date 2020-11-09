@@ -1512,7 +1512,7 @@ class FormacaoController extends FormacaoModel
         $insert = DbModel::insert('formacao_contratacoes', $dados);
         if ($insert->rowCount() >= 1) {
             $contratacao_id = DbModel::connection()->lastInsertId();
-            if (isset($post['protocolo'])){
+            if (isset($post['protocolo'])) {
                 //caso seja importação do capac, pegar o protocolo ja exixtente
                 $protocolo = $post['protocolo'];
             } else {
@@ -1969,11 +1969,11 @@ class FormacaoController extends FormacaoModel
     public function recuperaArquivosCapacInscritos($id)
     {
         $sql = "SELECT fl.documento, far.arquivo
-                FROM form_arquivos far
-                LEFT JOIN form_lista_documentos AS fl ON far.form_lista_documento_id = fl.id
+                FROM formacao_arquivos far
+                LEFT JOIN formacao_lista_documentos AS fl ON far.formacao_lista_documento_id = fl.id
                 WHERE far.publicado = 1 AND far.form_cadastro_id = {$id}";
 
-        return $this->consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
+        return $this->consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function insereInscrito($id)
@@ -2000,7 +2000,7 @@ class FormacaoController extends FormacaoModel
         $pfDetalhes['genero_id'] = $inscrito->genero_id;
         $pfDetalhes['regiao_id'] = $inscrito->regiao_preferencial_id;
         $pfDetalhes['grau_instrucao_id'] = $inscrito->grau_instrucao_id;
-        $pfDetalhes['curriculo'] = NULL;
+        $pfDetalhes['curriculo'] = '';
         $pfDetalhes['trans'] = $inscrito->trans == 'Sim' ? 1 : 0;
         $pfDetalhes['pcd'] = $inscrito->pcd == 'Sim' ? 1 : 0;
 
@@ -2020,15 +2020,15 @@ class FormacaoController extends FormacaoModel
         $pfBanco['agencia'] = $inscrito->agencia;
         $pfBanco['conta'] = $inscrito->conta;
 
+        try {
+            $insertPf = DbModel::insert('pessoa_fisicas', $pessoaFisica);
+            if ($insertPf || DbModel::connection()->errorCode() == 0) {
+                $pessoaFisica_id = DbModel::connection()->lastInsertId();
+                $pfDetalhes['pessoa_fisica_id'] = $pessoaFisica_id;
+                $pfEndereco['pessoa_fisica_id'] = $pessoaFisica_id;
+                $pfBanco['pessoa_fisica_id'] = $pessoaFisica_id;
 
-        $insertPf = DbModel::insert('pessoa_fisicas', $pessoaFisica);
-        if ($insertPf || DbModel::connection()->errorCode() == 0) {
-            $pessoaFisica_id = DbModel::connection()->lastInsertId();
-            $pfDetalhes['pessoa_fisica_id'] = $pessoaFisica_id;
-            $pfEndereco['pessoa_fisica_id'] = $pessoaFisica_id;
-            $pfBanco['pessoa_fisica_id'] = $pessoaFisica_id;
 
-            try {
                 $insertDetalhes = DbModel::insert('pf_detalhes', $pfDetalhes);
                 if ($insertDetalhes || DbModel::connection()->errorCode() == 0) {
                     $insertEndereco = DbModel::insert('pf_enderecos', $pfEndereco);
@@ -2055,16 +2055,16 @@ class FormacaoController extends FormacaoModel
                         }
                     }
                 }
-            } catch (Exception $e) {
-                $alerta = [
-                    'alerta' => 'simples',
-                    'titulo' => 'Erro!',
-                    'texto' => 'Erro ao importar!<br>' . $e->getMessage(),
-                    'tipo' => 'error',
-                    'location' => SERVERURL . '/formacao'
-                ];
-                return MainModel::sweetAlert($alerta);
             }
+        } catch (Exception $e) {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Erro!',
+                'texto' => 'Erro ao importar!<br>' . $e->getMessage() . '!',
+                'tipo' => 'error',
+                'location' => SERVERURL . 'formacao/resumo_inscrito&id=' . $id
+            ];
+            return MainModel::sweetAlert($alerta);
         }
     }
 }
