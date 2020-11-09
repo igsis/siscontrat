@@ -33,9 +33,11 @@
                             <a href="<?= SERVERURL ?>formacao/pesquisa_pf" class="btn btn-success btn-sm" >
                                 <i class="fas fa-plus"></i> Cadastrar Novo
                             </a>
-                            <a href="<?= SERVERURL ?>formacao/pf_lista_capac" class="btn btn-info btn-sm">
-                                <i class="fas fa-arrow-alt-circle-down"></i> Importar do CAPAC
-                            </a>
+                            <?php if ($_SESSION['perfil_s'] == 1){ ?>
+                                <a href="<?= SERVERURL ?>formacao/pf_lista_capac" class="btn btn-info btn-sm">
+                                    <i class="fas fa-arrow-alt-circle-down"></i> Importar do CAPAC
+                                </a>
+                            <?php } ?>
                         </div>
                     </div>
                     <!-- /.card-header -->
