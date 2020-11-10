@@ -9,7 +9,6 @@ $pfObjeto = new PessoaFisicaController();
 $id = $_GET['id'];
 $inscrito = $formacaoObj->recuperaInscrito($id);
 $telefones = $formacaoObj->recuperaTelInscrito($inscrito->pessoa_fisica_id);
-$arquivos = $formacaoObj->recuperaArquivosCapacInscritos($inscrito->id);
 
 if (isset($_POST['importar'])) {
     $formacaoObj->insereInscrito($inscrito);
@@ -174,22 +173,6 @@ $verifCpf = $pfObjeto->getCPF($inscrito->cpf)->fetchObject();
                         <div class="row mt-3">
                             <div class="col-12">
                                 <ul class="list-group">
-                                    <li class="list-group-item bg-warning disabled color-palette">
-                                        <span class="font-weight-bold">Arquivo(s) de Pessoa Física:</span>
-                                    </li>
-                                    <?php foreach ($arquivos as $arquivo): ?>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <div>
-                                                <?= $arquivo->documento ?>
-                                            </div>
-                                            <div>
-                                                <a href="<?= CAPACURL ?>capac/uploads/<?= $arquivo->arquivo ?>"
-                                                   class="btn btn-sm btn-primary">
-                                                    Baixar
-                                                </a>
-                                            </div>
-                                        </li>
-                                    <?php endforeach; ?>
                                     <li class="list-group-item">
                                         <a href="<?= SERVERURL ?>api/downloadInscritos.php?id=<?= $inscrito->id ?>&formacao=1"
                                            target="_blank"
@@ -201,9 +184,7 @@ $verifCpf = $pfObjeto->getCPF($inscrito->cpf)->fetchObject();
                         </div>
                     </div>
                     <div class="card-footer">
-                        <?php if ($verifCpf): ?>
-                            <a href="#" class="btn btn-info float-right">Atualizar Inscrito</a>
-                        <?php else: ?>
+                        <?php if (!$verifCpf): ?>
                             <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoajax.php" method="POST">
                                 <input type="hidden" name="_method" value="importarInscrito">
                                 <input type="hidden" name="id" value="<?= $formacaoObj->encryption($inscrito->id) ?>">

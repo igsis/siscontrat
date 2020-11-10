@@ -94,15 +94,12 @@
                 </a>
             </li>
         <?php } ?>
-
-        <?php if ($_SESSION['perfil_s'] == 1 ){ ?>
-            <li class="nav-item">
-                <a href="<?= SERVERURL ?>formacao/listar_inscritos" class="nav-link" id="listar_inscritos">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Listar inscritos</p>
-                </a>
-            </li>
-        <?php } ?>
+        <li class="nav-item">
+            <a href="<?= SERVERURL ?>formacao/listar_inscritos" class="nav-link" id="listar_inscritos">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Listar inscritos</p>
+            </a>
+        </li>
         <li class="nav-item">
             <a href="<?= SERVERURL ?>formacao/exportar_inscritos_capac" class="nav-link" id="exportar_inscritos_capac">
                 <i class="far fa-circle nav-icon"></i>
