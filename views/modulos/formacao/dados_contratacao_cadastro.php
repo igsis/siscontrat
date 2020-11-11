@@ -13,7 +13,7 @@ elseif($capacId){
     $pfObj =  new PessoaFisicaController();
     $dados_contratacao = $contratacaoObj->recuperaDadosContratacaoCapac($capacId);
     $arquivos = $arquivosObj->listarArquivosCapac($capacId)->fetchAll(PDO::FETCH_OBJ);
-    $idPf = $pfObj->recuperaIdPfCapac($dados_contratacao->pessoa_fisica_id);
+    $idPf = $pfObj->recuperaIdPfSis($dados_contratacao->pessoa_fisica_id);
 }
 
 //caso haja um cadastro, torna a checkbox do proponente inalterável

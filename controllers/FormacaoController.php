@@ -2070,7 +2070,8 @@ class FormacaoController extends FormacaoModel
 
     public function recuperaIdContratacao($protocoloCapac)
     {
-        return DbModel::consultaSimples("SELECT * FROM formacao_contratacao WHERE protocolo = '$protocoloCapac'")->fetchObject()->id; //sis
+        $idContratacao =  DbModel::consultaSimples("SELECT * FROM formacao_contratacoes WHERE protocolo = '$protocoloCapac'")->fetchObject()->id; //sis
+        return MainModel::encryption($idContratacao);
     }
 }
 

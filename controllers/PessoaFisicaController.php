@@ -316,7 +316,7 @@ class PessoaFisicaController extends PessoaFisicaModel
         return DbModel::consultaSimples('SELECT * FROM  pessoa_fisicas', $capac)->fetchAll(PDO::FETCH_OBJ);;
     }
 
-    public function recuperaIdPfCapac($id)
+    public function recuperaIdPfSis($id)
     {
         //função para pegar id de pf no sis baseado no cpf que vem do capac ao importar dados para contratação
         $cpf = DbModel::consultaSimples("SELECT * FROM pessoa_fisicas WHERE id = $id", true)->fetchObject()->cpf;

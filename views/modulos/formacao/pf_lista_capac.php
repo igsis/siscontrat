@@ -41,19 +41,23 @@ $lista_pf = $pfObj->listaPf(true);
                             </thead>
                             <tbody>
                             <?php foreach ($lista_pf as $pf): ?>
-                                <?php if($pfObj->getCPF($pf->cpf)->rowCount() == 0): ?>
-                                    <tr>
-                                        <td><?= $pf->nome?></td>
-                                        <td><?= $pf->cpf?></td>
-                                        <td><?= date_format(date_create($pf->data_nascimento), 'd/m/Y')?></td>
-                                        <td><?= $pf->email?></td>
-                                        <td>
+                                <tr>
+                                    <td><?= $pf->nome?></td>
+                                    <td><?= $pf->cpf?></td>
+                                    <td><?= $pfObj->dataParaBR($pf->data_nascimento)?></td>
+                                    <td><?= $pf->email?></td>
+                                    <td>
+                                        <?php if($pfObj->getCPF($pf->cpf)->rowCount() == 0): ?>
                                             <a href="<?= SERVERURL . "formacao/pf_cadastro&capac=" . $pfObj->encryption($pf->id)?>" class="btn bg-gradient-info btn-sm" >
-                                                <i class="fas fa-arrow-alt-circle-down"></i> Importar
+                                                Importar  &nbsp;
                                             </a>
-                                        </td>
-                                    </tr>
-                                <?php endif; ?>
+                                        <?php else : ?>
+                                            <a href="<?= SERVERURL . "formacao/pf_cadastro&id=" . $pfObj->encryption($pfObj->recuperaIdPfSis($pf->id))?>" class="btn bg-gradient-warning btn-sm" >
+                                                Importado
+                                            </a>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                             </tbody>
                             <tfoot>

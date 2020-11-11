@@ -1,14 +1,15 @@
 <?php
 require_once "./controllers/FormacaoController.php";
+require_once "./controllers/PessoaFisicaController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $getAno = isset($_GET['ano']) ? $_GET['ano'] : 0;
-$dados_contratacaoObj = new FormacaoController();
+$formacaoObj = new FormacaoController();
 $pfObj = new PessoaFisicaController();
 
 if ($getAno) {
-    $dados_contratacao = $dados_contratacaoObj->listaDadosContratacaoCapac($getAno);
+    $dados_contratacao = $formacaoObj->listaDadosContratacaoCapac($getAno);
 } else {
-    $dados_contratacao = $dados_contratacaoObj->listaDadosContratacaoCapac();
+    $dados_contratacao = $formacaoObj->listaDadosContratacaoCapac();
 }
 
 $ano = date("Y");
@@ -70,32 +71,28 @@ $ano = date("Y");
                                     <td>
                                         <?php
                                         $buscaCpf = $pfObj->getCPF($contratacao->cpf)->rowCount();
-                                        if ($buscaCpf > 0){ // cpf presente no sis
+                                        if ($buscaCpf > 0){ // cpf existe no sis
                                             $dadoCompativel = $pfObj->comparaPf($contratacao->cpf); //compara dados sis e capac
-                                            if (!$dadoCompativel){ //dados divergentes
+                                            if (!$dadoCompativel){ //dados divergentes, abre sweetalert
                                                 $idPf = $pfObj->getCPF($contratacao->cpf)->fetchObject()->id;
-                                                $idPf =  $dados_contratacaoObj->encryption($idPf);
-                                                $idContratacao = $dados_contratacaoObj->encryption($contratacao->id);
+                                                $idPf =  $formacaoObj->encryption($idPf);
+                                                $idContratacao = $formacaoObj->encryption($contratacao->id);
                                                 $onClick = "onclick='atualizarPf(\"". $idPf ."\", \"". $idContratacao ."\")'";
                                             } else {
-                                                $onClick = "href=". SERVERURL . "formacao/dados_contratacao_cadastro&capac=" . $dados_contratacaoObj->encryption($contratacao->id);
+                                                $onClick = "href=". SERVERURL . "formacao/dados_contratacao_cadastro&capac=" . $formacaoObj->encryption($contratacao->id);
                                             }
                                         } else {
-                                            //pf a ser importado no sis
-                                            $idPf =  $dados_contratacaoObj->encryption($contratacao->pf_id);
+                                            //pf que será importado no sis
+                                            $idPf =  $formacaoObj->encryption($contratacao->pf_id);
                                             $onClick = "onclick='importarPf(\"". $idPf ."\")'";
                                         }
                                         ?>
-                                        <?php if (! $dados_contratacaoObj->chegaProtocolo($contratacao->protocolo)) : ?>
+                                        <?php if (! $formacaoObj->chegaProtocolo($contratacao->protocolo)) : ?>
                                             <a <?= $onClick ?> class="btn bg-gradient-info btn-sm" style="color:black" >
                                                 <i class="fas fa-arrow-alt-circle-down"></i> Importar
                                             </a>
                                         <?php else: ?>
-                                        <?php
-//                                            $idContratacao = recuperaIdContratacao($contratacao->protocolo);
-//                                            $idContratacao = $dados_contratacaoObj->encryption($idContratacao);
-                                        ?>
-                                            <a href="<?= SERVERURL . 'formacao/dados_contratacao_cadastro&id=' . $idContratacao ?>" class="btn bg-gradient-warning btn-sm" style="color:black">
+                                            <a href="<?= SERVERURL . 'formacao/dados_contratacao_cadastro&id=' . $formacaoObj->recuperaIdContratacao($contratacao->protocolo) ?>" class="btn bg-gradient-warning btn-sm" style="color:black">
                                                 <i class="fas fa-arrow-alt-circle-down"></i> Importado
                                             </a>
                                         <?php endif; ?>
