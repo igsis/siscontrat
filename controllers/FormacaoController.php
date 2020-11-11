@@ -2067,6 +2067,11 @@ class FormacaoController extends FormacaoModel
             return MainModel::sweetAlert($alerta);
         }
     }
+
+    public function recuperaIdContratacao($protocoloCapac)
+    {
+        return DbModel::consultaSimples("SELECT * FROM formacao_contratacao WHERE protocolo = '$protocoloCapac'")->fetchObject()->id; //sis
+    }
 }
 
 

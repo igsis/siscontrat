@@ -303,10 +303,10 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                         <?php foreach ($arquivos as $arquivo): ?>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>
-                                                    <?= $arquivo->documento ?>
+                                                  <?= $arquivosObj->getDocumento($arquivo->form_lista_documento_id) ?>
                                                 </div>
                                                 <div>
-                                                    <a href="<?= CAPACURL ?>capac/uploads/<?= $arquivo->arquivo ?>"
+                                                    <a href="<?= CAPACURL ?>/uploads/<?= $arquivo->arquivo ?>"
                                                        class="btn btn-sm btn-primary">
                                                         Baixar
                                                     </a>

@@ -316,17 +316,64 @@ class PessoaFisicaController extends PessoaFisicaModel
         return DbModel::consultaSimples('SELECT * FROM  pessoa_fisicas', $capac)->fetchAll(PDO::FETCH_OBJ);;
     }
 
-    public function checaArquivosCapac($id)
-    {
-        $arquivos = 2; //arrumar
-        return $arquivos > 0 ? true : false;
-    }
-
     public function recuperaIdPfCapac($id)
     {
         //função para pegar id de pf no sis baseado no cpf que vem do capac ao importar dados para contratação
         $cpf = DbModel::consultaSimples("SELECT * FROM pessoa_fisicas WHERE id = $id", true)->fetchObject()->cpf;
-        $idPf = $this::getCpf($cpf)->fetchObject()->id;
+        $idPf = $this::getCpf($cpf)->fetchObject()->id; //sis
         return $idPf;
+    }
+
+    public function comparaPf($cpf){
+        $pfSis = DbModel::consultaSimples("SELECT * FROM pessoa_fisicas WHERE cpf = '$cpf'")->fetchObject();
+        $pfSisEndereco = DbModel::consultaSimples("SELECT * FROM pf_enderecos WHERE pessoa_fisica_id = $pfSis->id")->fetchObject();
+        $pfSisDetalhes = DbModel::consultaSimples("SELECT * FROM pf_detalhes WHERE pessoa_fisica_id = $pfSis->id")->fetchObject();
+        $pfSisTelefone = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = $pfSis->id")->fetchObject();
+        $pfSisBanco = DbModel::consultaSimples("SELECT * FROM pf_bancos WHERE pessoa_fisica_id = $pfSis->id")->fetchObject();
+
+        $pfCapac = DbModel::consultaSimples("SELECT * FROM pessoa_fisicas WHERE cpf = '$cpf'", true)->fetchObject();
+        $pfCapacEndereco = DbModel::consultaSimples("SELECT * FROM pf_enderecos WHERE pessoa_fisica_id = $pfCapac->id", true)->fetchObject();
+        $pfCapacDetalhes = DbModel::consultaSimples("SELECT * FROM pf_detalhes WHERE pessoa_fisica_id = $pfCapac->id", true)->fetchObject();
+        $pfCapacTelefone = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = $pfCapac->id", true)->fetchObject();
+        $pfCapacBanco = DbModel::consultaSimples("SELECT * FROM pf_bancos WHERE pessoa_fisica_id = $pfCapac->id", true)->fetchObject();
+
+        //pessoa_fisicas
+        if ($pfCapac->ultima_atualizacao > $pfSis->ultima_atualizacao){ //verificar se ultima atualização foi no sis
+            if ($pfSis->nome != $pfCapac->nome) return false;
+            if ($pfSis->nome_artistico != $pfCapac->nome_artistico) return false;
+            if ($pfSis->rg != $pfCapac->rg) return false;
+            if ($pfSis->cpf != $pfCapac->cpf) return false;
+            if ($pfSis->ccm != $pfCapac->ccm) return false;
+            if ($pfSis->data_nascimento != $pfCapac->data_nascimento) return false;
+            if ($pfSis->nacionalidade_id != $pfCapac->nacionalidade_id) return false;
+            if ($pfSis->email != $pfCapac->email) return false;
+
+            //pfEndereco
+            if($pfSisEndereco->logradouro != $pfCapacEndereco->logradouro) return false;
+            if($pfSisEndereco->numero != $pfCapacEndereco->numero) return false;
+            if($pfSisEndereco->complemento != $pfCapacEndereco->complemento ) return false;
+            if($pfSisEndereco->bairro != $pfCapacEndereco->bairro) return false;
+            if($pfSisEndereco->cidade != $pfCapacEndereco->cidade) return false;
+            if($pfSisEndereco->uf != $pfCapacEndereco->uf) return false;
+            if($pfSisEndereco->cep != $pfCapacEndereco->cep) return false;
+
+            //pf_detalhes
+            if($pfSisDetalhes->etnia_id != $pfCapacDetalhes->etnia_id) return false;
+            if($pfSisDetalhes->grau_instrucao_id != $pfCapacDetalhes->grau_instrucao_id) return false;
+            if($pfSisDetalhes->trans != $pfCapacDetalhes->trans) return false;
+            if($pfSisDetalhes->pcd != $pfCapacDetalhes->pcd) return false;
+            if($pfSisDetalhes->genero_id != $pfCapacDetalhes->genero_id) return false;
+
+            //pf_telefone
+            if($pfSisTelefone->telefone != $pfCapacTelefone->telefone) return false;
+
+            //pf_bancos
+            if($pfSisBanco->banco_id != $pfCapacBanco->banco_id) return false;
+            if($pfSisBanco->agencia != $pfCapacBanco->agencia) return false;
+            if($pfSisBanco->conta != $pfCapacBanco->conta) return false;
+
+            return true;
+        }
+        return true;
     }
 }

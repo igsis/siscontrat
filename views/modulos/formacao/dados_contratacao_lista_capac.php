@@ -60,7 +60,6 @@ $ano = date("Y");
                             </thead>
                             <tbody>
                             <?php foreach ($dados_contratacao as $contratacao) : ?>
-                                <?php if (! $dados_contratacaoObj->chegaProtocolo($contratacao->protocolo)) : ?>
                                 <tr>
                                     <td><?= $contratacao->protocolo ?></td>
                                     <td><?= $contratacao->nome ?></td>
@@ -71,18 +70,38 @@ $ano = date("Y");
                                     <td>
                                         <?php
                                         $buscaCpf = $pfObj->getCPF($contratacao->cpf)->rowCount();
-                                            if ($buscaCpf > 0){
-                                                $onClick = "href=". SERVERURL . "formacao/dados_contratacao_cadastro&capac=" . $dados_contratacaoObj->encryption($contratacao->id);
+                                        if ($buscaCpf > 0){ // cpf presente no sis
+                                            $dadoCompativel = $pfObj->comparaPf($contratacao->cpf); //compara dados sis e capac
+                                            if (!$dadoCompativel){ //dados divergentes
+                                                $idPf = $pfObj->getCPF($contratacao->cpf)->fetchObject()->id;
+                                                $idPf =  $dados_contratacaoObj->encryption($idPf);
+                                                $idContratacao = $dados_contratacaoObj->encryption($contratacao->id);
+                                                $onClick = "onclick='atualizarPf(\"". $idPf ."\", \"". $idContratacao ."\")'";
                                             } else {
-                                                $idPf =  $dados_contratacaoObj->encryption($contratacao->pf_id);
-                                                $onClick = "onclick='importarPf(\"". $idPf ."\")'";                                            }
+                                                $onClick = "href=". SERVERURL . "formacao/dados_contratacao_cadastro&capac=" . $dados_contratacaoObj->encryption($contratacao->id);
+                                            }
+                                        } else {
+                                            //pf a ser importado no sis
+                                            $idPf =  $dados_contratacaoObj->encryption($contratacao->pf_id);
+                                            $onClick = "onclick='importarPf(\"". $idPf ."\")'";
+                                        }
                                         ?>
-                                        <a <?= $onClick ?> class="btn bg-gradient-info btn-sm" >
-                                            <i class="fas fa-arrow-alt-circle-down"></i> Importar
-                                        </a>
+                                        <?php if (! $dados_contratacaoObj->chegaProtocolo($contratacao->protocolo)) : ?>
+                                            <a <?= $onClick ?> class="btn bg-gradient-info btn-sm" style="color:black" >
+                                                <i class="fas fa-arrow-alt-circle-down"></i> Importar
+                                            </a>
+                                        <?php else: ?>
+                                        <?php
+//                                            $idContratacao = recuperaIdContratacao($contratacao->protocolo);
+//                                            $idContratacao = $dados_contratacaoObj->encryption($idContratacao);
+                                        ?>
+                                            <a href="<?= SERVERURL . 'formacao/dados_contratacao_cadastro&id=' . $idContratacao ?>" class="btn bg-gradient-warning btn-sm" style="color:black">
+                                                <i class="fas fa-arrow-alt-circle-down"></i> Importado
+                                            </a>
+                                        <?php endif; ?>
+
                                     </td>
                                 </tr>
-                                <?php endif; ?>
                             <?php endforeach; ?>
                             </tbody>
                             <tfoot>
@@ -166,6 +185,27 @@ $ano = date("Y");
         }).then(function (result) {
             if (result.value) {
                 window.location.href =  "<?= SERVERURL ?>formacao/pf_cadastro&capac=" + idPf;
+            }
+        })
+    }
+
+    function atualizarPf(idPf, idContratacao) {
+        Swal.fire({
+            title: '<strong>Atualizar Proponente</strong>',
+            type: 'info',
+            html:
+                '<h6>O cadastro deste proponente contém dados no SisContrat que divergem do CAPAC, deseja atualiza-lo?</h6>',
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: true,
+            reverseButtons: true,
+            confirmButtonText: 'Atualizar proponente',
+            cancelButtonText: 'Seguir importação',
+        }).then(function (result) {
+            if (result.value) {
+                window.location.href =  "<?= SERVERURL ?>formacao/pf_cadastro&id=" + idPf;
+            } else {
+                window.location.href =  "<?= SERVERURL ?>formacao/dados_contratacao_cadastro&capac=" + idContratacao;
             }
         })
     }
