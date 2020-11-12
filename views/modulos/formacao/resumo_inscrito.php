@@ -218,7 +218,7 @@ $verifCpf = $pfObjeto->getCPF($inscrito->cpf)->fetchObject();
                     </div>
                     <div class="card-footer">
                         <?php if (!$verifCpf): ?>
-                            <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoajax.php" method="POST">
+                            <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" method="POST">
                                 <input type="hidden" name="_method" value="importarInscrito">
                                 <input type="hidden" name="id" value="<?= $formacaoObj->encryption($inscrito->id) ?>">
                                 <button class="btn btn-info float-right" id="importar">Importar Inscrito</button>
