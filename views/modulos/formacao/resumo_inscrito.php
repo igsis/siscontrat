@@ -16,6 +16,7 @@ if (isset($_POST['importar'])) {
 
 $verifCpf = $pfObjeto->getCPF($inscrito->cpf)->fetchObject();
 
+var_dump($inscrito);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -64,66 +65,45 @@ $verifCpf = $pfObjeto->getCPF($inscrito->cpf)->fetchObject();
                                         <span class="font-weight-bold">Informações Pessoais </span>
                                     </li>
                                     <li class="list-group-item">
-                                        <span class="font-weight-bold">Nome: </span> <?= $inscrito->nome ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Nome artístico: </span> <?= $inscrito->nome_artistico ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Data de Nascimento: </span> <?= $inscrito->data_nascimento ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <?php if ($inscrito->rg): ?>
-                                            <span class="font-weight-bold">RG: </span> <?= $inscrito->rg ?>
-                                        <?php else: ?>
-                                            <span class="font-weight-bold">Passaporte: </span> <?= $inscrito->passaporte ?>
-                                        <?php endif; ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">CPF: </span> <?= $inscrito->cpf ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">CCM: </span> <?= $inscrito->ccm ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Email: </span> <?= $inscrito->email ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Telefone: </span> <?= $telefones ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Nacionalidade: </span> <?= $inscrito->nacionalidade ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Programa Selecionado: </span> <?= $formacaoObj->recuperaPrograma($formacaoObj->encryption($inscrito->programa_id))->programa ?>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col">
-                                <ul class="list-group">
-                                    <li class="list-group-item bg-secondary disabled color-palette">
-                                        <span class="font-weight-bold">Endereço </span>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">CEP: </span> <?= $inscrito->cep ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Logradouro: </span> <?= $inscrito->logradouro ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Número: </span> <?= $inscrito->numero ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Complemento: </span> <?= $inscrito->complemento ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Bairro: </span> <?= $inscrito->bairro ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Cidade: </span> <?= $inscrito->nome ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Estado: </span> <?= $inscrito->uf ?>
+                                        <div class="row">
+                                            <div class="col"><b>Nome:</b> <?= $inscrito->nome ?></div>
+
+                                            <div class="col"><b>Nome Artístico:</b> <?= $inscrito->nome_artistico ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col"><b>CPF:</b> <?= $inscrito->cpf ?></div>
+
+                                            <div class="col"><b>RG:</b> <?= $inscrito->rg ?></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col"><b>CCM:</b> <?= $inscrito->ccm ?></div>
+
+                                            <div class="col"><b>NIT:</b> <?= $inscrito->nit ?></div>
+
+                                            <div class="col"><b>DRT:</b> <?= $inscrito->drt ?></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col"><b>Data de
+                                                    Nascimento:</b> <?= date("d/m/Y", strtotime($inscrito->data_nascimento)) ?>
+                                            </div>
+
+                                            <div class="col"><b>Nacionalidade:</b> <?= $inscrito->nacionalidade ?></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4"><b>E-mail:</b> <?= $inscrito->email ?></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <b>Telefones:</b>
+                                                <?= $telefones ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <b>Endereço:</b> <?= $inscrito->logradouro . ", " . $inscrito->numero . " " . $inscrito->complemento . " " . $inscrito->bairro . " - " . $inscrito->cidade . "-" . $inscrito->uf . " CEP: " . $inscrito->cep ?>
+                                            </div>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -135,37 +115,84 @@ $verifCpf = $pfObjeto->getCPF($inscrito->cpf)->fetchObject();
                                         <span class="font-weight-bold">Informações Complementares:</span>
                                     </li>
                                     <li class="list-group-item">
-                                        <span class="font-weight-bold">Etnia: </span> <?= $inscrito->etnia ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Gênero: </span> <?= $inscrito->genero ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Trans: </span> <?= $inscrito->trans ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">PCD: </span> <?= $inscrito->pcd ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Grau Instituição: </span> <?= $inscrito->grau_instrucao ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Linguagem: </span> <?= $formacaoObj->recuperaLinguagem($formacaoObj->encryption($inscrito->linguagem_id))->linguagem ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Função: </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo_id))->cargo ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Região Preferencial: </span> <?= $inscrito->regiao ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Banco: </span> <?= $inscrito->banco ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Agência: </span> <?= $inscrito->agencia ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Conta: </span> <?= $inscrito->conta ?>
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="font-weight-bold">Ano de execusão do serviço: </span> <?= $inscrito->ano ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="font-weight-bold">Etnia: </span> <?= $inscrito->etnia ?>
+                                            </div>
+
+                                            <div class="col">
+                                                <span class="font-weight-bold">Gênero: </span> <?= $inscrito->genero ?>
+                                            </div>
+
+                                            <div class="col">
+                                                <span class="font-weight-bold">Trans: </span> <?= $inscrito->trans ?>
+                                            </div>
+
+                                            <div class="col">
+                                                <span class="font-weight-bold">PCD: </span> <?= $inscrito->pcd ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="font-weight-bold">Grau Instituição: </span> <?= $inscrito->grau_instrucao ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="font-weight-bold">Região Preferencial: </span> <?= $inscrito->regiao ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="font-weight-bold">Programa: </span> <?= $formacaoObj->recuperaPrograma($formacaoObj->encryption($inscrito->programa_id))->programa ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="font-weight-bold">Linguagem: </span> <?= $formacaoObj->recuperaLinguagem($formacaoObj->encryption($inscrito->linguagem_id))->linguagem ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="font-weight-bold">Função (1º Opção): </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo_id))->cargo ?>
+                                            </div>
+                                        </div>
+                                        <?php if ($inscrito->form_cargo2_id): ?>
+                                            <div class="row">
+                                                <div class="col">
+
+                                                    <span class="font-weight-bold">Função (2º Opção): </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo2_id))->cargo ?>
+                                                </div>
+                                            </div>
+                                        <?php endif;
+                                        if ($inscrito->form_cargo3_id): ?>
+                                            <div class="row">
+                                                <div class="col">
+
+                                                    <span class="font-weight-bold">Função (3º Opção): </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo3_id))->cargo ?>
+                                                </div>
+                                            </div>
+                                        <?php endif; ?>
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="font-weight-bold">Banco: </span> <?= $inscrito->banco ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="font-weight-bold">Agência: </span> <?= $inscrito->agencia ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <span class="font-weight-bold">Conta: </span> <?= $inscrito->conta ?>
+                                            </div>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
