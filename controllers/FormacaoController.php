@@ -1933,7 +1933,7 @@ class FormacaoController extends FormacaoModel
                         fc.form_cargo_id, gi.grau_instrucao, pe.uf, pe.cep, e.descricao AS `etnia`, g.genero, 
                         ba.banco, pb.agencia, pb.conta, fc.programa_id, fc.regiao_preferencial_id, 
                         fc.linguagem_id, pb.banco_id, pd.grau_instrucao_id, pd.etnia_id, pd.genero_id,
-                        fcd.form_cargo2_id, form_cargo3_id, nt.nit, dr.drt,                        
+                        fcd.form_cargo2_id, form_cargo3_id, nt.nit, dr.drt, fc.data_envio,                       
                         IF (pd.trans, 'Sim', 'Não') AS `trans`,
                         IF (pd.pcd, 'Sim', 'Não') AS `pcd`
              FROM form_cadastros fc

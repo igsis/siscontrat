@@ -16,7 +16,6 @@ if (isset($_POST['importar'])) {
 
 $verifCpf = $pfObjeto->getCPF($inscrito->cpf)->fetchObject();
 
-var_dump($inscrito);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -195,6 +194,13 @@ var_dump($inscrito);
                                         </div>
                                     </li>
                                 </ul>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <div class="text-center">
+                                    <span class="font-weight-bold">Cadastrado enviado em:</span> <?= date("d/m/Y h:i", strtotime($inscrito->data_envio)) ?>
+                                </div>
                             </div>
                         </div>
                         <div class="row mt-3">
