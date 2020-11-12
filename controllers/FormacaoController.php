@@ -985,22 +985,20 @@ class FormacaoController extends FormacaoModel
                                                   WHERE pf.id = $pessoa_fisica_id")->fetchObject();
     }
 
-    public function recuperaTelPf($pesquisa_fisica_id, $obj = 0)
+    public function recuperaTelPf($pessoa_fisica_id, $obj = 0, $capac = 0)
     {
         $tel = "";
-        //consulta no banco do siscontrat, caso não tenha resultados, realiza a busca no banco do capac, como o campo de telefone é obrigatório, em algum dos bancos terá registro
-        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id");
-        if ($telArrays->rowCount() > 0):
-            $telArrays->fetchAll();
+        if ($capac != 0):
+            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pessoa_fisica_id", '1')->fetchAll();
         else:
-            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id", '1')->fetchAll();
+            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pessoa_fisica_id AND publicado = 1")->fetchAll();
         endif;
 
-        if ($obj != NULL):
+        if ($obj != 0):
             return $telArrays;
         else:
-            foreach ($telArrays as $telArrays) {
-                $tel = $tel . $telArrays['telefone'] . '; ';
+            foreach ($telArrays AS $telArray) {
+                $tel = $tel . $telArray['telefone'] . '; ';
             }
             return substr($tel, 0, -2);
         endif;
@@ -2074,7 +2072,7 @@ class FormacaoController extends FormacaoModel
 
     public function recuperaIdContratacao($protocoloCapac)
     {
-        $idContratacao =  DbModel::consultaSimples("SELECT * FROM formacao_contratacoes WHERE protocolo = '$protocoloCapac'")->fetchObject()->id; //sis
+        $idContratacao = DbModel::consultaSimples("SELECT * FROM formacao_contratacoes WHERE protocolo = '$protocoloCapac'")->fetchObject()->id; //sis
         return MainModel::encryption($idContratacao);
     }
 }

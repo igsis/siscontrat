@@ -171,7 +171,7 @@ foreach ($dadosContratacoes AS $dadosContratacao) {
         ->setCellValue($a, $dadosContratacao->protocolo)
         ->setCellValue($b, $dadosContratacao->nome)
         ->setCellValue($c, $dadosContratacao->cpf == NULL ? $dadosContratacao->passaporte : $dadosContratacao->cpf)
-        ->setCellValue($d, $formacaoObj->recuperaTelPf($dadosContratacao->pessoa_fisica_id, ''))
+        ->setCellValue($d, $formacaoObj->recuperaTelPf($dadosContratacao->pessoa_fisica_id, '', '1'))
         ->setCellValue($e, $dadosContratacao->email)
         ->setCellValue($f, $formacaoObj->dataParaBR($dadosContratacao->data_nascimento))
         ->setCellValue($g, $dadosContratacao->programa)

@@ -128,6 +128,7 @@ endif;
                         </div>
 
                         <?php if ($pedido_id): ?>
+                            <br>
                             <div class="row">
                                 <div class="form-group col-md">
                                     <label for="numero_processo">Número do Processo: *</label>
@@ -168,11 +169,13 @@ endif;
                             </a>
                         </div>
 
+                        <?php if(isset($pedido_id) && $pedido_id != ""): ?>
                         <div class="col-md" style="text-align: center">
                             <a href="<?= SERVERURL ?>formacao/area_impressao&pedido_id=<?= $pedido_id ?>">
                                 <button type="button" class="btn btn-success">Ir para área de impressão</button>
                             </a>
                         </div>
+                        <?php endif; ?>
 
                         <div class="col-md">
                             <button type="submit" class="btn btn-info float-right" id="finaliza">

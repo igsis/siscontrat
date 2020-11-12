@@ -287,13 +287,13 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(12, $l, 'Cargo:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(40, $l, utf8_decode($contratacao->cargo), 0, 'L', 0);
+$pdf->MultiCell(100, $l, utf8_decode($contratacao->cargo), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(21, $l, 'Linguagem:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(40, $l, utf8_decode($contratacao->linguagem), 0, 'L', 0);
+$pdf->MultiCell(100, $l, utf8_decode($contratacao->linguagem), 0, 'L', 0);
 
 $pdf->Ln(5);
 
