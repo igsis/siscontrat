@@ -40,16 +40,16 @@ $cargo = $cargoObj->recuperaCargo($id);
                                 <div class="col-12">
 
                                     <div class="row">
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col-md">
                                             <label for="sigla">Cargo*: </label>
                                             <input type="text" class="form-control" id="cargo" name="cargo" maxlength="70" value="<?= $cargo->cargo ?? "" ?>" required>
                                         </div>
-
-                                        <div class="form-group col-md-8">
-                                            <label for="sigla">Justificativa*: </label>
-                                            <input type="text" class="form-control" id="justificativa" name="justificativa" maxlength="70" value="<?= $cargo->justificativa ?? "" ?>" required>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md">
+                                            <label for="justificativa">Justificativa*: </label>
+                                            <textarea name="justificativa" id="justificativa" class="form-control textarea" rows="4" required><?= $cargo->justificativa ?? "" ?></textarea>
                                         </div>
-
 
                                     </div>
                                 </div>

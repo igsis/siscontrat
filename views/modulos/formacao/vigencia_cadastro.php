@@ -93,7 +93,7 @@ $vigencia = $vigenciaObj->recuperaVigencia($id);
                                         <div class="form-group col-md-2">
                                             <label for="data_inicio">Data inicial:</label>
                                             <input type="date" name="data_inicio[]" class="form-control validaDatas" id="data_inicio_<?= $i ?>" value="<?= $parcela_vigencia[$i]->data_inicio ?? "" ?>" placeholder="DD/MM/AAAA">
-                                            <span id="data_inicio_<?= $i ?>-error" class="error invalid-feedback">Esta <strong>data inicial</strong> deve ser menor que a <strong>data de pagamento</strong> anterior</span>
+                                            <span id="data_inicio_<?= $i ?>-error" class="error invalid-feedback">Esta <strong>data inicial</strong> deve ser maior que a <strong>data de pagamento</strong> anterior</span>
                                         </div>
 
                                         <div class="form-group col-md-2">
@@ -105,7 +105,7 @@ $vigencia = $vigenciaObj->recuperaVigencia($id);
                                         <div class="form-group col-md-2">
                                             <label for="data_pagamento">Data pagamento: </label>
                                             <input type="date" name="data_pagamento[]" class="form-control validaDatas" id="data_pagamento_<?= $i ?>" value="<?= $parcela_vigencia[$i]->data_pagamento ?? "" ?>" placeholder="DD/MM/AAAA">
-                                            <span id="data_pagamento_<?= $i ?>-error" class="error invalid-feedback">A data de pagamento deve ser maior que a data final</span>
+                                            <span id="data_pagamento_<?= $i ?>-error" class="error invalid-feedback">A <strong>data de pagamento</strong> deve ser maior que a <strong>data final</strong></span>
                                         </div>
 
                                         <div class="form-group col-md-2">
@@ -154,7 +154,7 @@ $vigencia = $vigenciaObj->recuperaVigencia($id);
             if (key > 0) {
                 let data_pagamento_anterior = new Date($('#data_pagamento_' + (key-1)).val());
 
-                if (data_inicio.getTime() <= data_pagamento_anterior.getTime()) {
+                if (data_inicio.getTime() < data_pagamento_anterior.getTime()) {
                     $('#data_inicio_' + key).addClass('is-invalid');
                 } else {
                     $('#data_inicio_' + key).removeClass('is-invalid');

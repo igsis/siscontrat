@@ -37,6 +37,7 @@ class ViewsModel
             'cadastro',
             'complemento_oficina_cadastro',
             'dados_contratacao_lista',
+            'dados_contratacao_lista_capac',
             'demais_anexos',
             'detalhes_inscrito',
             'documento_cadastro',
@@ -72,6 +73,7 @@ class ViewsModel
             'pedido_visualizar',
             'pf_cadastro',
             'pf_lista',
+            'pf_lista_capac',
             'pj_cadastro',
             'produtor_cadastro',
             'programa',
@@ -107,6 +109,7 @@ class ViewsModel
             'abertura_lista',
             'abertura_cadastro',
             'listar_inscritos',
+            'resumo_inscrito',
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {

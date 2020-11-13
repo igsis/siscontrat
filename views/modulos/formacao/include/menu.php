@@ -4,9 +4,7 @@
         <p>Home</p>
     </a>
 </li>
-<?php
-if ($_SESSION['perfil_s'] == 1){
-?>
+
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -72,9 +70,7 @@ if ($_SESSION['perfil_s'] == 1){
         </li>
     </ul>
 </li>
-<?php
-}
-?>
+
 <li class="nav-item has-treeview">
     <a href="#" class="nav-link">
         <i class="fas fa-copyright"></i>
@@ -84,56 +80,34 @@ if ($_SESSION['perfil_s'] == 1){
         </p>
     </a>
     <ul class="nav nav-treeview">
-        <?php
-        if ($_SESSION['perfil_s'] != 16) //habilitar apenas listar inscritos
-        {
-        ?>
-        <li class="nav-item">
-            <a href="<?= SERVERURL ?>formacao/abertura_lista" class="nav-link" id="abertura_lista">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Cadastrar abertura</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="<?= SERVERURL ?>formacao/documento_lista" class="nav-link" id="documento_lista">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Lista de documentos</p>
-            </a>
-        </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if ($_SESSION['perfil_s'] == 1 || $_SESSION['perfil_s'] == 16){
-        ?>
+        <?php if ($_SESSION['perfil_s'] != 16) {//habilitar apenas listar inscritos ?>
+            <li class="nav-item">
+                <a href="<?= SERVERURL ?>formacao/abertura_lista" class="nav-link" id="abertura_lista">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Cadastrar abertura</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="<?= SERVERURL ?>formacao/documento_lista" class="nav-link" id="documento_lista">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Lista de documentos</p>
+                </a>
+            </li>
+        <?php } ?>
         <li class="nav-item">
             <a href="<?= SERVERURL ?>formacao/listar_inscritos" class="nav-link" id="listar_inscritos">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Listar inscritos</p>
             </a>
         </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if ($_SESSION['perfil_s'] == 1){
-        ?>
         <li class="nav-item">
             <a href="<?= SERVERURL ?>formacao/exportar_inscritos_capac" class="nav-link" id="exportar_inscritos_capac">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Exportar inscritos</p>
             </a>
         </li>
-        <?php
-        }
-        ?>
     </ul>
 </li>
-<?php
-if ($_SESSION['perfil_s'] == 1){
-?>
 <li class="nav-item">
     <a href="<?= SERVERURL ?>formacao/pf_lista" class="nav-link" id="pf_lista">
         <i class="fas fa-user-friends"></i>
@@ -164,6 +138,3 @@ if ($_SESSION['perfil_s'] == 1){
         <p>Concluir Processo</p>
     </a>
 </li>
-<?php
-}
-?>

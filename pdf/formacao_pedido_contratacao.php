@@ -63,7 +63,7 @@ $ano = date('Y');
         "<p>&nbsp;</p>" .
         "<p><strong>Nome:</strong> " . $pf->nome . " <br />" .
         $cpf_passaporte .
-        "<strong>Telefone:</strong> " . $formObj->recuperaTelPf($pedido->pessoa_fisica_id) . "<br />" .
+        "<strong>Telefone(s):</strong> " . $formObj->recuperaTelPf($pedido->pessoa_fisica_id) . "<br />" .
         "<strong>E-mail:</strong> " . $pf->email . "</p>" .
         "<p>&nbsp;</p>" .
         "<p><strong>Objeto:</strong> " . $formObj->retornaObjetoFormacao($pedido->origem_id) . "</p>" .
@@ -109,8 +109,10 @@ $ano = date('Y');
         try {
             document.execCommand('copy');
             alert('Copiado com sucesso!');
+            selection.removeAllRanges();
         } catch (err) {
-            alert('Texo não copiado, tente novamente.');
+            alert('Texto não copiado, tente novamente.');
+            selection.removeAllRanges();
         }
     }
 </script>

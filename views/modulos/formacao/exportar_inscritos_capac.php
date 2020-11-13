@@ -1,3 +1,8 @@
+<?php
+/*require_once "./models/DbModel.php";
+$dbObj = new DbModel();
+$ano = $dbObj->consultaSimples("SELECT ano FROM form_cadastros ORDER BY ano ASC LIMIT 0,1", TRUE)->fetchObject()->ano;*/
+?>
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -31,8 +36,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="submit" name="cadastra" id="cadastra"
-                                    class="btn btn-success btn-sm float-right">
+                            <button type="submit" class="btn btn-success btn-sm float-right">
                                 <i class="fas fa-file-excel"></i> Exportar para Excel
                             </button>
                         </div>

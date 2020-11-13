@@ -11,12 +11,6 @@ if (isset($_POST['_method'])) {
     $insPessoaFisica = new PessoaFisicaController();
 
     switch ($_POST['_method']) {
-        case "cadastrarPf":
-            // echo $insForm->insereFormacao();
-            break;
-        case "editarPf":
-            // echo $insForm->editaFormacao($_POST['id']);
-            break;
         case "cadastrarCargo":
             echo $insForm->insereCargo($_POST);
             break;
@@ -158,7 +152,9 @@ if (isset($_POST['_method'])) {
         case "desvincularCargo":
             echo $insForm->desvincularCargo($_POST);
             break;
-
+        case "importarInscrito":
+            echo $insForm->insereInscrito($_POST['id']);
+            break;
     }
     if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
         echo $insForm->listaDocumento($_POST['search'], $_POST['where']);

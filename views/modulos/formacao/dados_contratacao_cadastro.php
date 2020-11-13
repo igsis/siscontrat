@@ -1,11 +1,24 @@
 <?php
 require_once "./controllers/FormacaoController.php";
+require_once "./controllers/ArquivoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
+$capacId = isset($_GET['capac']) ? $_GET['capac'] : null;
 $contratacaoObj = new FormacaoController();
-$dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
+
+if($id){
+    $dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
+}
+elseif($capacId){
+    $arquivosObj =  new ArquivoController();
+    $pfObj =  new PessoaFisicaController();
+    $dados_contratacao = $contratacaoObj->recuperaDadosContratacaoCapac($capacId);
+    $arquivos = $arquivosObj->listarArquivosCapac($capacId)->fetchAll(PDO::FETCH_OBJ);
+    $idPf = $pfObj->recuperaIdPfSis($dados_contratacao->pessoa_fisica_id);
+}
 
 //caso haja um cadastro, torna a checkbox do proponente inalterável
 $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #eee; pointer-events: none; touch-action: none;'" : $readonly = "";
+$capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #eee; pointer-events: none; touch-action: none;'" : $readonly = "";
 ?>
 
 <div class="content-header">
@@ -43,7 +56,13 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                     <select name="pessoa_fisica_id" required
                                             class="form-control select2bs4" <?= $readonly ?>>
                                         <option value="">Selecione um proponente...</option>
-                                        <?php $contratacaoObj->geraOpcao('pessoa_fisicas', $dados_contratacao->pessoa_fisica_id ?? "") ?>
+                                        <?php
+                                        if ($capacId){
+                                            $contratacaoObj->geraOpcao('pessoa_fisicas', $idPf ?? "", false, false, false);
+                                        } else {
+                                            $contratacaoObj->geraOpcao('pessoa_fisicas', $dados_contratacao->pessoa_fisica_id ?? "");
+                                        }
+                                        ?>
                                     </select>
                                     <?php if ($id): ?>
                                         <br>
@@ -53,10 +72,20 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                             </button>
                                         </a>
                                     <?php endif; ?>
+
+                                    <?php if ($capacId): ?>
+                                        <br>
+                                        <a href="<?= SERVERURL ?>formacao/pf_cadastro&id=<?= $contratacaoObj->encryption($idPf) ?>"
+                                           target="_blank">
+                                            <button type="button" class="btn btn-primary float-right">Abrir Proponente
+                                            </button>
+                                        </a>
+                                        <input type="hidden" name="protocolo" value="<?= $dados_contratacao->protocolo?>">
+                                    <?php endif; ?>
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="form-group col-md">
                                     <label for="ano">Ano: *</label>
                                     <input type="number" min="2018" id="ano" name="ano"
@@ -78,7 +107,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="form-group col-md">
                                     <label for="territorio_id">Território: *</label>
                                     <select name="territorio_id" required class="form-control select2bs4">
@@ -112,7 +141,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="form-group col-md">
                                     <label for="linguagem_id">Linguagem: *</label>
                                     <select name="linguagem_id" required class="form-control select2bs4">
@@ -134,7 +163,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                     <label for="form_cargo_id">Cargo: *</label>
                                     <select name="form_cargo_id" id="cargo" required class="form-control select2bs4">
                                         <option value="">Selecione um cargo...</option>
-                                        <?php if (isset($dados_contratacao->form_cargo_id)) $contratacaoObj->geraOpcao('formacao_cargos', $dados_contratacao->form_cargo_id ?? "", '1') ?>
+                                        <?php $contratacaoObj->geraOpcao('formacao_cargos', $dados_contratacao->form_cargo_id ?? "", '1') ?>
                                     </select>
                                 </div>
 
@@ -147,7 +176,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="form-group col-md">
                                     <label for="regiao_preferencia_id">Região Preferencial: *</label>
                                     <select name="regiao_preferencia_id" required class="form-control select2bs4">
@@ -170,7 +199,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
 
                             <!-- gera 3 campos de instituições para 3 campos de locais, populando os mesmos com javascript caso necessário -->
                             <?php for ($i = 0; $i < 3; $i++) : ?>
-                                <div class="row">
+                                <div class="row mt-3">
                                     <div class="form-group col-md">
                                         <label>Instituição #<?= $i + 1 ?>
                                             : <?= $i == 0 || $i == 1 ? " *" : "" ?></label>
@@ -204,7 +233,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="col-md">
                                     <label for="observacao">Observação:</label>
                                     <textarea name="observacao" rows="3"
@@ -212,7 +241,7 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="form-group col-md">
                                     <label for="fiscal_id">Fiscal: *</label>
                                     <select name="fiscal_id" required class="form-control select2bs4">
@@ -251,6 +280,52 @@ $id != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='background: #
                                 </div>
                             <?php endif; ?>
                     </div>
+
+                    <?php if ($capacId && $arquivos): ?>
+                        <div class="row" >
+                            <div class="col-md-9" style="float:none;margin:auto;">
+                                <div class="card card-warning">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Anexos CAPAC</h3>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                                        class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mt-2 mb-3">
+                                            <div class="col-12">
+                                                <small> <strong>Atenção: a opção de recuperar arquivos presentes no CAPAC só estará disponível antes da importação ser concluída. </strong> </small>
+                                            </div>
+                                        </div>
+
+                                        <?php foreach ($arquivos as $arquivo): ?>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <div>
+                                                  <?= $arquivosObj->getDocumento($arquivo->form_lista_documento_id) ?>
+                                                </div>
+                                                <div>
+                                                    <a href="<?= CAPACURL ?>/uploads/<?= $arquivo->arquivo ?>"
+                                                       class="btn btn-sm btn-primary">
+                                                        Baixar
+                                                    </a>
+                                                </div>
+                                            </li>
+                                        <?php endforeach; ?>
+
+                                        <li class="list-group-item">
+                                            <a href="<?= SERVERURL ?>api/downloadCapac.php?id=<?= $dados_contratacao->id ?>&formacao=1"
+                                               target="_blank"
+                                               class="btn bg-gradient-purple btn-lg btn-block rounded-bottom"><i
+                                                        class="fas fa-file-archive"></i> Baixar todos os arquivos</a>
+                                        </li>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="card-footer">
                         <a href="<?= SERVERURL ?>formacao/dados_contratacao_lista">
                             <button type="button" class="btn btn-default pull-left">Voltar</button>

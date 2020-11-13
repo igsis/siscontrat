@@ -250,4 +250,15 @@ class ArquivoController extends ArquivoModel
         unlink($data . ".zip");
     }
 
+    public function listarArquivosCapac($origem_id)
+    {
+        $origem_id = MainModel::decryption($origem_id);
+        return  DbModel::consultaSimples("SELECT * FROM form_arquivos WHERE form_cadastro_id = '$origem_id' AND publicado = '1'", true);
+    }
+
+    public function getDocumento($idDocumento)
+    {
+        return DbModel::consultaSimples("SELECT documento FROM formacao_lista_documentos WHERE id = $idDocumento")->fetchObject()->documento;
+    }
+
 }

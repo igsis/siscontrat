@@ -107,9 +107,11 @@ switch ($tipo) {
         try {
             document.execCommand('copy');
             alert('Copiado com sucesso!');
+            selection.removeAllRanges();
         }
         catch (err) {
-            alert('Texo não copiado, tente novamente.');
+            alert('Texto não copiado, tente novamente.');
+            selection.removeAllRanges();
         }
     }
 </script>
