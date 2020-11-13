@@ -169,4 +169,22 @@ class PessoaFisicaModel extends ValidacaoModel
             return false;
         }
     }
+
+    protected function verificaDivergencia($dadosCapac, $dadosSis)
+    {
+        $camposIgnorados = ['id', 'ultima_atualizacao'];
+        foreach ($dadosCapac as $key => $valor) {
+            if (!in_array($key, $camposIgnorados)) {
+                if ($valor != $dadosSis->$key) {
+                    $dadosDivergentes[] = $key;
+                }
+            }
+        }
+
+        if (isset($dadosDivergentes)) {
+            return $dadosDivergentes;
+        } else {
+            return false;
+        }
+    }
 }

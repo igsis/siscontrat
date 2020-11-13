@@ -21,6 +21,12 @@ class DbModel
         return self::$conn;
     }
 
+    protected function killConn(){
+        if (isset(self::$conn)) {
+            self::$conn = null;
+        }
+    }
+
     /**
      * <p>Função para inserir um registro no banco de dados </p>
      * @param string $table
