@@ -425,7 +425,8 @@ class PessoaFisicaController extends PessoaFisicaModel
     public function comparaPf($id)
     {
         $id = MainModel::decryption($id);
-        $dados = new \stdClass;
+        $dados = (object)[];
+        $dados->success = false;
 
         $pfCapac = DbModel::getInfo('pessoa_fisicas', $id, true)->fetchObject();
         DbModel::killConn();

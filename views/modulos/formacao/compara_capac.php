@@ -1,7 +1,11 @@
 <?php
+require_once "./controllers/PessoaFisicaController.php";
 $pfObj = new PessoaFisicaController();
 
+$id = $_GET['id'];
+
 $dados = $pfObj->comparaPf($_GET['id']);
+$pf = $pfObj->recuperaPessoaFisicaCapac($id)
 ?>
 <div class="content-header">
     <div class="container-fluid">
