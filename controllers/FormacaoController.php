@@ -1897,8 +1897,13 @@ class FormacaoController extends FormacaoModel
                 if ($key != 'rangeDate') {
                     $where .= " AND {$key} = {$value}";
                 } else {
-                    $datas = explode('-', $value);
-                    $where .= " AND (data_envio BETWEEN '{$datas[0]}' AND '{$datas[1]}') ";
+                    $periodos = [];
+                    $datas = explode('/', $value);
+                    foreach ($datas as $data){
+                        $dados = explode('-',$data);
+                        array_push($periodos,"{$dados[2]}-{$dados[1]}-{$dados[0]}");
+                    }
+                    $where .= " AND (fc.data_envio BETWEEN '{$periodos[0]}' AND '{$periodos[1]}') ";
                 }
             }
         }

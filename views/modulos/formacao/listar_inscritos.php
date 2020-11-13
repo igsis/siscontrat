@@ -11,8 +11,11 @@ if (isset($_GET['busca'])) {
     $dados = $_GET;
 
     if (isset($dados['rangeDate'])) {
-        $dados['rangeDate'] = str_replace('t', '-', $dados['rangeDate']);
-        $dados['rangeDate'] = str_replace('b', '/', $dados['rangeDate']);
+        $dados['rangeDate'] = str_replace('t', '/', $dados['rangeDate']);
+        $dados['rangeDate'] = str_replace('b', '-', $dados['rangeDate']);
+
+        $periodo = str_replace('b', '/', $_GET['rangeDate']);
+        $periodo = str_replace('t', ' - ', $periodo);
     }
 
     array_splice($dados, 0, 2);
@@ -63,7 +66,7 @@ if (isset($_GET['busca'])) {
                                             </div>
                                             <input type="text" class="form-control inputs" name="periodo"
                                                    id="rangeDate"
-                                                   value="<?= isset($dados['rangeDate']) ? $dados['rangeDate'] : '' ?>">
+                                                   value="<?= isset($periodo) ? $periodo : '' ?>">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -91,7 +94,7 @@ if (isset($_GET['busca'])) {
                                             class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $formacaoObj->geraOpcao("regiaos", isset($dados['regiao']) ? $dados['regiao'] : '', false, false, true);
+                                        $formacaoObj->geraOpcao("regiao_preferencias", isset($dados['regiao_preferencial_id']) ? $dados['regiao_preferencial_id'] : '');
                                         ?>
                                     </select>
                                 </div>
@@ -100,7 +103,7 @@ if (isset($_GET['busca'])) {
                                     <select name="linguagem" id="linguagem_id" class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $formacaoObj->geraOpcao("linguagens", isset($dados['linguagem']) ? $dados['linguagem'] : '');
+                                        $formacaoObj->geraOpcao("linguagens", isset($dados['linguagem_id']) ? $dados['linguagem_id'] : '');
                                         ?>
                                     </select>
                                 </div>
@@ -111,7 +114,7 @@ if (isset($_GET['busca'])) {
                                     <select name="genero" id="genero_id" class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $formacaoObj->geraOpcao("generos", isset($dados['genero']) ? $dados['genero'] : '', false, false, true);
+                                        $formacaoObj->geraOpcao("generos", isset($dados['genero_id']) ? $dados['genero_id'] : '', false, false, true);
                                         ?>
                                     </select>
                                 </div>
@@ -214,6 +217,10 @@ if (isset($_GET['busca'])) {
 <!-- /.content -->
 
 <script defer>
+
+    <?php if (isset($periodo)): ?>
+        document.querySelector('#rangeDate').value = "<?= $periodo ?>"
+    <?php endif; ?>
     const url_cargos = '<?= $apiCargos ?>';
 
     document.querySelector('body').classList.toggle('sidebar-open');
