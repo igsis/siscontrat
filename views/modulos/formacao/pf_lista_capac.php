@@ -47,15 +47,13 @@ $lista_pf = $pfObj->listaPf(true);
                                     <td><?= $pfObj->dataParaBR($pf->data_nascimento)?></td>
                                     <td><?= $pf->email?></td>
                                     <td>
-                                        <?php if($pfObj->getCPF($pf->cpf)->rowCount() == 0): ?>
-                                            <a href="<?= SERVERURL . "formacao/pf_cadastro&capac=" . $pfObj->encryption($pf->id)?>" class="btn bg-gradient-info btn-sm" >
-                                                Importar  &nbsp;
-                                            </a>
-                                        <?php else : ?>
-                                            <a href="<?= SERVERURL . "formacao/pf_cadastro&id=" . $pfObj->encryption($pfObj->recuperaIdPfSis($pf->id))?>" class="btn bg-gradient-warning btn-sm" >
-                                                Importado
-                                            </a>
-                                        <?php endif; ?>
+                                        <form class="form-horizontal formulario-ajax" method="POST" role="form"
+                                              action="<?= SERVERURL ?>ajax/formacaoAjax.php" data-form="save">
+                                            <input type="hidden" name="_method" value="importarPf">
+                                            <input type="hidden" name="id" value="<?= $pfObj->encryption($pf->id) ?>">
+                                            <button type="submit" class="btn bg-gradient-info btn-sm">Importar</button>
+                                            <div class="resposta-ajax"></div>
+                                        </form>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

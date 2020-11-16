@@ -129,15 +129,17 @@ class PessoaFisicaController extends PessoaFisicaModel
                 }
             }
 
-            if (count($dadosLimpos['telefones'])>0){
-                $telefone_existe = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idDecryp'");
+            if (isset($dadosLimpos['telefones'])) {
+                if (count($dadosLimpos['telefones']) > 0) {
+                    $telefone_existe = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idDecryp'");
 
-                if ($telefone_existe->rowCount()>0){
-                    DbModel::deleteEspecial('pf_telefones', "pessoa_fisica_id",$idDecryp);
-                }
-                foreach ($dadosLimpos['telefones'] as $telefone){
-                    $telefone['pessoa_fisica_id'] = $idDecryp;
-                    DbModel::insert('pf_telefones', $telefone);
+                    if ($telefone_existe->rowCount() > 0) {
+                        DbModel::deleteEspecial('pf_telefones', "pessoa_fisica_id", $idDecryp);
+                    }
+                    foreach ($dadosLimpos['telefones'] as $telefone) {
+                        $telefone['pessoa_fisica_id'] = $idDecryp;
+                        DbModel::insert('pf_telefones', $telefone);
+                    }
                 }
             }
 
@@ -276,15 +278,14 @@ class PessoaFisicaController extends PessoaFisicaModel
         return $pf;
     }
 
-
-    public function recuperaPfDados($pessoafisica_id)
+    public function recuperaPfDados($pessoafisica_id, $capac = true)
     {
         return DbModel::consultaSimples("SELECT pfd.rede_social, g.genero, s.subprefeitura, e.descricao, gi.grau_instrucao FROM `fom_pf_dados` AS pfd
             INNER JOIN generos g on pfd.genero_id = g.id
             INNER JOIN subprefeituras s on pfd.subprefeitura_id = s.id
             INNER JOIN etnias e on pfd.etnia_id = e.id
             INNER JOIN grau_instrucoes gi on pfd.grau_instrucao_id = gi.id
-            WHERE pessoa_fisicas_id = '$pessoafisica_id'",true);
+            WHERE pessoa_fisicas_id = '$pessoafisica_id'", $capac);
     }
 
     public function getCPF($cpf){
@@ -295,6 +296,11 @@ class PessoaFisicaController extends PessoaFisicaModel
     public function getPassaporte($passaporte){
         $consulta_pf_pass = DbModel::consultaSimples("SELECT id, passaporte FROM pessoa_fisicas WHERE passaporte = '$passaporte'");
         return $consulta_pf_pass;
+    }
+
+    public function getNacionalidade($id)
+    {
+        return DbModel::getInfo('nacionalidades', $id)->fetch(PDO::FETCH_ASSOC)['nacionalidade'];
     }
 
     /**
@@ -308,7 +314,7 @@ class PessoaFisicaController extends PessoaFisicaModel
         if ($tipo == "string") {
             $pessoa_fisica_id = MainModel::decryption($pessoa_fisica_id);
         }
-        $pf = PessoaFisicaModel::validaPfModel($pessoa_fisica_id, $validacaoTipo, $evento_id,$tipo_documentos);
+        $pf = PessoaFisicaModel::validaPfModverificaDivergenciael($pessoa_fisica_id, $validacaoTipo, $evento_id,$tipo_documentos);
         return $pf;
     }
 
@@ -324,7 +330,7 @@ class PessoaFisicaController extends PessoaFisicaModel
         return $idPf;
     }
 
-    public function comparaPf($cpf){
+/*    public function comparaPf($cpf){
         $pfSis = DbModel::consultaSimples("SELECT * FROM pessoa_fisicas WHERE cpf = '$cpf'")->fetchObject();
         $pfSisEndereco = DbModel::consultaSimples("SELECT * FROM pf_enderecos WHERE pessoa_fisica_id = $pfSis->id")->fetchObject();
         $pfSisDetalhes = DbModel::consultaSimples("SELECT * FROM pf_detalhes WHERE pessoa_fisica_id = $pfSis->id")->fetchObject();
@@ -375,5 +381,76 @@ class PessoaFisicaController extends PessoaFisicaModel
             return true;
         }
         return true;
+    }*/
+
+    public function importarPf($id)
+    {
+        $idDecryp = MainModel::decryption($id);
+
+        $pfCapac = DbModel::getInfo('pessoa_fisicas', $idDecryp, true)->fetch(PDO::FETCH_ASSOC);
+        DbModel::killConn();
+        $queryPfSis = DbModel::consultaSimples("SELECT * FROM `pessoa_fisicas` WHERE cpf = '{$pfCapac['cpf']}'");
+
+        if ($queryPfSis->rowCount()) {
+            $pfSis = $queryPfSis->fetch(PDO::FETCH_ASSOC);
+            if (parent::verificaDivergencia($pfCapac, $pfSis)) {
+                $alerta = [
+                    'alerta' => 'sucesso',
+                    'titulo' => 'O CPF possui divergencias',
+                    'texto' => 'O CPF selecionado já possui cadastro no Siscontrat, selecione os dados que deseja atualizar antes de completar a importação',
+                    'tipo' => 'warning',
+                    'location' => SERVERURL . 'formacao/compara_capac&id=' . $id
+                ];
+            } else {
+                $alerta = [
+                    'alerta' => 'sucesso',
+                    'titulo' => 'Pessoa Física Importada',
+                    'texto' => 'A pessoa física selecionada foi importada com sucesso!',
+                    'tipo' => 'success',
+                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($pfSis['id'])
+                ];
+            }
+        } else {
+            unset($pfCapac['id']);
+            $pfCapac['ultima_atualizacao'] = date('Y-m-d H:i:s');
+            $insert = DbModel::insert('pessoa_fisicas', $pfCapac);
+            if ($insert) {
+                $id = DbModel::connection()->lastInsertId();
+                $alerta = [
+                    'alerta' => 'sucesso',
+                    'titulo' => 'Pessoa Física Importada',
+                    'texto' => 'A pessoa física selecionada foi importada com sucesso!',
+                    'tipo' => 'success',
+                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($id)
+                ];
+            }
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function comparaPf($id)
+    {
+        $id = MainModel::decryption($id);
+        $dados = [];
+
+        $pfCapac = DbModel::getInfo('pessoa_fisicas', $id, true)->fetch(PDO::FETCH_ASSOC);
+        DbModel::killConn();
+        $pfSis = DbModel::consultaSimples("SELECT * FROM `pessoa_fisicas` WHERE cpf = '{$pfCapac['cpf']}'")->fetch(PDO::FETCH_ASSOC);
+
+        $dadosDivergentes = parent::verificaDivergencia($pfCapac, $pfSis);
+
+        foreach ($dadosDivergentes as $dado) {
+            $dados['dadosCapac'][$dado] = $pfCapac[$dado];
+            $dados['dadosSis'][$dado] = $pfSis[$dado];
+        }
+
+        $dados['nome'] = $pfCapac['nome'];
+        $dados['cpf'] = $pfCapac['cpf'];
+        $dados['id'] = $pfSis['id'];
+        $dados['dadosCapac']['ultima_atualizacao'] = $pfCapac['ultima_atualizacao'];
+        $dados['dadosSis']['ultima_atualizacao'] = $pfSis['ultima_atualizacao'];
+
+        return $dados;
     }
 }
