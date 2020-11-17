@@ -170,13 +170,16 @@ class PessoaFisicaModel extends ValidacaoModel
         }
     }
 
-    protected function verificaDivergencia($dadosCapac, $dadosSis)
+    protected function verificaDivergencia($dadosCapac, $dadosSis, $retornaBool = false)
     {
-        $camposIgnorados = ['id', 'ultima_atualizacao'];
+        $camposIgnorados = ['id', 'pf_ultima_atualizacao'];
         foreach ($dadosCapac as $key => $valor) {
             if (!in_array($key, $camposIgnorados)) {
                 if ($valor != $dadosSis[$key]) {
                     $dadosDivergentes[] = $key;
+                    if ($retornaBool) {
+                        return true;
+                    }
                 }
             }
         }

@@ -20,7 +20,7 @@ $dados = $pfObj->comparaPf($_GET['id']);
     <div class="container-fluid">
         <div class="card card-info card-outline">
             <div class="card-header">
-                <h3 class="card-title"><?= $dados['nome'] ?> - <small>CPF: <?= $dados['cpf'] ?></small></h3>
+                <h3 class="card-title"><?= $dados['pf_nome'] ?> - <small>CPF: <?= $dados['pf_cpf'] ?></small></h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -29,17 +29,17 @@ $dados = $pfObj->comparaPf($_GET['id']);
                             <div class="card-header">
                                 <h3 class="card-title">Capac</h3>
                                 <div class="card-tools">
-                                    <span class="badge badge-warning">Última atualização: <?= $pfObj->dataParaBR($dados['dadosCapac']['ultima_atualizacao']) ?></span>
+                                    <span class="badge badge-warning">Última atualização: <?= $pfObj->dataParaBR($dados['dadosCapac']['pf_ultima_atualizacao']) ?></span>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <?php foreach ($dados['dadosCapac'] as $key => $dado) :
-                                    if ($key == "ultima_atualizacao") {continue;}
-                                    $label = ucwords(preg_replace('/_/', " ", $key)); ?>
+                                    if ($key == "pf_ultima_atualizacao") {continue;}
+                                    $label = ucwords(preg_replace('/_/', " ", substr($key, 3))); ?>
                                     <div class="form-group">
                                         <label><?= $label ?>:</label>
                                         <div class="input-group">
-                                            <?php if ($key == "nacionalidade_id" && $dado != ""): ?>
+                                            <?php if ($key == "pf_nacionalidade_id" && $dado != ""): ?>
                                                 <div class="input-group-append">
                                                     <span class="input-group-text "><?="$dado = ".$pfObj->getNacionalidade($dado)?></span>
                                                 </div>
@@ -63,16 +63,19 @@ $dados = $pfObj->comparaPf($_GET['id']);
                                 <input type="hidden" name="_method" value="editarPF">
                                 <input type="hidden" name="pagina" value="formacao/pf_cadastro">
                                 <input type="hidden" name="id" value="<?=$pfObj->encryption($dados['id'])?>">
+                                <?php if (!isset($dados['dadosSis']['pf_nome'])): ?>
+                                    <input type="hidden" name="pf_nome" value="<?= $dados['pf_nome'] ?>">
+                                <?php endif ?>
                                 <div class="card-header">
                                     <h3 class="card-title">Siscontrat</h3>
                                     <div class="card-tools">
-                                        <span class="badge badge-warning">Última atualização: <?= $pfObj->dataParaBR($dados['dadosSis']['ultima_atualizacao']) ?></span>
+                                        <span class="badge badge-warning">Última atualização: <?= $pfObj->dataParaBR($dados['dadosSis']['pf_ultima_atualizacao']) ?></span>
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <?php foreach ($dados['dadosSis'] as $key => $dado) :
-                                        if ($key == "ultima_atualizacao") {continue;}
-                                        $label = ucwords(preg_replace('/_/', " ", $key)); ?>
+                                        if ($key == "pf_ultima_atualizacao") {continue;}
+                                        $label = ucwords(preg_replace('/_/', " ", substr($key, 3))); ?>
                                         <div class="form-group">
                                             <label><?= $label ?>:</label>
                                             <div class="input-group">
@@ -81,7 +84,7 @@ $dados = $pfObj->comparaPf($_GET['id']);
                                                         <i class="fas fa-undo"></i>
                                                     </button>
                                                 </span>
-                                                <input type="text" name="pf_<?= $key ?>" class="form-control"
+                                                <input type="text" name="<?= $key ?>" class="form-control"
                                                        id="<?= $key ?>Sis"
                                                        data-valor="<?= $dado ?>" value="<?= $dado ?>" readonly>
                                                 <?php if ($key == "nacionalidade_id"): ?>
