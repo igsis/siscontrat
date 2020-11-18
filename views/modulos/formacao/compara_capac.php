@@ -39,11 +39,7 @@ $dados = $pfObj->comparaPf($_GET['id']);
                                     <div class="form-group">
                                         <label><?= $label ?>:</label>
                                         <div class="input-group">
-                                            <?php if ($key == "pf_nacionalidade_id" && $dado != ""): ?>
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text "><?="$dado = ".$pfObj->getNacionalidade($dado)?></span>
-                                                </div>
-                                            <?php endif; ?>
+                                            <?php $pfObj->recuperaDadoPorId($key, $dado, false) ?>
                                             <input type="text" name="message" class="form-control" id="<?=$key?>Cpc" value="<?=$dado?>" readonly>
                                             <span class="input-group-append">
                                                 <button type="button" class="btn btn-success" onclick="passaValor('<?=$key?>')">
@@ -87,11 +83,7 @@ $dados = $pfObj->comparaPf($_GET['id']);
                                                 <input type="text" name="<?= $key ?>" class="form-control"
                                                        id="<?= $key ?>Sis"
                                                        data-valor="<?= $dado ?>" value="<?= $dado ?>" readonly>
-                                                <?php if ($key == "nacionalidade_id"): ?>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text "><?="$dado = ".$pfObj->getNacionalidade($dado)?></span>
-                                                    </div>
-                                                <?php endif; ?>
+                                                <?php $pfObj->recuperaDadoPorId($key, $dado) ?>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>

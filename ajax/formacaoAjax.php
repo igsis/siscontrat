@@ -159,8 +159,10 @@ if (isset($_POST['_method'])) {
             echo $insPessoaFisica->importarPf($_POST['id']);
             break;
     }
-    if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
-        echo $insForm->listaDocumento($_POST['search'], $_POST['where']);
+    if (isset($_POST['_method'])) {
+        if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
+            echo $insForm->listaDocumento($_POST['search'], $_POST['where']);
+        }
     }
 } else {
     include_once "../config/destroySession.php";
