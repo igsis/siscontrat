@@ -253,12 +253,12 @@ class ArquivoController extends ArquivoModel
     public function listarArquivosCapac($origem_id)
     {
         $origem_id = MainModel::decryption($origem_id);
-        $sql = DbModel::consultaSimples(
-            "SELECT a.id, a.arquivo, a.data, ld.documento 
-                        FROM form_arquivos AS a
-                        INNER JOIN form_lista_documentos AS ld on a.form_lista_documento_id = ld.id
-                        WHERE form_cadastro_id = '$origem_id' AND a.publicado = '1'", true);
-        return $sql;
+        return  DbModel::consultaSimples("SELECT * FROM form_arquivos WHERE form_cadastro_id = '$origem_id' AND publicado = '1'", true);
+    }
+
+    public function getDocumento($idDocumento)
+    {
+        return DbModel::consultaSimples("SELECT documento FROM formacao_lista_documentos WHERE id = $idDocumento")->fetchObject()->documento;
     }
 
 }

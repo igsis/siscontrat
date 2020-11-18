@@ -41,19 +41,21 @@ $lista_pf = $pfObj->listaPf(true);
                             </thead>
                             <tbody>
                             <?php foreach ($lista_pf as $pf): ?>
-                                <?php if($pfObj->getCPF($pf->cpf)->rowCount() == 0): ?>
-                                    <tr>
-                                        <td><?= $pf->nome?></td>
-                                        <td><?= $pf->cpf?></td>
-                                        <td><?= date_format(date_create($pf->data_nascimento), 'd/m/Y')?></td>
-                                        <td><?= $pf->email?></td>
-                                        <td>
-                                            <a href="<?= SERVERURL . "formacao/pf_cadastro&capac=" . $pfObj->encryption($pf->id)?>" class="btn bg-gradient-info btn-sm" >
-                                                <i class="fas fa-arrow-alt-circle-down"></i> Importar
-                                            </a>
-                                        </td>
-                                    </tr>
-                                <?php endif; ?>
+                                <tr>
+                                    <td><?= $pf->nome?></td>
+                                    <td><?= $pf->cpf?></td>
+                                    <td><?= $pfObj->dataParaBR($pf->data_nascimento)?></td>
+                                    <td><?= $pf->email?></td>
+                                    <td>
+                                        <form class="form-horizontal formulario-ajax" method="POST" role="form"
+                                              action="<?= SERVERURL ?>ajax/formacaoAjax.php" data-form="save">
+                                            <input type="hidden" name="_method" value="importarPf">
+                                            <input type="hidden" name="id" value="<?= $pfObj->encryption($pf->id) ?>">
+                                            <button type="submit" class="btn bg-gradient-info btn-sm">Importar</button>
+                                            <div class="resposta-ajax"></div>
+                                        </form>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                             </tbody>
                             <tfoot>

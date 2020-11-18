@@ -985,22 +985,20 @@ class FormacaoController extends FormacaoModel
                                                   WHERE pf.id = $pessoa_fisica_id")->fetchObject();
     }
 
-    public function recuperaTelPf($pesquisa_fisica_id, $obj = 0)
+    public function recuperaTelPf($pessoa_fisica_id, $obj = 0, $capac = 0)
     {
         $tel = "";
-        //consulta no banco do siscontrat, caso não tenha resultados, realiza a busca no banco do capac, como o campo de telefone é obrigatório, em algum dos bancos terá registro
-        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id");
-        if ($telArrays->rowCount() > 0):
-            $telArrays->fetchAll();
+        if ($capac != 0):
+            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pessoa_fisica_id", '1')->fetchAll();
         else:
-            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id", '1')->fetchAll();
+            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pessoa_fisica_id AND publicado = 1")->fetchAll();
         endif;
 
-        if ($obj != NULL):
+        if ($obj != 0):
             return $telArrays;
         else:
-            foreach ($telArrays as $telArrays) {
-                $tel = $tel . $telArrays['telefone'] . '; ';
+            foreach ($telArrays AS $telArray) {
+                $tel = $tel . $telArray['telefone'] . '; ';
             }
             return substr($tel, 0, -2);
         endif;
@@ -1899,23 +1897,28 @@ class FormacaoController extends FormacaoModel
                 if ($key != 'rangeDate') {
                     $where .= " AND {$key} = {$value}";
                 } else {
-                    $datas = explode('-', $value);
-                    $where .= " AND (data_envio BETWEEN '{$datas[0]}' AND '{$datas[1]}') ";
+                    $periodos = [];
+                    $datas = explode('/', $value);
+                    foreach ($datas as $data){
+                        $dados = explode('-',$data);
+                        array_push($periodos,"{$dados[2]}-{$dados[1]}-{$dados[0]}");
+                    }
+                    $where .= " AND (fc.data_envio BETWEEN '{$periodos[0]}' AND '{$periodos[1]}') ";
                 }
             }
         }
 
         $sql = "SELECT 	    fc.id, fc.protocolo, pf.nome, pf.cpf, fc.ano, fr.regiao, 
-                            fc.form_cargo_id, fc.programa_id, fc.linguagem_id, 
-                            e.descricao AS `etnia`, g.genero, 
+                            fc.form_cargo_id, fc.programa_id, 
+                            fc.linguagem_id, e.descricao AS `etnia`, g.genero, 
                             IF (pd.trans, 'Sim', 'Não') AS `trans`,
                             IF (pd.pcd, 'Sim', 'Não') AS `pcd`
                  FROM form_cadastros fc
-                 LEFT JOIN pessoa_fisicas					pf ON fc.pessoa_fisica_id = pf.id
-                 LEFT JOIN form_regioes_preferenciais	    fr ON fc.regiao_preferencial_id = fr.id
-                 LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
-                 LEFT JOIN etnias							e  ON e.id = pd.etnia_id
-                 LEFT JOIN generos							g  ON g.id = pd.genero_id
+                 LEFT JOIN pessoa_fisicas					pf  ON fc.pessoa_fisica_id = pf.id
+                 LEFT JOIN form_regioes_preferenciais	    fr  ON fc.regiao_preferencial_id = fr.id
+                 LEFT JOIN pf_detalhes						pd  ON pf.id = pd.pessoa_fisica_id
+                 LEFT JOIN etnias							e   ON e.id = pd.etnia_id
+                 LEFT JOIN generos							g   ON g.id = pd.genero_id
                  WHERE protocolo IS NOT NULL AND `fc`.`publicado` = 1";
 
         $sql .= $where;
@@ -1932,20 +1935,24 @@ class FormacaoController extends FormacaoModel
                         fc.pessoa_fisica_id, pe.logradouro, pe.numero, pe.complemento, pe.bairro, pe.cidade,
                         fc.form_cargo_id, gi.grau_instrucao, pe.uf, pe.cep, e.descricao AS `etnia`, g.genero, 
                         ba.banco, pb.agencia, pb.conta, fc.programa_id, fc.regiao_preferencial_id, 
-                        fc.linguagem_id, pb.banco_id, pd.grau_instrucao_id, pd.etnia_id, pd.genero_id,                        
+                        fc.linguagem_id, pb.banco_id, pd.grau_instrucao_id, pd.etnia_id, pd.genero_id,
+                        fcd.form_cargo2_id, form_cargo3_id, nt.nit, dr.drt, fc.data_envio,                       
                         IF (pd.trans, 'Sim', 'Não') AS `trans`,
                         IF (pd.pcd, 'Sim', 'Não') AS `pcd`
              FROM form_cadastros fc
-             LEFT JOIN pessoa_fisicas					pf ON fc.pessoa_fisica_id = pf.id
-             LEFT JOIN pf_enderecos						pe ON pf.id = pe.pessoa_fisica_id 
-             LEFT JOIN nacionalidades					na ON pf.nacionalidade_id = na.id
-             LEFT JOIN form_regioes_preferenciais	    fr ON fc.regiao_preferencial_id = fr.id
-             LEFT JOIN pf_detalhes						pd ON pf.id = pd.pessoa_fisica_id
-             LEFT JOIN pf_bancos                        pb ON pf.id = pb.pessoa_fisica_id
-             LEFT JOIN bancos                           ba ON ba.id = pb.banco_id
-             LEFT JOIN grau_instrucoes					gi ON pd.grau_instrucao_id = gi.id
-             LEFT JOIN etnias							e  ON e.id = pd.etnia_id
-             LEFT JOIN generos							g  ON g.id = pd.genero_id
+             LEFT JOIN pessoa_fisicas					pf  ON fc.pessoa_fisica_id = pf.id
+             LEFT JOIN nits					            nt  ON nt.pessoa_fisica_id = pf.id
+             LEFT JOIN drts					            dr  ON dr.pessoa_fisica_id = pf.id
+             LEFT JOIN pf_enderecos						pe  ON pf.id = pe.pessoa_fisica_id 
+             LEFT JOIN nacionalidades					na  ON pf.nacionalidade_id = na.id
+             LEFT JOIN form_regioes_preferenciais	    fr  ON fc.regiao_preferencial_id = fr.id
+             LEFT JOIN pf_detalhes						pd  ON pf.id = pd.pessoa_fisica_id
+             LEFT JOIN pf_bancos                        pb  ON pf.id = pb.pessoa_fisica_id
+             LEFT JOIN bancos                           ba  ON ba.id = pb.banco_id
+             LEFT JOIN grau_instrucoes					gi  ON pd.grau_instrucao_id = gi.id
+             LEFT JOIN etnias							e   ON e.id = pd.etnia_id
+             LEFT JOIN generos							g   ON g.id = pd.genero_id
+             LEFT JOIN form_cargos_adicionais           fcd ON fc.id = fcd.form_cadastro_id
              WHERE protocolo IS NOT NULL AND fc.id = {$id}";
 
         return $this->consultaSimples($sql, true)->fetchObject();
@@ -2066,6 +2073,12 @@ class FormacaoController extends FormacaoModel
             ];
             return MainModel::sweetAlert($alerta);
         }
+    }
+
+    public function recuperaIdContratacao($protocoloCapac)
+    {
+        $idContratacao = DbModel::consultaSimples("SELECT * FROM formacao_contratacoes WHERE protocolo = '$protocoloCapac'")->fetchObject()->id; //sis
+        return MainModel::encryption($idContratacao);
     }
 }
 

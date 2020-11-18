@@ -50,7 +50,6 @@ $dotacao = DbModel::consultaSimples("SELECT acao FROM verbas WHERE id = $contrat
 <div align="center">
     <?php
     $conteudo =
-        "<p>&nbsp;</p>" .
         "<p align='justify'>I - À vista dos elementos constantes do presente, em especial da seleção realizada conforme Edital de chamamento para credenciamento de  Artistas-Educadores e Coordenadores Artístico-Pedagógicos do " . $contratacao->programa . " - " . $contratacao->edital . ", para atuar nos equipamentos públicos da Secretaria Municipal de Cultura e nos CEUS (Centros Educacionais Unificados)  da Secretaria Municipal de Educação na edição de 2020, publicado no DOC de  24/10/2019  (link SEI), no uso da competência a mim delegada pela Portaria nº 17/2018 - SMC/G , AUTORIZO com fundamento no artigo 25 “caput”, da Lei Federal nº 8.666/93, a contratação nas condições abaixo estipuladas, observada a legislação vigente e demais cautelas legais:</p>" .
         $trecho_cpf_passaporte .
         "<p><strong>Objeto:</strong> " . $formObj->retornaObjetoFormacao($pedido->origem_id) . "</p>" .
@@ -65,8 +64,7 @@ $dotacao = DbModel::consultaSimples("SELECT acao FROM verbas WHERE id = $contrat
         "<p>&nbsp;</p>" .
         "<p>&nbsp;</p>" .
         "<p>&nbsp;</p>" .
-        "<p align='center'><b>Chefe de Gabinete<br/>S.M.C</b></p>" .
-        "<p>&nbsp;</p>"
+        "<p align='center'><b>Chefe de Gabinete<br/>S.M.C</b></p>"
     ?>
 
     <div id="texto" class="texto"><?php echo $conteudo; ?></div>
@@ -102,9 +100,11 @@ $dotacao = DbModel::consultaSimples("SELECT acao FROM verbas WHERE id = $contrat
         try {
             document.execCommand('copy');
             alert('Copiado com sucesso!');
+            selection.removeAllRanges();
         }
         catch (err) {
-            alert('Texo não copiado, tente novamente.');
+            alert('Texto não copiado, tente novamente.');
+            selection.removeAllRanges();
         }
     }
 </script>

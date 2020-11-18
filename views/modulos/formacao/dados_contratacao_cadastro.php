@@ -13,7 +13,7 @@ elseif($capacId){
     $pfObj =  new PessoaFisicaController();
     $dados_contratacao = $contratacaoObj->recuperaDadosContratacaoCapac($capacId);
     $arquivos = $arquivosObj->listarArquivosCapac($capacId)->fetchAll(PDO::FETCH_OBJ);
-    $idPf = $pfObj->recuperaIdPfCapac($dados_contratacao->pessoa_fisica_id);
+    $idPf = $pfObj->recuperaIdPfSis($dados_contratacao->pessoa_fisica_id);
 }
 
 //caso haja um cadastro, torna a checkbox do proponente inalterável
@@ -303,10 +303,10 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                         <?php foreach ($arquivos as $arquivo): ?>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>
-                                                    <?= $arquivo->documento ?>
+                                                  <?= $arquivosObj->getDocumento($arquivo->form_lista_documento_id) ?>
                                                 </div>
                                                 <div>
-                                                    <a href="<?= CAPACURL ?>capac/uploads/<?= $arquivo->arquivo ?>"
+                                                    <a href="<?= CAPACURL ?>/uploads/<?= $arquivo->arquivo ?>"
                                                        class="btn btn-sm btn-primary">
                                                         Baixar
                                                     </a>

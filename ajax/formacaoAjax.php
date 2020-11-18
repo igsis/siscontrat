@@ -155,6 +155,9 @@ if (isset($_POST['_method'])) {
         case "importarInscrito":
             echo $insForm->insereInscrito($_POST['id']);
             break;
+        case "importarPf":
+            echo $insPessoaFisica->importarPf($_POST['id']);
+            break;
     }
     if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
         echo $insForm->listaDocumento($_POST['search'], $_POST['where']);

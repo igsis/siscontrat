@@ -2,20 +2,20 @@
 
 require_once "./controllers/FormacaoController.php";
 require_once "./controllers/PessoaFisicaController.php";
+require_once "./controllers/ArquivoController.php";
 
 $formacaoObj = new FormacaoController();
 $pfObjeto = new PessoaFisicaController();
+$arquivosObj =  new ArquivoController();
 
 $id = $_GET['id'];
 $inscrito = $formacaoObj->recuperaInscrito($id);
 $telefones = $formacaoObj->recuperaTelInscrito($inscrito->pessoa_fisica_id);
+$arquivos = $arquivosObj->listarArquivosCapac($id)->fetchAll(PDO::FETCH_OBJ);
 
 if (isset($_POST['importar'])) {
     $formacaoObj->insereInscrito($inscrito);
 }
-
-$verifCpf = $pfObjeto->getCPF($inscrito->cpf)->fetchObject();
-
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -29,175 +29,173 @@ $verifCpf = $pfObjeto->getCPF($inscrito->cpf)->fetchObject();
 </div>
 <!-- /.content-header -->
 
-<div class="row">
-    <div class="col-12 p-4">
-        <?php if ($verifCpf): ?>
-            <div class="alert alert-danger alert-dismissible">
-                <h5><i class="icon fas fa-ban"></i> Atenção!</h5>
-                O CPF <?= $inscrito->cpf ?>possui cadastro no sistema CAPAC e no SISCONTRAT.
-            </div>
-        <?php else: ?>
-            <div class="alert alert-warning alert-dismissible">
-                <h5><i class="icon fas fa-exclamation-triangle"></i> Atenção!</h5>
-                Todos os arquivos precisam ser baixados e enviados manualmente na página de anexos!
-            </div>
-        <?php endif; ?>
-    </div>
-</div>
-
 <!-- Main content -->
 <div class="content">
     <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="text-center">
+                    <span class="font-weight-bold">Cadastrado enviado em:</span> <?= date("d/m/Y h:i", strtotime($inscrito->data_envio)) ?>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
         <div class="row">
             <div class="col-md-12">
                 <!-- Horizontal Form -->
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Dados</h3>
+                        <h3 class="card-title">Dados pessoais</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col"><b>Nome:</b> <?= $inscrito->nome ?></div>
+                            <div class="col"><b>Nome Artístico:</b> <?= $inscrito->nome_artistico ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>RG:</b> <?= $inscrito->rg ?></div>
+                            <div class="col"><b>CPF:</b> <?= $inscrito->cpf ?></div>
+                            <div class="col"><b>CCM:</b> <?= $inscrito->ccm ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>Data de nascimento:</b> <?= date("d/m/Y", strtotime($inscrito->data_nascimento)) ?></div>
+                            <div class="col"><b>Nacionalidade:</b> <?= $inscrito->nacionalidade ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md"><b>E-mail:</b> <?= $inscrito->email ?></div>
+                            <div class="col"><b>Telefones:</b> <?= $telefones ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>NIT:</b> <?= $inscrito->nit ?></div>
+                            <div class="col"><b>DRT:</b> <?= $inscrito->drt ?></div>
+                            <div class="col"><b>Grau Instituição:</b> <?= $inscrito->grau_instrucao ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>Etnia:</b> <?= $inscrito->etnia ?></div>
+                            <div class="col"><b>Gênero:</b> <?= $inscrito->genero ?></div>
+                            <div class="col"><b>Trans:</b> <?= $inscrito->trans ?></div>
+                            <div class="col"><b>PCD:</b> <?= $inscrito->pcd ?></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <b>Endereço:</b> <?= $inscrito->logradouro . ", " . $inscrito->numero . " " . $inscrito->complemento . " " . $inscrito->bairro . " - " . $inscrito->cidade . "-" . $inscrito->uf . " CEP: " . $inscrito->cep ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><b>Banco:</b> <?= $inscrito->banco ?></div>
+                            <div class="col"><b>Agência:</b> <?= $inscrito->agencia ?></div>
+                            <div class="col"><b>Conta:</b> <?= $inscrito->conta ?></div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Horizontal Form -->
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Dados complementares</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <ul class="list-group">
-                                    <li class="list-group-item bg-secondary disabled color-palette">
-                                        <span class="font-weight-bold">Informações Pessoais </span>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Nome: </span> <?= $inscrito->nome ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Nome artístico: </span> <?= $inscrito->nome_artistico ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Data de Nascimento: </span> <?= $inscrito->data_nascimento ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <?php if ($inscrito->rg): ?>
-                                            <span class="font-weight-bold">RG: </span> <?= $inscrito->rg ?>
-                                        <?php else: ?>
-                                            <span class="font-weight-bold">Passaporte: </span> <?= $inscrito->passaporte ?>
-                                        <?php endif; ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">CPF: </span> <?= $inscrito->cpf ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">CCM: </span> <?= $inscrito->ccm ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Email: </span> <?= $inscrito->email ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Telefone: </span> <?= $telefones ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Nacionalidade: </span> <?= $inscrito->nacionalidade ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Programa Selecionado: </span> <?= $formacaoObj->recuperaPrograma($formacaoObj->encryption($inscrito->programa_id))->programa ?>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col">
-                                <ul class="list-group">
-                                    <li class="list-group-item bg-secondary disabled color-palette">
-                                        <span class="font-weight-bold">Endereço </span>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">CEP: </span> <?= $inscrito->cep ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Logradouro: </span> <?= $inscrito->logradouro ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Número: </span> <?= $inscrito->numero ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Complemento: </span> <?= $inscrito->complemento ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Bairro: </span> <?= $inscrito->bairro ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Cidade: </span> <?= $inscrito->nome ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Estado: </span> <?= $inscrito->uf ?>
-                                    </li>
-                                </ul>
+                                <span class="font-weight-bold">Ano de execusão do serviço: </span> <?= $inscrito->ano ?>
                             </div>
                         </div>
-                        <div class="row mt-3">
+                        <div class="row">
                             <div class="col">
-                                <ul class="list-group">
-                                    <li class="list-group-item bg-secondary disabled color-palette">
-                                        <span class="font-weight-bold">Informações Complementares:</span>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Etnia: </span> <?= $inscrito->etnia ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Gênero: </span> <?= $inscrito->genero ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Trans: </span> <?= $inscrito->trans ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">PCD: </span> <?= $inscrito->pcd ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Grau Instituição: </span> <?= $inscrito->grau_instrucao ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Linguagem: </span> <?= $formacaoObj->recuperaLinguagem($formacaoObj->encryption($inscrito->linguagem_id))->linguagem ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Função: </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo_id))->cargo ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Região Preferencial: </span> <?= $inscrito->regiao ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Banco: </span> <?= $inscrito->banco ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Agência: </span> <?= $inscrito->agencia ?>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="font-weight-bold">Conta: </span> <?= $inscrito->conta ?>
-                                    </li>
-                                </ul>
+                                <span class="font-weight-bold">Região Preferencial: </span> <?= $inscrito->regiao ?>
                             </div>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <a href="<?= SERVERURL ?>api/downloadInscritos.php?id=<?= $inscrito->id ?>&formacao=1"
-                                           target="_blank"
-                                           class="btn bg-gradient-purple btn-lg btn-block rounded-bottom"><i
-                                                    class="fas fa-file-archive"></i> Baixar todos os arquivos</a>
-                                    </li>
-                                </ul>
+                        <div class="row">
+                            <div class="col">
+                                <span class="font-weight-bold">Programa: </span> <?= $formacaoObj->recuperaPrograma($formacaoObj->encryption($inscrito->programa_id))->programa ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <span class="font-weight-bold">Linguagem: </span> <?= $formacaoObj->recuperaLinguagem($formacaoObj->encryption($inscrito->linguagem_id))->linguagem ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <span class="font-weight-bold">Função (1º Opção): </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo_id))->cargo ?>
+                            </div>
+                        </div>
+                        <?php if ($inscrito->form_cargo2_id): ?>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="font-weight-bold">Função (2º Opção): </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo2_id))->cargo ?>
+                                </div>
+                            </div>
+                        <?php endif;
+                        if ($inscrito->form_cargo3_id): ?>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="font-weight-bold">Função (3º Opção): </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo3_id))->cargo ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Horizontal Form -->
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Anexos</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <?php foreach ($arquivos as $arquivo): ?>
+                                    <div class="row">
+                                        <div class="col">
+                                            <a href="<?= CAPACURL ?>/uploads/<?= $arquivo->arquivo ?>" target="_blank"><?= $arquivosObj->getDocumento($arquivo->form_lista_documento_id) ?></a><br/>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                            <div class="col-md alert alert-warning alert-dismissible">
+                                <h5><i class="icon fas fa-exclamation-triangle"></i> Atenção!</h5>
+                                <p><br>Todos os arquivos precisam ser baixados e enviados manualmente na página de anexos!</p>
                             </div>
                         </div>
                     </div>
+                    <!-- /.card-body -->
                     <div class="card-footer">
-                        <?php if (!$verifCpf): ?>
-                            <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoajax.php" method="POST">
-                                <input type="hidden" name="_method" value="importarInscrito">
-                                <input type="hidden" name="id" value="<?= $formacaoObj->encryption($inscrito->id) ?>">
-                                <button class="btn btn-info float-right" id="importar">Importar Inscrito</button>
-                                <div class="resposta-ajax"></div>
-                            </form>
-                        <?php endif; ?>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a href="<?= SERVERURL ?>api/downloadInscritos.php?id=<?= $inscrito->id ?>&formacao=1" target="_blank" class="btn bg-gradient-purple btn-sm btn-block rounded-bottom"><i class="fas fa-file-archive"></i> Baixar todos os arquivos</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- /.card -->
             </div>
         </div>
         <!-- /.row -->
+        <div class="card-footer">
+            <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" method="POST">
+                <input type="hidden" name="_method" value="importarInscrito">
+                <input type="hidden" name="id" value="<?= $formacaoObj->encryption($inscrito->id) ?>">
+                <button class="btn btn-info float-right" id="importar" disabled>Importar Inscrito</button>
+                <div class="resposta-ajax"></div>
+            </form>
+        </div>
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
