@@ -12,10 +12,6 @@ $id = $_GET['id'];
 $inscrito = $formacaoObj->recuperaInscrito($id);
 $telefones = $formacaoObj->recuperaTelInscrito($inscrito->pessoa_fisica_id);
 $arquivos = $arquivosObj->listarArquivosCapac($id)->fetchAll(PDO::FETCH_OBJ);
-
-if (isset($_POST['importar'])) {
-    $formacaoObj->insereInscrito($inscrito);
-}
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -160,6 +156,12 @@ if (isset($_POST['importar'])) {
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-md alert alert-warning alert-dismissible">
+                                <h5><strong><i class="icon fas fa-exclamation-triangle"></i> Atenção!</strong></h5>
+                                <p><br>Todos os arquivos precisam ser baixados e enviados manualmente na página de anexos!</p>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-8">
                                 <?php foreach ($arquivos as $arquivo): ?>
                                     <div class="row">
@@ -169,16 +171,12 @@ if (isset($_POST['importar'])) {
                                     </div>
                                 <?php endforeach; ?>
                             </div>
-                            <div class="col-md alert alert-warning alert-dismissible">
-                                <h5><i class="icon fas fa-exclamation-triangle"></i> Atenção!</h5>
-                                <p><br>Todos os arquivos precisam ser baixados e enviados manualmente na página de anexos!</p>
-                            </div>
                         </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col">
                                 <a href="<?= SERVERURL ?>api/downloadInscritos.php?id=<?= $inscrito->id ?>&formacao=1" target="_blank" class="btn bg-gradient-purple btn-sm btn-block rounded-bottom"><i class="fas fa-file-archive"></i> Baixar todos os arquivos</a>
                             </div>
                         </div>
@@ -189,10 +187,11 @@ if (isset($_POST['importar'])) {
         </div>
         <!-- /.row -->
         <div class="card-footer">
+            <a href="<?= SERVERURL ?>formacao/listar_inscritos" class="btn btn-default float-left">Voltar</a>
             <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" method="POST">
                 <input type="hidden" name="_method" value="importarInscrito">
                 <input type="hidden" name="id" value="<?= $formacaoObj->encryption($inscrito->id) ?>">
-                <button class="btn btn-info float-right" id="importar" disabled>Importar Inscrito</button>
+                <button class="btn btn-info float-right" id="importar">Importar Inscrito</button>
                 <div class="resposta-ajax"></div>
             </form>
         </div>

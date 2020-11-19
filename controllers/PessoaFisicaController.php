@@ -298,11 +298,6 @@ class PessoaFisicaController extends PessoaFisicaModel
         return $consulta_pf_pass;
     }
 
-    public function getNacionalidade($id)
-    {
-        return DbModel::getInfo('nacionalidades', $id)->fetch(PDO::FETCH_ASSOC)['nacionalidade'];
-    }
-
     /**
      * @param int|string $pessoa_fisica_id
      * @param int $validacaoTipo <p>Deve conter o valor 1 para validação de pessoa física e 2 para validação de líder</p>
@@ -330,7 +325,7 @@ class PessoaFisicaController extends PessoaFisicaModel
         return $idPf;
     }
 
-    public function importarPf($id)
+    public function importarPf($id, $bool = false)
     {
         $idDecryp = MainModel::decryption($id);
 
@@ -385,13 +380,16 @@ class PessoaFisicaController extends PessoaFisicaModel
         if ($queryPfSis->rowCount()) {
             $pfSis = $queryPfSis->fetch(PDO::FETCH_ASSOC);
 
-            $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '{$pfSis['id']}'", true)->fetchAll(PDO::FETCH_ASSOC);
+            $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '{$pfSis['id']}'")->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($telefones as $key => $telefone) {
                 $pfSis['te_telefone_'.$key] = $telefone['telefone'];
             }
 
             if (parent::verificaDivergencia($pfCapac, $pfSis, true)) {
+                if ($bool) {
+                    return false;
+                }
                 $alerta = [
                     'alerta' => 'sucesso',
                     'titulo' => 'O CPF possui divergencias',
@@ -400,6 +398,9 @@ class PessoaFisicaController extends PessoaFisicaModel
                     'location' => SERVERURL . 'formacao/compara_capac&id=' . $id
                 ];
             } else {
+                if ($bool) {
+                    return $pfSis['id'];
+                }
                 $alerta = [
                     'alerta' => 'sucesso',
                     'titulo' => 'Pessoa Física Importada',
@@ -415,6 +416,9 @@ class PessoaFisicaController extends PessoaFisicaModel
             $insert = self::inserePessoaFisica("", true);
             if ($insert) {
                 $id = $insert;
+                if ($bool) {
+                    return $id;
+                }
                 $alerta = [
                     'alerta' => 'sucesso',
                     'titulo' => 'Pessoa Física Importada',
@@ -469,16 +473,29 @@ class PessoaFisicaController extends PessoaFisicaModel
         $sqlCapac = $sqlBase." WHERE pf.id = '$id'";
 
         $pfCapac = DbModel::consultaSimples($sqlCapac, true)->fetch(PDO::FETCH_ASSOC);
+
+        $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$id'", true)->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($telefones as $key => $telefone) {
+            $pfCapac['te_telefone_'.$key] = $telefone['telefone'];
+        }
+
         DbModel::killConn();
 
         $sqlSis = $sqlBase." WHERE pf.cpf = '{$pfCapac['pf_cpf']}'";
         $pfSis = DbModel::consultaSimples($sqlSis)->fetch(PDO::FETCH_ASSOC);
 
+        $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '{$pfSis['id']}'")->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($telefones as $key => $telefone) {
+            $pfSis['te_telefone_'.$key] = $telefone['telefone'];
+        }
+
         $dadosDivergentes = parent::verificaDivergencia($pfCapac, $pfSis);
 
         foreach ($dadosDivergentes as $dado) {
             $dados['dadosCapac'][$dado] = $pfCapac[$dado];
-            $dados['dadosSis'][$dado] = $pfSis[$dado];
+            $dados['dadosSis'][$dado] = $pfSis[$dado] ?? "";
         }
 
         $dados['pf_nome'] = $pfCapac['pf_nome'];
@@ -488,5 +505,49 @@ class PessoaFisicaController extends PessoaFisicaModel
         $dados['dadosSis']['pf_ultima_atualizacao'] = $pfSis['pf_ultima_atualizacao'];
 
         return $dados;
+    }
+
+    /**
+     * <p>Função utilizada no arquivo <i>compara_capac.php</i> para retornar o dado de um determinado ID</p>
+     * @param $key
+     * @param $valor
+     * @param bool $append
+     */
+    public function recuperaDadoPorId($key, $valor, $append = true)
+    {
+        $camposIds = ['pf_nacionalidade_id', 'dt_etnia_id', 'dt_genero_id', 'dt_grau_instrucao_id', 'dt_trans', 'dt_pcd',];
+        if (in_array($key, $camposIds)) {
+            switch ($key) {
+                case 'pf_nacionalidade_id':
+                    $dado = DbModel::getInfo('nacionalidades', $valor)->fetchObject()->nacionalidade;
+                    break;
+                case 'dt_etnia_id':
+                    $dado = DbModel::getInfo('etnias', $valor)->fetchObject()->descricao;
+                    break;
+                case 'dt_genero_id':
+                    $dado = DbModel::getInfo('generos', $valor)->fetchObject()->genero;
+                    break;
+                case 'dt_grau_instrucao_id':
+                    $dado = DbModel::getInfo('grau_instrucoes', $valor)->fetchObject()->grau_instrucao;
+                    break;
+                case 'dt_trans':
+                    $dado = $valor == 1 ? "Sim" : "Não";
+                    break;
+                case 'dt_pcd':
+                    $dado = $valor == 1 ? "Sim" : "Não";
+                    break;
+                default:
+                    break;
+            }
+            if ($append) { ?>
+                <div class="input-group-append">
+                    <span class="input-group-text "><?= "$valor = $dado" ?></span>
+                </div>
+            <?php } else { ?>
+                <div class="input-group-prepend">
+                    <span class="input-group-text "><?= "$valor = $dado" ?></span>
+                </div>
+            <?php }
+        }
     }
 }
