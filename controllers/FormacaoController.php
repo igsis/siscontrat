@@ -1983,96 +1983,135 @@ class FormacaoController extends FormacaoModel
         return $this->consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function insereInscrito($id)
+//    public function insereInscrito($id)
+//    {
+//        $inscrito = $this->recuperaInscrito($id);
+//
+//        $phones = $this->recuperaTelInscrito($inscrito->id, 1);
+//
+//        //Tabela pessoa_fisicas
+//        $pessoaFisica = [];
+//        $pessoaFisica['nome'] = $inscrito->nome;
+//        $pessoaFisica['nome_artistico'] = $inscrito->nome_artistico;
+//        $pessoaFisica['rg'] = $inscrito->rg;
+//        $pessoaFisica['passaporte'] = $inscrito->passaporte;
+//        $pessoaFisica['cpf'] = $inscrito->cpf;
+//        $pessoaFisica['ccm'] = $inscrito->ccm;
+//        $pessoaFisica['data_nascimento'] = $inscrito->data_nascimento;
+//        $pessoaFisica['nacionalidade_id'] = $inscrito->nacionalidade_id;
+//        $pessoaFisica['email'] = $inscrito->email;
+//
+//        //Tabela pf_detalhes
+//        $pfDetalhes = [];
+//        $pfDetalhes['etnia_id'] = $inscrito->etnia_id;
+//        $pfDetalhes['genero_id'] = $inscrito->genero_id;
+//        $pfDetalhes['regiao_id'] = $inscrito->regiao_preferencial_id;
+//        $pfDetalhes['grau_instrucao_id'] = $inscrito->grau_instrucao_id;
+//        $pfDetalhes['curriculo'] = '';
+//        $pfDetalhes['trans'] = $inscrito->trans == 'Sim' ? 1 : 0;
+//        $pfDetalhes['pcd'] = $inscrito->pcd == 'Sim' ? 1 : 0;
+//
+//        //Tabela pf_enderecos
+//        $pfEndereco = [];
+//        $pfEndereco['logradouro'] = $inscrito->logradouro;
+//        $pfEndereco['numero'] = $inscrito->numero;
+//        $pfEndereco['complemento'] = $inscrito->complemento;
+//        $pfEndereco['bairro'] = $inscrito->bairro;
+//        $pfEndereco['cidade'] = $inscrito->cidade;
+//        $pfEndereco['uf'] = $inscrito->uf;
+//        $pfEndereco['cep'] = $inscrito->cep;
+//
+//        //Tabela pf_bancos
+//        $pfBanco = [];
+//        $pfBanco['banco_id'] = $inscrito->banco_id;
+//        $pfBanco['agencia'] = $inscrito->agencia;
+//        $pfBanco['conta'] = $inscrito->conta;
+//
+//        try {
+//            $insertPf = DbModel::insert('pessoa_fisicas', $pessoaFisica);
+//            if ($insertPf || DbModel::connection()->errorCode() == 0) {
+//                $pessoaFisica_id = DbModel::connection()->lastInsertId();
+//                $pfDetalhes['pessoa_fisica_id'] = $pessoaFisica_id;
+//                $pfEndereco['pessoa_fisica_id'] = $pessoaFisica_id;
+//                $pfBanco['pessoa_fisica_id'] = $pessoaFisica_id;
+//
+//
+//                $insertDetalhes = DbModel::insert('pf_detalhes', $pfDetalhes);
+//                if ($insertDetalhes || DbModel::connection()->errorCode() == 0) {
+//                    $insertEndereco = DbModel::insert('pf_enderecos', $pfEndereco);
+//                    if ($insertEndereco || DbModel::connection()->errorCode() == 0) {
+//                        $insertBanco = DbModel::insert('pf_bancos', $pfBanco);
+//                        if ($insertBanco || DbModel::connection()->errorCode() == 0) {
+//                            foreach ($phones as $phone) {
+//                                $pfPhone = [];
+//                                $pfPhone['pessoa_fisica_id'] = $pessoaFisica_id;
+//                                $pfPhone['telefone'] = $phone['telefone'];
+//
+//                                DbModel::insert('pf_telefones', $pfPhone);
+//                            }
+//                            if (DbModel::connection()->errorCode() == 0) {
+//                                $alerta = [
+//                                    'alerta' => 'sucesso',
+//                                    'titulo' => 'Importação de inscrito',
+//                                    'texto' => 'Importação de inscrito realizada com sucesso!',
+//                                    'tipo' => 'success',
+//                                    'location' => SERVERURL . 'formacao/resumo_inscrito&id=' . $id
+//                                ];
+//                                return MainModel::sweetAlert($alerta);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        } catch (Exception $e) {
+//            $alerta = [
+//                'alerta' => 'simples',
+//                'titulo' => 'Erro!',
+//                'texto' => 'Erro ao importar!<br>' . $e->getMessage() . '!',
+//                'tipo' => 'error',
+//                'location' => SERVERURL . 'formacao/resumo_inscrito&id=' . $id
+//            ];
+//            return MainModel::sweetAlert($alerta);
+//        }
+//    }
+
+    public function insereInscrito($id, $novoImport = true, $pfSis_id = null)
     {
-        $inscrito = $this->recuperaInscrito($id);
 
-        $phones = $this->recuperaTelInscrito($inscrito->id, 1);
+        if ($novoImport) {
+            $pfCapac_id = MainModel::encryption(self::recuperaInscrito($id)->pessoa_fisica_id);
 
-        //Tabela pessoa_fisicas
-        $pessoaFisica = [];
-        $pessoaFisica['nome'] = $inscrito->nome;
-        $pessoaFisica['nome_artistico'] = $inscrito->nome_artistico;
-        $pessoaFisica['rg'] = $inscrito->rg;
-        $pessoaFisica['passaporte'] = $inscrito->passaporte;
-        $pessoaFisica['cpf'] = $inscrito->cpf;
-        $pessoaFisica['ccm'] = $inscrito->ccm;
-        $pessoaFisica['data_nascimento'] = $inscrito->data_nascimento;
-        $pessoaFisica['nacionalidade_id'] = $inscrito->nacionalidade_id;
-        $pessoaFisica['email'] = $inscrito->email;
-
-        //Tabela pf_detalhes
-        $pfDetalhes = [];
-        $pfDetalhes['etnia_id'] = $inscrito->etnia_id;
-        $pfDetalhes['genero_id'] = $inscrito->genero_id;
-        $pfDetalhes['regiao_id'] = $inscrito->regiao_preferencial_id;
-        $pfDetalhes['grau_instrucao_id'] = $inscrito->grau_instrucao_id;
-        $pfDetalhes['curriculo'] = '';
-        $pfDetalhes['trans'] = $inscrito->trans == 'Sim' ? 1 : 0;
-        $pfDetalhes['pcd'] = $inscrito->pcd == 'Sim' ? 1 : 0;
-
-        //Tabela pf_enderecos
-        $pfEndereco = [];
-        $pfEndereco['logradouro'] = $inscrito->logradouro;
-        $pfEndereco['numero'] = $inscrito->numero;
-        $pfEndereco['complemento'] = $inscrito->complemento;
-        $pfEndereco['bairro'] = $inscrito->bairro;
-        $pfEndereco['cidade'] = $inscrito->cidade;
-        $pfEndereco['uf'] = $inscrito->uf;
-        $pfEndereco['cep'] = $inscrito->cep;
-
-        //Tabela pf_bancos
-        $pfBanco = [];
-        $pfBanco['banco_id'] = $inscrito->banco_id;
-        $pfBanco['agencia'] = $inscrito->agencia;
-        $pfBanco['conta'] = $inscrito->conta;
-
-        try {
-            $insertPf = DbModel::insert('pessoa_fisicas', $pessoaFisica);
-            if ($insertPf || DbModel::connection()->errorCode() == 0) {
-                $pessoaFisica_id = DbModel::connection()->lastInsertId();
-                $pfDetalhes['pessoa_fisica_id'] = $pessoaFisica_id;
-                $pfEndereco['pessoa_fisica_id'] = $pessoaFisica_id;
-                $pfBanco['pessoa_fisica_id'] = $pessoaFisica_id;
-
-
-                $insertDetalhes = DbModel::insert('pf_detalhes', $pfDetalhes);
-                if ($insertDetalhes || DbModel::connection()->errorCode() == 0) {
-                    $insertEndereco = DbModel::insert('pf_enderecos', $pfEndereco);
-                    if ($insertEndereco || DbModel::connection()->errorCode() == 0) {
-                        $insertBanco = DbModel::insert('pf_bancos', $pfBanco);
-                        if ($insertBanco || DbModel::connection()->errorCode() == 0) {
-                            foreach ($phones as $phone) {
-                                $pfPhone = [];
-                                $pfPhone['pessoa_fisica_id'] = $pessoaFisica_id;
-                                $pfPhone['telefone'] = $phone['telefone'];
-
-                                DbModel::insert('pf_telefones', $pfPhone);
-                            }
-                            if (DbModel::connection()->errorCode() == 0) {
-                                $alerta = [
-                                    'alerta' => 'sucesso',
-                                    'titulo' => 'Importação de inscrito',
-                                    'texto' => 'Importação de inscrito realizada com sucesso!',
-                                    'tipo' => 'success',
-                                    'location' => SERVERURL . 'formacao/resumo_inscrito&id=' . $id
-                                ];
-                                return MainModel::sweetAlert($alerta);
-                            }
-                        }
-                    }
-                }
+            $idPfInscrito = (new PessoaFisicaController)->importarPf($pfCapac_id, true);
+            if (!$idPfInscrito) {
+                $alerta = [
+                    'alerta' => 'sucesso',
+                    'titulo' => 'O CPF possui divergencias',
+                    'texto' => 'O CPF selecionado já possui cadastro no Siscontrat, selecione os dados que deseja atualizar antes de completar a importação',
+                    'tipo' => 'warning',
+                    'location' => SERVERURL . "formacao/compara_capac&id=$pfCapac_id&capac=$id"
+                ];
+            } else {
+                $alerta = [
+                    'alerta' => 'sucesso',
+                    'titulo' => 'Proponente Importado!',
+                    'texto' => 'O CPF selecionado foi importado ao Siscontrat. Conclua o cadastro na próxima tela.',
+                    'tipo' => 'success',
+                    'location' => SERVERURL . "formacao/dados_contratacao_cadastro&capac=$id"
+                ];
             }
-        } catch (Exception $e) {
+        } else {
+            $pf = PessoaFisicaController::editaPessoaFisica($pfSis_id, "", true);
+
             $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Erro!',
-                'texto' => 'Erro ao importar!<br>' . $e->getMessage() . '!',
-                'tipo' => 'error',
-                'location' => SERVERURL . 'formacao/resumo_inscrito&id=' . $id
+                'alerta' => 'sucesso',
+                'titulo' => 'Proponente Importado!',
+                'texto' => 'O CPF selecionado foi importado ao Siscontrat. Conclua o cadastro na próxima tela.',
+                'tipo' => 'success',
+                'location' => SERVERURL . "formacao/dados_contratacao_cadastro&capac=$id"
             ];
-            return MainModel::sweetAlert($alerta);
         }
+
+        return MainModel::sweetAlert($alerta);
     }
 
     public function recuperaIdContratacao($protocoloCapac)

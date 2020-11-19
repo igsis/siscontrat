@@ -325,7 +325,7 @@ class PessoaFisicaController extends PessoaFisicaModel
         return $idPf;
     }
 
-    public function importarPf($id)
+    public function importarPf($id, $bool = false)
     {
         $idDecryp = MainModel::decryption($id);
 
@@ -387,6 +387,9 @@ class PessoaFisicaController extends PessoaFisicaModel
             }
 
             if (parent::verificaDivergencia($pfCapac, $pfSis, true)) {
+                if ($bool) {
+                    return false;
+                }
                 $alerta = [
                     'alerta' => 'sucesso',
                     'titulo' => 'O CPF possui divergencias',
@@ -395,6 +398,9 @@ class PessoaFisicaController extends PessoaFisicaModel
                     'location' => SERVERURL . 'formacao/compara_capac&id=' . $id
                 ];
             } else {
+                if ($bool) {
+                    return $pfSis['id'];
+                }
                 $alerta = [
                     'alerta' => 'sucesso',
                     'titulo' => 'Pessoa Física Importada',
@@ -410,6 +416,9 @@ class PessoaFisicaController extends PessoaFisicaModel
             $insert = self::inserePessoaFisica("", true);
             if ($insert) {
                 $id = $insert;
+                if ($bool) {
+                    return $id;
+                }
                 $alerta = [
                     'alerta' => 'sucesso',
                     'titulo' => 'Pessoa Física Importada',
