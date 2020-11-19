@@ -55,21 +55,30 @@ if (isset($_GET['busca'])) {
                                     <input type="number" id="ano" name="ano_inscricao" class="form-control inputs"
                                            value="<?= isset($dados['ano']) ? $dados['ano'] : '' ?>">
                                 </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <div class="form-group pt-3">
-                                        <label for="periodo">Periodo :</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                              <span class="input-group-text">
-                                                <i class="far fa-calendar-alt"></i>
-                                              </span>
-                                            </div>
-                                            <input type="text" class="form-control inputs" name="periodo"
-                                                   id="rangeDate"
-                                                   value="<?= isset($periodo) ? $periodo : '' ?>">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
+                                <!--                                <div class="col-sm-12 col-md-4">-->
+                                <!--                                    <div class="form-group pt-3">-->
+                                <!--                                        <label for="periodo">Periodo :</label>-->
+                                <!--                                        <div class="input-group">-->
+                                <!--                                            <div class="input-group-prepend">-->
+                                <!--                                              <span class="input-group-text">-->
+                                <!--                                                <i class="far fa-calendar-alt"></i>-->
+                                <!--                                              </span>-->
+                                <!--                                            </div>-->
+                                <!--                                            <input type="text" class="form-control inputs" name="periodo"-->
+                                <!--                                                   id="rangeDate"-->
+                                <!--                                                   value="-->
+                                <? //= isset($periodo) ? $periodo : '' ?><!--">-->
+                                <!--                                        </div>-->
+                                <!-- /.input group -->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
+                                <div class="col-sm-12 col-md-2">
+                                    <label for="dataInicio">Data Início:</label>
+                                    <input type="date" class="form-control inputsData" id="dataInicio">
+                                </div>
+                                <div class="col-sm-12 col-md-2">
+                                    <label for="dataFim">Data Fim:</label>
+                                    <input type="date" class="form-control inputsData" id="dataFim">
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <label for="programa">Programa: </label>
@@ -219,7 +228,7 @@ if (isset($_GET['busca'])) {
 <script defer>
 
     <?php if (isset($periodo)): ?>
-        document.querySelector('#rangeDate').value = "<?= $periodo ?>"
+    document.querySelector('#rangeDate').value = "<?= $periodo ?>"
     <?php endif; ?>
     const url_cargos = '<?= $apiCargos ?>';
 
@@ -245,8 +254,11 @@ if (isset($_GET['busca'])) {
         let inputs = document.querySelectorAll('.inputs');
         let checks = document.querySelectorAll('.checks');
 
+        let datas = document.querySelectorAll('.inputsData');
+
         let dados = [];
         for (let input of inputs) {
+            console.log(input.id, input.id == 'dataInicio' ? true : false);
             let elemento = {}
             if (input.value != "") {
                 if (input.id != "rangeDate") {
@@ -269,13 +281,31 @@ if (isset($_GET['busca'])) {
                 dados.push(elemento)
             }
         }
-        console.log(dados)
+
+        if (datas.length == 1) {
+            let data = {};
+            data.id = 'rangeDate';
+            data.dado = alterDate(data.value)
+
+            dados.push(data);
+        } else if (datas.length == 2) {
+            let strData = '';
+            strData = datas[0].value + ' / ' + datas[1].value;
+
+            data = {};
+
+            data.id = 'rangeDate';
+            data.dado = alterDate(strData)
+
+            dados.push(data);
+        }
+
         return dados;
     }
 
     function alterDate(date) {
         date = date.replace(date.substr(10, 3), 't');
-        return date.split('/').join('b');
+        return date.split('-').join('b');
     }
 
     function checkValue(id) {
