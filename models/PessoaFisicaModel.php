@@ -175,7 +175,14 @@ class PessoaFisicaModel extends ValidacaoModel
         $camposIgnorados = ['id', 'pf_ultima_atualizacao'];
         foreach ($dadosCapac as $key => $valor) {
             if (!in_array($key, $camposIgnorados)) {
-                if ($valor != $dadosSis[$key]) {
+                if (isset($dadosSis[$key])) {
+                    if ($valor != $dadosSis[$key]) {
+                        $dadosDivergentes[] = $key;
+                        if ($retornaBool) {
+                            return true;
+                        }
+                    }
+                } else {
                     $dadosDivergentes[] = $key;
                     if ($retornaBool) {
                         return true;

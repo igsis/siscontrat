@@ -113,6 +113,9 @@ if (isset($_POST['_method'])) {
         case "editarPF":
             echo $insPessoaFisica->editaPessoaFisica($_POST['id'], $_POST['pagina']);
             break;
+        case "editarPFImport":
+            echo $insForm->insereInscrito($_POST['capac_id'], false, $_POST['id']);
+            break;
         case "cadastrarDadosContratacao":
             echo $insForm->insereDadosContratacao($_POST);
             break;
@@ -159,8 +162,10 @@ if (isset($_POST['_method'])) {
             echo $insPessoaFisica->importarPf($_POST['id']);
             break;
     }
-    if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
-        echo $insForm->listaDocumento($_POST['search'], $_POST['where']);
+    if (isset($_POST['_method'])) {
+        if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
+            echo $insForm->listaDocumento($_POST['search'], $_POST['where']);
+        }
     }
 } else {
     include_once "../config/destroySession.php";
