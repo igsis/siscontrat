@@ -7,21 +7,15 @@ $apiInscritos = CAPACURL . 'api/api_formacao_cargos.php';
 
 $formacaoObj = new FormacaoController();
 
-if (isset($_GET['busca'])) {
-    $dados = $_GET;
+if (isset($_POST['busca'])) {
+    $dados = $_POST;
 
-    if (isset($dados['rangeDate'])) {
-        $dados['rangeDate'] = str_replace('t', '/', $dados['rangeDate']);
-        $dados['rangeDate'] = str_replace('b', '-', $dados['rangeDate']);
-
-        $periodo = str_replace('b', '/', $_GET['rangeDate']);
-        $periodo = str_replace('t', ' - ', $periodo);
-    }
-
-    array_splice($dados, 0, 2);
+    array_splice($dados, 0, 1);
 
     $resultados = $formacaoObj->listarIncritos($dados);
 }
+
+var_dump($_POST);
 
 ?>
 <!-- Content Header (Page header) -->
@@ -48,11 +42,12 @@ if (isset($_GET['busca'])) {
                     </div>
                     <!-- /.card-header -->
                     <form method="post">
+                        <input type="hidden" name="busca" value="1">
                         <div class="card-body">
                             <div class="row d-flex align-items-center">
                                 <div class="col-sm-12 col-md-4">
                                     <label for="ano_inscricao">Ano de inscrição: </label>
-                                    <input type="number" id="ano" name="ano_inscricao" class="form-control inputs"
+                                    <input type="number" id="ano" name="ano" class="form-control inputs"
                                            value="<?= isset($dados['ano']) ? $dados['ano'] : '' ?>">
                                 </div>
                                 <!--                                <div class="col-sm-12 col-md-4">-->
@@ -74,11 +69,11 @@ if (isset($_GET['busca'])) {
                                 <!--                                </div>-->
                                 <div class="col-sm-12 col-md-2">
                                     <label for="dataInicio">Data Início:</label>
-                                    <input type="date" class="form-control inputsData" id="dataInicio">
+                                    <input type="date" class="form-control inputsData" name="data[]" id="dataInicio" value="<?= isset($dados['data'][0]) ? $dados['data'][0] : '' ?>">
                                 </div>
                                 <div class="col-sm-12 col-md-2">
                                     <label for="dataFim">Data Fim:</label>
-                                    <input type="date" class="form-control inputsData" id="dataFim">
+                                    <input type="date" class="form-control inputsData" name="data[]" id="dataFim" <?= isset($dados['data'][0]) ? $dados['data'][0] : '' ?>>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <label for="programa">Programa: </label>
@@ -148,7 +143,7 @@ if (isset($_GET['busca'])) {
                 <!-- /.card -->
             </div>
         </div>
-        <?php if (isset($_GET['busca'])): ?>
+        <?php if (isset($_POST['busca'])): ?>
             <div class="row">
                 <div class="col-12">
                     <div class="card card-info">
@@ -227,9 +222,6 @@ if (isset($_GET['busca'])) {
 
 <script defer>
 
-    <?php if (isset($periodo)): ?>
-    document.querySelector('#rangeDate').value = "<?= $periodo ?>"
-    <?php endif; ?>
     const url_cargos = '<?= $apiCargos ?>';
 
     document.querySelector('body').classList.toggle('sidebar-open');
@@ -242,13 +234,13 @@ if (isset($_GET['busca'])) {
         getFuncao(this.value);
     });
 
-    pesquisa.addEventListener('click', function (event) {
-        event.preventDefault();
-        let inputs = document.querySelectorAll('.inputs');
-        dados = createArray();
-
-        window.location.href = montaUrl(dados);
-    });
+    // pesquisa.addEventListener('click', function (event) {
+    //     event.preventDefault();
+    //     let inputs = document.querySelectorAll('.inputs');
+    //     dados = createArray();
+    //
+    //     window.location.href = montaUrl(dados);
+    // });
 
     function createArray() {
         let inputs = document.querySelectorAll('.inputs');
@@ -329,7 +321,7 @@ if (isset($_GET['busca'])) {
             });
     }
 
-    <?php if (isset($_GET['programa_id'])): ?>
+    <?php if (isset($_POST['programa_id'])): ?>
     getFuncao('<?= $dados['programa_id']?>', '<?= isset($dados['form_cargo_id']) ? $dados['form_cargo_id'] : '' ?>');
     <?php endif; ?>
 

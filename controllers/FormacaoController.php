@@ -997,7 +997,7 @@ class FormacaoController extends FormacaoModel
         if ($obj != 0):
             return $telArrays;
         else:
-            foreach ($telArrays AS $telArray) {
+            foreach ($telArrays as $telArray) {
                 $tel = $tel . $telArray['telefone'] . '; ';
             }
             return substr($tel, 0, -2);
@@ -1894,16 +1894,21 @@ class FormacaoController extends FormacaoModel
         $where = " ";
         if (count($dados)) {
             foreach ($dados as $key => $value) {
-                if ($key != 'rangeDate') {
-                    $where .= " AND {$key} = {$value}";
-                } else {
-                    $periodos = [];
-                    $datas = explode('/', $value);
-                    foreach ($datas as $data){
-                        $dados = explode('-',$data);
-                        array_push($periodos,"{$dados[2]}-{$dados[1]}-{$dados[0]}");
+                if ($value != '') {
+                    if ($key != 'data') {
+                        $where .= " AND {$key} = {$value}";
+                    } else {
+                        if (count($value) == 2 && ($value[0] != '' && $value[1] != '')) {
+                            $where .= " AND (fc.data_envio BETWEEN '{$value[0]}' AND '{$value[1]}') ";
+                        } elseif (count($value) == 1){
+                            if ($value[0] != ''){
+                                $where .= " AND fc.data_envio = '{$value[0]}' ";
+                            }
+                            elseif ($value[1] != ''){
+                                $where .= " AND fc.data_envio = '{$value[1]}' ";
+                            }
+                        }
                     }
-                    $where .= " AND (fc.data_envio BETWEEN '{$periodos[0]}' AND '{$periodos[1]}') ";
                 }
             }
         }
