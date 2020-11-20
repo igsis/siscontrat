@@ -188,7 +188,7 @@ var_dump($_POST);
                                         </td>
                                         <td>
                                             <a href="<?= SERVERURL ?>formacao/resumo_inscrito&id=<?= $formacaoObj->encryption($resultado->id) ?>"
-                                               target="_blank" class="btn btn-success btn-sm"> Resumo</a>
+                                               class="btn btn-success btn-sm"> Resumo</a>
                                         </td>
                                     </tr>
                                 <?php } ?>

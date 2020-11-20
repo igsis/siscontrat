@@ -4,6 +4,12 @@ $pfObj = new PessoaFisicaController();
 
 $id = $_GET['id'];
 
+if (isset($_GET['capac'])) {
+    $method = "editarPFImport";
+} else {
+    $method = "editarPF";
+}
+
 $dados = $pfObj->comparaPf($_GET['id']);
 ?>
 <div class="content-header">
@@ -39,11 +45,9 @@ $dados = $pfObj->comparaPf($_GET['id']);
                                     <div class="form-group">
                                         <label><?= $label ?>:</label>
                                         <div class="input-group">
-                                            <?php if ($key == "pf_nacionalidade_id" && $dado != ""): ?>
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text "><?="$dado = ".$pfObj->getNacionalidade($dado)?></span>
-                                                </div>
-                                            <?php endif; ?>
+                                            <?php if (!empty($dado)) {
+                                                $pfObj->recuperaDadoPorId($key, $dado, false);
+                                            } ?>
                                             <input type="text" name="message" class="form-control" id="<?=$key?>Cpc" value="<?=$dado?>" readonly>
                                             <span class="input-group-append">
                                                 <button type="button" class="btn btn-success" onclick="passaValor('<?=$key?>')">
@@ -60,11 +64,14 @@ $dados = $pfObj->comparaPf($_GET['id']);
                         <div class="card card-primary card-outline">
                             <form class="form-horizontal formulario-ajax" method="POST" role="form"
                                   action="<?= SERVERURL ?>ajax/formacaoAjax.php" data-form="update">
-                                <input type="hidden" name="_method" value="editarPF">
+                                <input type="hidden" name="_method" value="<?= $method ?>">
                                 <input type="hidden" name="pagina" value="formacao/pf_cadastro">
                                 <input type="hidden" name="id" value="<?=$pfObj->encryption($dados['id'])?>">
                                 <?php if (!isset($dados['dadosSis']['pf_nome'])): ?>
                                     <input type="hidden" name="pf_nome" value="<?= $dados['pf_nome'] ?>">
+                                <?php endif ?>
+                                <?php if (isset($_GET['capac'])): ?>
+                                    <input type="hidden" name="capac_id" value="<?= $_GET['capac'] ?>">
                                 <?php endif ?>
                                 <div class="card-header">
                                     <h3 class="card-title">Siscontrat</h3>
@@ -87,11 +94,9 @@ $dados = $pfObj->comparaPf($_GET['id']);
                                                 <input type="text" name="<?= $key ?>" class="form-control"
                                                        id="<?= $key ?>Sis"
                                                        data-valor="<?= $dado ?>" value="<?= $dado ?>" readonly>
-                                                <?php if ($key == "nacionalidade_id"): ?>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text "><?="$dado = ".$pfObj->getNacionalidade($dado)?></span>
-                                                    </div>
-                                                <?php endif; ?>
+                                                <?php if (!empty($dado)) {
+                                                    $pfObj->recuperaDadoPorId($key, $dado);
+                                                } ?>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
