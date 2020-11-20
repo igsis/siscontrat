@@ -173,7 +173,7 @@ if ($idCapac){
                             </div>
                             <hr/>
                             <div class="row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <div class="row">
                                         <div class="form-group col">
                                             <label for="regiao_id">Região: *</label>
@@ -222,7 +222,7 @@ if ($idCapac){
                                             </select>
                                         </div>
                                         <div class="form-group col-md-1">
-                                            <label for="dt_trans">Trans?</label><br>
+                                            <label for="dt_trans">Trans</label><br>
                                             <input type="checkbox" class="form-control-sm checkbox-grid-2 float-left" id="dt_trans" name="dt_trans" value="1"
                                                 <?php
                                                 if (isset($pf['trans'])){
@@ -234,7 +234,7 @@ if ($idCapac){
                                             >
                                         </div>
                                         <div class="form-group col-md-1">
-                                            <label for="dt_pcd">PCD?</label><br>
+                                            <label for="dt_pcd">PCD</label><br>
                                             <input type="checkbox" class="form-control-sm checkbox-grid-2 float-left" id="dt_pcd" name="dt_pcd" value="1"
                                                 <?php
                                                 if (isset($pf['pcd'])){
@@ -246,17 +246,14 @@ if ($idCapac){
                                             >
                                         </div>
                                     </div>
-
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="curriculo">Currículo:</label>
-                                    <textarea class="form-control" id="curriculo" name="dt_curriculo" rows="5"><?= $pf['curriculo'] ?? "" ?></textarea>
                                 </div>
                             </div>
                             <hr/>
                             <div class="row">
-
-
+                                <div class="form-group col-md-12">
+                                    <label for="curriculo">Currículo:</label>
+                                    <textarea class="form-control" id="curriculo" name="dt_curriculo" rows="5"><?= $pf['curriculo'] ?? "" ?></textarea>
+                                </div>
                             </div>
                             <hr/>
                             <div class="alert alert-warning alert-dismissible">
