@@ -15,8 +15,6 @@ if (isset($_POST['busca'])) {
     $resultados = $formacaoObj->listarIncritos($dados);
 }
 
-var_dump($_POST);
-
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -50,30 +48,13 @@ var_dump($_POST);
                                     <input type="number" id="ano" name="ano" class="form-control inputs"
                                            value="<?= isset($dados['ano']) ? $dados['ano'] : '' ?>">
                                 </div>
-                                <!--                                <div class="col-sm-12 col-md-4">-->
-                                <!--                                    <div class="form-group pt-3">-->
-                                <!--                                        <label for="periodo">Periodo :</label>-->
-                                <!--                                        <div class="input-group">-->
-                                <!--                                            <div class="input-group-prepend">-->
-                                <!--                                              <span class="input-group-text">-->
-                                <!--                                                <i class="far fa-calendar-alt"></i>-->
-                                <!--                                              </span>-->
-                                <!--                                            </div>-->
-                                <!--                                            <input type="text" class="form-control inputs" name="periodo"-->
-                                <!--                                                   id="rangeDate"-->
-                                <!--                                                   value="-->
-                                <? //= isset($periodo) ? $periodo : '' ?><!--">-->
-                                <!--                                        </div>-->
-                                <!-- /.input group -->
-                                <!--                                    </div>-->
-                                <!--                                </div>-->
                                 <div class="col-sm-12 col-md-2">
                                     <label for="dataInicio">Data Início:</label>
                                     <input type="date" class="form-control inputsData" name="data[]" id="dataInicio" value="<?= isset($dados['data'][0]) ? $dados['data'][0] : '' ?>">
                                 </div>
                                 <div class="col-sm-12 col-md-2">
                                     <label for="dataFim">Data Fim:</label>
-                                    <input type="date" class="form-control inputsData" name="data[]" id="dataFim" <?= isset($dados['data'][0]) ? $dados['data'][0] : '' ?>>
+                                    <input type="date" class="form-control inputsData" name="data[]" id="dataFim" value="<?= isset($dados['data'][1]) ? $dados['data'][1] : '' ?>">
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <label for="programa">Programa: </label>
