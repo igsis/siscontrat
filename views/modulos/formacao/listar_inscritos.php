@@ -7,18 +7,10 @@ $apiInscritos = CAPACURL . 'api/api_formacao_cargos.php';
 
 $formacaoObj = new FormacaoController();
 
-if (isset($_GET['busca'])) {
-    $dados = $_GET;
+if (isset($_POST['busca'])) {
+    $dados = $_POST;
 
-    if (isset($dados['rangeDate'])) {
-        $dados['rangeDate'] = str_replace('t', '/', $dados['rangeDate']);
-        $dados['rangeDate'] = str_replace('b', '-', $dados['rangeDate']);
-
-        $periodo = str_replace('b', '/', $_GET['rangeDate']);
-        $periodo = str_replace('t', ' - ', $periodo);
-    }
-
-    array_splice($dados, 0, 2);
+    array_splice($dados, 0, 1);
 
     $resultados = $formacaoObj->listarIncritos($dados);
 }
@@ -48,28 +40,21 @@ if (isset($_GET['busca'])) {
                     </div>
                     <!-- /.card-header -->
                     <form method="post">
+                        <input type="hidden" name="busca" value="1">
                         <div class="card-body">
                             <div class="row d-flex align-items-center">
                                 <div class="col-sm-12 col-md-4">
                                     <label for="ano_inscricao">Ano de inscrição: </label>
-                                    <input type="number" id="ano" name="ano_inscricao" class="form-control inputs"
+                                    <input type="number" id="ano" name="ano" class="form-control inputs"
                                            value="<?= isset($dados['ano']) ? $dados['ano'] : '' ?>">
                                 </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <div class="form-group pt-3">
-                                        <label for="periodo">Periodo :</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                              <span class="input-group-text">
-                                                <i class="far fa-calendar-alt"></i>
-                                              </span>
-                                            </div>
-                                            <input type="text" class="form-control inputs" name="periodo"
-                                                   id="rangeDate"
-                                                   value="<?= isset($periodo) ? $periodo : '' ?>">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
+                                <div class="col-sm-12 col-md-2">
+                                    <label for="dataInicio">Data Início:</label>
+                                    <input type="date" class="form-control inputsData" name="data[]" id="dataInicio" value="<?= isset($dados['data'][0]) ? $dados['data'][0] : '' ?>">
+                                </div>
+                                <div class="col-sm-12 col-md-2">
+                                    <label for="dataFim">Data Fim:</label>
+                                    <input type="date" class="form-control inputsData" name="data[]" id="dataFim" value="<?= isset($dados['data'][1]) ? $dados['data'][1] : '' ?>">
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <label for="programa">Programa: </label>
@@ -139,7 +124,7 @@ if (isset($_GET['busca'])) {
                 <!-- /.card -->
             </div>
         </div>
-        <?php if (isset($_GET['busca'])): ?>
+        <?php if (isset($_POST['busca'])): ?>
             <div class="row">
                 <div class="col-12">
                     <div class="card card-info">
@@ -218,9 +203,6 @@ if (isset($_GET['busca'])) {
 
 <script defer>
 
-    <?php if (isset($periodo)): ?>
-        document.querySelector('#rangeDate').value = "<?= $periodo ?>"
-    <?php endif; ?>
     const url_cargos = '<?= $apiCargos ?>';
 
     document.querySelector('body').classList.toggle('sidebar-open');
@@ -233,20 +215,23 @@ if (isset($_GET['busca'])) {
         getFuncao(this.value);
     });
 
-    pesquisa.addEventListener('click', function (event) {
-        event.preventDefault();
-        let inputs = document.querySelectorAll('.inputs');
-        dados = createArray();
-
-        window.location.href = montaUrl(dados);
-    });
+    // pesquisa.addEventListener('click', function (event) {
+    //     event.preventDefault();
+    //     let inputs = document.querySelectorAll('.inputs');
+    //     dados = createArray();
+    //
+    //     window.location.href = montaUrl(dados);
+    // });
 
     function createArray() {
         let inputs = document.querySelectorAll('.inputs');
         let checks = document.querySelectorAll('.checks');
 
+        let datas = document.querySelectorAll('.inputsData');
+
         let dados = [];
         for (let input of inputs) {
+            console.log(input.id, input.id == 'dataInicio' ? true : false);
             let elemento = {}
             if (input.value != "") {
                 if (input.id != "rangeDate") {
@@ -269,13 +254,31 @@ if (isset($_GET['busca'])) {
                 dados.push(elemento)
             }
         }
-        console.log(dados)
+
+        if (datas.length == 1) {
+            let data = {};
+            data.id = 'rangeDate';
+            data.dado = alterDate(data.value)
+
+            dados.push(data);
+        } else if (datas.length == 2) {
+            let strData = '';
+            strData = datas[0].value + ' / ' + datas[1].value;
+
+            data = {};
+
+            data.id = 'rangeDate';
+            data.dado = alterDate(strData)
+
+            dados.push(data);
+        }
+
         return dados;
     }
 
     function alterDate(date) {
         date = date.replace(date.substr(10, 3), 't');
-        return date.split('/').join('b');
+        return date.split('-').join('b');
     }
 
     function checkValue(id) {
@@ -299,7 +302,7 @@ if (isset($_GET['busca'])) {
             });
     }
 
-    <?php if (isset($_GET['programa_id'])): ?>
+    <?php if (isset($_POST['programa_id'])): ?>
     getFuncao('<?= $dados['programa_id']?>', '<?= isset($dados['form_cargo_id']) ? $dados['form_cargo_id'] : '' ?>');
     <?php endif; ?>
 
