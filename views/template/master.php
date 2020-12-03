@@ -105,6 +105,13 @@ else:
 <?php if(isset($sectionJS))
         echo $sectionJS;
 ?>
+
+<a href="https://forms.gle/ktjaMbEHmANLuFXi8" class="btn btn-warning" target="_blank"
+   style="position:fixed;bottom:40px;right:40px;text-align:center;
+   box-shadow: 1px 1px 2px #888;z-index:1000;">
+    <i class="fas fa-exclamation-circle"></i>
+    Deixe sua opnião</a>
+
 <!-- jQuery -->
 <script src="<?= SERVERURL ?>views/plugins/jquery/jquery.min.js"></script>
 <script src="<?= SERVERURL ?>views/plugins/moment/moment.min.js"></script>
