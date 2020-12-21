@@ -1929,7 +1929,6 @@ class FormacaoController extends FormacaoModel
 
         $sql .= $where;
 
-        var_dump($sql);
         return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
     }
 
