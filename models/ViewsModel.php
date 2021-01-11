@@ -111,6 +111,7 @@ class ViewsModel
             'territorio_lista',
             'vigencia_cadastro',
             'vigencia_lista',
+            "importar_capac"
         ];
         if (self::verificaModulo($modulo)) {
             if (in_array($view, $whitelist)) {
