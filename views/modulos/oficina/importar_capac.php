@@ -8,7 +8,7 @@ if (isset($_POST['busca'])) {
 
     array_splice($dados, 0, 1);
 
-    $resultados = $oficinaObj->recuperaOficinaCapac($dados);
+    $resultados = $oficinaObj->recuperaOficinasCapac($dados);
 
 }
 
@@ -95,7 +95,7 @@ if (isset($_POST['busca'])) {
                                             <td><?= $resultado->data_cadastro ?></td>
                                             <td><?= $resultado->publico ?></td>
                                             <td class="text-center">
-                                                <a href="#" class="btn btn-success"> Visualizar </a>
+                                                <a href="<?= SERVERURL ?>oficina/resumo_inscrito&id=<?= $resultado->id ?>" class="btn btn-success"> Visualizar </a>
                                             </td>
                                         </tr>
                                     <?php
