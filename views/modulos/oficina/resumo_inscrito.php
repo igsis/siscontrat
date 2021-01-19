@@ -6,7 +6,10 @@ $oficinaObj = new OficinaController();
 
 $id = $_GET['id'];
 
-$oficina =  $oficinaObj->recuperaOficinaCapac($id);
+
+$oficina = $oficinaObj->recuperaOficinaCapac($id);
+
+$publicos = $oficinaObj->recuperaPublico($id);
 
 ?>
 <!-- Content Header (Page header) -->
@@ -37,147 +40,185 @@ $oficina =  $oficinaObj->recuperaOficinaCapac($id);
                 <!-- Horizontal Form -->
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Dados pessoais</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col"><b>Nome:</b> <?php //$oficina->nome ?></div>
-                            <div class="col"><b>Nome Artístico:</b> <?php //$oficina->nome_artistico ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col"><b>RG:</b> <?php //$oficina->rg ?></div>
-                            <div class="col"><b>CPF:</b> <?php //$oficina->cpf ?></div>
-                            <div class="col"><b>CCM:</b> <?php //$oficina->ccm ?></div>
-                        </div>
-                        <div class="row">
-                            <div class="col"><b>Data de nascimento:</b> <?php //date("d/m/Y", strtotime($oficina->data_nascimento)) ?></div>
-                            <div class="col"><b>Nacionalidade:</b> <?php //$oficina->nacionalidade ?></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md"><b>E-mail:</b> <?php //$oficina->email ?></div>
-                            <div class="col"><b>Telefones:</b> <?php //$telefones ?></div>
-                        </div>
-                        <div class="row">
-                            <div class="col"><b>NIT:</b> <?php //$oficina->nit ?></div>
-                            <div class="col"><b>DRT:</b> <?php //$oficina->drt ?></div>
-                            <div class="col"><b>Grau Instituição:</b> <?php //$oficina->grau_instrucao ?></div>
-                        </div>
-                        <div class="row">
-                            <div class="col"><b>Etnia:</b> <?php //$oficina->etnia ?></div>
-                            <div class="col"><b>Gênero:</b> <?php //$oficina->genero ?></div>
-                            <div class="col"><b>Trans:</b> <?php //$oficina->trans ?></div>
-                            <div class="col"><b>PCD:</b> <?php //$oficina->pcd ?></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <b>Endereço:</b> <?php //$oficina->logradouro . ", " . $oficina->numero . " " . $oficina->complemento . " " . $oficina->bairro . " - " . $oficina->cidade . "-" . $oficina->uf . " CEP: " . $oficina->cep ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col"><b>Banco:</b> <?php //$oficina->banco ?></div>
-                            <div class="col"><b>Agência:</b> <?php //$oficina->agencia ?></div>
-                            <div class="col"><b>Conta:</b> <?php //$oficina->conta ?></div>
-                        </div>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-        </div>
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Horizontal Form -->
-                <div class="card card-info">
-                    <div class="card-header">
                         <h3 class="card-title">Dados oficina</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
-                                <span class="font-weight-bold">Protocolo: </span> <?php $oficina->protocolo ?>
+                                <span class="font-weight-bold">Protocolo: </span> <?= $oficina->protocolo ?>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col">
                                 <span class="font-weight-bold">Nome do Evento: </span> <?= $oficina->nome_evento ?>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col">
                                 <span class="font-weight-bold">Espaço Público: </span> <?= $oficina->espaco_publico ? 'Sim' : 'Não' ?>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-3">
+                            <div class="col">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            Público (Representatividade e Visibilidade Sócio-cultural)
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($publicos as $publico) {
+                                        ?>
+                                        <tr>
+                                            <td><?= $publico->publico ?></td>
+                                            <td><?= $publico->descricao ?></td>
+                                        </tr>
+                                        <?php
+                                    } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
                             <div class="col">
                                 <span class="font-weight-bold">Linguagem: </span> <?= $oficina->linguagem ?>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col">
                                 <span class="font-weight-bold">Sub-linguagem: </span> <?= $oficina->sublinguagem ?>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col">
-                                <span class="font-weight-bold">Sinopse: </span>
-                                <p><?= $oficina->sinopse ?></p>
+                                <span class="font-weight-bold">Nível: </span> <?= $oficina->nivel ?>
                             </div>
                         </div>
-                        <div class="row">
+
+                        <div class="row mt-3">
+                            <div class="col">
+                                <span class="font-weight-bold">Sinopse: </span> <?= $oficina->sinopse ?>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
                             <div class="col">
                                 <span class="font-weight-bold">Tipo Contratação: </span> <?= $oficina->tipo_contratacao ?>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col">
                                 <span class="font-weight-bold">Integrantes: </span> <?= $oficina->integrantes ?>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col">
                                 <span class="font-weight-bold">Links: </span> <?= $oficina->links ?>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col">
-                                <span class="font-weight-bold">Data Inicio: </span> <?= $oficina->data_inicio ?> <span class="font-weight-bold">Data Fim: </span> <?= $oficina->data_fim ?>
+                                <span class="font-weight-bold">Data de Cadastro: </span> <?= date("d/m/Y", strtotime($oficina->data_cadastro)) ?>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col">
-                                <span class="font-weight-bold">Dia execução 1: </span> <?= $oficinaObj->exibeExecucaoDia($oficina->execucao_dia1_id) ?> <span class="font-weight-bold">Dia execução 2: </span> <?= $oficinaObj->exibeExecucaoDia($oficina->execucao_dia2_id) ?>
+                                <span class="font-weight-bold">Data Inicio: </span> <?= date("d/m/Y", strtotime($oficina->data_inicio)) ?>
+                                &nbsp; &nbsp; &nbsp; &nbsp;
+                                <span class="font-weight-bold">Data Fim: </span> <?= date("d/m/Y", strtotime($oficina->data_fim)) ?>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <span class="font-weight-bold">Dia execução 1: </span> <?= $oficinaObj->exibeExecucaoDia($oficina->execucao_dia1_id) ?>
+                                &nbsp; &nbsp; &nbsp; &nbsp;
+                                <span class="font-weight-bold">Dia execução 2: </span> <?= $oficinaObj->exibeExecucaoDia($oficina->execucao_dia2_id) ?>
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mt-3">
                             <div class="col">
                                 <span class="font-weight-bold">Modalidade: </span> <?= $oficina->modalidade ?>
                             </div>
                         </div>
-
-
                     </div>
-                    <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Dados do Proponente</h3>
+                    </div>
+                    <div class="card-body">
+                        <?php if (1): ?>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="font-weight-bold">Nome: </span> Nome das pessoa
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">Nome Artístico: </span> Nome QWERTTYYYYYTTRTYT
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="font-weight-bold">Data de nascimento: </span> 01/01/2001
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">Nacionalidade: </span> Brasileiro
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="font-weight-bold">RG: </span> 00.000.000-00
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">CPF: </span>000.000.000-00
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">CCM: </span>000.000.000-00
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="font-weight-bold">E-mail: </span>teste@teste.com
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Telefones
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="font-weight-bold">NIT: </span>000000000000000000
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">DRT: </span>000000000000000000
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="row">
+                                
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <a href="<?= SERVERURL ?>formacao/listar_inscritos"
+                           class="btn btn-default float-left">Voltar</a>
+                        <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" method="POST">
+                            <input type="hidden" name="_method" value="importarInscrito">
+                            <input type="hidden" name="id" value="<?= $oficinaObj->encryption($oficina->id) ?>">
+                            <button class="btn btn-info float-right" id="importar">Importar Inscrito</button>
+                            <div class="resposta-ajax"></div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- /.row -->
 
         <!-- /.row -->
-        <div class="card-footer">
-            <a href="<?= SERVERURL ?>formacao/listar_inscritos" class="btn btn-default float-left">Voltar</a>
-            <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" method="POST">
-                <input type="hidden" name="_method" value="importarInscrito">
-                <input type="hidden" name="id" value="<?= $oficinaObj->encryption($oficina->id) ?>">
-                <button class="btn btn-info float-right" id="importar">Importar Inscrito</button>
-                <div class="resposta-ajax"></div>
-            </form>
-        </div>
+
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->

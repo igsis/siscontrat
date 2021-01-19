@@ -46,6 +46,7 @@ class OficinaController extends OficinaModel
 
     public function recuperaOficinaCapac($id)
     {
+        $idEvento = MainModel::decryption($id);
         $sql = "SELECT 	ev.id, ev.protocolo, ev.nome_evento, ev.espaco_publico, ev.sinopse, tc.tipo_contratacao,
                         ev.data_cadastro, ev.data_envio, oc.data_inicio, oc.data_fim, oc.integrantes, oc.links,
                         oc.quantidade_apresentacao, mo.modalidade, of.linguagem, os.sublinguagem, ofn.nivel,
@@ -56,7 +57,7 @@ class OficinaController extends OficinaModel
                 LEFT JOIN modalidades AS mo ON oc.modalidade_id = mo.id
                 LEFT JOIN ofic_linguagens AS of ON oc.ofic_linguagem_id = of.id
                 LEFT JOIN ofic_sublinguagens AS os ON oc.ofic_sublinguagem_id = os.id
-                LEFT JOIN ofic_niveis AS ofn ON oc.ofic_nivel_id = ofn.id WHERE ev.id = {$id}";
+                LEFT JOIN ofic_niveis AS ofn ON oc.ofic_nivel_id = ofn.id WHERE ev.id = {$idEvento}";
 
         return DbModel::consultaSimples($sql, true)->fetchObject();
     }
@@ -66,7 +67,19 @@ class OficinaController extends OficinaModel
         return (new EventoController)->exibeDescricaoPublico();
     }
 
-    public  function exibeExecucaoDia($id){
+    public function recuperaPublico($id)
+    {
+        $idEvento = MainModel::decryption($id);
+
+        $sql = "SELECT p.publico, p.descricao 
+                FROM evento_publico AS ep LEFT JOIN publicos AS p  ON ep.publico_id = p.id
+                WHERE ep.evento_id = {$idEvento}";
+
+        return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function exibeExecucaoDia($id)
+    {
         $sql = "SELECT dia FROM execucao_dias WHERE id = '{$id}'";
 
         return DbModel::consultaSimples($sql, true)->fetchObject()->dia;

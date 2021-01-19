@@ -95,7 +95,7 @@ if (isset($_POST['busca'])) {
                                             <td><?= $resultado->data_cadastro ?></td>
                                             <td><?= $resultado->publico ?></td>
                                             <td class="text-center">
-                                                <a href="<?= SERVERURL ?>oficina/resumo_inscrito&id=<?= $resultado->id ?>" class="btn btn-success"> Visualizar </a>
+                                                <a href="<?= SERVERURL ?>oficina/resumo_inscrito&id=<?= $oficinaObj->encryption($resultado->id) ?>" class="btn btn-success"> Visualizar </a>
                                             </td>
                                         </tr>
                                     <?php
