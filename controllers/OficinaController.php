@@ -9,193 +9,79 @@ if ($pedidoAjax) {
 
 class OficinaController extends OficinaModel
 {
-    public function recuperaOficina($id) {
-        $id = MainModel::decryption($id);
-        $oficina = OficinaModel::getOficina($id);
-        return $oficina;
-    }
-
-    public function recuperaComplementosOficina($atracao_id)
+    public function recuperaOficinasCapac($dados = [])
     {
-        $atracao_id = MainModel::decryption($atracao_id);
-        $complemento = DbModel::consultaSimples("SELECT * FROM oficinas WHERE atracao_id = '$atracao_id'")->fetchObject();
-        return $complemento;
+
+        $protocolo = '';
+        $nomeEvento = '';
+        $publico = '';
+
+        if ($dados['protocolo'] != "") {
+            $protocolo = " AND e.protocolo = '{$dados['protocolo']}'";
+        }
+
+        if ($dados['nome_evento'] != "") {
+            $nomeEvento = " AND e.nome_evento = '{$dados['nome_evento']}'";
+        }
+
+        if ($dados['publico'] != "") {
+            $publico = " AND p.id = '{$dados['publico']}'";
+        }
+
+        $sql = "SELECT 	e.id,
+                        e.nome_evento,
+                        e.protocolo,
+                        DATE_FORMAT(e.data_cadastro, '%d/%m/%Y')  as 'data_cadastro',
+                        (SELECT GROUP_CONCAT(' ',p.publico) FROM capac_new.evento_publico AS ep
+                                INNER JOIN capac_new.publicos AS p ON ep.publico_id = p.id
+                                WHERE ep.evento_id = e.id
+                            ) AS publico
+                FROM capac_new.eventos AS e
+                LEFT JOIN capac_new.evento_publico AS ep ON e.id = ep.evento_id
+                LEFT JOIN capac_new.publicos AS p ON p.id = ep.publico_id
+                WHERE e.publicado = 2 AND protocolo != '' {$protocolo} {$publico} {$nomeEvento} ";
+
+        return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function insereOficina($dados){
-        $dadosOficina = OficinaModel::limparStringOficina($dados);
-        $dadosOficina['at']['oficina'] = 1;
-        $evento_id = $dadosOficina['at']['evento_id'] = (new EventoController)->insereEvento($dadosOficina['ev'], true);
-        $atracaoOficina = DbModel::insert('atracoes', $dadosOficina['at']);
+    public function recuperaOficinaCapac($id)
+    {
+        $idEvento = MainModel::decryption($id);
+        $sql = "SELECT 	ev.id, ev.protocolo, ev.nome_evento, ev.espaco_publico, ev.sinopse, tc.tipo_contratacao,
+                        ev.data_cadastro, ev.data_envio, oc.data_inicio, oc.data_fim, oc.integrantes, oc.links,
+                        oc.quantidade_apresentacao, mo.modalidade, of.linguagem, os.sublinguagem, ofn.nivel,
+                        oc.execucao_dia1_id, oc.execucao_dia2_id
+                FROM eventos AS ev
+                LEFT JOIN tipos_contratacoes AS tc ON ev.tipo_contratacao_id = tc.id
+                LEFT JOIN ofic_cadastros AS oc ON ev.id = oc.evento_id
+                LEFT JOIN modalidades AS mo ON oc.modalidade_id = mo.id
+                LEFT JOIN ofic_linguagens AS of ON oc.ofic_linguagem_id = of.id
+                LEFT JOIN ofic_sublinguagens AS os ON oc.ofic_sublinguagem_id = os.id
+                LEFT JOIN ofic_niveis AS ofn ON oc.ofic_nivel_id = ofn.id WHERE ev.id = {$idEvento}";
 
-        if ($atracaoOficina->rowCount() > 0) {
-            $_SESSION['origem_id_s'] = $evento_id;
-            $_SESSION['atracao_id_s'] = $atracao_id = DbModel::connection()->lastInsertId();
-
-            $acaoAtracao = [
-                'acao_id' => 8,
-                'atracao_id' => $atracao_id
-            ];
-            DbModel::insert('acao_atracao', $acaoAtracao);
-
-            $alerta = [
-                'alerta' => 'sucesso',
-                'titulo' => 'Oficina Cadastrada!',
-                'texto' => 'Dados cadastrados com sucesso!',
-                'tipo' => 'success',
-                'location' => SERVERURL . 'oficina/evento_cadastro&key=' . MainModel::encryption($evento_id)
-            ];
-        } else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-
-        return MainModel::sweetAlert($alerta);
+        return DbModel::consultaSimples($sql, true)->fetchObject();
     }
 
-    public function editaOficina($dados, $evento_id, $atracao_id){
-        unset($dados['evento_id']);
-        unset($dados['atracao_id']);
-        $evento_id = MainModel::decryption($evento_id);
-        $atracao_id = MainModel::decryption($atracao_id);
-
-        $dadosOficina = OficinaModel::limparStringOficina($dados);
-        $dadosOficina['at']['oficina'] = 1;
-
-        $editaEvento = (new EventoController)->editaEvento($dadosOficina['ev'], $evento_id);
-
-        if (DbModel::connection()->errorCode() == 0) {
-            $editaAtracao = DbModel::update('atracoes', $dadosOficina['at'], $atracao_id);
-            if (DbModel::connection()->errorCode() == 0) {
-                $alerta = [
-                    'alerta' => 'sucesso',
-                    'titulo' => 'Oficina Atualizada!',
-                    'texto' => 'Dados atualizados com sucesso!',
-                    'tipo' => 'success',
-                    'location' => SERVERURL . 'oficina/evento_cadastro&key=' . MainModel::encryption($evento_id)
-                ];
-            } else {
-                $alerta = [
-                    'alerta' => 'simples',
-                    'titulo' => 'Erro!',
-                    'texto' => 'Erro ao salvar!',
-                    'tipo' => 'error',
-                    'location' => SERVERURL . 'oficina/evento_cadastro&key=' . MainModel::encryption($evento_id)
-                ];
-            }
-        } else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Erro!',
-                'texto' => 'Erro ao salvar!',
-                'tipo' => 'error',
-                'location' => SERVERURL . 'oficina/evento_cadastro&key=' . MainModel::encryption($evento_id)
-            ];
-        }
-
-        return MainModel::sweetAlert($alerta);
-    }
-
-    public function apagaOficina($id){
-        $apaga = DbModel::apaga("eventos", $id);
-        if ($apaga){
-            $alerta = [
-                'alerta' => 'sucesso',
-                'titulo' => 'Oficina',
-                'texto' => 'Oficina apagado com sucesso!',
-                'tipo' => 'danger',
-                'location' => SERVERURL.'oficina/evento_lista'
-            ];
-        }else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-        return MainModel::sweetAlert($alerta);
-    }
-
-    public function insereComplementosOficina($dados) {
-        unset($dados['_method']);
-
-        foreach ($dados as $campo => $valor) {
-            if ($campo != "dataInicioFim") {
-                $dadosComplemento[$campo] = MainModel::limparString($valor);
-                unset($dados[$campo]);
-            }
-        }
-
-        $datas = explode(" - ", $dados['dataInicioFim']);
-        $dadosComplemento['data_inicio'] = MainModel::dataParaSQL($datas[0]);
-        $dadosComplemento['data_fim'] = MainModel::dataParaSQL($datas[1]);
-
-        $dadosComplemento['atracao_id'] = MainModel::decryption($_SESSION['atracao_id_s']);
-
-        $complemento = DbModel::insert('oficinas', $dadosComplemento);
-        if ($complemento->rowCount() > 0) {
-            $alerta = [
-                'alerta' => 'sucesso',
-                'titulo' => 'Dados Complementares Cadastrados!',
-                'texto' => 'Dados cadastrados com sucesso!',
-                'tipo' => 'success',
-                'location' => SERVERURL . 'oficina/complemento_oficina_cadastro'
-            ];
-        } else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-
-        return MainModel::sweetAlert($alerta);
-    }
-
-    public function editaComplementosOficina($dados, $id) {
-        $id = MainModel::decryption($id);
-        unset($dados['_method']);
-        unset($dados['id']);
-
-        foreach ($dados as $campo => $valor) {
-            if ($campo != "dataInicioFim") {
-                $dadosComplemento[$campo] = MainModel::limparString($valor);
-                unset($dados[$campo]);
-            }
-        }
-
-        $datas = explode(" - ", $dados['dataInicioFim']);
-        $dadosComplemento['data_inicio'] = MainModel::dataParaSQL($datas[0]);
-        $dadosComplemento['data_fim'] = MainModel::dataParaSQL($datas[1]);
-
-        $editaComplemento = DbModel::update('oficinas', $dadosComplemento, $id);
-        if (DbModel::connection()->errorCode() == 0) {
-            $alerta = [
-                'alerta' => 'sucesso',
-                'titulo' => 'Dados Complementares Atualizados!',
-                'texto' => 'Dados atualizados com sucesso!',
-                'tipo' => 'success',
-                'location' => SERVERURL . 'oficina/complemento_oficina_cadastro'
-            ];
-        } else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-
-        return MainModel::sweetAlert($alerta);
-    }
-
-    public function exibeDescricaoPublico() {
+    public function exibeDescricaoPublico()
+    {
         return (new EventoController)->exibeDescricaoPublico();
+    }
+
+    public function recuperaPublico($id)
+    {
+        $idEvento = MainModel::decryption($id);
+
+        $sql = "SELECT p.publico, p.descricao 
+                FROM evento_publico AS ep LEFT JOIN publicos AS p  ON ep.publico_id = p.id
+                WHERE ep.evento_id = {$idEvento}";
+
+        return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function exibeExecucaoDia($id)
+    {
+        $sql = "SELECT dia FROM execucao_dias WHERE id = '{$id}'";
+
+        return DbModel::consultaSimples($sql, true)->fetchObject()->dia;
     }
 }

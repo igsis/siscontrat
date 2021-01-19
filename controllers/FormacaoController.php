@@ -1893,6 +1893,7 @@ class FormacaoController extends FormacaoModel
     {
         $where = " ";
         if (count($dados)) {
+
             foreach ($dados as $key => $value) {
                 if ($value != '') {
                     if ($key != 'data') {

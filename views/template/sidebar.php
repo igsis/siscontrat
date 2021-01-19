@@ -53,7 +53,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="http://smcsistemas.prefeitura.sp.gov.br/manual/capac" target="_blank" class="nav-link">
+                <a href="http://smcsistemas.prefeitura.sp.gov.br/manual/siscontrat" target="_blank" class="nav-link">
                     <i class="fa fa-question"></i>&nbsp;
                     <p>Ajuda</p>
                 </a>

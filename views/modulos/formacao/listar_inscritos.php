@@ -1,10 +1,6 @@
 <?php
 require_once "./controllers/FormacaoController.php";
 
-$apiCargos = CAPACURL . 'api/api_formacao_cargos.php';
-$apiInscritos = CAPACURL . 'api/api_formacao_cargos.php';
-
-
 $formacaoObj = new FormacaoController();
 
 if (isset($_POST['busca'])) {
@@ -58,7 +54,7 @@ if (isset($_POST['busca'])) {
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <label for="programa">Programa: </label>
-                                    <select name="programa" id="programa_id" class="form-control inputs">
+                                    <select name="programa_id" id="programa_id" class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
                                         $formacaoObj->geraOpcao("programas", isset($dados['programa_id']) ? $dados['programa_id'] : '')
@@ -69,13 +65,13 @@ if (isset($_POST['busca'])) {
                             <div class="row">
                                 <div class="col-sm-12 col-md-4">
                                     <label for="funcao">Função:</label>
-                                    <select name="funcao" id="form_cargo_id" class="form-control inputs">
+                                    <select name="form_cargo_id" id="form_cargo_id" class="form-control inputs">
 
                                     </select>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <label for="regiao_preferencial">Região Preferencial: </label>
-                                    <select name="regiao_preferencial" id="regiao_preferencial_id"
+                                    <select name="regiao_preferencial_id" id="regiao_preferencial_id"
                                             class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
@@ -85,7 +81,7 @@ if (isset($_POST['busca'])) {
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <label for="linguagem">Linguagem</label>
-                                    <select name="linguagem" id="linguagem_id" class="form-control inputs">
+                                    <select name="linguagem_id" id="linguagem_id" class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
                                         $formacaoObj->geraOpcao("linguagens", isset($dados['linguagem_id']) ? $dados['linguagem_id'] : '');
@@ -96,7 +92,7 @@ if (isset($_POST['busca'])) {
                             <div class="row d-flex align-items-center">
                                 <div class="col-sm-12 col-md-4">
                                     <label for="genero">Gênero: </label>
-                                    <select name="genero" id="genero_id" class="form-control inputs">
+                                    <select name="genero_id" id="genero_id" class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
                                         $formacaoObj->geraOpcao("generos", isset($dados['genero_id']) ? $dados['genero_id'] : '', false, false, true);
@@ -106,12 +102,12 @@ if (isset($_POST['busca'])) {
                                 <div class="col-sm-6 col-md-2 d-flex flex-column align-items-center">
                                     <label for="trans">Trans:</label>
                                     <input type="checkbox" name="trans" id="trans" class="form-control checks"
-                                           value="trans" <?= isset($dados['trans']) ? 'checked' : '' ?>>
+                                           value="1" <?= isset($dados['trans']) ? 'checked' : '' ?>>
                                 </div>
                                 <div class="col-sm-6 col-md-2 d-flex flex-column align-items-center">
                                     <label for="pcd">PCD: </label>
                                     <input type="checkbox" name="pcd" id="pcd" class="form-control checks"
-                                           value="pcd" <?= isset($dados['pcd']) ? 'checked' : '' ?>>
+                                           value="1" <?= isset($dados['pcd']) ? 'checked' : '' ?>>
                                 </div>
                             </div>
                         </div>
@@ -202,8 +198,6 @@ if (isset($_POST['busca'])) {
 <!-- /.content -->
 
 <script defer>
-
-    const url_cargos = '<?= $apiCargos ?>';
 
     document.querySelector('body').classList.toggle('sidebar-open');
     document.querySelector('body').classList.toggle('sidebar-collapse');
