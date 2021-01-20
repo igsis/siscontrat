@@ -11,6 +11,8 @@ $oficina = $oficinaObj->recuperaOficinaCapac($id);
 
 $publicos = $oficinaObj->recuperaPublico($id);
 
+$count = 0;
+
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -149,55 +151,84 @@ $publicos = $oficinaObj->recuperaPublico($id);
                         <h3 class="card-title">Dados do Proponente</h3>
                     </div>
                     <div class="card-body">
-                        <?php if (1): ?>
+                        <?php if ($oficina->pessoa_tipo_id == 1):
+                                $pf = $oficinaObj->recuperaPfCapac($oficina->pessoa_fisica_id);
+                            ?>
+
                             <div class="row">
                                 <div class="col">
-                                    <span class="font-weight-bold">Nome: </span> Nome das pessoa
+                                    <span class="font-weight-bold">Nome: </span> <?= $pf['nome'] ?>
                                 </div>
                                 <div class="col">
-                                    <span class="font-weight-bold">Nome Artístico: </span> Nome QWERTTYYYYYTTRTYT
+                                    <span class="font-weight-bold">Nome Artístico: </span> <?= $pf['nome_artistico'] ?>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <span class="font-weight-bold">Data de nascimento: </span> 01/01/2001
+                                    <span class="font-weight-bold">Etnia: </span> <?= $pf['descricao'] ?>
                                 </div>
                                 <div class="col">
-                                    <span class="font-weight-bold">Nacionalidade: </span> Brasileiro
+                                    <span class="font-weight-bold">Gênero: </span> <?= $pf['genero'] ?>
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">Grau de Instrução: </span> <?= $pf['grau_instrucao'] ?>
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">Trans: </span> <?= $pf['trans'] ? 'Sim' : 'Não' ?>
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">PCD: </span> <?= $pf['pcd'] ? 'Sim' : 'Não' ?>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <span class="font-weight-bold">RG: </span> 00.000.000-00
+                                    <span class="font-weight-bold">Data de nascimento: </span> <?= date('d/m/Y', strtotime($pf['data_nascimento'])) ?>
                                 </div>
                                 <div class="col">
-                                    <span class="font-weight-bold">CPF: </span>000.000.000-00
+                                    <span class="font-weight-bold">Nacionalidade: </span> <?= $pf['nacionalidade'] ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <?php if ($pf['rg'] != ''): ?>
+                                    <div class="col">
+                                        <span class="font-weight-bold">RG: </span> <?= $pf['rg'] ?>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="col">
+                                        <span class="font-weight-bold">Passaporte: </span> <?= $pf['passaporte'] ?>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="col">
+                                    <span class="font-weight-bold">CPF: </span> <?= $pf['cpf'] ?>
                                 </div>
                                 <div class="col">
-                                    <span class="font-weight-bold">CCM: </span>000.000.000-00
+                                    <span class="font-weight-bold">CCM: </span> <?= $pf['ccm'] ?>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <span class="font-weight-bold">E-mail: </span>teste@teste.com
+                                    <span class="font-weight-bold">E-mail: </span> <?= $pf['email'] ?>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col">
-                                    Telefones
-                                </div>
+                                <?php foreach ($pf['telefones'] as $telefone) {
+                                    ?>
+                                    <div class="col">
+                                        <span class="font-weight-bold">Telefones#<?= ++$count ?>:</span> <?= $telefone ?>
+                                    </div>
+                                <?php } ?>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <span class="font-weight-bold">NIT: </span>000000000000000000
+                                    <span class="font-weight-bold">NIT: </span> <?= $pf['nit'] ?>
                                 </div>
                                 <div class="col">
-                                    <span class="font-weight-bold">DRT: </span>000000000000000000
+                                    <span class="font-weight-bold">DRT: </span><?= $pf['drt'] ?>
                                 </div>
                             </div>
-                        <?php else: ?>
+                        <?php elseif ($oficina->pessoa_tipo_id == 2): ?>
                             <div class="row">
-                                
+
                             </div>
                         <?php endif; ?>
                     </div>

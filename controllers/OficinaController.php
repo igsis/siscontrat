@@ -50,14 +50,16 @@ class OficinaController extends OficinaModel
         $sql = "SELECT 	ev.id, ev.protocolo, ev.nome_evento, ev.espaco_publico, ev.sinopse, tc.tipo_contratacao,
                         ev.data_cadastro, ev.data_envio, oc.data_inicio, oc.data_fim, oc.integrantes, oc.links,
                         oc.quantidade_apresentacao, mo.modalidade, of.linguagem, os.sublinguagem, ofn.nivel,
-                        oc.execucao_dia1_id, oc.execucao_dia2_id
+                        oc.execucao_dia1_id, oc.execucao_dia2_id, p.*
                 FROM eventos AS ev
                 LEFT JOIN tipos_contratacoes AS tc ON ev.tipo_contratacao_id = tc.id
                 LEFT JOIN ofic_cadastros AS oc ON ev.id = oc.evento_id
                 LEFT JOIN modalidades AS mo ON oc.modalidade_id = mo.id
                 LEFT JOIN ofic_linguagens AS of ON oc.ofic_linguagem_id = of.id
                 LEFT JOIN ofic_sublinguagens AS os ON oc.ofic_sublinguagem_id = os.id
-                LEFT JOIN ofic_niveis AS ofn ON oc.ofic_nivel_id = ofn.id WHERE ev.id = {$idEvento}";
+                LEFT JOIN ofic_niveis AS ofn ON oc.ofic_nivel_id = ofn.id 
+                LEFT JOIN pedidos AS p on oc.id = p.origem_id 
+                WHERE ev.id = {$idEvento}";
 
         return DbModel::consultaSimples($sql, true)->fetchObject();
     }
@@ -76,6 +78,32 @@ class OficinaController extends OficinaModel
                 WHERE ep.evento_id = {$idEvento}";
 
         return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function recuperaPfCapac($id)
+    {
+        $pf = DbModel::consultaSimples(
+            "SELECT pf.*, pe.*, pb.*, n.nacionalidade, e.descricao, g.genero, gi.grau_instrucao, pd.trans, pd.pcd, d.drt, ni.nit
+                        FROM pessoa_fisicas AS pf
+                        LEFT JOIN pf_detalhes AS pd ON pf.id = pd.pessoa_fisica_id
+                        LEFT JOIN etnias AS e ON pd.etnia_id = e.id
+                        LEFT JOIN generos AS g ON pd.genero_id = g.id
+                        LEFT JOIN grau_instrucoes AS gi ON pd.grau_instrucao_id = gi.id
+                        LEFT JOIN pf_enderecos AS pe ON pf.id = pe.pessoa_fisica_id
+                        LEFT JOIN pf_bancos AS pb ON pf.id = pb.pessoa_fisica_id
+                        LEFT JOIN nacionalidades AS n ON pf.nacionalidade_id = n.id
+                        LEFT JOIN drts AS d ON pf.id = d.pessoa_fisica_id
+                        LEFT JOIN nits AS ni ON pf.id = ni.pessoa_fisica_id
+                        WHERE pf.id = '$id'", true);
+
+        $pf = $pf->fetch(PDO::FETCH_ASSOC);
+
+        $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$id'", true)->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($telefones as $key => $telefone) {
+            $pf['telefones']['tel_'.$key] = $telefone['telefone'];
+        }
+        return $pf;
     }
 
     public function exibeExecucaoDia($id)
