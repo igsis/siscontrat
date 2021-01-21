@@ -1,6 +1,7 @@
 <?php
 
 require_once "./controllers/OficinaController.php";
+require_once "./controllers/RepresentanteController.php";
 
 $oficinaObj = new OficinaController();
 
@@ -152,7 +153,7 @@ $count = 0;
                     </div>
                     <div class="card-body">
                         <?php if ($oficina->pessoa_tipo_id == 1):
-                                $pf = $oficinaObj->recuperaPfCapac($oficina->pessoa_fisica_id);
+                            $pf = (new PessoaFisicaController)->recuperaPessoaFisicaCapac($oficina->pessoa_fisica_id);
                             ?>
 
                             <div class="row">
@@ -226,10 +227,88 @@ $count = 0;
                                     <span class="font-weight-bold">DRT: </span><?= $pf['drt'] ?>
                                 </div>
                             </div>
-                        <?php elseif ($oficina->pessoa_tipo_id == 2): ?>
+                        <?php elseif ($oficina->pessoa_tipo_id == 2):
+                            $pj = $oficinaObj->recuperaPjCapac($oficina->pessoa_juridica_id);
+                            ?>
                             <div class="row">
-
+                                <div class="col">
+                                    <span class="font-weight-bold">Razão Social: </span> <?= $pj['razao_social'] ?>
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">CNPJ: </span> <?= $pj['cnpj'] ?>
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">CCM: </span> <?= $pj['ccm'] ?>
+                                </div>
                             </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="font-weight-bold">E-mail: </span> <?= $pj['email'] ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="font-weight-bold">Banco: </span> <?= $pj['banco'] ?>
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">Agencia: </span> <?= $pj['agencia'] ?>
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">Conta: </span> <?= $pj['conta'] ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span class="font-weight-bold">Endereço: </span> <?= "{$pj['logradouro']}, {$pj['numero']} - {$pj['bairro']}, {$pj['uf']} - {$pj['cep']}" ?>
+                                </div>
+                                <div class="col">
+                                    <span class="font-weight-bold">Complemento: </span> <?= $pj['complemento'] ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <?php foreach ($pj['telefones'] as $telefone) {
+                                    ?>
+                                    <div class="col">
+                                        <span class="font-weight-bold">Telefones#<?= ++$count ?>:</span> <?= $telefone ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <hr>
+                                </div>
+                            </div>
+                            <?php if ($pj['representante_legal1_id'] != null):
+                                    $representante = (new RepresentanteController)->recuperaRepresentante($oficinaObj->encryption($pj['representante_legal1_id']), true)->fetch(PDO::FETCH_ASSOC);
+                            ?>
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="font-weight-bold">Representante#1:</span> <?= $representante['nome'] ?>
+                                    </div>
+                                    <div class="col">
+                                        <span class="font-weight-bold">RG:</span> <?= $representante['cpf'] ?>
+                                    </div>
+                                    <div class="col">
+                                        <span class="font-weight-bold">RG:</span> <?= $representante['cpf'] ?>
+                                    </div>
+                                </div>
+                            <?php elseif ($pj['representante_legal2_id'] != null):
+                                    $representante = (new RepresentanteController)->recuperaRepresentante($oficinaObj->encryption($pj['representante_legal1_id']), true)->fetch(PDO::FETCH_ASSOC);
+                            ?>
+                                <div class="row">
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="font-weight-bold">Representante#2:</span> <?= $representante['nome'] ?>
+                                        </div>
+                                        <div class="col">
+                                            <span class="font-weight-bold">RG:</span> <?= $representante['cpf'] ?>
+                                        </div>
+                                        <div class="col">
+                                            <span class="font-weight-bold">RG:</span> <?= $representante['cpf'] ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                     <!-- /.card-body -->
