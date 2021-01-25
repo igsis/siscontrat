@@ -39,7 +39,7 @@ class OficinaController extends OficinaModel
                 FROM capac_new.eventos AS e
                 LEFT JOIN capac_new.evento_publico AS ep ON e.id = ep.evento_id
                 LEFT JOIN capac_new.publicos AS p ON p.id = ep.publico_id
-                WHERE e.publicado = 2 AND protocolo != '' {$protocolo} {$publico} {$nomeEvento} ";
+                WHERE e.tipo_contratacao_id = 5 AND e.publicado = 1 AND protocolo != '' {$protocolo} {$publico} {$nomeEvento} GROUP BY e.id";
 
         return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
     }
@@ -131,5 +131,10 @@ class OficinaController extends OficinaModel
         $sql = "SELECT dia FROM execucao_dias WHERE id = '{$id}'";
 
         return DbModel::consultaSimples($sql, true)->fetchObject()->dia;
+    }
+
+    public function importarOficinaCapac($id)
+    {
+
     }
 }

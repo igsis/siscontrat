@@ -315,8 +315,8 @@ $count = 0;
                     <div class="card-footer">
                         <a href="<?= SERVERURL ?>formacao/listar_inscritos"
                            class="btn btn-default float-left">Voltar</a>
-                        <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php" method="POST">
-                            <input type="hidden" name="_method" value="importarInscrito">
+                        <form class="formulario-ajax" action="<?= SERVERURL ?>ajax/oficinaAjax.php" method="POST">
+                            <input type="hidden" name="_method" value="importarOficina">
                             <input type="hidden" name="id" value="<?= $oficinaObj->encryption($oficina->id) ?>">
                             <button class="btn btn-info float-right" id="importar">Importar Inscrito</button>
                             <div class="resposta-ajax"></div>
