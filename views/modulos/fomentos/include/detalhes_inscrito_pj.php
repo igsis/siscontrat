@@ -1,10 +1,15 @@
 <?php
+/**
+ * @var FomentoController $fomentoObj
+ * @var array $projeto
+ */
+
 require_once "./controllers/PessoaJuridicaController.php";
 require_once "./controllers/RepresentanteController.php";
 $pessoaJuridicaObj = new PessoaJuridicaController();
 $repObj = new RepresentanteController();
 $pj = $pessoaJuridicaObj->recuperaPessoaJuridica(MainModel::encryption($projeto['pessoa_juridica_id']), true);
-$repre = $repObj->recuperaRepresentante(MainModel::encryption($pj['representante_legal1_id']))->fetch(PDO::FETCH_ASSOC);
+$repre = $repObj->recuperaRepresentante(MainModel::encryption($pj['representante_legal1_id']), true)->fetch(PDO::FETCH_ASSOC);
 ?>
 <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel"
      aria-labelledby="custom-tabs-one-profile-tab">
