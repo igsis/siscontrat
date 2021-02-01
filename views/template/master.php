@@ -2,6 +2,9 @@
 $template = new ViewsController();
 
 $pedidoAjax = false;
+
+require_once './controllers/EventoController.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -178,6 +181,72 @@ else:
         }
     })
     $('#rangeDate').val('');
+
+    $.ajax({
+        type: "POST",
+        url: "<?= SERVERURL ?>ajax/eventoAjax.php",
+        data: {
+            _method: 'notificacao',
+            id: <?= $_SESSION['usuario_id_s'] ?>,
+        },
+        success: (data, text) => {
+            if (data) {
+                let dados = JSON.parse(data);
+                let notificacao = document.querySelector('.nav-link .badge');
+                let msgNotificacao = document.querySelector('.nav-item .dropdown-menu .dropdown-header');
+                let menuNotificacao = document.querySelector('.nav-item .dropdown-menu');
+                let divisor = document.createElement('div');
+                divisor.classList.add('dropdown-divider');
+                if (dados.length){
+                    notificacao.innerHTML = dados.length;
+                    msgNotificacao.innerHTML = `Você tem ${dados.length} eventos que foram reabertos`;
+
+                    for (let x = 0; x < dados.length; x++){
+                        menuNotificacao.append(divisor);
+
+                        let nomeEvento = dados[x].nome_evento;
+                        menuNotificacao.append(linhaNotificacao(`${nomeEvento.substr(0,25)}...`, dados[x].data_reabertura));
+                    }
+
+                    menuNotificacao.append(divisor);
+
+                    let eventos = document.createElement('a');
+                    eventos.classList.add('dropdown-item');
+                    eventos.classList.add('dropdown-footer');
+                    eventos.href = '<?= SIS2URL ?>?perfil=evento&p=evento_lista';
+                    eventos.append('Veja Todos');
+
+                    menuNotificacao.append(eventos);
+                }
+                else {
+
+                }
+            }
+
+        },
+        error: () => {
+
+        }
+    })
+
+    function linhaNotificacao(nome, data){
+
+
+        let linha = document.createElement('a');
+        linha.classList.add('dropdown-item');
+        linha.href = '#';
+
+        let date = document.createElement('span');
+        date.classList.add('float-right');
+        date.classList.add('text-muted');
+        date.classList.add('text-sm');
+        date.append(data);
+
+        linha.append(nome);
+        linha.append(date);
+
+        return linha;
+    }
 </script>
 <?= (isset($javascript)) ? $javascript : ''; ?>
 </body>
