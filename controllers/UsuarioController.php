@@ -61,7 +61,7 @@ class UsuarioController extends UsuarioModel
     public function insereUsuario() {
         $erro = false;
         $dados = [];
-        $camposIgnorados = ["senha2", "_method", "instituicao", "local"];
+        $camposIgnorados = ["senha2", "_method"];
         foreach ($_POST as $campo => $post) {
             if (!in_array($campo, $camposIgnorados)) {
                 $dados[$campo] = MainModel::limparString($post);
@@ -111,28 +111,20 @@ class UsuarioController extends UsuarioModel
             $insereUsuario = DbModel::insert('usuarios', $dados);
             if ($insereUsuario) {
                 $usuario_id = DbModel::connection()->lastInsertId();
-                $dadosLocal = [
-                    'local_id' => $_POST['local'],
-                    'usuario_id' => $usuario_id
-                ];
-                $insereLocalUsuario = DbModel::insert('local_usuarios', $dadosLocal);
-                if ($insereLocalUsuario) {
-                    $alerta = [
+                $alerta = [
                         'alerta' => 'sucesso',
                         'titulo' => 'Usuário Cadastrado!',
                         'texto' => 'Usuário cadastrado com Sucesso!',
                         'tipo' => 'success',
                         'location' => SERVERURL
                     ];
-                } else {
-                    DbModel::deleteEspecial('usuarios', 'id', $usuario_id);
-                    $alerta = [
-                        'alerta' => 'simples',
-                        'titulo' => "Erro!",
-                        'texto' => "Erro ao inserir os dados no sistema. Tente novamente",
-                        'tipo' => "error"
-                    ];
-                }
+            } else {
+                $alerta = [
+                    'alerta' => 'simples',
+                    'titulo' => "Erro!",
+                    'texto' => "Erro ao inserir os dados no sistema. Tente novamente",
+                    'tipo' => "error"
+                ];
             }
         }
         return MainModel::sweetAlert($alerta);
