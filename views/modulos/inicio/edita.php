@@ -43,7 +43,7 @@ $local = $objUsuario->locaisUsuario($id);
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="nome">Usuário: *</label>
-                                    <input type="text" class="form-control" value="<?=$usuario['usuario']?>">
+                                    <input type="text" class="form-control" value="<?=$usuario['usuario']?>" readonly>
                                 </div>
                             </div>
                             <div class="row">
@@ -135,20 +135,34 @@ $local = $objUsuario->locaisUsuario($id);
 
     let instituicao = document.querySelector('#instituicao');
 
+    $(document).ready(function () {
+        let idInstituicao = $('#instituicao option:checked').val();
+        let local_id = <?= $usuario['local_id'] ?>;
+        getLocal(idInstituicao, local_id);
+    });
+
     instituicao.addEventListener('change', async e => {
         let idInstituicao = $('#instituicao option:checked').val();
-        fetch(`${url_local}?instituicao_id=${idInstituicao}`)
+        getLocal(idInstituicao);
+    });
+
+    function getLocal(instituicao_id, local_id = false) {
+        fetch(`${url_local}?instituicao_id=${instituicao_id}`)
             .then(response => response.json())
             .then(locais => {
                 $('#local option').remove();
                 $('#local').append('<option value="">Selecione uma opção...</option>');
 
                 for (const local of locais) {
-                    $('#local').append(`<option value='${local.id}'>${local.local}</option>`).focus();
+                    if (local.id == local_id) {
+                        $('#local').append(`<option value='${local.id}' selected>${local.local}</option>`);
+                    } else {
+                        $('#local').append(`<option value='${local.id}'>${local.local}</option>`);
+                    }
                 }
                 $('#local').unbind('mousedown');
                 $('#local').removeAttr('readonly');
 
             })
-    });
+    }
 </script>
