@@ -27,7 +27,7 @@ $('.formulario-ajax').submit(function (e) {
     var method = form.attr('method');
     var resposta = form.children('.resposta-ajax');
 
-    var msgError = "<script>Swal.fire('Ocorreu um erro insesperado','Por favor recarregue a pagina','error');</script>";
+    var msgError = "<script>Swal.fire('Ocorreu um erro insesperado','Por favor recarregue a página','error');</script>";
     var formdata = new FormData(this);
 
 

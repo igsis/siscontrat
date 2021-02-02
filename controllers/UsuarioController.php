@@ -207,6 +207,10 @@ class UsuarioController extends UsuarioModel
         return DbModel::getInfo('usuarios',$id);
     }
 
+    public function recuperaEmail($email){
+        return UsuarioModel::getExisteEmail($email);
+    }
+
     public function locaisUsuario($id) {
         $consultaLocais = DbModel::consultaSimples("SELECT l.id, l.local, l.instituicao_id, 
             i.id, i.nome, i.sigla, lu.local_id FROM instituicoes AS i 

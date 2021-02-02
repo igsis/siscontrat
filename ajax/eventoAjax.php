@@ -20,6 +20,9 @@ if (isset($_POST['_method'])) {
         case "apagaEvento":
             echo $insEvento->apagaEvento($_POST['id']);
             break;
+        case "notificacao":
+            echo $insEvento->notificacaoEventos($_POST['id']);
+            break;
     }
 } else {
     include_once "../config/destroySession.php";

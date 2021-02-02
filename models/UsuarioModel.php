@@ -35,4 +35,10 @@ class UsuarioModel extends MainModel
             return false;
         }
     }
+
+    protected function getExisteEmail($email){
+        $query = "SELECT id, email  FROM usuarios WHERE email = '$email'";
+        $resultado = DbModel::consultaSimples($query);
+        return $resultado;
+    }
 }

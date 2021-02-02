@@ -124,7 +124,7 @@ foreach ($inscritos as $inscrito){
         ->setCellValue($q, $rep['rg'])
         ->setCellValue($r, $rep['cpf'])
         ->setCellValue($s, $pj['telefones']['tel_0'])
-        ->setCellValue($t, $pj['telefones']['tel_1'])
+        ->setCellValue($t, $pj['telefones']['tel_1'] ?? "Não Cadastrado")
         ->setCellValue($u, $pj['cep'])
         ->setCellValue($v, $pj['logradouro'])
         ->setCellValue($w, $pj['numero'])

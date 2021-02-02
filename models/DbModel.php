@@ -21,6 +21,12 @@ class DbModel
         return self::$conn;
     }
 
+    protected function killConn(){
+        if (isset(self::$conn)) {
+            self::$conn = null;
+        }
+    }
+
     /**
      * <p>Função para inserir um registro no banco de dados </p>
      * @param string $table
@@ -96,7 +102,13 @@ class DbModel
         return $statement;
     }
 
-    // Método para apagar (despublicar)
+    /**
+     * Método para apagar (despublicar)
+     * @param string $table
+     * @param int $id
+     * @param bool $capac
+     * @return bool|PDOStatement
+     */
     protected function apaga($table, $id, $capac = false){
         $pdo = self::connection($capac);
         $sql = "UPDATE $table SET publicado = 0 WHERE id = :id";
@@ -121,6 +133,7 @@ class DbModel
         $pdo = self::connection($capac);
         $statement = $pdo->prepare($consulta);
         $statement->execute();
+        self::$conn = null;
 
         return $statement;
     }
