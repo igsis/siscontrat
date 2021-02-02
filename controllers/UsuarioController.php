@@ -210,4 +210,15 @@ class UsuarioController extends UsuarioModel
     public function recuperaEmail($email){
         return UsuarioModel::getExisteEmail($email);
     }
+
+    public function locaisUsuario($id) {
+        $consultaLocais = DbModel::consultaSimples("SELECT l.id, l.local, l.instituicao_id, 
+            i.id, i.nome, i.sigla, lu.local_id FROM instituicoes AS i 
+            INNER JOIN locais l ON (i.id = l.instituicao_id)
+            INNER JOIN local_usuarios lu ON (l.id = lu.local_id)");
+        $locais = $consultaLocais->fetch(PDO::FETCH_OBJ);
+        return $locais;
+    }
+
+   
 }
