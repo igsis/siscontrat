@@ -106,6 +106,10 @@ class UsuarioController extends UsuarioModel
             ];
         }
 
+        if (strpos($dados['usuario'],'d') === 0){
+            $dados['fiscal'] = 1;
+        }
+
         if (!$erro) {
             $dados['senha'] = MainModel::encryption($dados['senha']);
             $insereUsuario = DbModel::insert('usuarios', $dados);
