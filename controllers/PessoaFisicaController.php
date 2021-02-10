@@ -102,6 +102,8 @@ class PessoaFisicaController extends PessoaFisicaModel
 
         $dadosLimpos = PessoaFisicaModel::limparStringPF($_POST);
 
+        $dadosLimpos['pf']['ultima_atualizacao'] = date('Y-m-d H:i:s');
+
         $edita = DbModel::update('pessoa_fisicas', $dadosLimpos['pf'], $idDecryp);
         if ($edita) {
 
