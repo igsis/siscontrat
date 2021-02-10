@@ -489,11 +489,14 @@ class PessoaFisicaController extends PessoaFisicaModel
             $pfSis['te_telefone_'.$key] = $telefone['telefone'];
         }
 
+        /** @var array|bool $dadosDivergentes */
         $dadosDivergentes = parent::verificaDivergencia($pfCapac, $pfSis);
 
-        foreach ($dadosDivergentes as $dado) {
-            $dados['dadosCapac'][$dado] = $pfCapac[$dado];
-            $dados['dadosSis'][$dado] = $pfSis[$dado] ?? "";
+        if ($dadosDivergentes) {
+            foreach ($dadosDivergentes as $dado) {
+                $dados['dadosCapac'][$dado] = $pfCapac[$dado];
+                $dados['dadosSis'][$dado] = $pfSis[$dado] ?? "";
+            }
         }
 
         $dados['pf_nome'] = $pfCapac['pf_nome'];
