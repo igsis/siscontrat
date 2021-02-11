@@ -406,7 +406,7 @@ class PessoaFisicaController extends PessoaFisicaModel
                     'titulo' => 'Pessoa Física Importada',
                     'texto' => 'A pessoa física selecionada foi importada com sucesso!',
                     'tipo' => 'success',
-                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($pfSis['id'])
+                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($pfSis['id']) . '&import=1'
                 ];
             }
         } else {
@@ -424,7 +424,7 @@ class PessoaFisicaController extends PessoaFisicaModel
                     'titulo' => 'Pessoa Física Importada',
                     'texto' => 'A pessoa física selecionada foi importada com sucesso!',
                     'tipo' => 'success',
-                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($id)
+                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($id) . '&import=1'
                 ];
             }
         }
