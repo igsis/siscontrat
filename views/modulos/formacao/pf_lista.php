@@ -1,4 +1,4 @@
-0<?php
+<?php
     require_once "./controllers/FormacaoController.php";
     $formacaoObj = new FormacaoController();
     
