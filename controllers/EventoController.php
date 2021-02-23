@@ -275,4 +275,16 @@ class EventoController extends EventoModel
 
         return json_encode($resultado);
     }
+
+    function geraProtocolo($idEvento)
+    {
+        $tipo_evento = DbModel::consultaSimples("SELECT tipo_evento_id FROM eventos WHERE id ='$idEvento'")->fetchColumn(PDO::FETCH_OBJ);
+        $date = date('Ymd', strtotime('-3 hours'));
+        $preencheZeros = str_pad($idEvento, 5, '0', STR_PAD_LEFT);
+        if ($tipo_evento == 1){
+            return $date . '.' . $preencheZeros ."-E";
+        } elseif ($tipo_evento == 2) {
+            return $date . '.' . $preencheZeros . "-C";
+        }
+    }
 }

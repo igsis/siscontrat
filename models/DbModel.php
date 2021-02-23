@@ -51,6 +51,30 @@ class DbModel
         return $statement;
     }
 
+    /**
+     * <p>Função para inserir um registro no banco de dados caso seja válido </p>
+     * @param string $table
+     * <p>Tabela do banco de dados</p>
+     * @param array $data
+     * <p>Dados a serem inseridos</p>
+     * @param bool $capac
+     * <p><strong>FALSE</strong> por padrão. Quando <strong>TRUE</strong>, faz a consulta no banco de dados do sistema CAPAC</p>
+     * @return bool|PDOStatement
+     */
+    protected function insertignore($table, $data, $capac = false) {
+        $pdo = self::connection($capac);
+        $fields = implode(", ", array_keys($data));
+        $values = ":".implode(", :", array_keys($data));
+        $sql = "INSERT IGNORE INTO $table ($fields) VALUES ($values)";
+        $statement = $pdo->prepare($sql);
+        foreach($data as $key => $value) {
+            $statement->bindValue(":$key", $value, PDO::PARAM_STR);
+        }
+        $statement->execute();
+
+        return $statement;
+    }
+
     // Método para update
 
     /**
