@@ -4,11 +4,21 @@ if ($pedidoAjax) {
     require_once "../models/RecuperaSenhaModel.php";
     require_once "../controllers/RecuperaSenhaController.php";
     require_once "../controllers/UsuarioController.php";
+    require_once  "../views/plugins/phpmailer/src/PHPMailer.php";
+    require_once  "../views/plugins/phpmailer/src/SMTP.php";
+    require_once  "../views/plugins/phpmailer/src/Exception.php.php";
 } else {
     require_once "../models/RecuperaSenhaModel.php";
     require_once "../controllers/RecuperaSenhaController.php";
     require_once "../controllers/UsuarioController.php";
+    require_once  "../views/plugins/phpmailer/src/PHPMailer.php";
+    require_once  "../views/plugins/phpmailer/src/SMTP.php";
+    require_once  "../views/plugins/phpmailer/src/Exception.php.php";
 }
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 
 class RecuperaSenhaController extends RecuperaSenhaModel
@@ -62,22 +72,34 @@ class RecuperaSenhaController extends RecuperaSenhaModel
 
     public function enviarEmail($endEmail,$token)
     {
-        // Send email to user with the token in a link they can click on
-        $destinatario = $endEmail;
-        $subject = "Siscontrat - Recuperação de Senha";
-        $email = $this->geraEmail($token);
+        try{
+            $email =  new PHPMailer();
 
-        // To send HTML mail, the Content-type header must be set
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+            $email->isSMTP();
+            $email->Host = 'smtp.gmail.com';
+            $email->SMTPAuth = true;
+            $email->Username = 'lucasdauto79@gmail.com';
+            $email->Password = 'mazevilu';
+            $email->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $email->Port = 587;
 
-        // Create email headers
-        $headers .= 'From: no.reply.smcsistemas@gmail.com' . "\r\n";
-        if (mail($destinatario, $subject, $email, $headers))
-            return true;
+            $email->setFrom('lucasdauto@gmail.com');
+            $email->addAddress($endEmail);
 
-        return false;
+            $email->isHTML(true);
+            $email->Subject = "Siscontrat - Recuperação de Senha";
+            $email->Body = $this->geraEmail($token);
 
+            if ($email->send())
+                return true;
+
+            return false;
+
+        } catch (Exception $e){
+            MainModel::gravarLog("Erro ao enviar e-mail: {$email->ErrorInfo}");
+
+            return false;
+        }
     }
 
     public function geraEmail($token)
