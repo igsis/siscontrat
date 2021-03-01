@@ -4,17 +4,15 @@ if ($pedidoAjax) {
     require_once "../models/RecuperaSenhaModel.php";
     require_once "../controllers/RecuperaSenhaController.php";
     require_once "../controllers/UsuarioController.php";
-    require_once  "../views/plugins/phpmailer/src/PHPMailer.php";
-    require_once  "../views/plugins/phpmailer/src/SMTP.php";
-    require_once  "../views/plugins/phpmailer/src/Exception.php.php";
 } else {
     require_once "../models/RecuperaSenhaModel.php";
     require_once "../controllers/RecuperaSenhaController.php";
     require_once "../controllers/UsuarioController.php";
-    require_once  "../views/plugins/phpmailer/src/PHPMailer.php";
-    require_once  "../views/plugins/phpmailer/src/SMTP.php";
-    require_once  "../views/plugins/phpmailer/src/Exception.php.php";
 }
+
+require_once  "../views/plugins/phpmailer/src/PHPMailer.php";
+require_once  "../views/plugins/phpmailer/src/SMTP.php";
+require_once  "../views/plugins/phpmailer/src/Exception.php";
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -72,18 +70,27 @@ class RecuperaSenhaController extends RecuperaSenhaModel
 
     public function enviarEmail($endEmail,$token)
     {
+        $email =  new PHPMailer();
+
         try{
-            $email =  new PHPMailer();
 
             $email->isSMTP();
+            $email->CharSet = "UTF-8";
             $email->Host = 'smtp.gmail.com';
             $email->SMTPAuth = true;
-            $email->Username = 'lucasdauto79@gmail.com';
+            $email->Username = 'no.reply.smcsistemas@gmail.com';
             $email->Password = 'mazevilu';
             $email->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $email->Port = 587;
 
+//            DEBUG
+//            $email->SMTPDebug =  SMTP::DEBUG_SERVER;
+//            $email->setLanguage('pt');
+//            $email->SMTPDebug = 3;
+//            $email->Debugoutput = 'html';
+
             $email->setFrom('lucasdauto@gmail.com');
+            $email->addReplyTo('no-replay@siscontrat.com.br');
             $email->addAddress($endEmail);
 
             $email->isHTML(true);
