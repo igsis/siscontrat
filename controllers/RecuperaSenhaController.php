@@ -78,8 +78,8 @@ class RecuperaSenhaController extends RecuperaSenhaModel
             $email->CharSet = "UTF-8";
             $email->Host = 'smtp.gmail.com';
             $email->SMTPAuth = true;
-            $email->Username = 'no.reply.smcsistemas@gmail.com';
-            $email->Password = 'mazevilu';
+            $email->Username = SMTP;
+            $email->Password = SENHASMTP;
             $email->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $email->Port = 587;
 
@@ -89,8 +89,9 @@ class RecuperaSenhaController extends RecuperaSenhaModel
 //            $email->SMTPDebug = 3;
 //            $email->Debugoutput = 'html';
 
-            $email->setFrom('lucasdauto@gmail.com');
-            $email->addReplyTo('no-replay@siscontrat.com.br');
+            $email->setFrom(SMTP);
+            $email->FromName = "Siscontrat";
+            $email->addReplyTo('no-reply@siscontrat.com.br');
             $email->addAddress($endEmail);
 
             $email->isHTML(true);
