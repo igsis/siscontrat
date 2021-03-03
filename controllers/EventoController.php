@@ -259,4 +259,20 @@ class EventoController extends EventoModel
         $id = MainModel::decryption($id);
         return $id;
     }
+
+    public function notificacaoEventos($id)
+    {
+
+        $sql = "SELECT ev.nome_evento, DATE_FORMAT(er.data_reabertura, '%d/%m/%Y') AS 'data_reabertura' 
+            FROM eventos ev
+            LEFT JOIN evento_reaberturas er ON ev.id = er.evento_id
+            WHERE ev.evento_status_id = 1 
+            AND (ev.fiscal_id = '{$id}' OR ev.suplente_id = '{$id}' OR ev.usuario_id = '{$id}')
+            AND data_reabertura != ''  AND ev.publicado = 1
+            ORDER BY er.data_reabertura";
+
+        $resultado = DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
+
+        return json_encode($resultado);
+    }
 }

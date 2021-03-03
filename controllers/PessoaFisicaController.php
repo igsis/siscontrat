@@ -102,6 +102,8 @@ class PessoaFisicaController extends PessoaFisicaModel
 
         $dadosLimpos = PessoaFisicaModel::limparStringPF($_POST);
 
+        $dadosLimpos['pf']['ultima_atualizacao'] = date('Y-m-d H:i:s');
+
         $edita = DbModel::update('pessoa_fisicas', $dadosLimpos['pf'], $idDecryp);
         if ($edita) {
 
@@ -228,18 +230,16 @@ class PessoaFisicaController extends PessoaFisicaModel
     public function recuperaPessoaFisica($id, $capac = false) {
         $id = MainModel::decryption($id);
         $pf = DbModel::consultaSimples(
-            "SELECT pf.*, pe.*, pb.*, po.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, r.nome as regiao, gi.grau_instrucao
+            "SELECT pf.*, pe.*, pb.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, gi.grau_instrucao
             FROM pessoa_fisicas AS pf
             LEFT JOIN pf_enderecos pe on pf.id = pe.pessoa_fisica_id
             LEFT JOIN pf_bancos pb on pf.id = pb.pessoa_fisica_id
-            LEFT JOIN pf_oficinas po on pf.id = po.pessoa_fisica_id
             LEFT JOIN drts d on pf.id = d.pessoa_fisica_id
             LEFT JOIN nits n on pf.id = n.pessoa_fisica_id
             LEFT JOIN nacionalidades n2 on pf.nacionalidade_id = n2.id
             LEFT JOIN bancos b on pb.banco_id = b.id
             LEFT JOIN pf_detalhes pd on pf.id = pd.pessoa_fisica_id
             LEFT JOIN etnias e on pd.etnia_id = e.id
-            LEFT JOIN regiaos r on pd.regiao_id = r.id
             LEFT JOIN grau_instrucoes gi on pd.grau_instrucao_id = gi.id
             WHERE pf.id = '$id'", $capac);
 
@@ -406,7 +406,7 @@ class PessoaFisicaController extends PessoaFisicaModel
                     'titulo' => 'Pessoa Física Importada',
                     'texto' => 'A pessoa física selecionada foi importada com sucesso!',
                     'tipo' => 'success',
-                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($pfSis['id'])
+                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($pfSis['id']) . '&import=1'
                 ];
             }
         } else {
@@ -424,7 +424,7 @@ class PessoaFisicaController extends PessoaFisicaModel
                     'titulo' => 'Pessoa Física Importada',
                     'texto' => 'A pessoa física selecionada foi importada com sucesso!',
                     'tipo' => 'success',
-                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($id)
+                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($id) . '&import=1'
                 ];
             }
         }
@@ -491,11 +491,14 @@ class PessoaFisicaController extends PessoaFisicaModel
             $pfSis['te_telefone_'.$key] = $telefone['telefone'];
         }
 
+        /** @var array|bool $dadosDivergentes */
         $dadosDivergentes = parent::verificaDivergencia($pfCapac, $pfSis);
 
-        foreach ($dadosDivergentes as $dado) {
-            $dados['dadosCapac'][$dado] = $pfCapac[$dado];
-            $dados['dadosSis'][$dado] = $pfSis[$dado] ?? "";
+        if ($dadosDivergentes) {
+            foreach ($dadosDivergentes as $dado) {
+                $dados['dadosCapac'][$dado] = $pfCapac[$dado];
+                $dados['dadosSis'][$dado] = $pfSis[$dado] ?? "";
+            }
         }
 
         $dados['pf_nome'] = $pfCapac['pf_nome'];

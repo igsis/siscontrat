@@ -4,7 +4,26 @@ $id = $_GET['id'];
 
 $fomentoObj = new FomentoController();
 
-$nomeEdital = $fomentoObj->recuperaEdital($id)->titulo;
+$edital = $fomentoObj->recuperaEdital($id);
+$nomeEdital = $edital->titulo;
+$idEdital = $edital->id;
+$tipoCadastro = $edital->pessoa_tipos_id;
+
+if ($idEdital < 11) {
+    $editalAntigo = true;
+    if ($tipoCadastro == 1) {
+        require_once "./controllers/PessoaFisicaController.php";
+        $pessoaFisicaObj = new PessoaFisicaController();
+    } else {
+        require_once "./controllers/PessoaJuridicaController.php";
+        require_once "./controllers/RepresentanteController.php";
+        $pessoaJuridicaObj = new PessoaJuridicaController();
+        $representanteObj = new RepresentanteController();
+    }
+} else {
+    $editalAntigo = false;
+}
+
 $statusEdital = $fomentoObj->statusEdital($id);
 
 $projetosAprovados = $fomentoObj;
@@ -102,7 +121,16 @@ $inscritos = $fomentoObj->listaInscritos($id);
                             <thead>
                             <tr>
                                 <th>Protocolo</th>
-                                <th>Nome do projeto</th>
+                                <?php if ($editalAntigo) {
+                                    if ($tipoCadastro == 1) {
+                                        echo "<th>Nome do Inscrito</th>";
+                                    } else {
+                                        echo "<th>Nome do Representante</th>";
+                                    }
+                                } else {
+                                  echo "<th>Nome do projeto</th>";
+                                }
+                                ?>
                                 <th>Valor</th>
                                 <th>Status</th>
                                 <th>Ação</th>
@@ -111,12 +139,23 @@ $inscritos = $fomentoObj->listaInscritos($id);
                             <tbody>
                             <?php
                             if ($inscritos):
-                                foreach ($inscritos
-
-                                         as $inscrito): ?>
+                                foreach ($inscritos as $inscrito):
+                                ?>
                                     <tr>
                                         <td><?= $inscrito->protocolo ?></td>
-                                        <td><?= $inscrito->nome_projeto ?></td>
+                                        <?php if ($editalAntigo) {
+                                            if ($tipoCadastro == 1) {
+                                                $pfNome = $pessoaFisicaObj->recuperaPessoaFisica($fomentoObj->encryption($inscrito->pessoa_fisica_id), true)["nome"];
+                                                echo "<td>$pfNome</td>";
+                                            } else {
+                                                $idRepresentante = $pessoaJuridicaObj->recuperaPessoaJuridica($fomentoObj->encryption($inscrito->pessoa_juridica_id), true)["representante_legal1_id"];
+                                                $representanteNome = $representanteObj->recuperaRepresentante($fomentoObj->encryption($idRepresentante), true)->fetchObject()->nome;
+                                                echo "<td>$representanteNome</td>";
+                                            }
+                                        } else {
+                                            echo "<td>$inscrito->nome_projeto</td>";
+                                        }
+                                        ?>
                                         <td class="dinheiro"><?= $inscrito->valor_projeto ?></td>
                                         <td class="d-flex justify-content-center align-items-center">
                                             <?php switch ($inscrito->publicado) {

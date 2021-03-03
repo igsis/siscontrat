@@ -1,8 +1,11 @@
 <?php
 $id = $_SESSION['usuario_id_s'];
+$url_local = SERVERURL.'api/locais_espacos.php';
 require_once "./controllers/UsuarioController.php";
-$insUsuario = new UsuarioController();
-$usuario = $insUsuario->recuperaUsuario($id)->fetch();
+$objUsuario = new UsuarioController();
+$usuario = $objUsuario->recuperaUsuario($id)->fetch();
+$local = $objUsuario->locaisUsuario($id);
+
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -34,9 +37,13 @@ $usuario = $insUsuario->recuperaUsuario($id)->fetch();
                             <input type="hidden" name="id" value="<?= $id ?>">
 
                             <div class="row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-10">
                                     <label for="nome">Nome: *</label>
                                     <input type="text" class="form-control" id="nome" name="nome_completo" placeholder="Digite o nome completo" maxlength="120" value="<?=$usuario['nome_completo']?>" required>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="nome">Usuário: *</label>
+                                    <input type="text" class="form-control" value="<?=$usuario['usuario']?>" readonly>
                                 </div>
                             </div>
                             <div class="row">
@@ -47,6 +54,24 @@ $usuario = $insUsuario->recuperaUsuario($id)->fetch();
                                 <div class="form-group col-md-4">
                                     <label for="telefone">Telefone: *</label>
                                     <input type="text" data-mask="(00) 00000-0000" class="form-control" id="telefone" name="telefone" maxlength="15" onkeyup="mascara( this, mtel );" value="<?=$usuario['telefone']?>" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md">
+                                    <label for="instituicao">Instituição *</label>
+                                    <select class="form-control" name="instituicao_id" id="instituicao" required>
+                                        <option value="">Selecione uma opção...</option>
+                                        <?php
+                                        $objUsuario->geraOpcao("instituicoes",$usuario['instituicao_id']);
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md">
+                                    <label for="local">Local *</label>
+                                    <select class="form-control" id="local" name="local_id">
+                                        <!-- Populando pelo js -->
+                                    </select>
                                 </div>
                             </div>
 
@@ -105,3 +130,39 @@ $usuario = $insUsuario->recuperaUsuario($id)->fetch();
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+<script>
+    const url_local = '<?= $url_local ?>';
+
+    let instituicao = document.querySelector('#instituicao');
+
+    $(document).ready(function () {
+        let idInstituicao = $('#instituicao option:checked').val();
+        let local_id = <?= $usuario['local_id'] ?>;
+        getLocal(idInstituicao, local_id);
+    });
+
+    instituicao.addEventListener('change', async e => {
+        let idInstituicao = $('#instituicao option:checked').val();
+        getLocal(idInstituicao);
+    });
+
+    function getLocal(instituicao_id, local_id = false) {
+        fetch(`${url_local}?instituicao_id=${instituicao_id}`)
+            .then(response => response.json())
+            .then(locais => {
+                $('#local option').remove();
+                $('#local').append('<option value="">Selecione uma opção...</option>');
+
+                for (const local of locais) {
+                    if (local.id == local_id) {
+                        $('#local').append(`<option value='${local.id}' selected>${local.local}</option>`);
+                    } else {
+                        $('#local').append(`<option value='${local.id}'>${local.local}</option>`);
+                    }
+                }
+                $('#local').unbind('mousedown');
+                $('#local').removeAttr('readonly');
+
+            })
+    }
+</script>

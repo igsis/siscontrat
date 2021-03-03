@@ -61,7 +61,7 @@ class UsuarioController extends UsuarioModel
     public function insereUsuario() {
         $erro = false;
         $dados = [];
-        $camposIgnorados = ["senha2", "_method", "instituicao", "local"];
+        $camposIgnorados = ["senha2", "_method"];
         foreach ($_POST as $campo => $post) {
             if (!in_array($campo, $camposIgnorados)) {
                 $dados[$campo] = MainModel::limparString($post);
@@ -106,33 +106,29 @@ class UsuarioController extends UsuarioModel
             ];
         }
 
+        if (strpos($dados['usuario'],'d') === 0){
+            $dados['fiscal'] = 1;
+        }
+
         if (!$erro) {
             $dados['senha'] = MainModel::encryption($dados['senha']);
             $insereUsuario = DbModel::insert('usuarios', $dados);
             if ($insereUsuario) {
                 $usuario_id = DbModel::connection()->lastInsertId();
-                $dadosLocal = [
-                    'local_id' => $_POST['local'],
-                    'usuario_id' => $usuario_id
-                ];
-                $insereLocalUsuario = DbModel::insert('local_usuarios', $dadosLocal);
-                if ($insereLocalUsuario) {
-                    $alerta = [
+                $alerta = [
                         'alerta' => 'sucesso',
                         'titulo' => 'Usuário Cadastrado!',
                         'texto' => 'Usuário cadastrado com Sucesso!',
                         'tipo' => 'success',
                         'location' => SERVERURL
                     ];
-                } else {
-                    DbModel::deleteEspecial('usuarios', 'id', $usuario_id);
-                    $alerta = [
-                        'alerta' => 'simples',
-                        'titulo' => "Erro!",
-                        'texto' => "Erro ao inserir os dados no sistema. Tente novamente",
-                        'tipo' => "error"
-                    ];
-                }
+            } else {
+                $alerta = [
+                    'alerta' => 'simples',
+                    'titulo' => "Erro!",
+                    'texto' => "Erro ao inserir os dados no sistema. Tente novamente",
+                    'tipo' => "error"
+                ];
             }
         }
         return MainModel::sweetAlert($alerta);
@@ -210,4 +206,15 @@ class UsuarioController extends UsuarioModel
     public function recuperaEmail($email){
         return UsuarioModel::getExisteEmail($email);
     }
+
+    public function locaisUsuario($id) {
+        $consultaLocais = DbModel::consultaSimples("SELECT l.id, l.local, l.instituicao_id, 
+            i.id, i.nome, i.sigla, lu.local_id FROM instituicoes AS i 
+            INNER JOIN locais l ON (i.id = l.instituicao_id)
+            INNER JOIN local_usuarios lu ON (l.id = lu.local_id)");
+        $locais = $consultaLocais->fetch(PDO::FETCH_OBJ);
+        return $locais;
+    }
+
+   
 }

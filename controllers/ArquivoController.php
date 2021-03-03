@@ -250,6 +250,54 @@ class ArquivoController extends ArquivoModel
         unlink($data . ".zip");
     }
 
+    public function downloadArquivosCapac($id)
+    {
+        $path = "../../capac/uploads/";
+        $data = date('YmdHis');
+        $nome_arquivo = $data . ".zip";
+
+        $zip = new ZipArchive();
+
+        if ($zip->open($nome_arquivo, ZipArchive::CREATE) === true) {
+
+            $idPf = MainModel::decryption($id);
+
+            $sql = "SELECT fa.* FROM form_arquivos AS fa 
+                    INNER JOIN  form_cadastros AS fc ON fa.form_cadastro_id = fc.id
+                    INNER JOIN pessoa_fisicas AS pf ON pf.id = fc.pessoa_fisica_id
+                    WHERE pf.id = '{$idPf}' AND fa.publicado = 1";
+            $query = DbModel::consultaSimples($sql, TRUE)->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($query as $arquivo) {
+                $file = $path . $arquivo['arquivo'];
+                $file2 = $arquivo['arquivo'];
+                if ($zip->addFile($file, $file2)) {
+                    $zipou = true;
+                } else {
+                    $zipou = false;
+                }
+            }
+
+            $zip->close();
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Disposition: attachment; filename="' . $nome_arquivo . '"');
+        header('Content-Type: application/octet-stream');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Length: ' . filesize($nome_arquivo));
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+        header('Expires: 0');
+
+        ob_end_clean(); //essas duas linhas antes do readfile
+        flush();
+
+        readfile($nome_arquivo);
+
+        unlink($data . ".zip");
+    }
+
     public function listarArquivosCapac($origem_id)
     {
         $origem_id = MainModel::decryption($origem_id);

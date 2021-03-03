@@ -156,7 +156,6 @@ class PessoaJuridicaController extends PessoaJuridicaModel
             LEFT JOIN pj_enderecos pe on pj.id = pe.pessoa_juridica_id
             LEFT JOIN pj_bancos pb on pj.id = pb.pessoa_juridica_id
             LEFT JOIN bancos bc on pb.banco_id = bc.id
-            LEFT JOIN pj_oficinas po on pj.id = po.pessoa_juridica_id
             WHERE pj.id = '$id'
         ", $capac);
         $pj = $pj->fetch(PDO::FETCH_ASSOC);

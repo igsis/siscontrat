@@ -299,20 +299,26 @@ if ($idCapac){
                         if ($id){
                     ?>
                         <div class="row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col">
                                 <a href="<?= SERVERURL . "formacao/pf_demais_anexos&id=" . $id?>" class="btn btn-info pull-right btn-block">
                                      Demais Anexos
                                 </a>
                             </div>
-
-                            <div class="form-group col-md-4">
+                            <?php if(isset($_GET['import'])): ?>
+                                <div class="form-group col">
+                                    <a href="<?= SERVERURL ?>api/downloadCapac.php?id=<?= $id ?>&_method=arquivosPf" target="_blank" class="btn btn-info pull-right btn-block">
+                                        Baixar Arquivos
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+                            <div class="form-group col">
                                 <a href="<?= SERVERURL ?>pdf/rlt_formacao_pf.php?id=<?= $id ?>" target="_blank">
                                     <button type="submit" class="btn btn-info btn-block">Imprimir resumo
                                     </button>
                                 </a>
                             </div>
 
-                            <div class="form-group col-md-4">
+                            <div class="form-group col">
                                 <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= $id ?>" target="_blank">
                                     <button type="submit" class="btn btn-info pull-right btn-block">Clique aqui para
                                         gerar a FACC
