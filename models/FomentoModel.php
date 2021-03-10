@@ -7,10 +7,16 @@ if ($pedidoAjax) {
 
 class FomentoModel extends MainModel
 {
-    protected function recuperaInscritos($edital_id, $aprovados = false) {
-        $sql = "SELECT fp.*, fpd.instituicao, fpd.site FROM fom_projetos fp
-                LEFT JOIN fom_projeto_dados fpd ON fpd.fom_projeto_id = fp.id
+    protected function recuperaInscritos($edital_id, $tipo_pessoa,$aprovados = false) {
+        if ($tipo_pessoa == 1){
+            $sql = "SELECT fp.* FROM fom_projetos fp
+                LEFT JOIN fom_projeto_dado_pfs fpd ON fpd.fom_projeto_id = fp.id
                 WHERE fom_edital_id = '$edital_id' AND protocolo IS NOT NULL";
+        } else {
+            $sql = "SELECT fp.*, fpd.instituicao, fpd.site FROM fom_projetos fp
+                LEFT JOIN fom_projeto_dado_pjs fpd ON fpd.fom_projeto_id = fp.id
+                WHERE fom_edital_id = '$edital_id' AND protocolo IS NOT NULL";
+        }
 
         if ($aprovados) {
             $sql .= " AND publicado = 2";

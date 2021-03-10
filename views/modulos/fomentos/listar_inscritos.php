@@ -14,11 +14,19 @@ if ($idEdital < 11) {
     if ($tipoCadastro == 1) {
         require_once "./controllers/PessoaFisicaController.php";
         $pessoaFisicaObj = new PessoaFisicaController();
-    } else {
+    } else if ($tipoCadastro == 2) {
         require_once "./controllers/PessoaJuridicaController.php";
         require_once "./controllers/RepresentanteController.php";
         $pessoaJuridicaObj = new PessoaJuridicaController();
         $representanteObj = new RepresentanteController();
+    } else {
+        require_once "./controllers/PessoaFisicaController.php";
+        require_once "./controllers/PessoaJuridicaController.php";
+        require_once "./controllers/RepresentanteController.php";
+
+        $pessoaJuridicaObj = new PessoaJuridicaController();
+        $representanteObj = new RepresentanteController();
+        $pessoaFisicaObj = new PessoaFisicaController();
     }
 } else {
     $editalAntigo = false;
@@ -28,7 +36,12 @@ $statusEdital = $fomentoObj->statusEdital($id);
 
 $projetosAprovados = $fomentoObj;
 
-$inscritos = $fomentoObj->listaInscritos($id);
+if ($tipoCadastro != 3) {
+    $inscritos = $fomentoObj->listaInscritos($id, $tipoCadastro);
+} else {
+    $inscritosPj = $fomentoObj->listaInscritos($id, 1);
+    $inscritosPf = $fomentoObj->listaInscritos($id, 2);
+}
 ?>
 
 <style>
@@ -107,12 +120,15 @@ $inscritos = $fomentoObj->listaInscritos($id);
                     <!-- /.card-header -->
                     <div class="card-body">
                         <div class="row mb-5 d-flex justify-content-end ">
-                            <a href="<?=SERVERURL?>pdf/fomento_inscritos_aprovados.php?id=<?=$id?>" target="_blank" class="btn btn-warning">
+                            <a href="<?= SERVERURL ?>pdf/fomento_inscritos_aprovados.php?id=<?= $id ?>" target="_blank"
+                               class="btn btn-warning">
                                 <i class="fas fa-download mr-1"></i> Exportar inscritos
                             </a>
                             <?php if ($statusEdital->aprovados): ?>
-                                <div class="ml-1"><a href="<?= SERVERURL ?>pdf/fomento_inscritos_aprovados.php?id=<?= $id ?>&aprovado=true" target="_blank"
-                                      class="btn btn-success">
+                                <div class="ml-1"><a
+                                            href="<?= SERVERURL ?>pdf/fomento_inscritos_aprovados.php?id=<?= $id ?>&aprovado=true"
+                                            target="_blank"
+                                            class="btn btn-success">
                                         <i class="fas fa-download mr-1"></i> Inscritos Aprovados
                                     </a></div>
                             <?php endif ?>
@@ -124,11 +140,13 @@ $inscritos = $fomentoObj->listaInscritos($id);
                                 <?php if ($editalAntigo) {
                                     if ($tipoCadastro == 1) {
                                         echo "<th>Nome do Inscrito</th>";
-                                    } else {
+                                    } elseif ($tipoCadastro == 2) {
                                         echo "<th>Nome do Representante</th>";
+                                    } else {
+                                        echo "<th>Nome do Representante/Inscrito</th>";
                                     }
                                 } else {
-                                  echo "<th>Nome do projeto</th>";
+                                    echo "<th>Nome do projeto</th>";
                                 }
                                 ?>
                                 <th>Valor</th>
@@ -138,9 +156,9 @@ $inscritos = $fomentoObj->listaInscritos($id);
                             </thead>
                             <tbody>
                             <?php
-                            if ($inscritos):
+                            if (isset($inscritos)):
                                 foreach ($inscritos as $inscrito):
-                                ?>
+                                    ?>
                                     <tr>
                                         <td><?= $inscrito->protocolo ?></td>
                                         <?php if ($editalAntigo) {
@@ -152,6 +170,42 @@ $inscritos = $fomentoObj->listaInscritos($id);
                                                 $representanteNome = $representanteObj->recuperaRepresentante($fomentoObj->encryption($idRepresentante), true)->fetchObject()->nome;
                                                 echo "<td>$representanteNome</td>";
                                             }
+                                        } else {
+                                            echo "<td>$inscrito->nome_projeto</td>";
+                                        }
+                                        ?>
+                                        <td class="dinheiro"><?= $inscrito->valor_projeto ?></td>
+                                        <td class="d-flex justify-content-center align-items-center">
+                                            <?php switch ($inscrito->publicado) {
+                                                case 2:
+                                                    echo "<div class=\"quadr bg-green\" data-toggle=\"popover\" data-trigger=\"hover\"
+                                                 data-content=\"Aprovado\"></div>";
+                                                    break;
+                                                case 3:
+                                                    echo "<div class=\"quadr bg-danger\" data-toggle=\"popover\" data-trigger=\"hover\"
+                                             data-content=\"Reprovado\"></div>";
+                                                    break;
+                                                default:
+                                                    echo "Aguardando";
+                                                    break;
+                                            } ?>
+                                        </td>
+                                        <td>
+                                            <a href="<?= SERVERURL . "fomentos/detalhes_inscrito&id=" . $fomentoObj->encryption($inscrito->id) ?>"
+                                               class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Mais Detalhes</a>
+                                        </td>
+                                    </tr>
+                                <?php
+                                endforeach;
+                            elseif (isset($inscritosPf)):
+                                foreach ($inscritosPj as $inscrito):
+                                    ?>
+                                    <tr>
+                                        <td><?= $inscrito->protocolo ?></td>
+                                        <?php if ($editalAntigo) {
+                                            $idRepresentante = $pessoaJuridicaObj->recuperaPessoaJuridica($fomentoObj->encryption($inscrito->pessoa_juridica_id), true)["representante_legal1_id"];
+                                            $representanteNome = $representanteObj->recuperaRepresentante($fomentoObj->encryption($idRepresentante), true)->fetchObject()->nome;
+                                            echo "<td>$representanteNome</td>";
                                         } else {
                                             echo "<td>$inscrito->nome_projeto</td>";
                                         }
@@ -179,7 +233,42 @@ $inscritos = $fomentoObj->listaInscritos($id);
                                     </tr>
                                 <?php
                                 endforeach;
-                            else: ?>
+                                foreach ($inscritos as $inscrito):
+                                    ?>
+                                    <tr>
+                                        <td><?= $inscrito->protocolo ?></td>
+                                        <?php if ($editalAntigo) {
+                                            $pfNome = $pessoaFisicaObj->recuperaPessoaFisica($fomentoObj->encryption($inscrito->pessoa_fisica_id), true)["nome"];
+                                            echo "<td>$pfNome</td>";
+                                        } else {
+                                            echo "<td>$inscrito->nome_projeto</td>";
+                                        }
+                                        ?>
+                                        <td class="dinheiro"><?= $inscrito->valor_projeto ?></td>
+                                        <td class="d-flex justify-content-center align-items-center">
+                                            <?php switch ($inscrito->publicado) {
+                                                case 2:
+                                                    echo "<div class=\"quadr bg-green\" data-toggle=\"popover\" data-trigger=\"hover\"
+                                                 data-content=\"Aprovado\"></div>";
+                                                    break;
+                                                case 3:
+                                                    echo "<div class=\"quadr bg-danger\" data-toggle=\"popover\" data-trigger=\"hover\"
+                                             data-content=\"Reprovado\"></div>";
+                                                    break;
+                                                default:
+                                                    echo "Aguardando";
+                                                    break;
+                                            } ?>
+                                        </td>
+                                        <td>
+                                            <a href="<?= SERVERURL . "fomentos/detalhes_inscrito&id=" . $fomentoObj->encryption($inscrito->id) ?>"
+                                               class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Mais Detalhes</a>
+                                        </td>
+                                    </tr>
+                                <?php
+                                endforeach;
+                            else:
+                                ?>
                                 <tr>
                                     <td colspan="4" class="text-center">Este edital ainda não possui projetos
                                         inscritos

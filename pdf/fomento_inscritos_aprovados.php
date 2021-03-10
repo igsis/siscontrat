@@ -24,7 +24,7 @@ $arqObj = new ArquivoController();
 $edital = $fomentoObj->recuperaEdital($id);
 $nomeEdital = $edital->titulo;
 $pessoaTipo = $edital->pessoa_tipos_id;
-$inscritos = $fomentoObj->listaInscritos($id, $aprovado);
+$inscritos = $fomentoObj->listaInscritos($id, $pessoaTipo,$aprovado);
 
 $linkStyle = [
     'font' => [

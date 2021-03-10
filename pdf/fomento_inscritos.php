@@ -13,8 +13,11 @@ $objPHPExcel = new PHPExcel();
 $fomentoObj = new FomentoController();
 $arqObj = new ArquivoController();
 
-$nomeEdital = $fomentoObj->recuperaEdital($id)->titulo;
-$inscritos = $fomentoObj->listaInscritos($id);
+$edital = $fomentoObj->recuperaEdital($id);
+$tipoPessoa = $edital->pessoa_tipos_id;
+
+$nomeEdital = $edital->titulo;
+$inscritos = $fomentoObj->listaInscritos($id, $tipoPessoa);
 
 $linkStyle = [
     'font' => [

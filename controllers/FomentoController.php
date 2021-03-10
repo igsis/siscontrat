@@ -219,15 +219,15 @@ class FomentoController extends FomentoModel
      * @param bool $aprovados
      * @return array|bool
      */
-    public function listaInscritos($edital_id, $aprovados = false) {
+    public function listaInscritos($edital_id, $tipo_pessoa, $aprovados = false) {
         $edital_id = MainModel::decryption($edital_id);
 
-        return parent::recuperaInscritos($edital_id, $aprovados);
+        return parent::recuperaInscritos($edital_id, $tipo_pessoa, $aprovados);
     }
 
     public function recuperaProjeto($idInscrito){
         $id = MainModel::decryption($idInscrito);
-        $resultado = DbModel::consultaSimples("SELECT fp.*, fpd.instituicao, fpd.site FROM fom_projetos fp LEFT JOIN fom_projeto_dados fpd ON fpd.fom_projeto_id = fp.id WHERE fp.id = '$id'",true)->fetch(PDO::FETCH_ASSOC);
+        $resultado = DbModel::consultaSimples("SELECT fp.*, fpd.instituicao, fpd.site FROM fom_projetos fp LEFT JOIN fom_projeto_dado_pjs fpd ON fpd.fom_projeto_id = fp.id WHERE fp.id = '$id'",true)->fetch(PDO::FETCH_ASSOC);
         //$resultado = DbModel::getInfo('fom_projetos',$id,true)->fetch(PDO::FETCH_ASSOC);
         $resultado['responsavel_inscricao'] = DbModel::consultaSimples("SELECT nome FROM usuarios WHERE id='{$resultado['usuario_id']}'", true)->fetchColumn();
         return $resultado;
