@@ -29,6 +29,10 @@ $dados = $pfObj->comparaPf($_GET['id']);
                 <h3 class="card-title"><?= $dados['pf_nome'] ?> - <small>CPF: <?= $dados['pf_cpf'] ?></small></h3>
             </div>
             <div class="card-body">
+                <div class="alert alert-warning">
+                    <h5><i class="icon fas fa-exclamation-triangle"></i> Atenção!</h5>
+                    Os dados exibidos abaixo estão diferentes no cadastro efetuado no sistema CAPAC. Atualize se necessário.
+                </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card card-success card-outline">
@@ -45,12 +49,12 @@ $dados = $pfObj->comparaPf($_GET['id']);
                                     <div class="form-group">
                                         <label><?= $label ?>:</label>
                                         <div class="input-group">
-                                            <?php if (!empty($dado)) {
+                                            <?php if (!empty($dado) || ($dado == "0")) {
                                                 $pfObj->recuperaDadoPorId($key, $dado, false);
                                             } ?>
                                             <input type="text" name="message" class="form-control" id="<?=$key?>Cpc" value="<?=$dado?>" readonly>
                                             <span class="input-group-append">
-                                                <button type="button" class="btn btn-success" onclick="passaValor('<?=$key?>')">
+                                                <button type="button" class="btn btn-success" title="Atualizar campo" onclick="passaValor('<?=$key?>')">
                                                     <i class="fas fa-arrow-alt-circle-right"></i>
                                                 </button>
                                             </span>
@@ -60,6 +64,7 @@ $dados = $pfObj->comparaPf($_GET['id']);
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-6">
                         <div class="card card-primary card-outline">
                             <form class="form-horizontal formulario-ajax" method="POST" role="form"
@@ -87,7 +92,7 @@ $dados = $pfObj->comparaPf($_GET['id']);
                                             <label><?= $label ?>:</label>
                                             <div class="input-group">
                                                 <span class="input-group-prepend">
-                                                    <button type="button" class="btn btn-danger" onclick="resetaValor('<?=$key?>')">
+                                                    <button type="button" class="btn btn-danger" title="Reverter Atualização" onclick="resetaValor('<?=$key?>')">
                                                         <i class="fas fa-undo"></i>
                                                     </button>
                                                 </span>

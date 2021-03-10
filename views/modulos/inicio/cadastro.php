@@ -41,7 +41,7 @@ $objUsuario = new UsuarioController();
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label for="instituicao">Instituição *</label>
-                        <select class="form-control" name="instituicao" id="instituicao" required>
+                        <select class="form-control" name="instituicao_id" id="instituicao" required>
                             <option value="">Selecione uma opção...</option>
                             <?php
                             $objUsuario->geraOpcao("instituicoes");
@@ -50,7 +50,7 @@ $objUsuario = new UsuarioController();
                     </div>
                     <div class="form-group col-md-4">
                         <label for="local">Local *</label>
-                        <select class="form-control" id="local" name="local">
+                        <select class="form-control" id="local" name="local_id">
                             <!-- Populando pelo js -->
                         </select>
                     </div>
@@ -254,18 +254,9 @@ $objUsuario = new UsuarioController();
                     $('#local').append(`<option value='${local.id}'>${local.local}</option>`).focus();
 
                 }
+                $('#local').unbind('mousedown');
+                $('#local').removeAttr('readonly');
 
-                if (idInstituicao == 1){
-                    let locais = document.querySelector('#local');
-                    locais.value = 2;
-                    $('#local').attr('readonly', true);
-                    $('#local').on('mousedown', function(e) {
-                        e.preventDefault();
-                    });
-                } else {
-                    $('#local').unbind('mousedown');
-                    $('#local').removeAttr('readonly');
-                }
             })
     });
 </script>

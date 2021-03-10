@@ -102,6 +102,8 @@ class PessoaFisicaController extends PessoaFisicaModel
 
         $dadosLimpos = PessoaFisicaModel::limparStringPF($_POST);
 
+        $dadosLimpos['pf']['ultima_atualizacao'] = date('Y-m-d H:i:s');
+
         $edita = DbModel::update('pessoa_fisicas', $dadosLimpos['pf'], $idDecryp);
         if ($edita) {
 
@@ -404,7 +406,7 @@ class PessoaFisicaController extends PessoaFisicaModel
                     'titulo' => 'Pessoa Física Importada',
                     'texto' => 'A pessoa física selecionada foi importada com sucesso!',
                     'tipo' => 'success',
-                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($pfSis['id'])
+                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($pfSis['id']) . '&import=1'
                 ];
             }
         } else {
@@ -422,7 +424,7 @@ class PessoaFisicaController extends PessoaFisicaModel
                     'titulo' => 'Pessoa Física Importada',
                     'texto' => 'A pessoa física selecionada foi importada com sucesso!',
                     'tipo' => 'success',
-                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($id)
+                    'location' => SERVERURL . 'formacao/pf_cadastro&id=' . MainModel::encryption($id) . '&import=1'
                 ];
             }
         }
@@ -489,11 +491,14 @@ class PessoaFisicaController extends PessoaFisicaModel
             $pfSis['te_telefone_'.$key] = $telefone['telefone'];
         }
 
+        /** @var array|bool $dadosDivergentes */
         $dadosDivergentes = parent::verificaDivergencia($pfCapac, $pfSis);
 
-        foreach ($dadosDivergentes as $dado) {
-            $dados['dadosCapac'][$dado] = $pfCapac[$dado];
-            $dados['dadosSis'][$dado] = $pfSis[$dado] ?? "";
+        if ($dadosDivergentes) {
+            foreach ($dadosDivergentes as $dado) {
+                $dados['dadosCapac'][$dado] = $pfCapac[$dado];
+                $dados['dadosSis'][$dado] = $pfSis[$dado] ?? "";
+            }
         }
 
         $dados['pf_nome'] = $pfCapac['pf_nome'];
