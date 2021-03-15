@@ -49,42 +49,32 @@ $ano = date('Y');
 <br>
 <body>
 
-
-<?php
-
-$texto =
-    "<p><strong><u><center>Anexo I da Portaria SF nº 170, de 31 agosto de 2020</strong></p></u></center>" .
-    "<p>&nbsp;</p>" .
-    "<p><strong>Recebimento da Documentação </strong></p>" .
-    "<p>&nbsp;</p>" .
-    "<p>Atesto:</p>" .
-    "<p>( X ) o recebimento em $dataAtual de toda a documentação [INSERIR NÚMERO SEI DA NOTA FISCAL E ARQUIVOS
-CONSOLIDADOS] prevista na Portaria SF nº 170/2020.</p>" .
-    "<p>( &nbsp; ) o recebimento em $dataAtual da documentação [INSERIR NÚMERO SEI DA NOTA FISCAL E ARQUIVOS CONSOLIDADOS]
-prevista na Portaria SF nº 170/2020, ressalvado (s) [RELACIONAR OS DOCUMENTOS IRREGULARES].</p>" .
-    "<p><strong>Recebimento de material e/ou serviços: </strong></p>" .
-    "<p>Atesto:</p>" .
-    "<p>( X ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ]
-foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia $data_inicio, dentro do prazo previsto.<br>O prazo contratual é $periodo.</p>" .
-    "<p>( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ]
-foram entregues e/ou executados parcialmente, nos termos previstos no instrumento contratual (ou documento
-equivalente), do dia $data_fim, dentro do prazo previsto.<br>O prazo contratual é $periodo. </p>" .
-    "<p>( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL]
-foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento
-equivalente) no dia $data_fim, com atraso de ____dias.<br>O prazo contratual é $periodo. </p>" .
-    "<p>&nbsp;</p>" .
-    "<p>INFORMAÇÕES COMPLEMENTARES </p>" .
-    "<p>____________________________________________________________________________________________________________________________________</p>" .
-    "<p>____________________________________________________________________________________________________________________________________</p>" .
-    "<p>À área gestora / de liquidação e pagamento. </p>" .
-    "<p>&nbsp;</p>" .
-    "<p>Encaminho para prosseguimento </p>" .
-    "<p>São Paulo/SP, $dia de $mes de $ano </p>"
-
-?>
-
 <div align="center">
-    <div id="texto" class="texto"><?php echo $texto; ?></div>
+    <div id="texto" class="texto">
+        <p align="center"><strong><u>Anexo I da Portaria SF nº 170, de 31 agosto de 2020/strong></u></strong></p>
+        <p>&nbsp;</p>
+        <p><strong>Recebimento da Documentação </strong></p>
+        <p>Atesto:</p>
+        <p>( X ) o recebimento em <?= $dataAtual ?> de toda a documentação [INSERIR NÚMERO SEI DA NOTA FISCAL E ARQUIVOS CONSOLIDADOS] prevista na Portaria SF nº 170/2020.<br>O prazo contratual é <?= $periodo ?>.</p>
+        <p>( &nbsp; ) o recebimento em <?= $dataAtual ?> da documentação [INSERIR NÚMERO SEI DA NOTA FISCAL E ARQUIVOS CONSOLIDADOS] prevista na Portaria SF nº 170/2020, ressalvado (s) [RELACIONAR OS DOCUMENTOS IRREGULARES].<br>O prazo contratual é <?= $periodo ?>.</p>
+        <p>&nbsp;</p>
+        <p><strong>Recebimento de material e/ou serviços: </strong></p>
+        <p>Atesto:</p>
+        <p>( X ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia <?= $data_inicio ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>.</p>
+        <p>( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ] foram entregues e/ou executados parcialmente, nos termos previstos no instrumento contratual (ou documento
+            equivalente), do dia <?= $data_fim ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>. </p>
+        <p>( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento
+            equivalente) no dia <?= $data_fim ?>, com atraso de ____dias.<br>O prazo contratual é <?= $periodo ?>.</p>
+        <p>&nbsp;</p>
+        <p><b>INFORMAÇÕES COMPLEMENTARES</b></p>
+        <p>____________________________________________________________________________________________________________________________________</p>
+        <p>____________________________________________________________________________________________________________________________________</p>
+        <p>À área gestora / de liquidação e pagamento. </p>
+        <p>&nbsp;</p>
+        <p>Encaminho para prosseguimento </p>
+        <p>São Paulo, <?= $dia ?> de <?= $mes ?> de <?= $ano ?>.</p>
+
+    </div>
 </div>
 
 <div align="center">
