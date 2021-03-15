@@ -246,7 +246,7 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                     <label for="fiscal_id">Fiscal: *</label>
                                     <select name="fiscal_id" required class="form-control select2bs4">
                                         <option value="">Selecione um fiscal...</option>
-                                        <?php $contratacaoObj->geraOpcaoUsuario($dados_contratacao->fiscal_id ?? "", '1') ?>
+                                        <?php $contratacaoObj->geraOpcaoUsuario($dados_contratacao->fiscal_id ?? "", '17') ?>
                                     </select>
                                 </div>
 
@@ -254,7 +254,7 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                     <label for="suplente_id">Suplente:</label>
                                     <select name="suplente_id" class="form-control select2bs4">
                                         <option value="">Selecione um suplente...</option>
-                                        <?php $contratacaoObj->geraOpcaoUsuario($dados_contratacao->suplente_id ?? "", '1') ?>
+                                        <?php $contratacaoObj->geraOpcaoUsuario($dados_contratacao->suplente_id ?? "", '6') ?>
                                     </select>
                                 </div>
                             </div>
