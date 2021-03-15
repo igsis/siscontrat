@@ -1,6 +1,8 @@
 <?php
 require_once "./controllers/GestaoPrazoController.php";
+require_once "./controllers/EventoController.php";
 $gestaoObj = new GestaoPrazoController();
+$eventoObj = new EventoController();
 $eventos = $gestaoObj->listaAprovar();
 ?>
 <!-- Content Header (Page header) -->
@@ -41,9 +43,20 @@ $eventos = $gestaoObj->listaAprovar();
                             <tbody>
                             <?php foreach ($eventos as $evento): ?>
                                 <tr>
-                                    <td><?=$evento->nome_evento?></td>
-                                    <td>Locais</td>
-                                    <td>Período</td>
+                                    <td><?=$evento->nome_evento . $evento->id?></td>
+                                    <td>
+                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#listaLocais">
+                                            Launch Small Modal
+                                        </button>
+                                        <form class="form-horizontal formulario-ajax" method="POST"
+                                              action="<?= SERVERURL ?>ajax/EventoAjax.php" role="form"
+                                             >
+                                            <input type="hidden" name="_method" value="listaLocais">
+                                            <input type="hidden" name="id" value="<?= $evento->id ?>">
+                                            <button type="submit" class="btn btn-primary">Ver locais</button>
+                                        </form>
+                                    </td>
+                                    <td><?= $eventoObj->retornaPeriodo($evento->id) ?></td>
                                     <td><?=$evento->fiscal?></td>
                                     <td><?=$evento->operador ?? "não cadastrado" ?></td>
                                     <td>
@@ -88,9 +101,10 @@ $eventos = $gestaoObj->listaAprovar();
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
 <script type="application/javascript">
     $(document).ready(function () {
         $('.nav-link').removeClass('active');
-        $('#fomentos_inicio').addClass('active');
+        $('#gestaoPrazo_inicio').addClass('active');
     })
 </script>

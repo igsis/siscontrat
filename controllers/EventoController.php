@@ -287,4 +287,53 @@ class EventoController extends EventoModel
             return $date . '.' . $preencheZeros . "-C";
         }
     }
+
+    public function retornaPeriodo($idEvento):string
+    {
+        $primeiroDia = DbModel::consultaSimples("SELECT MIN(data_inicio) as data_inicio, virada FROM ocorrencias WHERE publicado = 1 AND origem_ocorrencia_id = '$idEvento' LIMIT 0,1")->fetch(PDO::FETCH_OBJ);
+        $ultimoDia = DbModel::consultaSimples("SELECT MAX(data_fim) as data_fim FROM ocorrencias WHERE publicado = 1 AND origem_ocorrencia_id = '$idEvento' LIMIT 0,1")->fetch(PDO::FETCH_OBJ);
+
+        if ($primeiroDia->virada == 1){
+            $virada = " DE ACORDO COM PROGRAMAÇÃO DO EVENTO NO PERÍODO DA VIRADA CULTURAL.";
+        } else{
+            $virada = "";
+        }
+
+        if ($ultimoDia->data_fim == null || $ultimoDia->data_fim == '0000-00-00'){
+            $periodo = date('d/m/Y', strtotime($primeiroDia->data_inicio)) . $virada;
+        } else{
+            $periodo = date('d/m/Y', strtotime($primeiroDia->data_inicio)) . " até " . date('d/m/Y', strtotime($ultimoDia->data_fim)) . $virada;
+        }
+        return $periodo;
+    }
+
+    public function retornaLocais($idEvento):string
+    {
+        $locais = DbModel::consultaSimples("SELECT i.sigla, l.local FROM ocorrencias o INNER JOIN instituicoes i on o.instituicao_id = i.id INNER JOIN locais l on o.local_id = l.id and i.id = l.instituicao_id WHERE o.publicado = 1 AND origem_ocorrencia_id = '$idEvento'")->fetchAll(PDO::FETCH_OBJ);
+        $lista = "";
+        foreach ($locais as $local) {
+            $lista .= "(" . $local->sigla . ") " . $local->local . ", ";
+        }
+        return substr($lista,0,-2);
+    }
+
+    public function modalLocais($idEvento):string
+    {
+        return "
+        <div class='modal fade' id='listaLocais' aria-hidden='true' style='display: none;'>
+            <div class='modal-dialog'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h4 class='modal-title'>Locais</h4>
+                    </div>
+                    <div class='modal-body'>
+                        ". $this->retornaLocais($idEvento) ."
+                    </div>
+                    <div class='modal-footer justify-content-between'>
+                        <button type='button' class='btn btn-default' data-dismiss=modal'>Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>";
+    }
 }
