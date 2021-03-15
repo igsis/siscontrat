@@ -63,8 +63,7 @@ $ano = date('Y');
         <p>( X ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia <?= $data_inicio ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>.</p>
         <p>( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ] foram entregues e/ou executados parcialmente, nos termos previstos no instrumento contratual (ou documento
             equivalente), do dia <?= $data_fim ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>. </p>
-        <p>( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento
-            equivalente) no dia <?= $data_fim ?>, com atraso de ____dias.<br>O prazo contratual é <?= $periodo ?>.</p>
+        <p>( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia _____ / _____ / _____, com atraso de ____ dias.<br>O prazo contratual é <?= $periodo ?>.</p>
         <p>&nbsp;</p>
         <p><b>INFORMAÇÕES COMPLEMENTARES</b></p>
         <p>____________________________________________________________________________________________________________________________________</p>
