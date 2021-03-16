@@ -143,14 +143,14 @@ endif;
                             <div class="form-group col-md">
                                 <label for="fiscal">Fiscal:</label>
                                 <input type="text" name="fiscal" class="form-control"
-                                       value="<?= isset($contratacao->fiscal) ? $contratacao->fiscal : "17" ?>"
+                                       value="<?= isset($contratacao->fiscal) ? $contratacao->fiscal : "" ?>"
                                        disabled>
                             </div>
 
                             <div class="form-group col-md">
                                 <label for="suplente">Suplente:</label>
                                 <input type="text" name="suplente" class="form-control"
-                                       value="<?= isset($contratacao->suplente) ? $contratacao->suplente : "6" ?>"
+                                       value="<?= isset($contratacao->suplente) ? $contratacao->suplente : "" ?>"
                                        disabled>
                             </div>
                         </div>
