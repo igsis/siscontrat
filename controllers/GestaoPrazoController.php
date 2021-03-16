@@ -24,6 +24,40 @@ class GestaoPrazoController extends MainModel
         WHERE e.evento_status_id = 2 AND e.publicado = 1 GROUP BY e.id")->fetchAll(PDO::FETCH_OBJ);
     }
 
+    public function desaprovar($post)
+    {
+        unset($post['id']);
+        unset ($post['_method']);
+        $evento_id = $post['evento_id'];
+
+        $dadosEvento['evento_status_id'] = 6;
+        DbModel::update("eventos",$dadosEvento,$evento_id);
+
+        $dadosPedido['status_pedido_id'] = 3;
+        DbModel::updateEspecial("pedidos",$dadosPedido,"origem_id",$evento_id);
+
+        $dadosChamado = MainModel::limpaPost($post);
+
+        $update = DbModel::update('chamados', $dadosChamado, $evento_id);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Evento Vetado!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'gestaoPrazo/inicio'
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
     public function aprovar($evento_id)
     {
         /* executa limpeza nos campos */

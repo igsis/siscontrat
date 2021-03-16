@@ -316,24 +316,4 @@ class EventoController extends EventoModel
         }
         return substr($lista,0,-2);
     }
-
-    public function modalLocais($idEvento):string
-    {
-        return "
-        <div class='modal fade' id='listaLocais' aria-hidden='true' style='display: none;'>
-            <div class='modal-dialog'>
-                <div class='modal-content'>
-                    <div class='modal-header'>
-                        <h4 class='modal-title'>Locais</h4>
-                    </div>
-                    <div class='modal-body'>
-                        ". $this->retornaLocais($idEvento) ."
-                    </div>
-                    <div class='modal-footer justify-content-between'>
-                        <button type='button' class='btn btn-default' data-dismiss=modal'>Fechar</button>
-                    </div>
-                </div>
-            </div>
-        </div>";
-    }
 }
