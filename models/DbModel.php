@@ -126,6 +126,24 @@ class DbModel
         return $statement;
     }
 
+    // Método para update condicional
+    protected function updateCondicional($table, $data, $where, $capac = false){
+        $pdo = self::connection($capac);
+        $new_values = "";
+        foreach($data as $key => $value) {
+            $new_values .= "$key=:$key, ";
+        }
+        $new_values = substr($new_values, 0, -2);
+        $sql = "UPDATE $table SET $new_values WHERE $where";
+        $statement = $pdo->prepare($sql);
+        foreach($data as $key => $value) {
+            $statement->bindValue(":$key", $value, PDO::PARAM_STR);
+        }
+        $statement->execute();
+
+        return $statement;
+    }
+
     /**
      * Método para apagar (despublicar)
      * @param string $table

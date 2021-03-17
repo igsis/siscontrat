@@ -293,3 +293,12 @@ $('#arquivarEdital').on('show.bs.modal', function (e) {
     $(this).find('p').text(`Tem certeza que deseja excluir o edital ${edital} ?`);
     $(this).find('#id').attr('value', `${id}`);
 })
+
+
+$('#vetacao').on('show.bs.modal', function (e) {
+    let nome = $(e.relatedTarget).attr('data-name');
+    let evento_id = $(e.relatedTarget).attr('data-id');
+
+    $(this).find('p').text(`Tem certeza que deseja vetar o evento ${nome} ?`);
+    $(this).find('#evento_id').attr('value', `${evento_id}`);
+})

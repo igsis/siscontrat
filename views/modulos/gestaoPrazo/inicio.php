@@ -55,16 +55,24 @@ $eventos = $gestaoObj->listaAprovar();
                                     <td>
                                         <div class="row">
                                             <div class="col-md">
-                                                <a href="<?= SERVERURL ?>"
+                                                <a href="http://<?=$_SERVER['HTTP_HOST']?>/siscontrat2/pdf/resumo_evento.php?id=<?= $evento->id ?>" target="_blank"
                                                    class="btn btn-sm btn-primary"><i class="far fa-file-alt"></i> Detalhes</a>
                                             </div>
+                                            <!-- aprovar -->
                                             <div class="col-md">
-                                                <a href="<?= SERVERURL ?>"
-                                                   class="btn btn-sm btn-success"><i class="far fa-thumbs-up"></i> Aprovar</a>
+                                                <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/gestaoPrazoAjax.php" method="POST" role="form" data-form="update">
+                                                    <input type="hidden" name="_method" value="aprovar">
+                                                    <input type="hidden" name="id" value="<?= $evento->id ?>">
+                                                    <button type="submit" name="cadastra" class="btn btn-sm btn-success">
+                                                        <i class="far fa-thumbs-up"></i> Aprovar
+                                                    </button>
+                                                    <div class="resposta-ajax"></div>
+                                                </form>
                                             </div>
+                                            <!-- desaprovar -->
                                             <div class="col-md">
                                                 <button type="button" class="btn btn-sm btn-danger" id="vetarEvento"
-                                                        data-toggle="modal" data-target="#vetacao" name="vetarEvento"
+                                                        data-toggle="modal" data-target="#vetacao"
                                                         data-name="<?= $evento->nome_evento ?>"
                                                         data-id="<?= $evento->id ?>">
                                                     <i class="far fa-thumbs-down"></i> Vetar
@@ -100,18 +108,19 @@ $eventos = $gestaoObj->listaAprovar();
 <!-- /.content -->
 
 <!-- modal -->
-<div id="vetacao" class="modal modal-danger modal fade in" role="dialog">
+<div class="modal fade" id="vetacao" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Confirmação do Veto</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <form action="<?=SERVERURL?>ajax/" method="post">
+            <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/gestaoPrazoAjax.php" method="POST" role="form" data-form="update">
+                <input type="hidden" name="_method" value="desaprovar">
                 <input type="hidden" name="evento_id" id="evento_id" value="">
                 <input type="hidden" name="titulo" value="Evento fora do prazo">
                 <div class="modal-body">
-                    <p>Tem certeza que deseja vetar este evento?</p>
+                    <p></p>
                     <label for="chamado_tipo_id">Motivo da Vetação: *</label>
                     <select id="chamado_tipo_id" name="chamado_tipo_id" class="form-control" required>
                         <option value="">Selecione o Motivo</option>
@@ -128,6 +137,7 @@ $eventos = $gestaoObj->listaAprovar();
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
                     <input type="submit" class="btn btn-danger btn-outline" name="vetar" value="Vetar">
                 </div>
+                <div class="resposta-ajax"></div>
             </form>
         </div>
     </div>
@@ -137,15 +147,5 @@ $eventos = $gestaoObj->listaAprovar();
     $(document).ready(function () {
         $('.nav-link').removeClass('active');
         $('#gestaoPrazo_inicio').addClass('active');
-    })
-</script>
-
-<script type="text/javascript">
-    $('#vetacao').on('show.bs.modal', function (e) {
-        let nome = $(e.relatedTarget).attr('data-nome');
-        let evento_id = $(e.relatedTarget).attr('data-id');
-
-        $(this).find('p').text(`Tem certeza que deseja excluir a categoria: ${nome} ?`);
-        $(this).find('#evento_id').attr('value', `${evento_id}`);
     })
 </script>

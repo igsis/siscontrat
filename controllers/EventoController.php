@@ -226,39 +226,7 @@ class EventoController extends EventoModel
         return $publico;
     }
 
-    public function envioEvento($id, $modulo)
-    {
-        $id = MainModel::decryption($id);
-        $dados = [
-            'publicado' => 2,
-            'data_cadastro' => date('Y-m-d H-i-s')
-        ];
-        $edita = DbModel::update("eventos",$dados,$id);
-        if ($edita->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
-            $alerta = [
-                'alerta' => 'sucesso',
-                'titulo' => 'Evento enviado com sucesso!',
-                'texto' => 'Seu código do CAPAC é: '.$id.'<br><div class="row"><div class="offset-3 col-md-6"><a href="'.SERVERURL.'pdf/resumo_evento.php" class="btn btn-primary btn-block" target="_blank">Imprimir comprovante</a></div></div>',
-                'tipo' => 'success',
-                'location' => SERVERURL . $modulo.'/evento_lista'
-            ];
-        }
-        else{
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-        return MainModel::sweetAlert($alerta);
-    }
 
-    public function descriptografia($id)
-    {
-        $id = MainModel::decryption($id);
-        return $id;
-    }
 
     public function notificacaoEventos($id)
     {
@@ -315,5 +283,60 @@ class EventoController extends EventoModel
             $lista .= "(" . $local->sigla . ") " . $local->local . ", ";
         }
         return substr($lista,0,-2);
+    }
+
+    public function enviaEvento($pagina, $evento_id):string
+    {
+        unset ($_POST['_method']);
+        $data = date('Y-m-d H:i:s');
+
+        // tabela eventos
+        $dadosEvento['evento_status_id'] = 3;
+        $verificaProtocolo = DbModel::consultaSimples("SELECT protocolo FROM eventos WHERE id = '$evento_id'")->fetchColumn(PDO::FETCH_OBJ);
+        if (!$verificaProtocolo){
+            $dadosEvento['protocolo'] = (new EventoController)->geraProtocolo($evento_id);
+        }
+        $editaEvento = DbModel::update("eventos", $dadosEvento,$evento_id);
+        if ($editaEvento->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            // tabela evento_envios
+            $dadosEnvio['evento_id'] = $evento_id;
+            $dadosEnvio['data_envio'] = $data;
+            $insereEnvio = DbModel::insert("evento_envios",$dadosEnvio);
+            if ($insereEnvio->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+                // tabela pedidos
+                $dadosPedido['status_pedido_id'] = 2;
+                $editaPedido = DbModel::updateEspecial("pedidos",$dadosPedido,"origem_id",$evento_id);
+                if ($editaPedido->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+                    //tabela producao_eventos
+                    $dadosProducao['evento_id'] = $evento_id;
+                    $dadosProducao['usuario_id'] = $_SESSION['usuario_id_s'];
+                    $dadosProducao['data'] = $data;
+                    $producaoEvento = DbModel::insertignore("producao_eventos", $dadosProducao);
+                    if ($producaoEvento->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+                        $alerta = [
+                            'alerta' => 'sucesso',
+                            'titulo' => 'Evento Aprovado!',
+                            'texto' => 'Evento enviado com protocolo ".$protocolo',
+                            'tipo' => 'success',
+                            'location' => SERVERURL . $pagina
+                        ];
+                    } else {
+                        exit("Erro ao salvar produção.");
+                    }
+                } else{
+                    exit("Erro ao salvar pedido.");
+                }
+            } else{
+                exit("Erro ao salvar data de envio.");
+            }
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
     }
 }
