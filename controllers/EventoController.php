@@ -244,9 +244,9 @@ class EventoController extends EventoModel
         return json_encode($resultado);
     }
 
-    function geraProtocolo($idEvento)
+    function geraProtocolo($idEvento):string
     {
-        $tipo_evento = DbModel::consultaSimples("SELECT tipo_evento_id FROM eventos WHERE id ='$idEvento'")->fetchColumn(PDO::FETCH_OBJ);
+        $tipo_evento = DbModel::consultaSimples("SELECT tipo_evento_id FROM eventos WHERE id ='$idEvento'")->fetchColumn();
         $date = date('Ymd', strtotime('-3 hours'));
         $preencheZeros = str_pad($idEvento, 5, '0', STR_PAD_LEFT);
         if ($tipo_evento == 1){
@@ -292,9 +292,9 @@ class EventoController extends EventoModel
 
         // tabela eventos
         $dadosEvento['evento_status_id'] = 3;
-        $verificaProtocolo = DbModel::consultaSimples("SELECT protocolo FROM eventos WHERE id = '$evento_id'")->fetchColumn(PDO::FETCH_OBJ);
+        $verificaProtocolo = DbModel::consultaSimples("SELECT protocolo FROM eventos WHERE id = '$evento_id'")->fetchColumn();
         if (!$verificaProtocolo){
-            $dadosEvento['protocolo'] = (new EventoController)->geraProtocolo($evento_id);
+            $verificaProtocolo = $dadosEvento['protocolo'] = $this->geraProtocolo($evento_id);
         }
         $editaEvento = DbModel::update("eventos", $dadosEvento,$evento_id);
         if ($editaEvento->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
@@ -305,24 +305,24 @@ class EventoController extends EventoModel
             if ($insereEnvio->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
                 // tabela pedidos
                 $dadosPedido['status_pedido_id'] = 2;
-                $editaPedido = DbModel::updateEspecial("pedidos",$dadosPedido,"origem_id",$evento_id);
+                $editaPedido = DbModel::updateCondicional("pedidos",$dadosPedido,"origem_tipo_id = 1 AND origem_id = $evento_id");
                 if ($editaPedido->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
                     //tabela producao_eventos
-                    $dadosProducao['evento_id'] = $evento_id;
-                    $dadosProducao['usuario_id'] = $_SESSION['usuario_id_s'];
-                    $dadosProducao['data'] = $data;
-                    $producaoEvento = DbModel::insertignore("producao_eventos", $dadosProducao);
-                    if ($producaoEvento->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
-                        $alerta = [
-                            'alerta' => 'sucesso',
-                            'titulo' => 'Evento Aprovado!',
-                            'texto' => 'Evento enviado com protocolo ".$protocolo',
-                            'tipo' => 'success',
-                            'location' => SERVERURL . $pagina
-                        ];
-                    } else {
-                        exit("Erro ao salvar produção.");
+                    $verificaProducao = DbModel::consultaSimples("SELECT evento_id FROM producao_eventos WHERE evento_id = '$evento_id'")->fetchColumn();
+                    if (!$verificaProducao){
+                        session_start(['name' => 'sis']);
+                        $dadosProducao['evento_id'] = $evento_id;
+                        $dadosProducao['usuario_id'] = $_SESSION['usuario_id_s'];
+                        $dadosProducao['data'] = $data;
+                        DbModel::insert("producao_eventos", $dadosProducao);
                     }
+                    $alerta = [
+                        'alerta' => 'sucesso',
+                        'titulo' => 'Evento Aprovado!',
+                        'texto' => 'Evento enviado com protocolo: '. $verificaProtocolo,
+                        'tipo' => 'success',
+                        'location' => SERVERURL . $pagina
+                    ];
                 } else{
                     exit("Erro ao salvar pedido.");
                 }
