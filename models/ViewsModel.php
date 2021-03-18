@@ -14,6 +14,7 @@ class ViewsModel
             "agendao",
             "fomentos",
             "administrativo",
+            "gestaoPrazo",
         ];
 
         if (in_array($mod, $modulos)) {

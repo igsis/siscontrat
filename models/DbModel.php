@@ -51,6 +51,30 @@ class DbModel
         return $statement;
     }
 
+    /**
+     * <p>Função para inserir um registro no banco de dados caso seja válido </p>
+     * @param string $table
+     * <p>Tabela do banco de dados</p>
+     * @param array $data
+     * <p>Dados a serem inseridos</p>
+     * @param bool $capac
+     * <p><strong>FALSE</strong> por padrão. Quando <strong>TRUE</strong>, faz a consulta no banco de dados do sistema CAPAC</p>
+     * @return bool|PDOStatement
+     */
+    protected function insertignore($table, $data, $capac = false) {
+        $pdo = self::connection($capac);
+        $fields = implode(", ", array_keys($data));
+        $values = ":".implode(", :", array_keys($data));
+        $sql = "INSERT IGNORE INTO $table ($fields) VALUES ($values)";
+        $statement = $pdo->prepare($sql);
+        foreach($data as $key => $value) {
+            $statement->bindValue(":$key", $value, PDO::PARAM_STR);
+        }
+        $statement->execute();
+
+        return $statement;
+    }
+
     // Método para update
 
     /**
@@ -94,6 +118,24 @@ class DbModel
         $sql = "UPDATE $table SET $new_values WHERE $campo = :$campo";
         $statement = $pdo->prepare($sql);
         $statement->bindValue(":$campo", $campo_id, PDO::PARAM_STR);
+        foreach($data as $key => $value) {
+            $statement->bindValue(":$key", $value, PDO::PARAM_STR);
+        }
+        $statement->execute();
+
+        return $statement;
+    }
+
+    // Método para update condicional
+    protected function updateCondicional($table, $data, $where, $capac = false){
+        $pdo = self::connection($capac);
+        $new_values = "";
+        foreach($data as $key => $value) {
+            $new_values .= "$key=:$key, ";
+        }
+        $new_values = substr($new_values, 0, -2);
+        $sql = "UPDATE $table SET $new_values WHERE $where";
+        $statement = $pdo->prepare($sql);
         foreach($data as $key => $value) {
             $statement->bindValue(":$key", $value, PDO::PARAM_STR);
         }
