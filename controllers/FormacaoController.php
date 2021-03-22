@@ -934,7 +934,7 @@ class FormacaoController extends FormacaoModel
     public function recuperaPedido($pedido_id, $excel = 0, $ano = 0)
     {
         if ($excel != 0 && $ano != 0):
-            $sql = "SELECT p.numero_processo, fc.protocolo, fc.programa_id, pf.id, pf.nome, pro.programa, c.cargo AS 'funcao', l.linguagem, pf.email, s.status
+            $sql = "SELECT p.numero_processo, fc.protocolo, fc.programa_id, pf.id, pf.nome, pro.programa, c.cargo AS 'funcao', c.justificativa AS 'cargo_justificativa', l.linguagem, pf.email, s.status
                                                       FROM pedidos AS p
                                                       INNER JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
                                                       INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id
@@ -947,7 +947,7 @@ class FormacaoController extends FormacaoModel
         else:
             $pedido_id = MainModel::decryption($pedido_id);
             return DbModel::consultaSimples("SELECT p.id, p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
-                                                            p.forma_pagamento, p.justificativa, p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome, c.cargo, fc.programa_id, l.linguagem
+                                                            p.forma_pagamento, p.justificativa, p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome, c.cargo, fc.programa_id, l.linguagem, c.justificativa AS 'cargo_justificativa'
                                                   FROM pedidos AS p
                                                   INNER JOIN pedido_status AS s ON s.id = p.status_pedido_id 
                                                   INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id 
