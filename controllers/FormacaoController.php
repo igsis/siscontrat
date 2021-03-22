@@ -754,7 +754,10 @@ class FormacaoController extends FormacaoModel
 
         foreach ($post as $campo => $dado) {
             foreach ($dado as $key => $valor) {
-                $dados[$key][$campo] = MainModel::limparString($valor);
+                if ($campo === "valor")
+                    $dados[$key][$campo] = MainModel::dinheiroDeBr($valor);
+                else
+                    $dados[$key][$campo] = MainModel::limparString($valor);
             }
         }
 
