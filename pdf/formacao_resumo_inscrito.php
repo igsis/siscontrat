@@ -200,13 +200,13 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', $f);
 $pdf->Cell(36, $l, utf8_decode("Função (2º opção):"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', $f);
-$pdf->Cell(20, $l, utf8_decode($formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo2_id))->cargo), 0, 1, 'L');
+$pdf->Cell(20, $l, utf8_decode($formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo2_id))->cargo ?? "não cadastrado"), 0, 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', $f);
 $pdf->Cell(36, $l, utf8_decode("Função (3º opção):"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', $f);
-$pdf->Cell(20, $l, utf8_decode($formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo3_id))->cargo), 0, 1, 'L');
+$pdf->Cell(20, $l, utf8_decode($formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo3_id))->cargo ?? "não cadastrado"), 0, 1, 'L');
 
 $pdf->Ln(20);
 
