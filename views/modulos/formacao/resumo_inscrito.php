@@ -32,9 +32,9 @@ $arquivos = $arquivosObj->listarArquivosCapac($id)->fetchAll(PDO::FETCH_OBJ);
 <!-- Main content -->
 <div class="content">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row mb-5">
             <div class="col">
-                <div class="text-center">
+                <div class="text-right">
                     <span class="font-weight-bold">Cadastrado enviado em:</span> <?= date("d/m/Y h:i", strtotime($inscrito->data_envio)) ?>
                 </div>
             </div>

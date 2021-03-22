@@ -23,6 +23,12 @@ $data = date('d/m/Y');
 $dia = date('d');
 $mes = MainModel::retornaMes(date('m'));
 $ano = date('Y');
+
+if ($pedido->programa_id == 1) {
+    $objetivo = "CONTRATAÇÃO COMO {$pedido->cargo} de {$pedido->linguagem} DO PROGRAMA DE INICIAÇÃO ARTÍSTICA - {$ano}  NOS TERMOS DO EDITAL 026/2020 - SMC/CFOC/SFC - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL.";
+}elseif ($pedido->programa_id == 2) {
+    $objetivo = "CONTRATAÇÃO COMO {$pedido->cargo} de {$pedido->linguagem} DO PROGRAMA VOCACIONAL - {$ano} NOS TERMOS DO EDITAL 027/2020 - SMC/CFOC/SFC -  PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL.";
+}
 ?>
 
 <html>
@@ -66,13 +72,13 @@ $ano = date('Y');
         "<strong>Telefone(s):</strong> " . $formObj->recuperaTelPf($pedido->pessoa_fisica_id) . "<br />" .
         "<strong>E-mail:</strong> " . $pf->email . "</p>" .
         "<p>&nbsp;</p>" .
-        "<p><strong>Objeto:</strong> " . $formObj->retornaObjetoFormacao($pedido->origem_id) . "</p>" .
+        "<p><strong>Objeto:</strong> {$objetivo}</p>" .
         "<p><strong>Data / Período:</strong> " . $formObj->retornaPeriodoFormacao($pedido->origem_id) . " - conforme Proposta/Cronograma</p>" .
         "<p><strong>Carga Horária:</strong> " . $formObj->retornaCargaHoraria($pedido->origem_id) . " hora(s)" . "</p>" .
         "<p align='justify'><strong>Local(ais):</strong> " . $formObj->retornaLocaisFormacao($pedido->origem_id) . "</p>" .
         "<p><strong>Valor: </strong> R$ " . MainModel::dinheiroParaBr($pedido->valor_total) . "  (" . MainModel::valorPorExtenso($pedido->valor_total) . " )</p>" .
         "<p align='justify'><strong>Forma de Pagamento:</strong> " . $pedido->forma_pagamento . "</p>" .
-        "<p align='justify'><strong>Justificativa: </strong> " . $pedido->justificativa . "</p>" .
+        "<p align='justify'><strong>Justificativa: </strong> " . $pedido->cargo . "</p>" .
         "<p align='justify'>Nos termos do art. 6º do decreto 54.873/2014, fica designado como fiscal desta contratação artística a servidora Natalia Silva Cunha, RF 842.773.9 e, como substituto, Ilton T. Hanashiro Yogi, RF 800.116.2. Diante do exposto, solicitamos autorização para prosseguimento do presente." . "</p>";
     ?>
 
