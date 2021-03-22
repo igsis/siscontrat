@@ -34,11 +34,6 @@ $arquivos = $arquivosObj->listarArquivosCapac($id)->fetchAll(PDO::FETCH_OBJ);
     <div class="container-fluid">
         <div class="row mb-5">
             <div class="col">
-                <div class="text-left">
-                    <a href="#" target="_blank" class="btn btn-sm btn-primary"> Gerar PDF</a>
-                </div>
-            </div>
-            <div class="col">
                 <div class="text-right">
                     <span class="font-weight-bold">Cadastrado enviado em:</span> <?= date("d/m/Y h:i", strtotime($inscrito->data_envio)) ?>
                 </div>
