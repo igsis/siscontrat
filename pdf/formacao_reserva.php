@@ -9,12 +9,13 @@ $formObj = new FormacaoController();
 
 $pedido_id = $_GET['id'];
 $tipo = $_GET['tipo'];
+$ano = date('Y');
 
 $pedido = $formObj->recuperaPedido($pedido_id);
 
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $contratacao = $formObj->recuperaContratacao($pedido->origem_id);
-
+$vigencia = $formObj->dadosVigencia($contratacao->form_vigencia_id);
 switch ($tipo) {
     case "pia":
         $topico = "<p>Assim, solicito a reserva de recursos que deverá onerar a ação 6374 – Dotação 25.10.13.392.3001.6374</p>";
@@ -29,6 +30,8 @@ switch ($tipo) {
         $topico = "";
         break;
 }
+
+$objetivo = "O presente processo trata de {$pf->nome}, contratação como {$pedido->cargo} de {$pedido->linguagem} do {$contratacao->programa} - 2021 nos termos do  EDITAL  026/2020 - SMC/CFOC/SFC - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL. , no valor de {$vigencia->valorTotal} , conforme solicitação (  link SEI ), foram anexados os documentos necessários exigidos no edital, no período de  {$formObj->dataParaBR($vigencia->data_inicio)} e {$formObj->dataParaBR($vigencia->data_fim)}.";
 ?>
 
 <html>
@@ -61,7 +64,7 @@ switch ($tipo) {
         "<p><strong>Do processo nº:</strong> " . $pedido->protocolo . "</p>" .
         "<p>&nbsp;</p>" .
         "<p><strong>INTERESSADO:</strong> " . $pf->nome . "  </span></p>" .
-        "<p><strong>Objeto:</strong> " . $formObj->retornaObjetoFormacao($pedido->origem_id) . "</p>" .
+        "<p><strong>Objeto:</strong> " . $objetivo . "</p>" .
         "<p>&nbsp;</p>" .
         "<p><strong>CONTABILIDADE</strong></p>" .
         "<p><strong>Sr(a). Responsável</strong></p>" .

@@ -754,7 +754,10 @@ class FormacaoController extends FormacaoModel
 
         foreach ($post as $campo => $dado) {
             foreach ($dado as $key => $valor) {
-                $dados[$key][$campo] = MainModel::limparString($valor);
+                if ($campo === "valor")
+                    $dados[$key][$campo] = MainModel::dinheiroDeBr($valor);
+                else
+                    $dados[$key][$campo] = MainModel::limparString($valor);
             }
         }
 
@@ -931,7 +934,7 @@ class FormacaoController extends FormacaoModel
     public function recuperaPedido($pedido_id, $excel = 0, $ano = 0)
     {
         if ($excel != 0 && $ano != 0):
-            $sql = "SELECT p.numero_processo, fc.protocolo, fc.programa_id, pf.id, pf.nome, pro.programa, c.cargo AS 'funcao', l.linguagem, pf.email, s.status
+            $sql = "SELECT p.numero_processo, fc.protocolo, fc.programa_id, pf.id, pf.nome, pro.programa, c.cargo AS 'funcao', c.justificativa AS 'cargo_justificativa', l.linguagem, pf.email, s.status
                                                       FROM pedidos AS p
                                                       INNER JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
                                                       INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id
@@ -944,7 +947,7 @@ class FormacaoController extends FormacaoModel
         else:
             $pedido_id = MainModel::decryption($pedido_id);
             return DbModel::consultaSimples("SELECT p.id, p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
-                                                            p.forma_pagamento, p.justificativa, p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome, c.cargo, fc.programa_id, l.linguagem
+                                                            p.forma_pagamento, p.justificativa, p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome, c.cargo, fc.programa_id, l.linguagem, c.justificativa AS 'cargo_justificativa'
                                                   FROM pedidos AS p
                                                   INNER JOIN pedido_status AS s ON s.id = p.status_pedido_id 
                                                   INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id 
@@ -961,8 +964,7 @@ class FormacaoController extends FormacaoModel
         if ($decription != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
-        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', 
-                       c.cargo, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', vb.verba                                                                   
+        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', c.cargo, c.justificativa as cargo_justificativa, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', vb.verba, fc.form_vigencia_id
                 FROM formacao_contratacoes AS fc
                 INNER JOIN programas AS pro ON pro.id = fc.programa_id
                 INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
@@ -2127,6 +2129,12 @@ class FormacaoController extends FormacaoModel
     {
         $idContratacao = DbModel::consultaSimples("SELECT * FROM formacao_contratacoes WHERE protocolo = '$protocoloCapac'")->fetchObject()->id; //sis
         return MainModel::encryption($idContratacao);
+    }
+
+    public function dadosVigencia($id)
+    {
+        return DbModel::consultaSimples("SELECT SUM(valor) AS 'valorTotal', MIN(data_inicio) AS 'data_inicio', MAX(data_fim) AS 'data_fim' FROM formacao_parcelas WHERE formacao_vigencia_id= {$id}")
+            ->fetchObject();
     }
 }
 
