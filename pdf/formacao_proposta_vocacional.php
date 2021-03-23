@@ -297,7 +297,7 @@ for ($i = 0; $i < count($dadosParcelas); $i++):
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial', '', 10);
-    $pdf->MultiCell(180, $l, utf8_decode("De $inicio a $fim - até $horas hora(s)"));
+    $pdf->MultiCell(180, $l, utf8_decode("De $inicio a $fim - $horas hora(s)"));
 endfor;
 
 $pdf->Ln(15);
