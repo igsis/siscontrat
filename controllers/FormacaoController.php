@@ -964,7 +964,7 @@ class FormacaoController extends FormacaoModel
         if ($decription != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
-        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', c.cargo, c.justificativa as cargo_justificativa, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', vb.verba  
+        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', c.cargo, c.justificativa as cargo_justificativa, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', vb.verba, fc.form_vigencia_id
                 FROM formacao_contratacoes AS fc
                 INNER JOIN programas AS pro ON pro.id = fc.programa_id
                 INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
@@ -2129,6 +2129,12 @@ class FormacaoController extends FormacaoModel
     {
         $idContratacao = DbModel::consultaSimples("SELECT * FROM formacao_contratacoes WHERE protocolo = '$protocoloCapac'")->fetchObject()->id; //sis
         return MainModel::encryption($idContratacao);
+    }
+
+    public function dadosVigencia($id)
+    {
+        return DbModel::consultaSimples("SELECT SUM(valor) AS 'valorTotal', MIN(data_inicio) AS 'data_inicio', MAX(data_fim) AS 'data_fim' FROM formacao_parcelas WHERE formacao_vigencia_id= {$id}")
+            ->fetchObject();
     }
 }
 
