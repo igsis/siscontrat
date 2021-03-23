@@ -202,8 +202,8 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                 <div class="row mt-3">
                                     <div class="form-group col-md">
                                         <label>Instituição #<?= $i + 1 ?>
-                                            : <?= $i == 0 || $i == 1 ? " *" : "" ?></label>
-                                        <select class="form-control select2bs4" <?= $i == 0 || $i == 1 ? "required" : "" ?>
+                                            : <?= $i == 0 ? " *" : "" ?></label>
+                                        <select class="form-control select2bs4" <?= $i == 0 ? "required" : "" ?>
                                                 id="instituicao<?= $i ?>" onchange="popularLocal<?= $i + 1 ?>(<?= $i ?>)">
                                             <option value="0">Selecione uma opção...</option>
                                             <?php $contratacaoObj->geraOpcao('instituicoes') ?>
@@ -217,10 +217,10 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                     endif; ?>
                                     <div class="form-group col-md">
                                         <label for="local_id[]">Local #<?= $i + 1 ?>
-                                            : <?= $i == 0 || $i == 1 ? " *" : "" ?></label>
+                                            : <?= $i == 0 ? " *" : "" ?></label>
                                         <select name="local_id[]" class="form-control select2bs4"
                                                 onchange="bloqueandoLocais()"
-                                                id="local<?= $i + 1 ?>" <?= $i == 0 || $i == 1 ? "required" : "" ?>>
+                                                id="local<?= $i + 1 ?>" <?= $i == 0 ? "required" : "" ?>>
                                             <?php isset($local) && $local != "" ? $contratacaoObj->geraOpcao('locais', $local) : "" ?>
                                         </select>
                                     </div>
@@ -508,7 +508,7 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
         if (local1 == local3)
             count = true;
 
-        if (local2 == local3)
+        if (local2 == local3 && local2 != '' && local3 != '')
             count = true;
 
         if (count == true) {
