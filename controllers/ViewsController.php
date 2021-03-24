@@ -111,4 +111,14 @@ class ViewsController extends ViewsModel
     {
         return (new DbModel)->consultaSimples("SELECT * FROM avisos WHERE publicado = '1'")->fetchAll(PDO::FETCH_OBJ);
     }
+
+    public function exibeJivoChat($view)
+    {
+        $naoExibir = ['index', 'login', 'cadastro', 'recupera_senha', 'resete_senha'];
+        if (!in_array($view, $naoExibir)) {
+            return '<script src="//code.jivosite.com/widget/eOXbKuMDQM" async></script>';
+        } else {
+            return '';
+        }
+    }
 }

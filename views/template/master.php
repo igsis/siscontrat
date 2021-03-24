@@ -5,6 +5,7 @@ $pedidoAjax = false;
 
 require_once './controllers/EventoController.php';
 
+$view = $template->exibirViewController();
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +42,7 @@ require_once './controllers/EventoController.php';
     <!-- Select2 -->
     <link rel="stylesheet" href="<?= SERVERURL ?>views/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="<?= SERVERURL ?>views/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-
+    <?= $template->exibeJivoChat($view) ?>
 </head>
 <!--<body class="hold-transition login-page">-->
 <body class="hold-transition sidebar-mini">
