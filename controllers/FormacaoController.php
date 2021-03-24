@@ -854,7 +854,7 @@ class FormacaoController extends FormacaoModel
             INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
             INNER JOIN verbas v on p.verba_id = v.id 
             INNER JOIN formacao_status fs on fc.form_status_id = fs.id
-            WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 {$whereAno} {$whereStatusPedido}";
+            WHERE p.publicado = 1 AND p.origem_tipo_id = 2 {$whereAno} {$whereStatusPedido}";
 
         return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
     }
@@ -1397,13 +1397,25 @@ class FormacaoController extends FormacaoModel
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
-        $consultaNomes = DbModel::consultaSimples("SELECT p.programa, l.linguagem, p.edital FROM programas AS p 
+        $consultaNomes = DbModel::consultaSimples("SELECT fc.programa_id, p.programa, l.linguagem, p.edital, fcargo.cargo FROM programas AS p 
                                         INNER JOIN formacao_contratacoes AS fc ON p.id = fc.programa_id
+                                        INNER JOIN formacao_cargos AS fcargo ON fc.form_cargo_id = fcargo.id
                                         INNER JOIN linguagens l ON fc.linguagem_id = l.id
                                         WHERE fc.id = $contratacao_id AND fc.publicado = 1");
         if ($consultaNomes->rowCount() > 0) {
             $nomesObj = $consultaNomes->fetchObject();
-            return $nomesObj->programa . " - " . $nomesObj->linguagem . " - " . $nomesObj->edital;
+
+            if ($nomesObj->programa_id == 1) {
+                $texto['programa'] = "VOCACIONAL";
+                $texto['edital'] = "027/2020";
+            } else {
+                $texto['programa'] = "DE INICIAÇÃO ARTÍSTICA";
+                $texto['edital'] = "026/2020";
+            }
+
+            $objeto = "CONTRATAÇÃO COMO $nomesObj->cargo de $nomesObj->linguagem DO PROGRAMA {$texto['programa']} - 2021 NOS TERMOS DO EDITAL {$texto['edital']} - SMC/CFOC/SFC - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL.";
+            $encoding = 'UTF-8'; // ou ISO-8859-1...
+            return mb_convert_case($objeto, MB_CASE_UPPER, $encoding);
         } else {
             return "";
         }

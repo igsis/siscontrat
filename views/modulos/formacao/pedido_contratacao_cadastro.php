@@ -115,7 +115,7 @@ endif;
 
                             <div class="form-group col-md">
                                 <label for="justificativa">Justificativa: *</label>
-                                <textarea name="justificativa" class="form-control" rows="8" required><?= isset($pedido->cargo_justificativa) ? $pedido->cargo_justificativa : "" ?></textarea>
+                                <textarea name="justificativa" class="form-control" rows="8" required><?= isset($contratacao->cargo_justificativa) ? $contratacao->cargo_justificativa : "" ?></textarea>
                             </div>
                         </div>
 
@@ -130,8 +130,8 @@ endif;
                             <br>
                             <div class="row">
                                 <div class="form-group col-md">
-                                    <label for="numero_processo">Número do Processo: *</label>
-                                    <input type="text" name="numero_processo" required class="form-control"
+                                    <label for="numero_processo">Número do Processo:</label>
+                                    <input type="text" name="numero_processo" class="form-control"
                                            value="<?= isset($pedido->numero_processo) ? $pedido->numero_processo : "" ?>"
                                            data-mask="9999.9999/9999999-9" minlength="19">
                                 </div>

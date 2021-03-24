@@ -148,29 +148,25 @@ $pdf->Cell(160, 10, 'PROPOSTA', 0, 0, 'C');
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(10, 10, utf8_decode($pedido->protocolo), 0, 1, 'R');
 
+$l = 5; //DEFINE A ALTURA DA LINHA
+
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(13, $l, "Objeto:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(20, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 0, 'L');
-
-$pdf->Ln(6);
+$pdf->Cell(20, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(15, $l, utf8_decode('Período:'), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(180, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido->origem_id)), 0, 0, 'L');
-
-$pdf->Ln(6);
+$pdf->Cell(180, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido->origem_id)), 0, 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(25, $l, utf8_decode("Carga Horária:"), '0', '0', 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(168, $l, utf8_decode($formObj->retornaCargaHoraria($pedido->origem_id) . " hora(s)"), 0, 0, 'L');
-
-$pdf->Ln(7);
+$pdf->Cell(168, $l, utf8_decode($formObj->retornaCargaHoraria($pedido->origem_id) . " hora(s)"), 0, 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -231,7 +227,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
 $pdf->MultiCell(0, 4, utf8_decode($penalidades), 0, 'J', 0);
 
-$pdf->Ln(5);
+$pdf->Ln(15);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -253,6 +249,7 @@ if ($pf->passaporte != NULL) {
 }
 
 $pdf->AddPage('', '');
+$l = 7; //DEFINE A ALTURA DA LINHA
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 12);
@@ -300,8 +297,10 @@ for ($i = 0; $i < count($dadosParcelas); $i++):
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial', '', 10);
-    $pdf->MultiCell(180, $l, utf8_decode("De $inicio a $fim - até $horas hora(s)"));
+    $pdf->MultiCell(180, $l, utf8_decode("De $inicio a $fim - $horas hora(s)"));
 endfor;
+
+$pdf->Ln(15);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
