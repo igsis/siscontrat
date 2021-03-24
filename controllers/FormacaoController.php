@@ -854,7 +854,7 @@ class FormacaoController extends FormacaoModel
             INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
             INNER JOIN verbas v on p.verba_id = v.id 
             INNER JOIN formacao_status fs on fc.form_status_id = fs.id
-            WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 {$whereAno} {$whereStatusPedido}";
+            WHERE p.publicado = 1 AND p.origem_tipo_id = 2 {$whereAno} {$whereStatusPedido}";
 
         return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
     }
