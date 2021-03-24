@@ -16,10 +16,11 @@ $pedido = $formObj->recuperaPedido($pedido_id);
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $contratacao = $formObj->recuperaContratacao($pedido->origem_id);
 $vigencia = $formObj->dadosVigencia($contratacao->form_vigencia_id);
+$ano = date('Y');
 switch ($tipo) {
     case "pia":
         $topico = "<p>Assim, solicito a reserva de recursos que deverá onerar a ação 6374 – Dotação 25.10.13.392.3001.6374</p>";
-        $objetivo = "O presente processo trata de {$pf->nome}, contratação como {$pedido->cargo} de {$pedido->linguagem} do {$contratacao->programa} - 2021 nos termos do  EDITAL  026/2020 - SMC/CFOC/SFC - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL. , no valor de {$formObj->dinheiroParaBr($vigencia->valorTotal)} , conforme solicitação (  link SEI ), foram anexados os documentos necessários exigidos no edital, no período de {$formObj->retornaPeriodoFormacao($contratacao->id)}.";
+        $objetivo = "O presente processo trata de {$pf->nome}, contratação como {$pedido->cargo} de {$pedido->linguagem} - {$ano} nos termos do  EDITAL  026/2020 - SMC/CFOC/SFC - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL. , no valor de {$formObj->dinheiroParaBr($vigencia->valorTotal)} ({$formObj->valorPorExtenso($vigencia->valorTotal)}) , conforme solicitação (  link SEI ), foram anexados os documentos necessários exigidos no edital, no período de {$formObj->retornaPeriodoFormacao($contratacao->id)}.";
         break;
     case "sme":
         $topico = "<p>Assim, solicito a reserva de recursos, que deverá onerar os recursos da Nota de Reserva com Transferência da SME nº 22.671/2019 e para o INSS Patronal a Nota de Reserva com Transferência nº 22.711/2019 SEI (link do SEI)</p>";
@@ -27,7 +28,7 @@ switch ($tipo) {
         break;
     case "vocacional":
         $topico = "<p>Assim, solicito a reserva de recursos que deverá onerar a ação 6375 – Dotação 25.10.13.392.3001.6375</p>";
-        $objetivo = "O presente processo trata de {$pf->nome}, contratação como {$pedido->cargo} de {$pedido->linguagem} do {$contratacao->programa} - 2021 nos termos do  EDITAL  027/2020 - SMC/CFOC/SFC - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL. , no valor de {$formObj->dinheiroParaBr($vigencia->valorTotal)}, conforme solicitação (  link SEI ), foram anexados os documentos necessários exigidos no edital, no período de {$formObj->retornaPeriodoFormacao($contratacao->id)}.";
+        $objetivo = "O presente processo trata de {$pf->nome}, contratação como {$pedido->cargo} de {$pedido->linguagem} - {$ano} nos termos do  EDITAL  027/2020 - SMC/CFOC/SFC - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL. , no valor de {$formObj->dinheiroParaBr($vigencia->valorTotal)} ({$formObj->valorPorExtenso($vigencia->valorTotal)}), conforme solicitação (  link solicitação ), foram anexados os documentos necessários exigidos no edital, no período de {$formObj->retornaPeriodoFormacao($contratacao->id)}.";
         break;
     default:
         $topico = "";
