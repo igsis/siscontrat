@@ -1112,6 +1112,10 @@ class FormacaoController extends FormacaoModel
         endfor;
         $formaCompleta = $formaCompleta . "\nA liquidação de cada parcela se dará em 3 (três) dias úteis após a data de confirmação da correta execução do(s) serviço(s).";
 
+        if (isset($post['valor_total'])) {
+            $post['valor_total'] = MainModel::dinheiroDeBr($post['valor_total']);
+        }
+
         $dados = MainModel::limpaPost($post);
 
         $insert = DbModel::insert('pedidos', $dados);
@@ -1143,6 +1147,9 @@ class FormacaoController extends FormacaoModel
         unset($post['_method']);
         unset($post['id']);
 
+        if (isset($post['valor_total'])) {
+            $post['valor_total'] = MainModel::dinheiroDeBr($post['valor_total']);
+        }
         $dados = MainModel::limpaPost($post);
         $update = DbModel::update('pedidos', $dados, $pedido_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
