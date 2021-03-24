@@ -950,7 +950,7 @@ class FormacaoController extends FormacaoModel
         else:
             $pedido_id = MainModel::decryption($pedido_id);
             return DbModel::consultaSimples("SELECT p.id, p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
-                                                            p.forma_pagamento, p.justificativa, p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome, c.cargo, fc.programa_id, l.linguagem, c.justificativa AS 'cargo_justificativa', fc.id AS 'contratacao_id'
+                                                            p.forma_pagamento, p.justificativa, p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome, c.cargo, fc.programa_id, l.linguagem
                                                   FROM pedidos AS p
                                                   INNER JOIN pedido_status AS s ON s.id = p.status_pedido_id 
                                                   INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id 

@@ -66,7 +66,7 @@ $ano = date('Y');
         "<strong>Telefone(s):</strong> " . $formObj->recuperaTelPf($pedido->pessoa_fisica_id) . "<br />" .
         "<strong>E-mail:</strong> " . $pf->email . "</p>" .
         "<p>&nbsp;</p>" .
-        "<p><strong>Objeto:</strong> {$formObj->retornaObjetoFormacao($pedido->contratacao_id)}</p>" .
+        "<p><strong>Objeto:</strong> {$formObj->retornaObjetoFormacao($pedido->origem_id)}</p>" .
         "<p><strong>Data / Período:</strong> " . $formObj->retornaPeriodoFormacao($pedido->origem_id) . " - conforme Proposta/Cronograma</p>" .
         "<p><strong>Carga Horária:</strong> " . $formObj->retornaCargaHoraria($pedido->origem_id) . " hora(s)" . "</p>" .
         "<p align='justify'><strong>Local(ais):</strong> " . $formObj->retornaLocaisFormacao($pedido->origem_id) . "</p>" .
