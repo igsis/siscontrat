@@ -2152,12 +2152,6 @@ class FormacaoController extends FormacaoModel
         $idContratacao = DbModel::consultaSimples("SELECT * FROM formacao_contratacoes WHERE protocolo = '$protocoloCapac'")->fetchObject()->id; //sis
         return MainModel::encryption($idContratacao);
     }
-
-    public function dadosVigencia($id)
-    {
-        return DbModel::consultaSimples("SELECT SUM(valor) AS 'valorTotal', MIN(data_inicio) AS 'data_inicio', MAX(data_fim) AS 'data_fim' FROM formacao_parcelas WHERE formacao_vigencia_id= {$id}")
-            ->fetchObject();
-    }
 }
 
 
