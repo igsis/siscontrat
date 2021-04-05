@@ -87,7 +87,7 @@ $vigencia = $vigenciaObj->recuperaVigencia($id);
 
                                         <div class="form-group col-md-2">
                                             <label for="valor[]">Valor:</label>
-                                            <input type="text" id="valor<?= $i ?>" name="valor[]" onKeyPress="return(moeda(this,'.',',',event))" value="<?= $parcela_vigencia[$i]->valor ?? "" ?>" class="form-control valor">
+                                            <input type="text" id="valor<?= $i ?>" name="valor[]" onKeyPress="return(moeda(this,'.',',',event))" value="<?= isset($parcela_vigencia[$i]->valor) ? $vigenciaObj->dinheiroParaBr($parcela_vigencia[$i]->valor) :"" ?>" class="form-control valor">
                                         </div>
 
                                         <div class="form-group col-md-2">

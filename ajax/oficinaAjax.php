@@ -23,6 +23,9 @@ if (isset($_POST['_method'])) {
         case "editaComplemento":
             echo $insOficina->editaComplementosOficina($_POST, $_POST['id']);
             break;
+        case "importarOficina":
+            echo $insOficina->importarOficinaCapac($_POST['id']);
+            break;
     }
 } else {
     include_once "../config/destroySession.php";

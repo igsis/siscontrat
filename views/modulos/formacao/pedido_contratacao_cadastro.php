@@ -31,21 +31,20 @@ endif;
                     <h4 class="card-title">Cadastro de Pedido de Contratação</h4>
                 </div>
 
-                <div class="card-body">
-                    <form class="form-horizontal formulario-ajax" method="POST"
-                          action="<?= SERVERURL ?>ajax/formacaoAjax.php" role="form"
-                          data-form="<?= ($pedido_id) ? "update" : "save" ?>">
-                        <input type="hidden" name="_method"
-                               value="<?= ($pedido_id) ? "editarPedido" : "cadastrarPedido" ?>">
-                        <?php if ($pedido_id): ?>
-                            <input type="hidden" name="id" value="<?= $pedido_id ?>">
-                        <?php endif; ?>
+                <form class="form-horizontal formulario-ajax" method="POST"
+                      action="<?= SERVERURL ?>ajax/formacaoAjax.php" role="form"
+                      data-form="<?= ($pedido_id) ? "update" : "save" ?>">
+                    <input type="hidden" name="_method" value="<?= ($pedido_id) ? "editarPedido" : "cadastrarPedido" ?>">
+                    <?php if ($pedido_id): ?>
+                        <input type="hidden" name="id" value="<?= $pedido_id ?>">
+                    <?php endif; ?>
+                    <div class="card-body">
+
                         <div class="row">
                             <div class="form-group col-md">
                                 <label for="origem_id">Código de Dados para Contratação:</label>
                                 <input type="text" name="origem_id" class="form-control" readonly
                                        value="<?= $contratacao->id ?>">
-
                             </div>
 
                             <div class="form-group col-md">
@@ -115,8 +114,7 @@ endif;
 
                             <div class="form-group col-md">
                                 <label for="justificativa">Justificativa: *</label>
-                                <textarea name="justificativa" class="form-control" rows="8"
-                                          required><?= isset($pedido->justificativa) ? $pedido->justificativa : "" ?></textarea>
+                                <textarea name="justificativa" class="form-control" rows="8" required><?= isset($contratacao->cargo_justificativa) ? $contratacao->cargo_justificativa : "" ?></textarea>
                             </div>
                         </div>
 
@@ -131,8 +129,8 @@ endif;
                             <br>
                             <div class="row">
                                 <div class="form-group col-md">
-                                    <label for="numero_processo">Número do Processo: *</label>
-                                    <input type="text" name="numero_processo" required class="form-control"
+                                    <label for="numero_processo">Número do Processo:</label>
+                                    <input type="text" name="numero_processo" class="form-control"
                                            value="<?= isset($pedido->numero_processo) ? $pedido->numero_processo : "" ?>"
                                            data-mask="9999.9999/9999999-9" minlength="19">
                                 </div>
@@ -159,33 +157,34 @@ endif;
                         <input type="hidden" name="status_pedido_id" value="2">
                         <input type="hidden" name="origem_tipo_id" value="2">
                         <div class="resposta-ajax"></div>
-                </div>
-
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col-md">
-                            <a href="<?= SERVERURL ?>formacao/pedido_contratacao_lista">
-                                <button type="button" class="btn btn-default">Voltar</button>
-                            </a>
-                        </div>
-
-                        <?php if(isset($pedido_id) && $pedido_id != ""): ?>
-                        <div class="col-md" style="text-align: center">
-                            <a href="<?= SERVERURL ?>formacao/area_impressao&pedido_id=<?= $pedido_id ?>">
-                                <button type="button" class="btn btn-success">Ir para área de impressão</button>
-                            </a>
-                        </div>
-                        <?php endif; ?>
-
-                        <div class="col-md">
-                            <button type="submit" class="btn btn-info float-right" id="finaliza">
-                                <?= $pedido_id == NULL ? "Cadastrar" : "Editar" ?>
-                            </button>
-                        </div>
-
                     </div>
-                    </form>
-                </div>
+
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md">
+                                <a href="<?= SERVERURL ?>formacao/pedido_contratacao_lista">
+                                    <button type="button" class="btn btn-default">Voltar</button>
+                                </a>
+                            </div>
+
+                            <?php if(isset($pedido_id) && $pedido_id != ""): ?>
+                            <div class="col-md" style="text-align: center">
+                                <a href="<?= SERVERURL ?>formacao/area_impressao&pedido_id=<?= $pedido_id ?>">
+                                    <button type="button" class="btn btn-success">Ir para área de impressão</button>
+                                </a>
+                            </div>
+                            <?php endif; ?>
+
+                            <div class="col-md">
+                                <button type="submit" class="btn btn-info float-right" id="finaliza">
+                                    Gravar
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="resposta-ajax"></div>
+                </form>
             </div>
         </div>
     </div>

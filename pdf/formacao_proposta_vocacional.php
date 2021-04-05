@@ -99,11 +99,11 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(36, $l, 'Data de Nascimento:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(30, $l, utf8_decode(MainModel::dataParaBR($pf->data_nascimento) == "00-00-0000" ? "Não cadastrado" : MainModel::dataParaBR($pf->data_nascimento)), 0, 0, 'L');
+$pdf->Cell(21, $l, utf8_decode(MainModel::dataParaBR($pf->data_nascimento) == "00-00-0000" ? "Não cadastrado" : MainModel::dataParaBR($pf->data_nascimento)), 0, 0, 'L');
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(26, $l, "Nacionalidade:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(30, $l, utf8_decode(MainModel::checaCampo($pf->nacionalidade)), 0, 0, 'L');
+$pdf->Cell(43, $l, utf8_decode(MainModel::checaCampo($pf->nacionalidade)), 0, 0, 'L');
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(10, $l, "CCM:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
@@ -148,29 +148,25 @@ $pdf->Cell(160, 10, 'PROPOSTA', 0, 0, 'C');
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(10, 10, utf8_decode($pedido->protocolo), 0, 1, 'R');
 
+$l = 5; //DEFINE A ALTURA DA LINHA
+
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(13, $l, "Objeto:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(20, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 0, 'L');
-
-$pdf->Ln(6);
+$pdf->MultiCell(165, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(15, $l, utf8_decode('Período:'), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(180, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido->origem_id)), 0, 0, 'L');
-
-$pdf->Ln(6);
+$pdf->Cell(180, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido->origem_id)), 0, 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(25, $l, utf8_decode("Carga Horária:"), '0', '0', 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(168, $l, utf8_decode($formObj->retornaCargaHoraria($pedido->origem_id) . " hora(s)"), 0, 0, 'L');
-
-$pdf->Ln(7);
+$pdf->Cell(168, $l, utf8_decode($formObj->retornaCargaHoraria($pedido->origem_id) . " hora(s)"), 0, 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -194,7 +190,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(22, $l, 'Justificativa:', '0', '0', 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(155, $l, utf8_decode($pedido->justificativa));
+$pdf->MultiCell(155, $l, utf8_decode($pedido->cargo_justificativa));
 
 //RODAPÉ PERSONALIZADO
 $pdf->SetXY($x, 262);
@@ -231,20 +227,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
 $pdf->MultiCell(0, 4, utf8_decode($penalidades), 0, 'J', 0);
 
-$pdf->Ln(5);
-
-$pdf->SetX($x);
-$pdf->SetFont('Arial','B', 10);
-$pdf->Cell(22,4,'Regime emergencial:',0,1,'L');
-
-$pdf->SetX($x);
-$pdf->SetFont('Arial','', 10);
-$pdf->MultiCell(180,4,utf8_decode("
-Durante o período em que os equipamentos Culturais e da Educação estiverem fechados, é do intuito da SMC tornar pública e acessível a formação a partir de suas diversas linguagens artísticas, pesquisas, mantendo como destinatário o publico-alvo do Programa.
-Será da atribuição dos Artistas Educadores/Orientadores:
-- A criação de materiais artístico pedagógicos em diversos suportes: vídeo, imagem, som e texto; que podem ser conteúdos ao vivo ou gravados, na forma de aulas, vivências, ações artísticas alinhados aos princípios do Programa.
-- A criação e apresentação prévia da programação, cronograma e periodicidade de publicação dos materiais.
-- A avaliação do alcance e impacto das ações e organização de novas estratégias de publicação devidamente alinhadas com a equipe técnica e coordenação do Programa."));
+$pdf->Ln(15);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -266,6 +249,7 @@ if ($pf->passaporte != NULL) {
 }
 
 $pdf->AddPage('', '');
+$l = 7; //DEFINE A ALTURA DA LINHA
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 12);
@@ -313,8 +297,10 @@ for ($i = 0; $i < count($dadosParcelas); $i++):
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial', '', 10);
-    $pdf->MultiCell(180, $l, utf8_decode("De $inicio a $fim - até $horas hora(s)"));
+    $pdf->MultiCell(180, $l, utf8_decode("De $inicio a $fim - $horas hora(s)"));
 endfor;
+
+$pdf->Ln(15);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -335,6 +321,6 @@ if ($pf->passaporte != NULL) {
     $pdf->Cell(100, 4, "CPF: " . $pf->cpf, 0, 0, 'L');
 }
 
-$pdf->Output('Proposta Vocacional', "I");
+$pdf->Output('Proposta Formação', "I");
 ?>
 

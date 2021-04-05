@@ -666,7 +666,10 @@ class FormacaoController extends FormacaoModel
 
         foreach ($post as $campo => $dado) {
             foreach ($dado as $key => $valor) {
-                $dados[$key][$campo] = MainModel::limparString($valor);
+                if ($campo === "valor")
+                    $dados[$key][$campo] = MainModel::dinheiroDeBr($valor);
+                else
+                    $dados[$key][$campo] = MainModel::limparString($valor);
             }
         }
 
@@ -754,7 +757,10 @@ class FormacaoController extends FormacaoModel
 
         foreach ($post as $campo => $dado) {
             foreach ($dado as $key => $valor) {
-                $dados[$key][$campo] = MainModel::limparString($valor);
+                if ($campo === "valor")
+                    $dados[$key][$campo] = MainModel::dinheiroDeBr($valor);
+                else
+                    $dados[$key][$campo] = MainModel::limparString($valor);
             }
         }
 
@@ -848,7 +854,7 @@ class FormacaoController extends FormacaoModel
             INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
             INNER JOIN verbas v on p.verba_id = v.id 
             INNER JOIN formacao_status fs on fc.form_status_id = fs.id
-            WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 {$whereAno} {$whereStatusPedido}";
+            WHERE p.publicado = 1 AND p.origem_tipo_id = 2 {$whereAno} {$whereStatusPedido}";
 
         return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
     }
@@ -931,7 +937,7 @@ class FormacaoController extends FormacaoModel
     public function recuperaPedido($pedido_id, $excel = 0, $ano = 0)
     {
         if ($excel != 0 && $ano != 0):
-            return DbModel::consultaSimples("SELECT p.numero_processo, fc.protocolo, pf.id, pf.nome, pro.programa, c.cargo AS 'funcao', l.linguagem, pf.email, s.status
+            $sql = "SELECT p.numero_processo, fc.protocolo, fc.programa_id, pf.id, pf.nome, pro.programa, c.cargo AS 'funcao', c.justificativa AS 'cargo_justificativa', l.linguagem, pf.email, s.status
                                                       FROM pedidos AS p
                                                       INNER JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
                                                       INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id
@@ -939,15 +945,20 @@ class FormacaoController extends FormacaoModel
                                                       INNER JOIN formacao_cargos AS c ON fc.form_cargo_id = c.id
                                                       INNER JOIN linguagens AS l ON fc.linguagem_id = l.id
                                                       INNER JOIN formacao_status AS s ON fc.form_status_id = s.id
-                                                      WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 AND fc.ano = $ano")->fetchAll(PDO::FETCH_OBJ);
+                                                      WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 AND fc.ano = $ano";
+            return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
         else:
             $pedido_id = MainModel::decryption($pedido_id);
             return DbModel::consultaSimples("SELECT p.id, p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
-                                                         p.forma_pagamento, p.justificativa, p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome 
+                                                            p.forma_pagamento, p.justificativa AS 'cargo_justificativa', p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome, c.cargo, fc.programa_id, l.linguagem, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf
                                                   FROM pedidos AS p
                                                   INNER JOIN pedido_status AS s ON s.id = p.status_pedido_id 
-                                                  INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id
+                                                  INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id 
+                                                  INNER JOIN linguagens AS l ON fc.linguagem_id = l.id
                                                   INNER JOIN pessoa_fisicas AS pf ON pf.id = p.pessoa_fisica_id
+                                                  INNER JOIN formacao_cargos AS c ON fc.form_cargo_id = c.id
+                                                    LEFT JOIN usuarios fis on fc.fiscal_id = fis.id
+                                                    LEFT JOIN usuarios sup on fc.suplente_id = sup.id
                                                   WHERE p.id = $pedido_id AND p.publicado = 1 AND p.origem_tipo_id = 2")->fetchObject();
         endif;
 
@@ -958,8 +969,7 @@ class FormacaoController extends FormacaoModel
         if ($decription != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
-        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', 
-                       c.cargo, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', vb.verba                                                                   
+        $sql = "SELECT fc.id, pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, pf.nome AS 'nome_pf', c.cargo, c.justificativa as cargo_justificativa, l.linguagem, cor.coordenadoria, fiscal.nome_completo AS 'fiscal', suplente.nome_completo AS 'suplente', vb.verba, fc.form_vigencia_id
                 FROM formacao_contratacoes AS fc
                 INNER JOIN programas AS pro ON pro.id = fc.programa_id
                 INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
@@ -1104,6 +1114,10 @@ class FormacaoController extends FormacaoModel
         endfor;
         $formaCompleta = $formaCompleta . "\nA liquidação de cada parcela se dará em 3 (três) dias úteis após a data de confirmação da correta execução do(s) serviço(s).";
 
+        if (isset($post['valor_total'])) {
+            $post['valor_total'] = MainModel::dinheiroDeBr($post['valor_total']);
+        }
+
         $dados = MainModel::limpaPost($post);
 
         $insert = DbModel::insert('pedidos', $dados);
@@ -1135,6 +1149,9 @@ class FormacaoController extends FormacaoModel
         unset($post['_method']);
         unset($post['id']);
 
+        if (isset($post['valor_total'])) {
+            $post['valor_total'] = MainModel::dinheiroDeBr($post['valor_total']);
+        }
         $dados = MainModel::limpaPost($post);
         $update = DbModel::update('pedidos', $dados, $pedido_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
@@ -1389,13 +1406,23 @@ class FormacaoController extends FormacaoModel
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
-        $consultaNomes = DbModel::consultaSimples("SELECT p.programa, l.linguagem, p.edital FROM programas AS p 
+        $consultaNomes = DbModel::consultaSimples("SELECT fc.programa_id, p.programa, l.linguagem, p.edital, fcargo.cargo FROM programas AS p 
                                         INNER JOIN formacao_contratacoes AS fc ON p.id = fc.programa_id
+                                        INNER JOIN formacao_cargos AS fcargo ON fc.form_cargo_id = fcargo.id
                                         INNER JOIN linguagens l ON fc.linguagem_id = l.id
                                         WHERE fc.id = $contratacao_id AND fc.publicado = 1");
         if ($consultaNomes->rowCount() > 0) {
             $nomesObj = $consultaNomes->fetchObject();
-            return $nomesObj->programa . " - " . $nomesObj->linguagem . " - " . $nomesObj->edital;
+
+            if ($nomesObj->programa_id == 1) {
+                $texto['programa'] = "VOCACIONAL";
+            } else {
+                $texto['programa'] = "DE INICIAÇÃO ARTÍSTICA";
+            }
+
+            $objeto = "CONTRATAÇÃO COMO $nomesObj->cargo de $nomesObj->linguagem DO PROGRAMA {$texto['programa']} - 2021 NOS TERMOS DO $nomesObj->edital - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL.";
+            $encoding = 'UTF-8';
+            return mb_convert_case($objeto, MB_CASE_UPPER, $encoding);
         } else {
             return "";
         }

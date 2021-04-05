@@ -12,13 +12,17 @@ $id = $_GET['id'];
 $inscrito = $formacaoObj->recuperaInscrito($id);
 $telefones = $formacaoObj->recuperaTelInscrito($inscrito->pessoa_fisica_id);
 $arquivos = $arquivosObj->listarArquivosCapac($id)->fetchAll(PDO::FETCH_OBJ);
+;
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
+            <div class="col-sm-10">
                 <h1 class="m-0 text-dark">Resumo Inscrito CAPAC</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-2">
+                <a href="<?= SERVERURL ?>pdf/formacao_resumo_inscrito.php?id=<?= $formacaoObj->encryption($inscrito->id) ?>" target="_blank" class="btn bg-gradient-primary btn-sm btn-block rounded-bottom"><i class="fas fa-file-pdf"></i> Imprimir</a>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -28,9 +32,9 @@ $arquivos = $arquivosObj->listarArquivosCapac($id)->fetchAll(PDO::FETCH_OBJ);
 <!-- Main content -->
 <div class="content">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row mb-5">
             <div class="col">
-                <div class="text-center">
+                <div class="text-right">
                     <span class="font-weight-bold">Cadastrado enviado em:</span> <?= date("d/m/Y h:i", strtotime($inscrito->data_envio)) ?>
                 </div>
             </div>
