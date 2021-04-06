@@ -58,7 +58,7 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                         <option value="">Selecione um proponente...</option>
                                         <?php
                                         if ($capacId){
-                                            $contratacaoObj->geraOpcao('pessoa_fisicas', $idPf ?? "", false, false, true);
+                                            $contratacaoObj->geraOpcao('pessoa_fisicas', $idPf ?? "");
                                         } else {
                                             $pfObj->geraOpcaoPf($dados_contratacao->pessoa_fisica_id ?? "");
                                         }
