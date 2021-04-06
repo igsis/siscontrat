@@ -74,7 +74,7 @@ $anos = $formObj->anosPedido();
                                 <tr>
                                     <td><?= $pedido->protocolo ?></td>
                                     <td><?= $pedido->numero_processo ?></td>
-                                    <td><?= $pedido->nome ?></td>
+                                    <td><?= $pedido->nome_social != null ? "$pedido->nome ($pedido->nome_social)" : $pedido->nome ?></td>
                                     <td><?= $formObj->retornaLocaisFormacao($pedido->origem_id) ?></td>
                                     <td><?= $pedido->ano ?></td>
                                     <td><?= $pedido->verba ?></td>

@@ -3,6 +3,8 @@ $pedido_id = isset($_GET['pedido_id']) ? $_GET['pedido_id'] : "";
 require_once "./controllers/FormacaoController.php";
 
 $formObj = new FormacaoController();
+$pfObj =  new PessoaFisicaController();
+
 if ($pedido_id != ''):
     $pedido = $formObj->recuperaPedido($pedido_id);
     $contratacao_id = $pedido->origem_id;
@@ -53,7 +55,7 @@ endif;
                                         style="background: #eee; pointer-events: none; touch-action: none;"
                                         class="form-control">
                                     <option value="">Selecione uma opção...</option>
-                                    <?php $formObj->geraOpcao("pessoa_fisicas", $contratacao->pessoa_fisica_id ?? "") ?>
+                                    <?php $pfObj->geraOpcaoPf($contratacao->pessoa_fisica_id ?? "") ?>
                                 </select>
                             </div>
                         </div>

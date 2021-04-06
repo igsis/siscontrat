@@ -846,12 +846,13 @@ class FormacaoController extends FormacaoModel
 
         $sql = "SELECT   p.id, p.origem_id,fc.protocolo, fc.ano,
                          p.numero_processo,fc.num_processo_pagto, 
-                         pf.nome, pf.cpf, pf.passaporte, v.verba, 
+                         pf.nome, ns.nome_social, pf.cpf, pf.passaporte, v.verba, 
                          ps.`status`, fc.form_status_id 
             FROM pedidos p 
             LEFT JOIN pedido_status ps ON p.status_pedido_id = ps.id
             INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id 
-            INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
+            INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id                
+            LEFT JOIN pf_nome_social ns ON pf.id = ns.pessoa_fisica_id                
             INNER JOIN verbas v on p.verba_id = v.id 
             INNER JOIN formacao_status fs on fc.form_status_id = fs.id
             WHERE p.publicado = 1 AND p.origem_tipo_id = 2 {$whereAno} {$whereStatusPedido}";
@@ -987,11 +988,12 @@ class FormacaoController extends FormacaoModel
     //retorna um obj com os dados de uma determinada pessoa fisica
     public function recuperaPf($pessoa_fisica_id)
     {
-        return DbModel::consultaSimples("SELECT pf.*, n.nacionalidade, pe.*, d.drt 
+        return DbModel::consultaSimples("SELECT pf.*, ns.nome_social, n.nacionalidade, pe.*, d.drt 
                                                   FROM pessoa_fisicas AS pf 
                                                   LEFT JOIN nacionalidades AS n ON pf.nacionalidade_id = n.id  
                                                   LEFT JOIN pf_enderecos AS pe ON pf.id = pe.pessoa_fisica_id
                                                   LEFT JOIN drts AS d ON pf.id = d.pessoa_fisica_id
+                                                  LEFT JOIN pf_nome_social AS ns ON pf.id = ns.pessoa_fisica_id
                                                   WHERE pf.id = $pessoa_fisica_id")->fetchObject();
     }
 
@@ -1436,19 +1438,21 @@ class FormacaoController extends FormacaoModel
         }
 
         $sql = "SELECT
-                                        c.id AS 'id',
-                                        c.protocolo AS 'protocolo',
-                                        pf.nome AS 'pessoa',
-                                        c.ano AS 'ano',
-                                        p.programa AS 'programa',
-                                        l.linguagem AS 'linguagem',
-                                        fc.cargo AS 'cargo'
-                                        FROM formacao_contratacoes AS c
-                                        INNER JOIN pessoa_fisicas AS pf ON pf.id = c.pessoa_fisica_id
-                                        INNER JOIN programas AS p ON p.id = c.programa_id
-                                        INNER JOIN linguagens AS l ON l.id = c.linguagem_id
-                                        INNER JOIN formacao_cargos AS fc ON fc.id = c.form_cargo_id
-                                        WHERE c.publicado = 1 {$whereAno}";
+                    c.id AS 'id',
+                    c.protocolo AS 'protocolo',
+                    pf.nome AS 'pessoa',
+                    ns.nome_social,
+                    c.ano AS 'ano',
+                    p.programa AS 'programa',
+                    l.linguagem AS 'linguagem',
+                    fc.cargo AS 'cargo'
+                FROM formacao_contratacoes AS c
+                INNER JOIN pessoa_fisicas AS pf ON pf.id = c.pessoa_fisica_id
+                LEFT JOIN pf_nome_social AS ns ON pf.id = ns.pessoa_fisica_id                    
+                INNER JOIN programas AS p ON p.id = c.programa_id
+                INNER JOIN linguagens AS l ON l.id = c.linguagem_id
+                INNER JOIN formacao_cargos AS fc ON fc.id = c.form_cargo_id
+                WHERE c.publicado = 1 {$whereAno}";
         return DbModel::consultaSimples($sql);
     }
 

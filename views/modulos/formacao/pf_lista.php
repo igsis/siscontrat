@@ -60,7 +60,7 @@
                                 <tr>
                                     <td><?= $pf->numero_processo?></td>
                                     <td><?= $pf->protocolo?></td>
-                                    <td><?=$pf->nome?></td>
+                                    <td><?=$pf->nome_social != null ? "$pf->nome ($pf->nome_social)" : $pf->nome?></td>
                                     <td>
                                         <?php
                                         if (isset($pf->cpf) && $pf->cpf != ""){
