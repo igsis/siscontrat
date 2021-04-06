@@ -114,7 +114,7 @@ else:
    style="position:fixed;bottom:40px;right:40px;text-align:center;
    box-shadow: 1px 1px 2px #888;z-index:1000;">
     <i class="fas fa-exclamation-circle"></i>
-    Deixe sua opnião</a>
+    Deixe sua opinião</a>
 
 <!-- jQuery -->
 <script src="<?= SERVERURL ?>views/plugins/jquery/jquery.min.js"></script>
