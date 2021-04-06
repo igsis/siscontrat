@@ -573,4 +573,33 @@ class PessoaFisicaController extends PessoaFisicaModel
             <?php }
         }
     }
+
+    /**
+     * <p>Gera options para a tag <i>select</i> a partir dos registros da tabela de Pessoa Fisica</p>
+     * @param string $selected [opcional]
+     * <p>Valor a qual deve vir selecionado</p>
+     * @param bool $orderPorId [opcional]
+     * <p><strong>FALSE</strong> por padrão. Quando <strong>TRUE</strong>, ordena a lista por ordem de ID</p>
+     */
+    public function geraOpcaoPf($selected = "", $orderPorId = false)
+    {
+        $order = $orderPorId ? 1 : 2;
+        $sql = "SELECT pf.id, pf.nome, ns.nome_social FROM `pessoa_fisicas` AS pf
+                LEFT JOIN pf_nome_social AS ns on pf.id = ns.pessoa_fisica_id
+                ORDER BY $order";
+        $consulta = DbModel::consultaSimples($sql);
+        if ($consulta->rowCount() >= 1) {
+            foreach ($consulta->fetchAll() as $option) {
+                $nome = $option['nome'];
+                if ($option['nome_social'] != null) {
+                    $nome .= " ({$option['nome_social']})";
+                }
+                if ($option['id'] == $selected) {
+                    echo "<option value='" . $option['id'] . "' selected >" . $nome . "</option>";
+                } else {
+                    echo "<option value='" . $option['id'] . "'>" . $nome . "</option>";
+                }
+            }
+        }
+    }
 }

@@ -4,13 +4,13 @@ require_once "./controllers/ArquivoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $capacId = isset($_GET['capac']) ? $_GET['capac'] : null;
 $contratacaoObj = new FormacaoController();
+$pfObj =  new PessoaFisicaController();
 
 if($id){
     $dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
 }
 elseif($capacId){
     $arquivosObj =  new ArquivoController();
-    $pfObj =  new PessoaFisicaController();
     $dados_contratacao = $contratacaoObj->recuperaDadosContratacaoCapac($capacId);
     $arquivos = $arquivosObj->listarArquivosCapac($capacId)->fetchAll(PDO::FETCH_OBJ);
     $idPf = $pfObj->recuperaIdPfSis($dados_contratacao->pessoa_fisica_id);
@@ -58,9 +58,9 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                         <option value="">Selecione um proponente...</option>
                                         <?php
                                         if ($capacId){
-                                            $contratacaoObj->geraOpcao('pessoa_fisicas', $idPf ?? "", false, false, false);
+                                            $contratacaoObj->geraOpcao('pessoa_fisicas', $idPf ?? "", false, false, true);
                                         } else {
-                                            $contratacaoObj->geraOpcao('pessoa_fisicas', $dados_contratacao->pessoa_fisica_id ?? "");
+                                            $pfObj->geraOpcaoPf($dados_contratacao->pessoa_fisica_id ?? "");
                                         }
                                         ?>
                                     </select>
