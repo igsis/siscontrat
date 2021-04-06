@@ -65,6 +65,13 @@ class PessoaFisicaController extends PessoaFisicaModel
                 }
             }
 
+            if (isset($dadosLimpos['ns'])){
+                if (count($dadosLimpos['ns']) > 0) {
+                    $dadosLimpos['ns']['pessoa_fisica_id'] = $id;
+                    DbModel::insert('pf_nome_social', $dadosLimpos['ns']);
+                }
+            }
+
             // if ($_SESSION['modulo_s'] == 6 || $_SESSION['modulo_s'] == 7){ //formação ou jovem monitor
             //     $_SESSION['origem_id_s'] = MainModel::encryption($id);
             // }
@@ -197,6 +204,18 @@ class PessoaFisicaController extends PessoaFisicaModel
                 }
             }
 
+            if (isset($dadosLimpos['ns'])) {
+                if (count($dadosLimpos['ns']) > 0) {
+                    $nome_social_existe = DbModel::consultaSimples("SELECT * FROM pf_nome_social WHERE pessoa_fisica_id = '$idDecryp'");
+                    if ($nome_social_existe->rowCount() > 0) {
+                        DbModel::updateEspecial('pf_nome_social', $dadosLimpos['ns'], "pessoa_fisica_id", $idDecryp);
+                    } else {
+                        $dadosLimpos['ns']['pessoa_fisica_id'] = $idDecryp;
+                        DbModel::insert('pf_nome_social', $dadosLimpos['ns']);
+                    }
+                }
+            }
+
             // if ($_SESSION['modulo_s'] == 6 || $_SESSION['modulo_s'] == 7){ //formação ou jovem monitor
             //     $_SESSION['origem_id_s'] = $id;
             // }
@@ -230,7 +249,7 @@ class PessoaFisicaController extends PessoaFisicaModel
     public function recuperaPessoaFisica($id, $capac = false) {
         $id = MainModel::decryption($id);
         $pf = DbModel::consultaSimples(
-            "SELECT pf.*, pe.*, pb.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, gi.grau_instrucao
+            "SELECT pf.*, pe.*, pb.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, gi.grau_instrucao, ns.nome_social 
             FROM pessoa_fisicas AS pf
             LEFT JOIN pf_enderecos pe on pf.id = pe.pessoa_fisica_id
             LEFT JOIN pf_bancos pb on pf.id = pb.pessoa_fisica_id
@@ -241,6 +260,7 @@ class PessoaFisicaController extends PessoaFisicaModel
             LEFT JOIN pf_detalhes pd on pf.id = pd.pessoa_fisica_id
             LEFT JOIN etnias e on pd.etnia_id = e.id
             LEFT JOIN grau_instrucoes gi on pd.grau_instrucao_id = gi.id
+            LEFT JOIN pf_nome_social ns on pf.id = ns.pessoa_fisica_id
             WHERE pf.id = '$id'", $capac);
 
         $pf = $pf->fetch(PDO::FETCH_ASSOC);
@@ -551,6 +571,35 @@ class PessoaFisicaController extends PessoaFisicaModel
                     <span class="input-group-text "><?= "$valor = $dado" ?></span>
                 </div>
             <?php }
+        }
+    }
+
+    /**
+     * <p>Gera options para a tag <i>select</i> a partir dos registros da tabela de Pessoa Fisica</p>
+     * @param string $selected [opcional]
+     * <p>Valor a qual deve vir selecionado</p>
+     * @param bool $orderPorId [opcional]
+     * <p><strong>FALSE</strong> por padrão. Quando <strong>TRUE</strong>, ordena a lista por ordem de ID</p>
+     */
+    public function geraOpcaoPf($selected = "", $orderPorId = false)
+    {
+        $order = $orderPorId ? 1 : 2;
+        $sql = "SELECT pf.id, pf.nome, ns.nome_social FROM `pessoa_fisicas` AS pf
+                LEFT JOIN pf_nome_social AS ns on pf.id = ns.pessoa_fisica_id
+                ORDER BY $order";
+        $consulta = DbModel::consultaSimples($sql);
+        if ($consulta->rowCount() >= 1) {
+            foreach ($consulta->fetchAll() as $option) {
+                $nome = $option['nome'];
+                if ($option['nome_social'] != null) {
+                    $nome .= " ({$option['nome_social']})";
+                }
+                if ($option['id'] == $selected) {
+                    echo "<option value='" . $option['id'] . "' selected >" . $nome . "</option>";
+                } else {
+                    echo "<option value='" . $option['id'] . "'>" . $nome . "</option>";
+                }
+            }
         }
     }
 }
