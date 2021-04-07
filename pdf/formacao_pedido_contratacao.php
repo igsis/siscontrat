@@ -13,6 +13,8 @@ $pedido = $formObj->recuperaPedido($pedido_id);
 
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 
+$nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
+
 if ($pf->passaporte != NULL) {
     $cpf_passaporte = "<strong>Passaporte: </strong> " . $pf->passaporte . "<br />";
 } else {
@@ -61,7 +63,7 @@ $ano = date('Y');
         "<p><strong>Processo SEI nº:</strong> " . MainModel::checaCampo($pedido->numero_processo) . "</p>" .
         "<p><strong>Setor  solicitante:</strong> Supervisão de Formação Cultural</p>" .
         "<p>&nbsp;</p>" .
-        "<p><strong>Nome:</strong> " . $pf->nome . " <br />" .
+        "<p><strong>Nome:</strong> " . $nome . " <br />" .
         $cpf_passaporte .
         "<strong>Telefone(s):</strong> " . $formObj->recuperaTelPf($pedido->pessoa_fisica_id) . "<br />" .
         "<strong>E-mail:</strong> " . $pf->email . "</p>" .

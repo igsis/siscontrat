@@ -20,6 +20,8 @@ $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $telPf = $formObj->recuperaTelPf($pedido->pessoa_fisica_id);
 $parcelaDados = $formObj->retornaDadosParcelas($pedido->origem_id, '', '1', $parcela_id);
 
+$nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
+
 $ano = date('Y', strtotime("now"));
 
 $pdf = new PDF('P', 'mm', 'A4'); //CRIA UM NOVO ARQUIVO PDF NO TAMANHO A4
@@ -43,13 +45,13 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
 $pdf->Cell(14, $l, 'Nome:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(180, $l, utf8_decode($pf->nome), 0, 'L', 0);
+$pdf->MultiCell(180, $l, utf8_decode($nome), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
 $pdf->Cell(14, $l, utf8_decode("Objeto:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->Cell(40, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 0, 'L');
+$pdf->MultiCell(170, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 'L', 0);
 
 $pdf->Ln(6);
 
@@ -114,7 +116,7 @@ $pdf->MultiCell(180, $l, utf8_decode("OBSERVAÇÃO: A validade deste recibo est�
 
 $pdf->SetXY($x, 262);
 $pdf->SetFont('Arial', '', 12);
-$pdf->Cell(100, $l, utf8_decode($pf->nome), 'T', 1, 'L');
+$pdf->Cell(100, $l, utf8_decode($nome), 'T', 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 12);

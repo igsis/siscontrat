@@ -1,3 +1,8 @@
+<?php
+require_once "./controllers/PessoaFisicaController.php";
+$pfObj = new PessoaFisicaController();
+?>
+
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -51,9 +56,9 @@
 
                         <div class="col-md-4">
                             <div class="input-group-append">
-                                <select class="form-control" name="proponente" id="buscaProponente">
+                                <select class="select2bs4 form-control" name="proponente" id="buscaProponente">
                                     <option value="">Selecione uma opção...</option>
-                                    <?= MainModel::geraOpcao('pessoa_fisicas') ?>
+                                    <?= $pfObj->geraOpcaoPf() ?>
                                 </select>
                                 <button type="button" class="btn btn-info btn-flat rounded-right"><i
                                             class="fa fa-search"></i>
@@ -207,9 +212,17 @@
     function criarLinha(dados) {
         let tbody = document.querySelector('tbody');
         let tr = document.createElement('tr');
+        let nome = "";
+
+        if (dados.nome_social == null) {
+            nome = dados.nome;
+        } else {
+            nome = dados.nome + " (" + dados.nome_social + ")";
+        }
+
         tr.appendChild(criarColuna(dados.numero_processo));
         tr.appendChild(criarColuna(dados.protocolo));
-        tr.appendChild(criarColuna(dados.nome));
+        tr.appendChild(criarColuna(nome));
         tr.appendChild(criarColuna(criarBotaoEmpenho(dados.pedido_id)));
         tr.appendChild(criarColuna(criarBotaoPgto(dados.pedido_id)));
 

@@ -846,7 +846,7 @@ class FormacaoController extends FormacaoModel
 
         $sql = "SELECT   p.id, p.origem_id,fc.protocolo, fc.ano,
                          p.numero_processo,fc.num_processo_pagto, 
-                         pf.nome, ns.nome_social, pf.cpf, pf.passaporte, v.verba, 
+                         pf.id AS 'pessoa_fisica_id', pf.nome, ns.nome_social, pf.cpf, pf.passaporte, v.verba, 
                          ps.`status`, fc.form_status_id 
             FROM pedidos p 
             LEFT JOIN pedido_status ps ON p.status_pedido_id = ps.id
@@ -1386,10 +1386,11 @@ class FormacaoController extends FormacaoModel
         }
 
 
-        $consulta = DbModel::consultaSimples("SELECT p.id AS pedido_id, fc.protocolo, pf.nome, p.numero_processo, s.status 
+        $consulta = DbModel::consultaSimples("SELECT p.id AS pedido_id, fc.protocolo, pf.nome, ns.nome_social, p.numero_processo, s.status 
                                                   FROM formacao_contratacoes fc 
                                                   INNER JOIN pedidos p ON fc.id = p.origem_id
                                                   LEFT JOIN pessoa_fisicas pf ON p.pessoa_fisica_id = pf.id
+                                                  LEFT JOIN pf_nome_social ns ON ns.pessoa_fisica_id = pf.id
                                                   INNER JOIN pedido_status s ON s.id = p.status_pedido_id
                                                   WHERE p.origem_tipo_id = 2 AND p.publicado = 1$sqlProponente $sqlProcesso $sqlProtocolo $sqlStatus")->fetchAll(PDO::FETCH_ASSOC);
         if (count($consulta) > 0) {

@@ -73,15 +73,9 @@
                                     <td><?= $pf->ano?></td>
                                     <td><?= $pf->status?></td>
                                     <td>
-                                        <?php if ($pf->ano >= $anoVigencia): ?>
-                                            <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&pedido_id=" . $formacaoObj->encryption($pf->id) ?>" class="btn bg-gradient-primary btn-sm">
-                                                <i class="fas fa-user-edit"></i> &nbsp; Editar &nbsp; &nbsp;
-                                            </a>
-                                        <?php else: ?>
-                                            <a href="<?= SERVERURL . "formacao/pedido_visualizar&pedido_id=" . $formacaoObj->encryption($pf->id) ?>" class="btn bg-gradient-primary btn-sm">
-                                                <i class="fas fa-list"></i> &nbsp; Visualizar
-                                            </a>
-                                        <?php endif; ?>
+                                        <a href="<?= SERVERURL ?>formacao/pf_cadastro&id=<?= $formacaoObj->encryption($pf->pessoa_fisica_id) ?>" class="btn bg-gradient-primary btn-sm">
+                                            <i class="fas fa-user-edit"></i> &nbsp; Editar &nbsp; &nbsp;
+                                        </a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>  
