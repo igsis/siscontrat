@@ -117,12 +117,24 @@ class PessoaFisicaController extends PessoaFisicaModel
             if (isset($dadosLimpos['bc'])) {
                 if (count($dadosLimpos['bc']) > 0) {
                     $banco_existe = DbModel::consultaSimples("SELECT * FROM pf_bancos WHERE pessoa_fisica_id = '$idDecryp'");
-                    if ($banco_existe->rowCount() > 0) {
-                        DbModel::updateEspecial('pf_bancos', $dadosLimpos['bc'], "pessoa_fisica_id", $idDecryp);
+                    $banco_existe = $banco_existe->rowCount();
+                    if (isset($dadosLimpos['bc']['agencia']) || isset($dadosLimpos['bc']['conta'])) {
+                        if ($banco_existe > 0) {
+                            DbModel::updateEspecial('pf_bancos', $dadosLimpos['bc'], "pessoa_fisica_id", $idDecryp);
+                        } else {
+                            $dadosLimpos['bc']['pessoa_fisica_id'] = $idDecryp;
+                            DbModel::insert('pf_bancos', $dadosLimpos['bc']);
+                        }
                     } else {
-                        $dadosLimpos['bc']['pessoa_fisica_id'] = $idDecryp;
-                        DbModel::insert('pf_bancos', $dadosLimpos['bc']);
+                        if ($banco_existe > 0) {
+                            DbModel::deleteEspecial('pf_bancos', 'pessoa_fisica_id', $idDecryp);
+                        }
                     }
+                }
+            } else {
+                $banco_existe = DbModel::consultaSimples("SELECT * FROM pf_bancos WHERE pessoa_fisica_id = '$idDecryp'");
+                if ($banco_existe->rowCount() > 0) {
+                    DbModel::deleteEspecial('pf_bancos', 'pessoa_fisica_id', $idDecryp);
                 }
             }
 
