@@ -20,6 +20,8 @@ $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $contratacao = $formObj->recuperaContratacao($pedido->origem_id);
 $objeto = $formObj->retornaObjetoFormacao($pedido->origem_id);
 
+$nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
+
 if ($pedido->verba_id == 22){ //Transferência de outra secretaria
     $topico = "<p>Assim, solicito a reserva de recursos, que deverá onerar os recursos da Nota de Reserva com Transferência da SME nº 22.671/2019 e para o INSS Patronal a Nota de Reserva com Transferência nº 22.711/2019 SEI (link do SEI).</p>";
 } else{
@@ -68,7 +70,7 @@ if ($pedido->verba_id == 22){ //Transferência de outra secretaria
     <div id="texto" class="texto">
         <p><b>Do processo nº:</b> <?=$pedido->numero_processo?></p>
         <p>&nbsp;</p>
-        <p><b>INTERESSADO:</b> <?= $pf->nome ?><br>
+        <p><b>INTERESSADO:</b> <?= $nome ?><br>
             <b>OBJETO:</b> <?= $objeto ?></p>
         <p>&nbsp;</p>
         <p>&nbsp;</p>
@@ -76,7 +78,7 @@ if ($pedido->verba_id == 22){ //Transferência de outra secretaria
         <p>&nbsp;</p>
         <p>
             <strong>Sr(a). Responsável,</strong><br>
-            O presente processo trata de <?= $pf->nome ?>, <?= $contratacao->programa ?>, <?= $contratacao->linguagem ?> NOS TERMOS DO EDITAL - <?= strtoupper($contratacao->edital) ?> - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL, no valor de R$ <?= (new MainModel)->dinheiroParaBr($pedido->valor_total) ?> ( <?=  (new MainModel)->valorPorExtenso($pedido->valor_total) ?>), conforme solicitação (link da solicitação), foram anexados os documentos necessários exigidos no edital, no período de <?= $formObj->retornaPeriodoFormacao($pedido->origem_id) ?>.
+            O presente processo trata de <?= $nome ?>, <?= $contratacao->programa ?>, <?= $contratacao->linguagem ?> NOS TERMOS DO EDITAL - <?= strtoupper($contratacao->edital) ?> - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL, no valor de R$ <?= (new MainModel)->dinheiroParaBr($pedido->valor_total) ?> ( <?=  (new MainModel)->valorPorExtenso($pedido->valor_total) ?>), conforme solicitação (link da solicitação), foram anexados os documentos necessários exigidos no edital, no período de <?= $formObj->retornaPeriodoFormacao($pedido->origem_id) ?>.
         </p>
         <p>&nbsp;</p>
         <?= $topico ?>

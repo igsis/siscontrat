@@ -18,6 +18,8 @@ $ne = $formObj->retornaNotaEmpenho($pedido_id);
 $pedido = $formObj->recuperaPedido($pedido_id);
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 
+$nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
+
 $data = date('d-m-Y');
 
 $pdf = new PDF('P', 'mm', 'A4'); //CRIA UM NOVO ARQUIVO PDF NO TAMANHO A4
@@ -72,7 +74,7 @@ $pdf->Ln(75);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
-$pdf->Cell(165, $l, utf8_decode($pf->nome), 'T', 0, 'L');
+$pdf->Cell(165, $l, utf8_decode($nome), 'T', 0, 'L');
 
 $pdf->Ln();
 
@@ -113,7 +115,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
 $pdf->Cell(15, $l, "Objeto:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->Cell(23, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 0, 'L');
+$pdf->MultiCell(170, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 'L', 0);
 
 $pdf->Output('formacao_ne.pdf', 'I');
 ?>
