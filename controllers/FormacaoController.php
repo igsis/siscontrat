@@ -846,7 +846,7 @@ class FormacaoController extends FormacaoModel
 
         $sql = "SELECT   p.id, p.origem_id,fc.protocolo, fc.ano,
                          p.numero_processo,fc.num_processo_pagto, 
-                         pf.nome, ns.nome_social, pf.cpf, pf.passaporte, v.verba, 
+                         pf.id AS 'pessoa_fisica_id', pf.nome, ns.nome_social, pf.cpf, pf.passaporte, v.verba, 
                          ps.`status`, fc.form_status_id 
             FROM pedidos p 
             LEFT JOIN pedido_status ps ON p.status_pedido_id = ps.id
