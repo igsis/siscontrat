@@ -109,6 +109,14 @@ class PessoaFisicaController extends PessoaFisicaModel
 
         $dadosLimpos = PessoaFisicaModel::limparStringPF($_POST);
 
+        $camposNaoObrigatorios = ['nome_artistico', 'ccm'];
+
+        foreach ($camposNaoObrigatorios as $campo) {
+            if (!isset($dadosLimpos['pf'][$campo])) {
+                $dadosLimpos['pf'][$campo] = "";
+            }
+        }
+
         $dadosLimpos['pf']['ultima_atualizacao'] = date('Y-m-d H:i:s');
 
         $edita = DbModel::update('pessoa_fisicas', $dadosLimpos['pf'], $idDecryp);
