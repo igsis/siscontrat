@@ -7,14 +7,26 @@ if ($pedidoAjax) {
 
 class FomentoModel extends MainModel
 {
-    protected function recuperaInscritos($edital_id, $tipo_pessoa,$aprovados = false) {
+    protected function recuperaInscritos($edital_id, $tipo_pessoa, $aprovados = false) {
+        $tipo_contratacao = DbModel::consultaSimples("SELECT tipo_contratacao_id FROM fom_editais WHERE id = '$edital_id'", true)->fetchColumn();
+        if ($tipo_contratacao == 24) {
+            $campo = ", fa.area ";
+            $joinPeriferias = "LEFT JOIN fom_edital_periferias fep ON fep.fom_projeto_id = fp.id
+                               LEFT JOIN fom_areas fa ON fa.id = fep.fom_area_id ";
+        } else {
+            $campo = "";
+            $joinPeriferias = "";
+        }
+
         if ($tipo_pessoa == 1){
-            $sql = "SELECT fp.* FROM fom_projetos fp
+            $sql = "SELECT fp.* {$campo} FROM fom_projetos fp
                 LEFT JOIN fom_projeto_dado_pfs fpd ON fpd.fom_projeto_id = fp.id
+                $joinPeriferias
                 WHERE fom_edital_id = '$edital_id' AND protocolo IS NOT NULL";
         } else {
-            $sql = "SELECT fp.*, fpd.instituicao, fpd.site FROM fom_projetos fp
+            $sql = "SELECT fp.*, fpd.instituicao, fpd.site {$campo} FROM fom_projetos fp
                 LEFT JOIN fom_projeto_dado_pjs fpd ON fpd.fom_projeto_id = fp.id
+                $joinPeriferias
                 WHERE fom_edital_id = '$edital_id' AND protocolo IS NOT NULL";
         }
 

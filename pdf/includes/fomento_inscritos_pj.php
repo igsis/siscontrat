@@ -1,4 +1,7 @@
 <?php
+/** @var PHPExcel $objPHPExcel */
+/** @var object $inscritos */
+/** @var int $tipo_contratacao */
 
 //Colorir o header
 $objPHPExcel->getActiveSheet()->getStyle("A1:AA1")->applyFromArray
@@ -40,14 +43,24 @@ $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue("W2", "Número")
     ->setCellValue("X2", "Bairro")
     ->setCellValue("Y2", "Cidade")
-    ->setCellValue("Z2", "Estado")
-    ->setCellValue("AA2", "Anexos");
+    ->setCellValue("Z2", "Estado");
+
+if ($tipo_contratacao == 24) {
+    $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue("AA2", "Area de Inscrição")
+        ->setCellValue("AB2", "Anexos");
+    $celulas = "A2:AB2";
+} else {
+    $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue("AA2", "Anexos");
+    $celulas = "A2:AA2";
+}
 
 // Definimos o estilo da fonte
-$objPHPExcel->getActiveSheet()->getStyle('A2:AA2')->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle($celulas)->getFont()->setBold(true);
 
 //Colorir a primeira linha
-$objPHPExcel->getActiveSheet()->getStyle('A2:AA2')->applyFromArray
+$objPHPExcel->getActiveSheet()->getStyle($celulas)->applyFromArray
 (
     array
     (
@@ -90,6 +103,9 @@ foreach ($inscritos as $inscrito){
     $y = "Y" . $cont;
     $z = "Z" . $cont;
     $aa = "AA" . $cont;
+    if ($tipo_contratacao == 24) {
+        $ab = "AB" . $cont;
+    }
 
     require_once "../controllers/PessoaJuridicaController.php";
     require_once "../controllers/RepresentanteController.php";
@@ -130,12 +146,25 @@ foreach ($inscritos as $inscrito){
         ->setCellValue($w, $pj['numero'])
         ->setCellValue($x, $pj['bairro'])
         ->setCellValue($y, $pj['cidade'])
-        ->setCellValue($z, $pj['uf'])
-        ->setCellValue($aa, 'download');
+        ->setCellValue($z, $pj['uf']);
+
+    if ($tipo_contratacao == 24) {
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($aa, $inscrito->area)
+            ->setCellValue($ab, 'download');
+    } else {
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($aa, 'download');
+    }
 
 
-    $objPHPExcel->getActiveSheet()->getCell($aa)->getHyperlink()->setUrl($zip);
-    $objPHPExcel->getActiveSheet()->getCell($aa)->getStyle()->applyFromArray($linkStyle);
+    if ($tipo_contratacao == 24) {
+        $objPHPExcel->getActiveSheet()->getCell($ab)->getHyperlink()->setUrl($zip);
+        $objPHPExcel->getActiveSheet()->getCell($ab)->getStyle()->applyFromArray($linkStyle);
+    } else {
+        $objPHPExcel->getActiveSheet()->getCell($aa)->getHyperlink()->setUrl($zip);
+        $objPHPExcel->getActiveSheet()->getCell($aa)->getStyle()->applyFromArray($linkStyle);
+    }
 
     $cont++;
 }
@@ -170,3 +199,4 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('X')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
