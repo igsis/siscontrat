@@ -396,4 +396,12 @@ class FomentoController extends FomentoModel
 
         return MainModel::sweetAlert($alerta);
     }
+
+    public function recuperaDadosEditalPeriferia($projeto_id)
+    {
+        $sql = "SELECT fa.area FROM fom_edital_periferias fep
+                INNER JOIN fom_areas AS fa ON fa.id = fep.fom_area_id
+                WHERE fep.fom_projeto_id = '$projeto_id'";
+        return DbModel::consultaSimples($sql, true)->fetchColumn();
+    }
 }
