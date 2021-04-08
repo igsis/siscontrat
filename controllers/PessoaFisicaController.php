@@ -104,16 +104,18 @@ class PessoaFisicaController extends PessoaFisicaModel
     }
 
     /* edita */
-    public function editaPessoaFisica($id,$pagina,$retornaId = false){
+    public function editaPessoaFisica($id,$pagina,$retornaId = false, $importar = false){
         $idDecryp = MainModel::decryption($_POST['id']);
 
         $dadosLimpos = PessoaFisicaModel::limparStringPF($_POST);
 
         $camposNaoObrigatorios = ['nome_artistico', 'ccm'];
 
-        foreach ($camposNaoObrigatorios as $campo) {
-            if (!isset($dadosLimpos['pf'][$campo])) {
-                $dadosLimpos['pf'][$campo] = "";
+        if (!$importar) {
+            foreach ($camposNaoObrigatorios as $campo) {
+                if (!isset($dadosLimpos['pf'][$campo])) {
+                    $dadosLimpos['pf'][$campo] = "";
+                }
             }
         }
 
@@ -135,14 +137,18 @@ class PessoaFisicaController extends PessoaFisicaModel
                         }
                     } else {
                         if ($banco_existe > 0) {
-                            DbModel::deleteEspecial('pf_bancos', 'pessoa_fisica_id', $idDecryp);
+                            if (!$importar) {
+                                DbModel::deleteEspecial('pf_bancos', 'pessoa_fisica_id', $idDecryp);
+                            }
                         }
                     }
                 }
             } else {
                 $banco_existe = DbModel::consultaSimples("SELECT * FROM pf_bancos WHERE pessoa_fisica_id = '$idDecryp'");
                 if ($banco_existe->rowCount() > 0) {
-                    DbModel::deleteEspecial('pf_bancos', 'pessoa_fisica_id', $idDecryp);
+                    if (!$importar) {
+                        DbModel::deleteEspecial('pf_bancos', 'pessoa_fisica_id', $idDecryp);
+                    }
                 }
             }
 
@@ -394,7 +400,10 @@ class PessoaFisicaController extends PessoaFisicaModel
                         pd.trans AS 'dt_trans',
                         pd.pcd AS 'dt_pcd',
                         d.drt AS 'dr_drt',
-                        n.nit AS 'ni_nit'
+                        n.nit AS 'ni_nit',
+                        pb.banco_id AS 'bc_banco_id',
+                        pb.agencia AS 'bc_agencia',
+                        pb.conta AS 'bc_conta'
                     FROM pessoa_fisicas AS pf
                     LEFT JOIN pf_enderecos AS pe on pf.id = pe.pessoa_fisica_id
                     LEFT JOIN pf_bancos AS pb on pf.id = pb.pessoa_fisica_id
@@ -502,7 +511,10 @@ class PessoaFisicaController extends PessoaFisicaModel
                         pd.trans AS 'dt_trans',
                         pd.pcd AS 'dt_pcd',
                         d.drt AS 'dr_drt',
-                        n.nit AS 'ni_nit'
+                        n.nit AS 'ni_nit',
+                        pb.banco_id AS 'bc_banco_id',
+                        pb.agencia AS 'bc_agencia',
+                        pb.conta AS 'bc_conta'
                     FROM pessoa_fisicas AS pf
                     LEFT JOIN pf_enderecos AS pe on pf.id = pe.pessoa_fisica_id
                     LEFT JOIN pf_bancos AS pb on pf.id = pb.pessoa_fisica_id
@@ -558,7 +570,7 @@ class PessoaFisicaController extends PessoaFisicaModel
      */
     public function recuperaDadoPorId($key, $valor, $append = true)
     {
-        $camposIds = ['pf_nacionalidade_id', 'dt_etnia_id', 'dt_genero_id', 'dt_grau_instrucao_id', 'dt_trans', 'dt_pcd',];
+        $camposIds = ['pf_nacionalidade_id', 'dt_etnia_id', 'dt_genero_id', 'dt_grau_instrucao_id', 'dt_trans', 'dt_pcd', 'bc_banco_id',];
         if (in_array($key, $camposIds)) {
             switch ($key) {
                 case 'pf_nacionalidade_id':
@@ -572,6 +584,9 @@ class PessoaFisicaController extends PessoaFisicaModel
                     break;
                 case 'dt_grau_instrucao_id':
                     $dado = DbModel::getInfo('grau_instrucoes', $valor)->fetchObject()->grau_instrucao;
+                    break;
+                case 'bc_banco_id':
+                    $dado = DbModel::getInfo('bancos', $valor)->fetchObject()->banco;
                     break;
                 case 'dt_trans':
                     $dado = $valor == 1 ? "Sim" : "Não";

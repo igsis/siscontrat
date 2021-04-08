@@ -113,6 +113,9 @@ if (isset($_POST['_method'])) {
         case "editarPF":
             echo $insPessoaFisica->editaPessoaFisica($_POST['id'], $_POST['pagina']);
             break;
+        case "editarPFImportadoCapac":
+            echo $insPessoaFisica->editaPessoaFisica($_POST['id'], $_POST['pagina'], false, true);
+            break;
         case "editarPFImport":
             echo $insForm->insereInscrito($_POST['capac_id'], false, $_POST['id']);
             break;
