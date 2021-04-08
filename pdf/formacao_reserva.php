@@ -23,7 +23,7 @@ $objeto = $formObj->retornaObjetoFormacao($pedido->origem_id);
 $nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
 
 if ($pedido->verba_id == 22){ //Transferência de outra secretaria
-    $topico = "<p>Assim, solicito a reserva de recursos, que deverá onerar os recursos da Nota de Reserva com Transferência da SME nº 22.671/2019 e para o INSS Patronal a Nota de Reserva com Transferência nº 22.711/2019 SEI (link do SEI).</p>";
+    $topico = "<p>Assim, solicito a reserva de recursos, que deverá onerar os recursos da Nota de Reserva com Transferência da SME nº 23.711/2021 e para o INSS Patronal a Nota de Reserva com Transferência nº 23.710/2021 SEI (link do SEI).</p>";
 } else{
     $topico = "<p>Assim, solicito a reserva de recursos que deverá onerar a ação $verba->acao.</p>";
 }
