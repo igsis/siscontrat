@@ -187,10 +187,6 @@ class FomentoController extends FomentoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    /** @TODO: Verificar se esta função é realmente necessária
-     * @param int $edital_id
-     * @return mixed
-     */
     public function recuperaTipoContratacao($edital_id) {
         $tipo = gettype($edital_id);
         if ($tipo == "string") {
