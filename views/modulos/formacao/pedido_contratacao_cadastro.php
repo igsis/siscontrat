@@ -99,7 +99,7 @@ endif;
                                 <label for="verba">Verba:</label>
                                 <select name="verba_id" id="verba" tabindex="-1" class="form-control">
                                     <option value="">Selecione uma opção...</option>
-                                    <?php $formObj->geraOpcao("verbas", $contratacao->programa_verba_id ?? "") ?>
+                                    <?php $formObj->geraOpcao("verbas", $pedido->verba_id ?? "") ?>
                                 </select>
                             </div>
                         </div>
