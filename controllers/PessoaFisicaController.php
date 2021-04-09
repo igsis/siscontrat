@@ -65,6 +65,13 @@ class PessoaFisicaController extends PessoaFisicaModel
                 }
             }
 
+            if (isset($dadosLimpos['ns'])){
+                if (count($dadosLimpos['ns']) > 0) {
+                    $dadosLimpos['ns']['pessoa_fisica_id'] = $id;
+                    DbModel::insert('pf_nome_social', $dadosLimpos['ns']);
+                }
+            }
+
             // if ($_SESSION['modulo_s'] == 6 || $_SESSION['modulo_s'] == 7){ //formação ou jovem monitor
             //     $_SESSION['origem_id_s'] = MainModel::encryption($id);
             // }
@@ -97,10 +104,20 @@ class PessoaFisicaController extends PessoaFisicaModel
     }
 
     /* edita */
-    public function editaPessoaFisica($id,$pagina,$retornaId = false){
+    public function editaPessoaFisica($id,$pagina,$retornaId = false, $importar = false){
         $idDecryp = MainModel::decryption($_POST['id']);
 
         $dadosLimpos = PessoaFisicaModel::limparStringPF($_POST);
+
+        $camposNaoObrigatorios = ['nome_artistico', 'ccm'];
+
+        if (!$importar) {
+            foreach ($camposNaoObrigatorios as $campo) {
+                if (!isset($dadosLimpos['pf'][$campo])) {
+                    $dadosLimpos['pf'][$campo] = "";
+                }
+            }
+        }
 
         $dadosLimpos['pf']['ultima_atualizacao'] = date('Y-m-d H:i:s');
 
@@ -110,11 +127,27 @@ class PessoaFisicaController extends PessoaFisicaModel
             if (isset($dadosLimpos['bc'])) {
                 if (count($dadosLimpos['bc']) > 0) {
                     $banco_existe = DbModel::consultaSimples("SELECT * FROM pf_bancos WHERE pessoa_fisica_id = '$idDecryp'");
-                    if ($banco_existe->rowCount() > 0) {
-                        DbModel::updateEspecial('pf_bancos', $dadosLimpos['bc'], "pessoa_fisica_id", $idDecryp);
+                    $banco_existe = $banco_existe->rowCount();
+                    if (isset($dadosLimpos['bc']['agencia']) || isset($dadosLimpos['bc']['conta'])) {
+                        if ($banco_existe > 0) {
+                            DbModel::updateEspecial('pf_bancos', $dadosLimpos['bc'], "pessoa_fisica_id", $idDecryp);
+                        } else {
+                            $dadosLimpos['bc']['pessoa_fisica_id'] = $idDecryp;
+                            DbModel::insert('pf_bancos', $dadosLimpos['bc']);
+                        }
                     } else {
-                        $dadosLimpos['bc']['pessoa_fisica_id'] = $idDecryp;
-                        DbModel::insert('pf_bancos', $dadosLimpos['bc']);
+                        if ($banco_existe > 0) {
+                            if (!$importar) {
+                                DbModel::deleteEspecial('pf_bancos', 'pessoa_fisica_id', $idDecryp);
+                            }
+                        }
+                    }
+                }
+            } else {
+                $banco_existe = DbModel::consultaSimples("SELECT * FROM pf_bancos WHERE pessoa_fisica_id = '$idDecryp'");
+                if ($banco_existe->rowCount() > 0) {
+                    if (!$importar) {
+                        DbModel::deleteEspecial('pf_bancos', 'pessoa_fisica_id', $idDecryp);
                     }
                 }
             }
@@ -197,6 +230,18 @@ class PessoaFisicaController extends PessoaFisicaModel
                 }
             }
 
+            if (isset($dadosLimpos['ns'])) {
+                if (count($dadosLimpos['ns']) > 0) {
+                    $nome_social_existe = DbModel::consultaSimples("SELECT * FROM pf_nome_social WHERE pessoa_fisica_id = '$idDecryp'");
+                    if ($nome_social_existe->rowCount() > 0) {
+                        DbModel::updateEspecial('pf_nome_social', $dadosLimpos['ns'], "pessoa_fisica_id", $idDecryp);
+                    } else {
+                        $dadosLimpos['ns']['pessoa_fisica_id'] = $idDecryp;
+                        DbModel::insert('pf_nome_social', $dadosLimpos['ns']);
+                    }
+                }
+            }
+
             // if ($_SESSION['modulo_s'] == 6 || $_SESSION['modulo_s'] == 7){ //formação ou jovem monitor
             //     $_SESSION['origem_id_s'] = $id;
             // }
@@ -230,7 +275,7 @@ class PessoaFisicaController extends PessoaFisicaModel
     public function recuperaPessoaFisica($id, $capac = false) {
         $id = MainModel::decryption($id);
         $pf = DbModel::consultaSimples(
-            "SELECT pf.*, pe.*, pb.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, gi.grau_instrucao
+            "SELECT pf.*, pe.*, pb.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, gi.grau_instrucao, ns.nome_social 
             FROM pessoa_fisicas AS pf
             LEFT JOIN pf_enderecos pe on pf.id = pe.pessoa_fisica_id
             LEFT JOIN pf_bancos pb on pf.id = pb.pessoa_fisica_id
@@ -241,6 +286,7 @@ class PessoaFisicaController extends PessoaFisicaModel
             LEFT JOIN pf_detalhes pd on pf.id = pd.pessoa_fisica_id
             LEFT JOIN etnias e on pd.etnia_id = e.id
             LEFT JOIN grau_instrucoes gi on pd.grau_instrucao_id = gi.id
+            LEFT JOIN pf_nome_social ns on pf.id = ns.pessoa_fisica_id
             WHERE pf.id = '$id'", $capac);
 
         $pf = $pf->fetch(PDO::FETCH_ASSOC);
@@ -354,7 +400,10 @@ class PessoaFisicaController extends PessoaFisicaModel
                         pd.trans AS 'dt_trans',
                         pd.pcd AS 'dt_pcd',
                         d.drt AS 'dr_drt',
-                        n.nit AS 'ni_nit'
+                        n.nit AS 'ni_nit',
+                        pb.banco_id AS 'bc_banco_id',
+                        pb.agencia AS 'bc_agencia',
+                        pb.conta AS 'bc_conta'
                     FROM pessoa_fisicas AS pf
                     LEFT JOIN pf_enderecos AS pe on pf.id = pe.pessoa_fisica_id
                     LEFT JOIN pf_bancos AS pb on pf.id = pb.pessoa_fisica_id
@@ -462,7 +511,10 @@ class PessoaFisicaController extends PessoaFisicaModel
                         pd.trans AS 'dt_trans',
                         pd.pcd AS 'dt_pcd',
                         d.drt AS 'dr_drt',
-                        n.nit AS 'ni_nit'
+                        n.nit AS 'ni_nit',
+                        pb.banco_id AS 'bc_banco_id',
+                        pb.agencia AS 'bc_agencia',
+                        pb.conta AS 'bc_conta'
                     FROM pessoa_fisicas AS pf
                     LEFT JOIN pf_enderecos AS pe on pf.id = pe.pessoa_fisica_id
                     LEFT JOIN pf_bancos AS pb on pf.id = pb.pessoa_fisica_id
@@ -518,7 +570,7 @@ class PessoaFisicaController extends PessoaFisicaModel
      */
     public function recuperaDadoPorId($key, $valor, $append = true)
     {
-        $camposIds = ['pf_nacionalidade_id', 'dt_etnia_id', 'dt_genero_id', 'dt_grau_instrucao_id', 'dt_trans', 'dt_pcd',];
+        $camposIds = ['pf_nacionalidade_id', 'dt_etnia_id', 'dt_genero_id', 'dt_grau_instrucao_id', 'dt_trans', 'dt_pcd', 'bc_banco_id',];
         if (in_array($key, $camposIds)) {
             switch ($key) {
                 case 'pf_nacionalidade_id':
@@ -532,6 +584,9 @@ class PessoaFisicaController extends PessoaFisicaModel
                     break;
                 case 'dt_grau_instrucao_id':
                     $dado = DbModel::getInfo('grau_instrucoes', $valor)->fetchObject()->grau_instrucao;
+                    break;
+                case 'bc_banco_id':
+                    $dado = DbModel::getInfo('bancos', $valor)->fetchObject()->banco;
                     break;
                 case 'dt_trans':
                     $dado = $valor == 1 ? "Sim" : "Não";
@@ -551,6 +606,35 @@ class PessoaFisicaController extends PessoaFisicaModel
                     <span class="input-group-text "><?= "$valor = $dado" ?></span>
                 </div>
             <?php }
+        }
+    }
+
+    /**
+     * <p>Gera options para a tag <i>select</i> a partir dos registros da tabela de Pessoa Fisica</p>
+     * @param string $selected [opcional]
+     * <p>Valor a qual deve vir selecionado</p>
+     * @param bool $orderPorId [opcional]
+     * <p><strong>FALSE</strong> por padrão. Quando <strong>TRUE</strong>, ordena a lista por ordem de ID</p>
+     */
+    public function geraOpcaoPf($selected = "", $orderPorId = false)
+    {
+        $order = $orderPorId ? 1 : 2;
+        $sql = "SELECT pf.id, pf.nome, ns.nome_social FROM `pessoa_fisicas` AS pf
+                LEFT JOIN pf_nome_social AS ns on pf.id = ns.pessoa_fisica_id
+                ORDER BY $order";
+        $consulta = DbModel::consultaSimples($sql);
+        if ($consulta->rowCount() >= 1) {
+            foreach ($consulta->fetchAll() as $option) {
+                $nome = $option['nome'];
+                if ($option['nome_social'] != null) {
+                    $nome .= " ({$option['nome_social']})";
+                }
+                if ($option['id'] == $selected) {
+                    echo "<option value='" . $option['id'] . "' selected >" . $nome . "</option>";
+                } else {
+                    echo "<option value='" . $option['id'] . "'>" . $nome . "</option>";
+                }
+            }
         }
     }
 }

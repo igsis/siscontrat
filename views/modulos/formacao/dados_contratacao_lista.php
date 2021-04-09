@@ -69,7 +69,7 @@ $ano = date("Y");
                             <?php foreach ($dados_contratacao as $contratacao) : ?>
                                 <tr>
                                     <td><?= $contratacao['protocolo'] ?></td>
-                                    <td><?= $contratacao['pessoa'] ?></td>
+                                    <td><?= $contratacao['nome_social'] != null ? "{$contratacao['pessoa']} ({$contratacao['nome_social']})" : $contratacao['pessoa']?></td>
                                     <td><?= $contratacao['ano'] ?></td>
                                     <td><?= $contratacao['programa'] ?></td>
                                     <td><?= $contratacao['linguagem'] ?></td>

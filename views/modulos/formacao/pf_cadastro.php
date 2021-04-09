@@ -77,6 +77,13 @@ if ($idCapac){
                                            pattern="[a-zA-ZàèìòùÀÈÌÒÙâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇáéíóúýÁÉÍÓÚÝ ]{1,70}">
                                 </div>
                                 <div class="form-group col-md-6">
+                                    <label for="nomeSocial">Nome Social:</label>
+                                    <input type="text" class="form-control" name="ns_nome_social" placeholder="Digite o nome social" maxlength="70" value="<?= $pf['nome_social'] ?? "" ?>">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-12">
                                     <label for="nomeArtistico">Nome Artístico:</label>
                                     <input type="text" class="form-control" name="pf_nome_artistico" placeholder="Digite o nome artistico" maxlength="70" value="<?= $pf['nome_artistico'] ?? "" ?>">
                                 </div>

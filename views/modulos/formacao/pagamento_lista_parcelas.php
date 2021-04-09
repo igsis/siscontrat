@@ -11,6 +11,8 @@ $pessoa = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $contratacao = $formObj->recuperaContratacao(MainModel::encryption($pedido->origem_id), 1);
 $parcelas = $pedObj->getParcelarPedidoFomentos($pedido_id);
 
+$nome = $pessoa->nome_social != null ? "$pessoa->nome ($pessoa->nome_social)" : $pessoa->nome;
+
 //contador de parcelas
 $i = 1;
 ?>
@@ -31,7 +33,7 @@ $i = 1;
             <div class="col-md-12">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h4 class="card-title"><?= $pessoa->nome ?> (<?= $pessoa->cpf ?>)</h4>
+                        <h4 class="card-title"><?= $nome ?> (<?= "CPF: " . $pessoa->cpf ?>)</h4>
                     </div>
 
                     <div class="card-body">

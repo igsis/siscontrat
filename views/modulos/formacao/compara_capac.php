@@ -7,7 +7,7 @@ $id = $_GET['id'];
 if (isset($_GET['capac'])) {
     $method = "editarPFImport";
 } else {
-    $method = "editarPF";
+    $method = "editarPFImportadoCapac";
 }
 
 $dados = $pfObj->comparaPf($_GET['id']);

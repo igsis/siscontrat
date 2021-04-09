@@ -25,6 +25,8 @@ class PDF extends FPDF{
 $pf = $pfObj->recuperaPessoaFisica($id_pf);
 $telefone = $formObj->recuperaTelefonePf($id_pf);
 
+$nome = $pf['nome_social'] != null ? "{$pf['nome_social']} ({$pf['nome']})" : $pf['nome'];
+
 $data = date('d-m-Y');
 
 $pdf = new PDF('P', 'mm', 'A4'); //CRIA UM NOVO ARQUIVO PDF NO TAMANHO A4
@@ -53,7 +55,7 @@ $pdf->Cell(53, $l, utf8_decode($pf['ccm'] == NULL ? "Não cadastrado" : $pf['ccm
 
 $pdf->SetXY($x, 55);
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(160, $l, utf8_decode($pf['nome']), 0, 0, 'L');
+$pdf->Cell(160, $l, utf8_decode($nome), 0, 0, 'L');
 
 $pdf->SetXY($x, 68);
 $pdf->SetFont('Arial', '', 10);

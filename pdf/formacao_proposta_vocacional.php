@@ -34,6 +34,8 @@ $Observacao = "Todas as atividades dos programas da Supervisão de Formação s�
 $penalidades = PedidoController::retornaPenalidades(20);
 $dadosParcelas = $formObj->retornaDadosParcelas($pedido->origem_id);
 
+$nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
+
 $ano = date('Y');
 
 $pdf = new PDF('P', 'mm', 'A4'); //CRIA UM NOVO ARQUIVO PDF NO TAMANHO A4
@@ -67,7 +69,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(12, $l, 'Nome:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(120, $l, utf8_decode($pf->nome), 0, 'L', 0);
+$pdf->MultiCell(120, $l, utf8_decode($nome), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -195,7 +197,7 @@ $pdf->MultiCell(155, $l, utf8_decode($pedido->cargo_justificativa));
 //RODAPÉ PERSONALIZADO
 $pdf->SetXY($x, 262);
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(100, 4, utf8_decode($pf->nome), 'T', 1, 'L');
+$pdf->Cell(100, 4, utf8_decode($nome), 'T', 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -235,7 +237,7 @@ $pdf->Cell(180, $l, utf8_decode("Data: _________ / _________ / " . $ano) . ".", 
 
 $pdf->SetXY($x, 262);
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(100, 4, utf8_decode($pf->nome), 'T', 1, 'L');
+$pdf->Cell(100, 4, utf8_decode($nome), 'T', 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -265,7 +267,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(12, $l, 'Nome:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(120, $l, utf8_decode($pf->nome), 0, 'L', 0);
+$pdf->MultiCell(120, $l, utf8_decode($nome), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -308,7 +310,7 @@ $pdf->Cell(180, $l, utf8_decode("São Paulo, ______ de ____________________ de "
 
 $pdf->SetXY($x, 262);
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(100, 4, utf8_decode($pf->nome), 'T', 1, 'L');
+$pdf->Cell(100, 4, utf8_decode($nome), 'T', 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
