@@ -19,6 +19,7 @@ if ($pedidoAjax) {
 
 class PedidoController extends PedidoModel
 {
+    /*
     public function inserePedidoJuridica($pagina, $origem_tipo)
     {
         $idPj = PessoaJuridicaController::inserePessoaJuridica($pagina, true);
@@ -90,6 +91,8 @@ class PedidoController extends PedidoModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
+
 
     public function editaPedidoFisica($idPf, $pagina, $origem_tipo)
     {
@@ -232,4 +235,33 @@ class PedidoController extends PedidoModel
     {
         return DbModel::getInfo("verbas",$id)->fetchObject();
     }
+    */
+    public function editaPedido($pagina)
+    {
+        $idPedido = $_POST['id'];
+        unset($_POST['id']);
+        unset ($_POST['_method']);
+
+        $dados = MainModel::limpaPost($_POST);
+
+        $update = DbModel::update('pedidos', $dados, $idPedido);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Edital Atualizado!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . $pagina . '&id=' . MainModel::encryption($idPedido)
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
 }

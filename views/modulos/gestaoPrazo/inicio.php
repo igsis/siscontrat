@@ -1,8 +1,10 @@
 <?php
 require_once "./controllers/GestaoPrazoController.php";
 require_once "./controllers/EventoController.php";
+require_once "./controllers/PedidoController.php";
 $gestaoObj = new GestaoPrazoController();
 $eventoObj = new EventoController();
+$pedidoObj = new PedidoController();
 $eventos = $gestaoObj->listaAprovar();
 ?>
 <!-- Content Header (Page header) -->
@@ -51,7 +53,15 @@ $eventos = $gestaoObj->listaAprovar();
                                     </td>
                                     <td><?= $eventoObj->retornaPeriodo($evento->id) ?></td>
                                     <td><?=$evento->fiscal?></td>
-                                    <td><?=$evento->operador ?? "não cadastrado" ?></td>
+                                    <td>
+                                        <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/gestaoPrazoAjax.php" method="POST" role="form" data-form="update">
+                                            <select class="form-control" name="operador_id" id="operador_id" required>
+                                                <option value="">Selecione...</option>
+                                                <?php $eventoObj->geraOpcao('usuarios u INNER JOIN usuario_contratos uc ON uc.usuario_id = u.id', $evento->operador ?? ""); ?>
+                                            </select>
+                                            <button type="submit" name="cadastra" class="btn btn-sm btn-block btn-success">Gravar</button>
+                                        </form>
+                                    </td>
                                     <td>
                                         <div class="row">
                                             <div class="col-md">
