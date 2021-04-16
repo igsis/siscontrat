@@ -52,7 +52,7 @@ echo "<html>";
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
 echo "<body>";
 
-echo "<p align='justify'><b>CONTRATANTE:</b> " . "SMC" . "</p>";
+echo "<p align='justify'><b>CONTRATANTE:</b> " . "Secretaria Municipal de Cultura" . "</p>";
 echo "<p align='justify'><b>CONTRATADO(S):</b> Contratação de <b>" . $nome . "</b>, " . $cpf_passaporte . " e demais integrantes relacionados na declaração de exclusividade.</p>";
 echo "<p align='justify'><b>EVENTO/SERV:</b> Apresentação do " . $objeto . ", conforme segue:<br>
 " . listaLocais($evento['id'], '1') . " <br></p>";

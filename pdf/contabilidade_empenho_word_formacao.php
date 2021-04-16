@@ -16,17 +16,17 @@ $pedido = $formObj->recuperaPedido($pedido_id);
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $contratacao = $formObj->recuperaContratacao($pedido_id, '0');
 
-$dataAtual = date('d/m/Y');
+$dataAtual = date('d-m-Y');
 
 header("Content-type: application/vnd.ms-word");
-header("Content-Disposition: attachment;Filename=" . $pedido['numero_processo'] . " em $dataAtual.doc");
+header("Content-Disposition: attachment;Filename=" . $pedido->numero_processo . "_em_$dataAtual.doc");
 ?>
 <html lang="pt-br">
 <header>
     <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
 </header>
 <body>
-    <p style="text-align: justify"><b>CONTRATANTE:</b> SMC</p>
+    <p style="text-align: justify"><b>CONTRATANTE:</b> Secretaria Municipal de Cultura</p>
     <p style="text-align: justify"><b>CONTRATADO(S):</b> Contratação de <b><?=$pf->nome?></b>, <?= $pf->cpf ?> e demais integrantes relacionados na declaração de exclusividade.</p>
     <p style="text-align: justify"><b>EVENTO/SERV:</b> Apresentação do <?= $formObj->retornaObjetoFormacao($pedido_id) ?>, conforme segue: <?= $formObj->retornaLocaisFormacao($pedido_id) ?> <br></p>
     <p style="text-align: justify"><b>DATA/PERÍODO:</b> <?= $formObj->retornaPeriodoFormacao($pedido_id) ?></p>

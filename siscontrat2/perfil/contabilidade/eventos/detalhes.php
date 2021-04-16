@@ -43,9 +43,9 @@ $btnWord = "";
 if(isset($_POST['gravar'])){
     //confere qual link correto baseado no tipo da pessoa
     if($pedido['pessoa_tipo_id'] == 1){
-        $link = PDFURL. "contabilidade_anexo_empenho_word_pf.php";
+        $link = PDFURL. "contabilidade_empenho_word_pf.php";
     }else{
-        $link = PDFURL . "contabilidade_anexo_empenho_word_pj.php";
+        $link = PDFURL . "contabilidade_empenho_word_pj.php";
     }
 
     $cadastra = $con->query("UPDATE pedidos SET status_pedido_id = 17 WHERE id = '$idPedido'");
