@@ -41,14 +41,11 @@ $suplente = recuperaDados('usuarios', 'id', $pedido['suplente_id'])['nome_comple
 $btnWord = "";
 
 if(isset($_POST['gravar'])){
-    $server = "http://" . $_SERVER['SERVER_NAME'] . "/siscontrat2/";
-    $http = $server . "/pdf/";
-
     //confere qual link correto baseado no tipo da pessoa
     if($pedido['pessoa_tipo_id'] == 1){
         $link = PDFURL. "contabilidade_anexo_empenho_word_pf.php";
     }else{
-        $link = $http . "contabilidade_anexo_empenho_word_pj.php";
+        $link = PDFURL . "contabilidade_anexo_empenho_word_pj.php";
     }
 
     $cadastra = $con->query("UPDATE pedidos SET status_pedido_id = 17 WHERE id = '$idPedido'");

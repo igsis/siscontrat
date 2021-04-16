@@ -949,7 +949,9 @@ class FormacaoController extends FormacaoModel
                                                       WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 AND fc.ano = $ano";
             return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
         else:
-            $pedido_id = MainModel::decryption($pedido_id);
+            if (gettype($pedido_id) == "string") {
+                $pedido_id = MainModel::decryption($pedido_id);
+            }
             return DbModel::consultaSimples("SELECT p.id, p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
                                                             p.forma_pagamento, p.justificativa AS 'cargo_justificativa', p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome, c.cargo, fc.programa_id, l.linguagem, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf
                                                   FROM pedidos AS p

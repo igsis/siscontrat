@@ -1,9 +1,7 @@
 <?php
 $idPedido = $_POST['idPedido'];
 
-$server = "http://" . $_SERVER['SERVER_NAME'] . "/siscontrat2/";
-$http = $server . "/pdf/";
-$link = $http . "exporta_word_contabilidade_formacao.php";
+$link = PDFURL. "contabilidade_empenho_word_formacao.php";
 
 $con = bancoMysqli();
 

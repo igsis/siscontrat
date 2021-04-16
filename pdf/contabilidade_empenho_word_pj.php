@@ -1,7 +1,7 @@
 <?php
 //require '../include/';
-require_once("../funcoes/funcoesConecta.php");
-require_once("../funcoes/funcoesGerais.php");
+require_once("../siscontrat2/funcoes/funcoesConecta.php");
+require_once("../siscontrat2/funcoes/funcoesGerais.php");
 
 //CONEXÃO COM BANCO DE DADOS
 $con = bancoMysqli();
