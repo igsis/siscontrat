@@ -2,6 +2,8 @@
 date_default_timezone_set('GMT');
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 
+include_once "../../config/configGeral.php";
+
 function habilitarErro()
 {
     @ini_set('display_errors', '1');
