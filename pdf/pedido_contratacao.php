@@ -1,6 +1,6 @@
 <?php
-require_once("../funcoes/funcoesConecta.php");
-require_once("../funcoes/funcoesGerais.php");
+require_once("../siscontrat2/funcoes/funcoesConecta.php");
+require_once("../siscontrat2/funcoes/funcoesGerais.php");
 
 $con = bancoMysqli();
 
@@ -54,10 +54,10 @@ $totalApresentacao = $con->query("SELECT SUM(quantidade_apresentacao) as apresen
             text-align: justify;
         }
     </style>
-    <link rel="stylesheet" href="../visual/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../visual/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../siscontrat2/visual/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../siscontrat2/visual/bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="include/dist/ZeroClipboard.min.js"></script>
+    <script src="../siscontrat2/pdf/include/dist/ZeroClipboard.min.js"></script>
     <title>Pedido de Contratação</title>
 </head>
 
@@ -116,7 +116,7 @@ $totalApresentacao = $con->query("SELECT SUM(quantidade_apresentacao) as apresen
     </button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="http://sei.prefeitura.sp.gov.br" target="_blank">
-        <button class="btn btn-primary">CLIQUE AQUI PARA ACESSAR O <img src="../visual/images/logo_sei.jpg"></button>
+        <button class="btn btn-primary">CLIQUE AQUI PARA ACESSAR O <img src="../siscontrat2/visual/images/logo_sei.jpg"></button>
     </a>
 </div>
 

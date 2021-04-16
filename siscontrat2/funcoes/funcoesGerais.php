@@ -2,7 +2,19 @@
 date_default_timezone_set('GMT');
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 
-include_once "../../config/configGeral.php";
+/*
+ * configGeral
+ */
+define('SERVERURL', "http://{$_SERVER['HTTP_HOST']}/siscontrat/");
+define('SIS2URL', SERVERURL."siscontrat2/visual/index.php");
+define('PDFURL', SERVERURL."pdf/");
+define('CAPACURL', "http://{$_SERVER['HTTP_HOST']}/capac/");
+define('NOMESIS', "SisContrat");
+define('SMTP', 'no.replay@teste.com');
+define('SENHASMTP', 'senha');
+date_default_timezone_set('America/Fortaleza');
+ini_set('session.gc_maxlifetime', 60*60); // 60 minutos
+/* ./configGeral */
 
 function habilitarErro()
 {
