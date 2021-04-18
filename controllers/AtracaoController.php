@@ -9,123 +9,35 @@ if ($pedidoAjax) {
 
 class AtracaoController extends AtracaoModel
 {
-    public function insereAtracao($post){
-        /* executa limpeza nos campos */
-        $dadosAtracao = [];
-        unset($post['_method']);
-        foreach ($post as $campo => $valor) {
-            if ($campo != "acoes") {
-                $dadosAtracao[$campo] = MainModel::limparString($valor);
-                unset($post[$campo]);
-            }
+    /**
+     * @param int|string $idEvento
+     * @return object
+     */
+    public function recuperaAtracao($idEvento):stdClass
+    {
+        if (gettype($idEvento) == "string") {
+            $idEvento = MainModel::decryption($idEvento);
         }
-        $dadosAtracao['evento_id'] = MainModel::decryption($_SESSION['origem_id_s']);
-        $dadosAtracao['valor_individual'] = MainModel::dinheiroDeBr($dadosAtracao['valor_individual']);
-        /* /.limpeza */
+        $atracao =  DbModel::consultaSimples("SELECT a.*, ci.classificacao_indicativa, p.nome, p.email, p.telefone1, p.telefone2, p.observacao 
+            FROM atracoes a 
+            INNER JOIN classificacao_indicativas ci on a.classificacao_indicativa_id = ci.id 
+            LEFT JOIN produtores p on a.produtor_id = p.id
+            WHERE evento_id = '$idEvento' AND publicado = 1
+        ")->fetchAll(PDO::FETCH_OBJ);
 
-        /* cadastro */
-        $insere = DbModel::insert('atracoes', $dadosAtracao);
-        if ($insere->rowCount() >= 1) {
-            $atracao_id = DbModel::connection()->lastInsertId();
-            $_SESSION['atracao_id_s'] = MainModel::encryption($atracao_id);
-            $atualizaRelacionamentoAcoes = MainModel::atualizaRelacionamento('acao_atracao', 'atracao_id', $atracao_id, 'acao_id', $post['acoes']);
-
-            if ($atualizaRelacionamentoAcoes) {
-                $alerta = [
-                    'alerta' => 'sucesso',
-                    'titulo' => 'Atração Cadastrada!',
-                    'texto' => 'Dados cadastrados com sucesso!',
-                    'tipo' => 'success',
-                    'location' => SERVERURL . 'eventos/atracao_cadastro&key=' . MainModel::encryption($atracao_id)
-                ];
-            } else {
-                $alerta = [
-                    'alerta' => 'simples',
-                    'titulo' => 'Oops! Algo deu Errado!',
-                    'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                    'tipo' => 'error',
-                ];
-            }
-        } else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
+        $acoes = DbModel::consultaSimples("SELECT a.acao FROM acao_atracao at INNER JOIN acoes a on at.acao_id = a.id WHERE atracao_id = '{$atracao['id']}'")->fetchAll(PDO::FETCH_ASSOC);
+        $lista = "";
+        foreach ($acoes as $acao) {
+            $lista .= $acao['acao'] . ", ";
         }
-        /* /.cadastro */
-        return MainModel::sweetAlert($alerta);
+        $atracao['acoes'] = substr($lista,0,-2);
+
+        return (object)$atracao;
     }
 
-    public function editaAtracao($post,$atracao_id){
-        /* executa limpeza nos campos */
-        $dadosAtracao = [];
-        unset($post['_method']);
-        unset($post['id']);
-        foreach ($post as $campo => $valor) {
-            if ($campo != "acoes") {
-                $dadosAtracao[$campo] = MainModel::limparString($valor);
-                if ($campo == "valor_individual") {
-                    $dadosAtracao[$campo] = MainModel::dinheiroDeBr($dadosAtracao[$campo]);
-                }
-                unset($post[$campo]);
-            }
-        }
-        /* /.limpeza */
-
-        // edição
-        $edita = DbModel::update("atracoes",$dadosAtracao,$atracao_id);
-        if ($edita->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
-            $atualizaRelacionamentoPublicos = MainModel::atualizaRelacionamento('acao_atracao', 'atracao_id', $atracao_id, 'acao_id', $post['acoes']);
-            if ($atualizaRelacionamentoPublicos) {
-                $alerta = [
-                    'alerta' => 'sucesso',
-                    'titulo' => 'Atração Atualizada!',
-                    'texto' => 'Dados atualizados com sucesso!',
-                    'tipo' => 'success',
-                    'location' => SERVERURL . 'eventos/atracao_cadastro&key=' . MainModel::encryption($atracao_id)
-                ];
-            } else {
-                $alerta = [
-                    'alerta' => 'simples',
-                    'titulo' => 'Oops! Algo deu Errado!',
-                    'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                    'tipo' => 'error',
-                ];
-            }
-
-        } else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-        /* /.edicao */
-        return MainModel::sweetAlert($alerta);
-    }
-
-    public function apagaAtracao($id){
-        $apaga = DbModel::apaga("atracoes", $id);
-        if ($apaga){
-            $alerta = [
-                'alerta' => 'sucesso',
-                'titulo' => 'Atração',
-                'texto' => 'Atração apagada com sucesso!',
-                'tipo' => 'success',
-                'location' => SERVERURL.'eventos/atracao_lista'
-            ];
-        }else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-        return MainModel::sweetAlert($alerta);
+    public function recuperaIntegrante($idAtracao)
+    {
+        return DbModel::consultaSimples("SELECT * FROM integrantes i INNER JOIN atracao_integrante ai on i.id = ai.integrante_id WHERE atracao_id = '$idAtracao'")->fetchAll(PDO::FETCH_OBJ);
     }
     
     public function exibeDescricaoAcao() {

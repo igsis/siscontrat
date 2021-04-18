@@ -109,4 +109,42 @@ class PedidoController extends PedidoModel
     {
         return DbModel::getInfo("verbas",$id)->fetchObject();
     }
+
+    /**
+     * @param $idPedido
+     * @return array
+     */
+    public function recuperaValorLocal($idPedido)
+    {
+        if (gettype($idPedido) == "string") {
+            $idPedido = MainModel::decryption($idPedido);
+        }
+        return DbModel::consultaSimples("SELECT l.local, ve.valor FROM valor_equipamentos AS ve
+            INNER JOIN locais l on ve.local_id = l.id
+            WHERE pedido_id = '$idPedido'")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    /**
+     * @param $idPedido
+     * @return object
+     */
+    public function recuperaParecer($idPedido):stdClass
+    {
+        if (gettype($idPedido) == "string") {
+            $idPedido = MainModel::decryption($idPedido);
+        }
+        return DbModel::consultaSimples("SELECT * FROM parecer_artisticos WHERE pedido_id = '$idPedido'")->fetchObject();
+    }
+
+    /**
+     * @param $idPedido
+     * @return array
+     */
+    public function recuperaPedidoEtapas($idPedido)
+    {
+        if (gettype($idPedido) == "string") {
+            $idPedido = MainModel::decryption($idPedido);
+        }
+        return DbModel::consultaSimples("SELECT * FROM pedido_etapas WHERE pedido_id = '$idPedido'")->fetchAll(PDO::FETCH_OBJ);
+    }
 }
