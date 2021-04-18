@@ -4,10 +4,13 @@ $pedidoAjax = true;
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
 require_once "../controllers/PedidoController.php";
+require_once "../controllers/EventoController.php";
 
 $pedidoObj = new PedidoController();
+$eventoObj = new EventoController();
 
 $pedido = $pedidoObj->recuperaPedido(2, 2);
+$evento = $eventoObj->recuperaEvento(4);
 ?>
 
 <html>
@@ -21,8 +24,12 @@ $pedido = $pedidoObj->recuperaPedido(2, 2);
 <div align="left">
     <pre>
         <?php
-        echo $pedido->numero_processo."<br>";
-        echo("The object is:\n");
+        var_dump($evento);
+        ?>
+    </pre>
+    <hr>
+    <pre>
+        <?php
         var_dump($pedido);
         ?>
     </pre>

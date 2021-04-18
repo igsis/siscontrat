@@ -9,31 +9,6 @@ if ($pedidoAjax) {
 
 class AtracaoController extends AtracaoModel
 {
-    public function listaAtracoes($evento_id){
-        $evento_id = MainModel::decryption($evento_id);
-        $consultaEvento = DbModel::consultaSimples("SELECT a.*, ci.classificacao_indicativa FROM atracoes AS a LEFT JOIN classificacao_indicativas ci on a.classificacao_indicativa_id = ci.id WHERE a.publicado = 1 AND a.evento_id = '$evento_id'");
-        $atracoes = $consultaEvento->fetchAll(PDO::FETCH_OBJ);
-        foreach ($atracoes as $key => $atracao) {
-            $produtor_id = MainModel::encryption($atracao->produtor_id);
-            $atracoes[$key]->produtor = (new ProdutorController)->recuperaProdutor($produtor_id)->fetchObject();
-
-            $atracoes[$key]->acoes = (object) $this->recuperaAtracaoAcao($atracao->id);
-        }
-        return $atracoes;
-    }
-
-    public function getAtracaoId($evento_id) {
-        $evento_id = MainModel::decryption($evento_id);
-        $atracao_id = DbModel::consultaSimples("SELECT id FROM atracoes WHERE evento_id = '$evento_id'")->fetch()['id'];
-        return MainModel::encryption($atracao_id);
-    }
-
-    public function recuperaAtracao($id) {
-        $id = MainModel::decryption($id);
-        $atracao = AtracaoModel::getAtracao($id);
-        return $atracao;
-    }
-
     public function insereAtracao($post){
         /* executa limpeza nos campos */
         $dadosAtracao = [];
@@ -152,7 +127,7 @@ class AtracaoController extends AtracaoModel
         }
         return MainModel::sweetAlert($alerta);
     }
-
+    
     public function exibeDescricaoAcao() {
         $acoes = DbModel::consultaSimples("SELECT acao, descricao FROM acoes WHERE publicado = '1' ORDER BY 1");
         foreach ($acoes->fetchAll() as $acao) {
@@ -162,37 +137,6 @@ class AtracaoController extends AtracaoModel
                 <td><?= $acao['descricao'] ?></td>
             </tr>
             <?php
-        }
-    }
-
-    public function validaAtracao($evento_id) {
-        $evento_id = MainModel::decryption($evento_id);
-        $atracoes = AtracaoModel::validaAtracaoModel($evento_id);
-
-        if ($atracoes) {
-            $existeErro = MainModel::in_array_r(true, $atracoes, true);
-            if ($existeErro) {
-                foreach ($atracoes as $key => $erro) {
-                    if ($erro != false) {
-                        foreach ($erro as $campo => $item) {
-                            if ($campo == 'produtor' || $campo == 'lider') {
-                                foreach ($item as $dado) {
-                                    if ($dado['bol']) {
-                                        $validacao[$key][] = $campo.": ".$dado['motivo'];
-                                    }
-                                }
-                            } else {
-                                if ($item['bol']) {
-                                    $validacao[$key][] = $item['motivo'];
-                                }
-                            }
-                        }
-                    }
-                }
-                return $validacao;
-            } else {
-                return false;
-            }
         }
     }
 }
