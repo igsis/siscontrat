@@ -242,10 +242,6 @@ class PessoaFisicaController extends PessoaFisicaModel
                 }
             }
 
-            // if ($_SESSION['modulo_s'] == 6 || $_SESSION['modulo_s'] == 7){ //formação ou jovem monitor
-            //     $_SESSION['origem_id_s'] = $id;
-            // }
-
             if($retornaId){
                 return $idDecryp;
             } else{
@@ -272,8 +268,17 @@ class PessoaFisicaController extends PessoaFisicaModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function recuperaPessoaFisica($id, $capac = false) {
-        $id = MainModel::decryption($id);
+    /**
+     * @param int|string $id
+     * @param false $capac
+     * <p>True se for para conectar no banco capac</p>
+     * @return object
+     */
+    public function recuperaPessoaFisica($id, $capac = false):stdClass
+    {
+        if (gettype($id == "string")){
+            $id = MainModel::decryption($id);
+        }
         $pf = DbModel::consultaSimples(
             "SELECT pf.*, pe.*, pb.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, gi.grau_instrucao, ns.nome_social 
             FROM pessoa_fisicas AS pf
@@ -295,7 +300,7 @@ class PessoaFisicaController extends PessoaFisicaModel
         foreach ($telefones as $key => $telefone) {
             $pf['telefones']['tel_'.$key] = $telefone['telefone'];
         }
-        return $pf;
+        return (object)$pf;
     }
 
     public function recuperaPessoaFisicaCapac($id) {

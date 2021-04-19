@@ -3,14 +3,12 @@ if ($pedidoAjax) {
     require_once "../models/PedidoModel.php";
     require_once "../controllers/PessoaFisicaController.php";
     require_once "../controllers/PessoaJuridicaController.php";
-    require_once "../controllers/LiderController.php";
     require_once "../controllers/RepresentanteController.php";
     require_once "../controllers/FormacaoController.php";
 } else {
     require_once "./models/PedidoModel.php";
     require_once "./controllers/PessoaFisicaController.php";
     require_once "./controllers/PessoaJuridicaController.php";
-    require_once "./controllers/LiderController.php";
     require_once "./controllers/RepresentanteController.php";
     require_once "./controllers/FormacaoController.php";
 }
