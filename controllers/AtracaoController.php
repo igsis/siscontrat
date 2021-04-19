@@ -35,20 +35,15 @@ class AtracaoController extends AtracaoModel
         return (object)$atracao;
     }
 
+    /**
+     * @param $idAtracao
+     * @return array
+     */
     public function recuperaIntegrante($idAtracao)
     {
-        return DbModel::consultaSimples("SELECT * FROM integrantes i INNER JOIN atracao_integrante ai on i.id = ai.integrante_id WHERE atracao_id = '$idAtracao'")->fetchAll(PDO::FETCH_OBJ);
-    }
-    
-    public function exibeDescricaoAcao() {
-        $acoes = DbModel::consultaSimples("SELECT acao, descricao FROM acoes WHERE publicado = '1' ORDER BY 1");
-        foreach ($acoes->fetchAll() as $acao) {
-            ?>
-            <tr>
-                <td><?= $acao['acao'] ?></td>
-                <td><?= $acao['descricao'] ?></td>
-            </tr>
-            <?php
+        if (gettype($idAtracao) == "string") {
+            $idAtracao = MainModel::decryption($idAtracao);
         }
+        return DbModel::consultaSimples("SELECT * FROM integrantes i INNER JOIN atracao_integrante ai on i.id = ai.integrante_id WHERE atracao_id = '$idAtracao'")->fetchAll(PDO::FETCH_OBJ);
     }
 }

@@ -1,179 +1,16 @@
 <?php
 if ($pedidoAjax) {
-    require_once "../models/EventoModel.php";
+    require_once "../models/MainModel.php";
     require_once "../controllers/PessoaFisicaController.php";
     require_once "../controllers/PessoaJuridicaController.php";
 } else {
-    require_once "./models/EventoModel.php";
+    require_once "./models/MainModel.php";
     require_once "./controllers/PessoaFisicaController.php";
     require_once "./controllers/PessoaJuridicaController.php";
 }
 
-class EventoController extends EventoModel
+class EventoController extends MainModel
 {
-    public function insereEvento($post, $oficina = false){
-        /* executa limpeza nos campos */
-        $dadosEvento = [];
-        unset($post['_method']);
-        foreach ($post as $campo => $valor) {
-            if (($campo != "publicos") && ($campo != "fomento_id")) {
-                $dadosEvento[$campo] = MainModel::limparString($valor);
-                unset($post[$campo]);
-            }
-        }
-        $dadosEvento['usuario_id'] = $_SESSION['usuario_id_s'];
-        $dadosEvento['data_cadastro'] = date('Y-m-d H:i:s');
-        /* /.limpeza */
-
-        /* cadastro */
-        $insere = DbModel::insert('eventos', $dadosEvento);
-        if ($insere->rowCount() >= 1) {
-            $evento_id = DbModel::connection()->lastInsertId();
-            $_SESSION['origem_id_s'] = MainModel::encryption($evento_id);
-            $atualizaRelacionamentoPublicos = MainModel::atualizaRelacionamento('evento_publico', 'evento_id', $evento_id, 'publico_id', $post['publicos']);
-
-            if ($atualizaRelacionamentoPublicos) {
-                if ($dadosEvento['fomento'] == 1) {
-                    $atualizaRelacionamentoFomento = MainModel::atualizaRelacionamento('evento_fomento', 'evento_id', $evento_id, 'fomento_id', $post['fomento_id']);
-                    if ($atualizaRelacionamentoFomento) {
-                        if ($oficina) {
-                            return $evento_id;
-                        }
-                        $alerta = [
-                            'alerta' => 'sucesso',
-                            'titulo' => 'Evento Cadastrado!',
-                            'texto' => 'Dados cadastrados com sucesso!',
-                            'tipo' => 'success',
-                            'location' => SERVERURL . 'eventos/evento_cadastro&key=' . MainModel::encryption($evento_id)
-                        ];
-                    } else {
-                        $alerta = [
-                            'alerta' => 'simples',
-                            'titulo' => 'Oops! Algo deu Errado!',
-                            'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                            'tipo' => 'error',
-                        ];
-                    }
-                } else {
-                    if ($oficina) {
-                        return $evento_id;
-                    }
-                    $alerta = [
-                        'alerta' => 'sucesso',
-                        'titulo' => 'Evento Cadastrado!',
-                        'texto' => 'Dados cadastrados com sucesso!',
-                        'tipo' => 'success',
-                        'location' => SERVERURL . 'eventos/evento_cadastro&key=' . MainModel::encryption($evento_id)
-                    ];
-                }
-            } else {
-                $alerta = [
-                    'alerta' => 'simples',
-                    'titulo' => 'Oops! Algo deu Errado!',
-                    'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                    'tipo' => 'error',
-                ];
-            }
-        } else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-        /* /.cadastro */
-        return MainModel::sweetAlert($alerta);
-    }
-
-    public function editaEvento($post,$evento_id, $oficina = false){
-        /* executa limpeza nos campos */
-        $dadosEvento = [];
-        unset($post['_method']);
-        unset($post['id']);
-        foreach ($post as $campo => $valor) {
-            if (($campo != "publicos") && ($campo != "fomento_id")) {
-                $dadosEvento[$campo] = MainModel::limparString($valor);
-                unset($post[$campo]);
-            }
-        }
-        /* /.limpeza */
-
-        // edição
-        $edita = DbModel::update("eventos",$dadosEvento,$evento_id);
-        if ($edita->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
-            $atualizaRelacionamentoPublicos = MainModel::atualizaRelacionamento('evento_publico', 'evento_id', $evento_id, 'publico_id', $post['publicos']);
-            if ($atualizaRelacionamentoPublicos) {
-                if ($dadosEvento['fomento'] == 1) {
-                    $atualizaRelacionamentoFomento = MainModel::atualizaRelacionamento('evento_fomento', 'evento_id', $evento_id, 'fomento_id', $post['fomento_id']);
-                    if ($atualizaRelacionamentoFomento) {
-                        $alerta = [
-                            'alerta' => 'sucesso',
-                            'titulo' => 'Evento Atualizado!',
-                            'texto' => 'Dados atualizados com sucesso!',
-                            'tipo' => 'success',
-                            'location' => SERVERURL . 'eventos/evento_cadastro&key=' . MainModel::encryption($evento_id)
-                        ];
-                    } else {
-                        $alerta = [
-                            'alerta' => 'simples',
-                            'titulo' => 'Oops! Algo deu Errado!',
-                            'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                            'tipo' => 'error',
-                        ];
-                    }
-                } else {
-                    DbModel::consultaSimples("DELETE FROM evento_fomento WHERE evento_id = '$evento_id'");
-                    $alerta = [
-                        'alerta' => 'sucesso',
-                        'titulo' => 'Evento Atualizado!',
-                        'texto' => 'Dados atualizados com sucesso!',
-                        'tipo' => 'success',
-                        'location' => SERVERURL . 'eventos/evento_cadastro&key=' . MainModel::encryption($evento_id)
-                    ];
-                }
-            } else {
-                $alerta = [
-                    'alerta' => 'simples',
-                    'titulo' => 'Oops! Algo deu Errado!',
-                    'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                    'tipo' => 'error',
-                ];
-            }
-
-        } else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-        /* /.edicao */
-        return MainModel::sweetAlert($alerta);
-    }
-
-    public function apagaEvento($id){
-        $apaga = DbModel::apaga("eventos", $id);
-        if ($apaga){
-            $alerta = [
-                'alerta' => 'sucesso',
-                'titulo' => 'Evento',
-                'texto' => 'Evento apagado com sucesso!',
-                'tipo' => 'danger',
-                'location' => SERVERURL.'eventos/evento_lista'
-            ];
-        }else {
-            $alerta = [
-                'alerta' => 'simples',
-                'titulo' => 'Oops! Algo deu Errado!',
-                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
-                'tipo' => 'error',
-            ];
-        }
-        return MainModel::sweetAlert($alerta);
-    }
-
     /**
      * @param int|string $idEvento
      * @return object
@@ -205,18 +42,6 @@ class EventoController extends EventoModel
         $evento['publicos'] = substr($lista,0,-2);
 
         return (object)$evento;
-    }
-
-    public function exibeDescricaoPublico() {
-        $publicos = DbModel::consultaSimples("SELECT publico, descricao FROM publicos WHERE publicado = '1' ORDER BY 1");
-        foreach ($publicos->fetchAll() as $publico) {
-            ?>
-            <tr>
-                <td><?= $publico['publico'] ?></td>
-                <td><?= $publico['descricao'] ?></td>
-            </tr>
-            <?php
-        }
     }
 
     public function notificacaoEventos($id)
