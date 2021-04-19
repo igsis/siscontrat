@@ -78,7 +78,7 @@ if ($pedido->verba_id == 22){ //Transferência de outra secretaria
         <p>&nbsp;</p>
         <p>
             <strong>Sr(a). Responsável,</strong><br>
-            O presente processo trata de <?= $nome ?>, <?= $contratacao->programa ?>, <?= $contratacao->linguagem ?> NOS TERMOS DO EDITAL - <?= strtoupper($contratacao->edital) ?> - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL, no valor de R$ <?= (new MainModel)->dinheiroParaBr($pedido->valor_total) ?> ( <?=  (new MainModel)->valorPorExtenso($pedido->valor_total) ?>), conforme solicitação (link da solicitação), foram anexados os documentos necessários exigidos no edital, no período de <?= $formObj->retornaPeriodoFormacao($pedido->origem_id) ?>.
+            O presente processo trata de <?= $nome ?>, <?= $contratacao->programa ?>, <?= $contratacao->linguagem ?> NOS TERMOS DO EDITAL - <?= strtoupper($contratacao->edital) ?> - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL, no valor de R$ <?= (new MainModel)->dinheiroParaBr($pedido->valor_total) ?> ( <?=  (new MainModel)->valorPorExtenso($pedido->valor_total) ?>), conforme solicitação ( ), foram anexados os documentos necessários exigidos no edital, no período de <?= $formObj->retornaPeriodoFormacao($pedido->origem_id) ?>.
         </p>
         <p>&nbsp;</p>
         <?= $topico ?>
