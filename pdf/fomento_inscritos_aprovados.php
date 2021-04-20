@@ -22,6 +22,7 @@ $fomentoObj = new FomentoController();
 $arqObj = new ArquivoController();
 
 $edital = $fomentoObj->recuperaEdital($id);
+$tipo_contratacao = $fomentoObj->recuperaTipoContratacao($id);
 $nomeEdital = $edital->titulo;
 $pessoaTipo = $edital->pessoa_tipos_id;
 $inscritos = $fomentoObj->listaInscritos($id, $pessoaTipo,$aprovado);

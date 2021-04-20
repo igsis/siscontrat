@@ -5,9 +5,11 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
 require_once "../controllers/FormacaoController.php";
+require_once "../controllers/PessoaFisicaController.php";
 require_once "../controllers/PedidoController.php";
 
 $formObj = new FormacaoController();
+$pfObj = new PessoaFisicaController();
 
 $pedido_id = $_GET['id'];
 
@@ -28,11 +30,12 @@ class PDF extends FPDF
 
 $pedido = $formObj->recuperaPedido($pedido_id);
 $contratacao = $formObj->recuperaContratacao($pedido->origem_id);
-$pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
-$telPf = $formObj->recuperaTelPf($pedido->pessoa_fisica_id);
+$pf = $pfObj->recuperaPessoaFisica($pfObj->encryption($pedido->pessoa_fisica_id));
 $Observacao = "Todas as atividades dos programas da Supervisão de Formação são inteiramente gratuitas e é terminantemente proibido cobrar por elas sob pena de multa e rescisão de contrato.";
 $penalidades = PedidoController::retornaPenalidades(20);
 $dadosParcelas = $formObj->retornaDadosParcelas($pedido->origem_id);
+
+$nome = $pf->nome_social != null ? "{$pf->nome_social} ({$pf->nome})" : $pf->nome;
 
 $ano = date('Y');
 
@@ -46,7 +49,7 @@ $l = 7; //DEFINE A ALTURA DA LINHA
 
 $pdf->SetXY($x, 35);// SetXY - DEFINE O X (largura) E O Y (altura) NA PÁGINA
 
-$pdf->SetTitle("Proposta Vocacional");
+$pdf->SetTitle(utf8_decode("Proposta Formação"));
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -67,7 +70,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(12, $l, 'Nome:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(120, $l, utf8_decode($pf->nome), 0, 'L', 0);
+$pdf->MultiCell(120, $l, utf8_decode($nome), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -99,7 +102,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(36, $l, 'Data de Nascimento:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(21, $l, utf8_decode(MainModel::dataParaBR($pf->data_nascimento) == "00-00-0000" ? "Não cadastrado" : MainModel::dataParaBR($pf->data_nascimento)), 0, 0, 'L');
+$pdf->Cell(30, $l, utf8_decode(MainModel::validaData($pf->data_nascimento)), 0, 0, 'L');
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(26, $l, "Nacionalidade:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
@@ -107,7 +110,7 @@ $pdf->Cell(43, $l, utf8_decode(MainModel::checaCampo($pf->nacionalidade)), 0, 0,
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(10, $l, "CCM:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(30, $l, utf8_decode(MainModel::checaCampo($pf->ccm)), 0, 0, 'L');
+$pdf->Cell(21, $l, utf8_decode(MainModel::checaCampo($pf->ccm)), 0, 0, 'L');
 
 $pdf->Ln(7);
 
@@ -127,7 +130,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(21, $l, 'Telefone(s):', '0', '0', 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(168, $l, utf8_decode($telPf), 0, 'L', 0);
+$pdf->MultiCell(168, $l, utf8_decode($pf->telefones['tel_0'] ?? null . " " .$pf->telefones['tel_1'] ?? null. " ".$pf->telefones['tel_2'] ?? null), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -195,7 +198,7 @@ $pdf->MultiCell(155, $l, utf8_decode($pedido->cargo_justificativa));
 //RODAPÉ PERSONALIZADO
 $pdf->SetXY($x, 262);
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(100, 4, utf8_decode($pf->nome), 'T', 1, 'L');
+$pdf->Cell(100, 4, utf8_decode($nome), 'T', 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -235,7 +238,7 @@ $pdf->Cell(180, $l, utf8_decode("Data: _________ / _________ / " . $ano) . ".", 
 
 $pdf->SetXY($x, 262);
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(100, 4, utf8_decode($pf->nome), 'T', 1, 'L');
+$pdf->Cell(100, 4, utf8_decode($nome), 'T', 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -265,7 +268,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(12, $l, 'Nome:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(120, $l, utf8_decode($pf->nome), 0, 'L', 0);
+$pdf->MultiCell(120, $l, utf8_decode($nome), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -308,7 +311,7 @@ $pdf->Cell(180, $l, utf8_decode("São Paulo, ______ de ____________________ de "
 
 $pdf->SetXY($x, 262);
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(100, 4, utf8_decode($pf->nome), 'T', 1, 'L');
+$pdf->Cell(100, 4, utf8_decode($nome), 'T', 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -321,6 +324,5 @@ if ($pf->passaporte != NULL) {
     $pdf->Cell(100, 4, "CPF: " . $pf->cpf, 0, 0, 'L');
 }
 
-$pdf->Output('Proposta Formação', "I");
+$pdf->Output('Proposta_'.$contratacao->programa.'.pdf', "I");
 ?>
-

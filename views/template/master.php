@@ -5,6 +5,7 @@ $pedidoAjax = false;
 
 require_once './controllers/EventoController.php';
 
+$view = $template->exibirViewController();
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +42,7 @@ require_once './controllers/EventoController.php';
     <!-- Select2 -->
     <link rel="stylesheet" href="<?= SERVERURL ?>views/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="<?= SERVERURL ?>views/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-
+    <?= $template->exibeJivoChat($view) ?>
 </head>
 <!--<body class="hold-transition login-page">-->
 <body class="hold-transition sidebar-mini">
@@ -113,7 +114,7 @@ else:
    style="position:fixed;bottom:40px;right:40px;text-align:center;
    box-shadow: 1px 1px 2px #888;z-index:1000;">
     <i class="fas fa-exclamation-circle"></i>
-    Deixe sua opnião</a>
+    Deixe sua opinião</a>
 
 <!-- jQuery -->
 <script src="<?= SERVERURL ?>views/plugins/jquery/jquery.min.js"></script>

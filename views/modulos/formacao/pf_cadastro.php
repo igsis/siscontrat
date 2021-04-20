@@ -12,16 +12,16 @@ $insPessoaFisica = new PessoaFisicaController();
 
 if ($id && $type == null) {
     $pf = $insPessoaFisica->recuperaPessoaFisica($id);
-    $documento = $pf['cpf'];
+    $documento = $pf->cpf;
 }
 
 if (isset($_POST['pf_cpf'])){
     $documento = $_POST['pf_cpf'];
     $pf = $insPessoaFisica->getCPF($documento)->fetch();
     if ($pf){
-        $id = MainModel::encryption($pf['id']);
+        $id = MainModel::encryption($pf->id);
         $pf = $insPessoaFisica->recuperaPessoaFisica($id);
-        $documento = $pf['cpf'];
+        $documento = $pf->cpf;
     }
 }
 
@@ -32,7 +32,7 @@ if ($type == 1){
 
 if ($idCapac){
     $pf = $insPessoaFisica->recuperaPessoaFisicaCapac($idCapac);
-    $documento = $pf['cpf'];
+    $documento = $pf->cpf;
 }
 
 ?>
@@ -72,20 +72,27 @@ if ($idCapac){
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="nome">Nome: *</label>
-                                    <input type="text" class="form-control" name="pf_nome" placeholder="Digite o nome" maxlength="70" value="<?= $pf['nome'] ?? "" ?>" required
+                                    <input type="text" class="form-control" name="pf_nome" placeholder="Digite o nome" maxlength="70" value="<?= $pf->nome ?? "" ?>" required
                                            placeholder="Digite o nome" title="Apenas letras"
                                            pattern="[a-zA-ZàèìòùÀÈÌÒÙâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇáéíóúýÁÉÍÓÚÝ ]{1,70}">
                                 </div>
                                 <div class="form-group col-md-6">
+                                    <label for="nomeSocial">Nome Social:</label>
+                                    <input type="text" class="form-control" name="ns_nome_social" placeholder="Digite o nome social" maxlength="70" value="<?= $pf->nome_social ?? "" ?>">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-12">
                                     <label for="nomeArtistico">Nome Artístico:</label>
-                                    <input type="text" class="form-control" name="pf_nome_artistico" placeholder="Digite o nome artistico" maxlength="70" value="<?= $pf['nome_artistico'] ?? "" ?>">
+                                    <input type="text" class="form-control" name="pf_nome_artistico" placeholder="Digite o nome artistico" maxlength="70" value="<?= $pf->nome_artistico ?? "" ?>">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="form-group col-md-2">
                                     <label for="rg">RG: *</label>
-                                    <input type="text" class="form-control" name="pf_rg" placeholder="Digite o RG" maxlength="20" value="<?= $pf['rg'] ?? ""?>" required>
+                                    <input type="text" class="form-control" name="pf_rg" placeholder="Digite o RG" maxlength="20" value="<?= $pf->rg ?? ""?>" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cpf">CPF: </label>
@@ -93,19 +100,19 @@ if ($idCapac){
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="ccm">CCM:</label>
-                                    <input type="text" id="ccm" name="pf_ccm" class="form-control" placeholder="Digite o CCM" maxlength="11" value="<?= $pf['ccm'] ?? ""?>">
+                                    <input type="text" id="ccm" name="pf_ccm" class="form-control" placeholder="Digite o CCM" maxlength="11" value="<?= $pf->ccm ?? ""?>">
                                 </div>
 
                                 <div class="form-group col-md-3">
                                     <label for="dataNascimento">Data de Nascimento: *</label>
-                                    <input type="date" class="form-control" id="data_nascimento" name="pf_data_nascimento" onkeyup="barraData(this);" value="<?= $pf['data_nascimento'] ?? "" ?>" required/>
+                                    <input type="date" class="form-control" id="data_nascimento" name="pf_data_nascimento" onkeyup="barraData(this);" value="<?= $pf->data_nascimento ?? "" ?>" required/>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="nacionalidade">Nacionalidade: *</label>
                                     <select class="form-control select2bs4" id="nacionalidade" name="pf_nacionalidade_id" required>
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $insPessoaFisica->geraOpcao("nacionalidades",$pf['nacionalidade_id']);
+                                        $insPessoaFisica->geraOpcao("nacionalidades",$pf->nacionalidade_id);
                                         ?>
                                     </select>
                                 </div>
@@ -114,26 +121,26 @@ if ($idCapac){
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="email">E-mail: *</label>
-                                    <input type="email" name="pf_email" class="form-control" maxlength="60" placeholder="Digite o E-mail" value="<?= $pf['email'] ?? "" ?>" required>
+                                    <input type="email" name="pf_email" class="form-control" maxlength="60" placeholder="Digite o E-mail" value="<?= $pf->email ?? "" ?>" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>Telefone #1: *</label>
-                                    <input type="text" id="telefone" name="te_telefone_1" onkeyup="mascara( this, mtel );"  class="form-control" placeholder="Digite o telefone" required value="<?= $pf['telefones']['tel_0'] ?? "" ?>" maxlength="15">
+                                    <input type="text" id="telefone" name="te_telefone_1" onkeyup="mascara( this, mtel );"  class="form-control" placeholder="Digite o telefone" required value="<?= $pf->telefones['tel_0'] ?? "" ?>" maxlength="15">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>Telefone #2:</label>
-                                    <input type="text" id="telefone1" name="te_telefone_2" onkeyup="mascara( this, mtel );"  class="form-control" placeholder="Digite o telefone" maxlength="15" value="<?= $pf['telefones']['tel_1'] ?? "" ?>">
+                                    <input type="text" id="telefone1" name="te_telefone_2" onkeyup="mascara( this, mtel );"  class="form-control" placeholder="Digite o telefone" maxlength="15" value="<?= $pf->telefones['tel_1'] ?? "" ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>Telefone #3:</label>
-                                    <input type="text" id="telefone2" name="te_telefone_3" onkeyup="mascara( this, mtel );"  class="form-control telefone" placeholder="Digite o telefone" maxlength="15" value="<?= $pf['telefones']['tel_2'] ?? "" ?>">
+                                    <input type="text" id="telefone2" name="te_telefone_3" onkeyup="mascara( this, mtel );"  class="form-control telefone" placeholder="Digite o telefone" maxlength="15" value="<?= $pf->telefones['tel_2'] ?? "" ?>">
                                 </div>
                             </div>
                             <hr/>
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="cep">CEP: *</label>
-                                    <input type="text" class="form-control" name="en_cep" id="cep" onkeypress="mask(this, '#####-###')" maxlength="9" placeholder="Digite o CEP" required value="<?= $pf['cep'] ?? "" ?>" >
+                                    <input type="text" class="form-control" name="en_cep" id="cep" onkeypress="mask(this, '#####-###')" maxlength="9" placeholder="Digite o CEP" required value="<?= $pf->cep ?? "" ?>" >
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>&nbsp;</label><br>
@@ -143,7 +150,7 @@ if ($idCapac){
                             <div class="row align-items-end">
                                 <div class="form-group col-3">
                                     <label for="rua">Rua: *</label>
-                                    <input type="text" class="form-control" name="en_logradouro" id="rua" placeholder="Digite a rua" maxlength="200" value="<?= $pf['logradouro'] ?? "" ?>" readonly>
+                                    <input type="text" class="form-control" name="en_logradouro" id="rua" placeholder="Digite a rua" maxlength="200" value="<?= $pf->logradouro ?? "" ?>" readonly>
                                 </div>
                                 <div class="form-group col-2">
                                     <label for="numero">
@@ -152,23 +159,23 @@ if ($idCapac){
                                             <i class="fas fa-info-circle"></i>
                                         </button>
                                     </label>
-                                    <input type="number" min="0" name="en_numero" class="form-control" placeholder="Ex.: 10" value="<?= $pf['numero'] ?? "" ?>" required>
+                                    <input type="number" min="0" name="en_numero" class="form-control" placeholder="Ex.: 10" value="<?= $pf->numero ?? "" ?>" required>
                                 </div>
                                 <div class="form-group col-2">
                                     <label for="complemento">Complemento:</label>
-                                    <input type="text" name="en_complemento" class="form-control" maxlength="20" placeholder="Digite o complemento" value="<?= $pf['complemento'] ??""?>">
+                                    <input type="text" name="en_complemento" class="form-control" maxlength="20" placeholder="Digite o complemento" value="<?= $pf->complemento ??""?>">
                                 </div>
                                 <div class="form-group col-2">
                                     <label for="bairro">Bairro: *</label>
-                                    <input type="text" class="form-control" name="en_bairro" id="bairro" placeholder="Digite o Bairro" maxlength="80" value="<?= $pf['bairro'] ?? ""?>" readonly>
+                                    <input type="text" class="form-control" name="en_bairro" id="bairro" placeholder="Digite o Bairro" maxlength="80" value="<?= $pf->bairro ?? ""?>" readonly>
                                 </div>
                                 <div class="form-group col-2">
                                     <label for="cidade">Cidade: *</label>
-                                    <input type="text" class="form-control" name="en_cidade" id="cidade" placeholder="Digite a cidade" maxlength="50" value="<?= $pf['cidade'] ?? "" ?>" readonly>
+                                    <input type="text" class="form-control" name="en_cidade" id="cidade" placeholder="Digite a cidade" maxlength="50" value="<?= $pf->cidade ?? "" ?>" readonly>
                                 </div>
                                 <div class="form-group col-1">
                                     <label for="estado">Estado: *</label>
-                                    <input type="text" class="form-control" name="en_uf" id="estado" maxlength="2" placeholder="Ex.: SP" value="<?= $pf['uf'] ?? "" ?>" readonly>
+                                    <input type="text" class="form-control" name="en_uf" id="estado" maxlength="2" placeholder="Ex.: SP" value="<?= $pf->uf ?? "" ?>" readonly>
                                 </div>
                             </div>
                             <hr/>
@@ -180,24 +187,24 @@ if ($idCapac){
                                             <select class="form-control select2bs4" id="regiao_id" name="dt_regiao_id" required>
                                                 <option value="">Selecione uma opção...</option>
                                                 <?php
-                                                $insPessoaFisica->geraOpcao("regiaos",$pf['regiao_id']);
+                                                $insPessoaFisica->geraOpcao("regiaos",$pf->regiao_id);
                                                 ?>
                                             </select>
                                         </div>
                                         <div class="form-group col">
                                             <label for="nit">NIT: *</label>
-                                            <input type="text" id="nit" name="ni_nit" class="form-control" maxlength="45" placeholder="Digite o NIT" required value="<?= $pf['nit'] ?? "" ?>">
+                                            <input type="text" id="nit" name="ni_nit" class="form-control" maxlength="45" placeholder="Digite o NIT" required value="<?= $pf->nit ?? "" ?>">
                                         </div>
                                         <div class="form-group col">
                                             <label for="drt">DRT: </label>
-                                            <input type="text" id="drt" name="dr_drt" class="form-control" maxlength="45" placeholder="Digite o DRT em caso de artes cênicas" value="<?= $pf['drt'] ?? "" ?>">
+                                            <input type="text" id="drt" name="dr_drt" class="form-control" maxlength="45" placeholder="Digite o DRT em caso de artes cênicas" value="<?= $pf->drt ?? "" ?>">
                                         </div>
                                         <div class="form-group col">
                                             <label for="grau_instrucao_id">Grau Instrução: *</label>
                                             <select class="form-control select2bs4" id="grau_instrucao_id" name="dt_grau_instrucao_id" required>
                                                 <option value="">Selecione uma opção...</option>
                                                 <?php
-                                                $insPessoaFisica->geraOpcao("grau_instrucoes",$pf['grau_instrucao_id']);
+                                                $insPessoaFisica->geraOpcao("grau_instrucoes",$pf->grau_instrucao_id);
                                                 ?>
                                             </select>
                                         </div>
@@ -208,7 +215,7 @@ if ($idCapac){
                                             <select class="form-control select2bs4" id="etnia_id" name="dt_etnia_id" required>
                                                 <option value="">Selecione uma opção...</option>
                                                 <?php
-                                                $insPessoaFisica->geraOpcao("etnias",$pf['etnia_id']);
+                                                $insPessoaFisica->geraOpcao("etnias",$pf->etnia_id);
                                                 ?>
                                             </select>
                                         </div>
@@ -217,7 +224,7 @@ if ($idCapac){
                                             <select class="form-control select2bs4" id="genero" name="dt_genero_id" required>
                                                 <option value="">Selecione uma opção...</option>
                                                 <?php
-                                                $insPessoaFisica->geraOpcao("generos",$pf['genero_id'] ?? '',true);
+                                                $insPessoaFisica->geraOpcao("generos",$pf->genero_id ?? '',true);
                                                 ?>
                                             </select>
                                         </div>
@@ -225,8 +232,8 @@ if ($idCapac){
                                             <label for="dt_trans">Trans</label><br>
                                             <input type="checkbox" class="form-control-sm checkbox-grid-2 float-left" id="dt_trans" name="dt_trans" value="1"
                                                 <?php
-                                                if (isset($pf['trans'])){
-                                                    if ($pf['trans'] == 1){
+                                                if (isset($pf->trans)){
+                                                    if ($pf->trans == 1){
                                                         echo 'checked';
                                                     }
                                                 }
@@ -237,8 +244,8 @@ if ($idCapac){
                                             <label for="dt_pcd">PCD</label><br>
                                             <input type="checkbox" class="form-control-sm checkbox-grid-2 float-left" id="dt_pcd" name="dt_pcd" value="1"
                                                 <?php
-                                                if (isset($pf['pcd'])){
-                                                    if ($pf['pcd'] == 1){
+                                                if (isset($pf->pcd)){
+                                                    if ($pf->pcd == 1){
                                                         echo 'checked';
                                                     }
                                                 }
@@ -252,7 +259,7 @@ if ($idCapac){
                             <div class="row">
                                 <div class="form-group col-md-12">
                                     <label for="curriculo">Currículo:</label>
-                                    <textarea class="form-control" id="curriculo" name="dt_curriculo" rows="5"><?= $pf['curriculo'] ?? "" ?></textarea>
+                                    <textarea class="form-control" id="curriculo" name="dt_curriculo" rows="5"><?= $pf->curriculo ?? "" ?></textarea>
                                 </div>
                             </div>
                             <hr/>
@@ -268,17 +275,17 @@ if ($idCapac){
                                     <select id="banco" name="bc_banco_id" class="form-control select2bs4">
                                         <option value="">Selecione um banco...</option>
                                         <?php
-                                        $insPessoaFisica->geraOpcao("bancos", $pf['banco_id']);
+                                        $insPessoaFisica->geraOpcao("bancos", $pf->banco_id);
                                         ?>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="agencia">Agência:</label>
-                                    <input type="text" id="agencia" name="bc_agencia" class="form-control" placeholder="Digite a Agência" maxlength="12" value="<?= $pf['agencia'] ?? ""?>">
+                                    <input type="text" id="agencia" name="bc_agencia" class="form-control" placeholder="Digite a Agência" maxlength="12" value="<?= $pf->agencia ?? ""?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="conta">Conta:</label>
-                                    <input type="text" id="conta" name="bc_conta" class="form-control" placeholder="Digite a Conta" maxlength="12" value="<?= $pf['conta'] ?? "" ?>">
+                                    <input type="text" id="conta" name="bc_conta" class="form-control" placeholder="Digite a Conta" maxlength="12" value="<?= $pf->conta ?? "" ?>">
                                 </div>
                             </div>
                         </div>
@@ -319,7 +326,7 @@ if ($idCapac){
                             </div>
 
                             <div class="form-group col">
-                                <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= $id ?>" target="_blank">
+                                <a href="<?= SERVERURL ?>pdf/facc_pf.php?id=<?= $id ?>" target="_blank">
                                     <button type="submit" class="btn btn-info pull-right btn-block">Clique aqui para
                                         gerar a FACC
                                     </button>

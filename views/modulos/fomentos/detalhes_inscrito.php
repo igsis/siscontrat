@@ -20,7 +20,6 @@ $tipo_contratacao_id = $fomentoObj->recuperaTipoContratacao((string)MainModel::e
 $lista_documento_ids = $arqObj->recuperaIdListaDocumento(MainModel::encryption($projeto['fom_edital_id']), true)->fetchAll(PDO::FETCH_COLUMN);
 $arqEnviados = $arqObj->listarArquivosEnviados(MainModel::encryption($projeto['id']), $lista_documento_ids, $tipo_contratacao_id)->fetchAll(PDO::FETCH_OBJ);
 $strArquivos = '';
-
 ?>
 
 <!-- Content Header (Page header) -->
@@ -112,6 +111,14 @@ $strArquivos = '';
                                         <span class="font-weight-bold">Responsável pela inscrição:</span>
                                         <span class="text-left"><?= $projeto['responsavel_inscricao'] ?></span>
                                     </p>
+
+                                    <?php if($tipo_contratacao_id == 24): ?>
+                                        <p>
+                                            <span class="font-weight-bold">Área de inscrição:</span>
+                                            <span class="text-left"><?= $fomentoObj->recuperaDadosEditalPeriferia($projeto['id']) ?></span>
+                                        </p>
+                                    <?php endif; ?>
+
                                     <p>
                                         <span class="font-weight-bold">Valor do projeto:</span>
                                         <span id="dinheiro"> <?= $projeto['valor_projeto'] ?></span>

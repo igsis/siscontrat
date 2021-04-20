@@ -1,6 +1,7 @@
 <?php
 define('SERVERURL', "http://{$_SERVER['HTTP_HOST']}/siscontrat/");
-define('SIS2URL', "http://{$_SERVER['HTTP_HOST']}/siscontrat2/visual/index.php");
+define('SIS2URL', SERVERURL."siscontrat2/visual/index.php");
+define('PDFURL', SERVERURL."pdf/");
 define('CAPACURL', "http://{$_SERVER['HTTP_HOST']}/capac/");
 define('NOMESIS', "SisContrat");
 define('SMTP', 'no.replay@teste.com');

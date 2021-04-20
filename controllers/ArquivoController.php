@@ -309,4 +309,28 @@ class ArquivoController extends ArquivoModel
         return DbModel::consultaSimples("SELECT documento FROM formacao_lista_documentos WHERE id = $idDocumento")->fetchObject()->documento;
     }
 
+    /**
+     * @param $idEvento
+     * @return array
+     */
+    public function recuperaArquivoComProd($idEvento)
+    {
+        if (gettype($idEvento) == "string") {
+            $idEvento = MainModel::decryption($idEvento);
+        }
+        return DbModel::consultaSimples("SELECT * FROM arquivos as arq INNER JOIN lista_documentos AS ld ON arq.lista_documento_id = ld.id  WHERE arq.origem_id = '$idEvento' AND arq.publicado = '1' ORDER BY arq.id")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    /**
+     * @param $idPedido
+     * @return array
+     */
+    public function recuperaArquivoPedido($idPedido)
+    {
+        return DbModel::consultaSimples("SELECT * FROM lista_documentos as list
+            INNER JOIN arquivos as arq ON arq.lista_documento_id = list.id
+            WHERE arq.origem_id = '$idPedido' AND list.tipo_documento_id = 3
+            AND arq.publicado = '1' ORDER BY arq.id")->fetchAll(PDO::FETCH_OBJ);
+    }
+
 }

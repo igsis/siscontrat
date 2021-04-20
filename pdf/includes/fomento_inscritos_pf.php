@@ -1,6 +1,11 @@
 <?php
+/** @var PHPExcel $objPHPExcel */
+/** @var FomentoController $fomentoObj */
+/** @var object $inscritos */
+/** @var int $tipo_contratacao */
 
 //Colorir o header
+
 $objPHPExcel->getActiveSheet()->getStyle("A1:AB1")->applyFromArray
 (
     array
@@ -41,14 +46,24 @@ $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue("X2", "Bairro")
     ->setCellValue("Y2", "Cidade")
     ->setCellValue("Z2", "Estado")
-    ->setCellValue("AA2", "Subprefeitura")
-    ->setCellValue("AB2", "Anexos");
+    ->setCellValue("AA2", "Subprefeitura");
+
+if ($tipo_contratacao == 24) {
+    $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue("AB2", "Area de Inscrição")
+        ->setCellValue("AC2", "Anexos");
+    $celulas = "A2:AC2";
+} else {
+    $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue("AB2", "Anexos");
+    $celulas = "A2:AB2";
+}
 
 // Definimos o estilo da fonte
-$objPHPExcel->getActiveSheet()->getStyle('A2:AB2')->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle($celulas)->getFont()->setBold(true);
 
 //Colorir a primeira linha
-$objPHPExcel->getActiveSheet()->getStyle('A2:AB2')->applyFromArray
+$objPHPExcel->getActiveSheet()->getStyle($celulas)->applyFromArray
 (
     array
     (
@@ -92,12 +107,15 @@ foreach ($inscritos as $inscrito){
     $z = "Z" . $cont;
     $aa = "AA" . $cont;
     $ab = "AB" . $cont;
+    if ($tipo_contratacao == 24) {
+        $ac = "AC" . $cont;
+    }
 
     require_once "../controllers/PessoaFisicaController.php";
     $pessoaFisicaObj = new PessoaFisicaController();
     $pf = $pessoaFisicaObj->recuperaPessoaFisica($pessoaFisicaObj->encryption($inscrito->pessoa_fisica_id), true);
     $usuario = $pessoaFisicaObj->consultaSimples("SELECT nome FROM `usuarios` WHERE `id` = $inscrito->usuario_id", true)->fetchColumn();
-    $pfDados = $pessoaFisicaObj->recuperaPfDados($pf['id'])->fetchObject();
+    $pfDados = $pessoaFisicaObj->recuperaPfDados($pf->id)->fetchObject();
 
     $zip = SERVERURL."api/downloadInscritos.php?id=".$inscrito->id;
 
@@ -114,28 +132,40 @@ foreach ($inscritos as $inscrito){
         ->setCellValue($h, $inscrito->representante_nucleo)
         ->setCellValue($i, $inscrito->coletivo_produtor)
         ->setCellValue($j, $inscrito->nucleo_artistico)
-        ->setCellValue($k, $pf['nome'])
-        ->setCellValue($l, $pf['cpf'])
+        ->setCellValue($k, $pf->nome)
+        ->setCellValue($l, $pf->cpf)
         ->setCellValue($m, $pfDados->genero)
         ->setCellValue($n, $pfDados->descricao)
-        ->setCellValue($o, $fomentoObj->dataParaBR($pf['data_nascimento']))
+        ->setCellValue($o, $fomentoObj->dataParaBR($pf->data_nascimento))
         ->setCellValue($p, $pfDados->rede_social)
         ->setCellValue($q, $pfDados->grau_instrucao)
-        ->setCellValue($r, $pf['email'])
-        ->setCellValue($s, $pf['telefones']['tel_0'])
-        ->setCellValue($t, $pf['telefones']['tel_1'])
-        ->setCellValue($u, $pf['cep'])
-        ->setCellValue($v, $pf['logradouro'])
-        ->setCellValue($w, $pf['numero'])
-        ->setCellValue($x, $pf['bairro'])
-        ->setCellValue($y, $pf['cidade'])
-        ->setCellValue($z, $pf['uf'])
-        ->setCellValue($aa,$pfDados->subprefeitura)
-        ->setCellValue($ab, 'download');
+        ->setCellValue($r, $pf->email)
+        ->setCellValue($s, $pf->telefones['tel_0'])
+        ->setCellValue($t, $pf->telefones['tel_1'])
+        ->setCellValue($u, $pf->cep)
+        ->setCellValue($v, $pf->logradouro)
+        ->setCellValue($w, $pf->numero)
+        ->setCellValue($x, $pf->bairro)
+        ->setCellValue($y, $pf->cidade)
+        ->setCellValue($z, $pf->uf)
+        ->setCellValue($aa,$pfDados->subprefeitura);
 
+    if ($tipo_contratacao == 24) {
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($ab, $inscrito->area)
+            ->setCellValue($ac, 'download');
+    } else {
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue($ab, 'download');
+    }
 
-    $objPHPExcel->getActiveSheet()->getCell($ab)->getHyperlink()->setUrl($zip);
-    $objPHPExcel->getActiveSheet()->getCell($ab)->getStyle()->applyFromArray($linkStyle);
+    if ($tipo_contratacao == 24) {
+        $objPHPExcel->getActiveSheet()->getCell($ac)->getHyperlink()->setUrl($zip);
+        $objPHPExcel->getActiveSheet()->getCell($ac)->getStyle()->applyFromArray($linkStyle);
+    } else {
+        $objPHPExcel->getActiveSheet()->getCell($ab)->getHyperlink()->setUrl($zip);
+        $objPHPExcel->getActiveSheet()->getCell($ab)->getStyle()->applyFromArray($linkStyle);
+    }
 
     $cont++;
 }
@@ -171,3 +201,4 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('Y')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('Z')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('AA')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setAutoSize(true);
