@@ -49,7 +49,7 @@ $pf_id = $formObj->recuperaPedido($id)->pessoa_fisica_id;
                         <div class="col">
                             <div class="card">
                                 <div class="card-body">
-                                    <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= MainModel::encryption($pf_id) ?>" target="_blank">
+                                    <a href="<?= SERVERURL ?>pdf/facc_pf.php?id=<?= MainModel::encryption($pf_id) ?>" target="_blank">
                                         <button class="btn btn-primary btn-block">FACC</button>
                                     </a>
                                 </div>

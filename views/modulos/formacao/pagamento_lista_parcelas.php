@@ -58,7 +58,7 @@ $i = 1;
                         </div>
                         <div class="row">
                             <div class="col-md">
-                                <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= MainModel::encryption($pedido->pessoa_fisica_id) ?>"
+                                <a href="<?= SERVERURL ?>pdf/facc_pf.php?id=<?= MainModel::encryption($pedido->pessoa_fisica_id) ?>"
                                    target="_blank">
                                     <button class="btn btn-primary">Gerar FACC</button>
                                 </a>

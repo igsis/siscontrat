@@ -105,7 +105,7 @@ if ($pedido['pessoa_tipo_id'] == 1) {
     $pdf->SetFont('Arial', 'B', 11);
     $pdf->Cell(14, $l, utf8_decode('Nome:'), 0, 0, 'L');
     $pdf->SetFont('Arial', '', 11);
-    $pdf->Cell(150, $l, utf8_decode($pf['nome']), 0, 1, 'L');
+    $pdf->Cell(150, $l, utf8_decode($pf->nome), 0, 1, 'L');
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial', 'B', 11);

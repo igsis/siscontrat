@@ -995,7 +995,7 @@ class FormacaoController extends FormacaoModel
         $pfObj = new PessoaFisicaController();
         $idPf = $this->encryption($form['pessoa_fisica_id']);
         $pf = $pfObj->recuperaPessoaFisica($idPf);
-        $contratacao = array_merge($form,$pf);
+        $contratacao = array_merge($form,array($pf));
         return (object)$contratacao;
     }
 
@@ -1017,37 +1017,6 @@ class FormacaoController extends FormacaoModel
                 WHERE fc.id = {$contratacao_id} AND fc.publicado = 1";
 
         return DbModel::consultaSimples($sql)->fetchObject();
-    }
-
-    //retorna um obj com os dados de uma determinada pessoa fisica
-    public function recuperaPf($pessoa_fisica_id)
-    {
-        return DbModel::consultaSimples("SELECT pf.*, ns.nome_social, n.nacionalidade, pe.*, d.drt 
-                                                  FROM pessoa_fisicas AS pf 
-                                                  LEFT JOIN nacionalidades AS n ON pf.nacionalidade_id = n.id  
-                                                  LEFT JOIN pf_enderecos AS pe ON pf.id = pe.pessoa_fisica_id
-                                                  LEFT JOIN drts AS d ON pf.id = d.pessoa_fisica_id
-                                                  LEFT JOIN pf_nome_social AS ns ON pf.id = ns.pessoa_fisica_id
-                                                  WHERE pf.id = $pessoa_fisica_id")->fetchObject();
-    }
-
-    public function recuperaTelPf($pessoa_fisica_id, $obj = 0, $capac = 0)
-    {
-        $tel = "";
-        if ($capac != 0):
-            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pessoa_fisica_id", '1')->fetchAll();
-        else:
-            $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pessoa_fisica_id AND publicado = 1")->fetchAll();
-        endif;
-
-        if ($obj != 0):
-            return $telArrays;
-        else:
-            foreach ($telArrays as $telArray) {
-                $tel = $tel . $telArray['telefone'] . '; ';
-            }
-            return substr($tel, 0, -2);
-        endif;
     }
 
     public function vincularCargo($post)
@@ -1694,42 +1663,6 @@ class FormacaoController extends FormacaoModel
     public function listaDocumento($documento, $tipo_documento)
     {
         return parent::getDocumento($documento, $tipo_documento);
-    }
-
-    public function recuperaEnderecoPf($idPf)
-    {
-        $idPf = MainModel::decryption($idPf);
-
-        $testaEnderecos = DbModel::consultaSimples("SELECT * FROM pf_enderecos WHERE pessoa_fisica_id = $idPf");
-
-        if ($testaEnderecos->rowCount() > 0) {
-            while ($enderecoArray = $testaEnderecos->fetch(PDO::FETCH_ASSOC)) {
-                $endereco = $enderecoArray['logradouro'] . ", " . $enderecoArray['numero'] . " " . $enderecoArray['complemento'] . " / - " . $enderecoArray['bairro'] . " - " . $enderecoArray['cidade'] . " / " . $enderecoArray['uf'];
-            }
-        } else {
-            $endereco = "Não cadastrado";
-        }
-        return $endereco;
-    }
-
-    public function recuperaTelefonePf($idPf)
-    {
-        $idPf = MainModel::decryption($idPf);
-        $sqlTelefone = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPf' AND publicado = 1");
-        $telefones = $sqlTelefone->fetch(PDO::FETCH_ASSOC);
-        $numTelefone = $sqlTelefone->rowCount();
-
-        return $telefones;
-    }
-
-    public function recuperaTelefonePf2($idPf)
-    {
-        $idPf = MainModel::decryption($idPf);
-        return DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPf' AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
-        //$telefones = $sqlTelefone->fetch(PDO::FETCH_ASSOC);
-        //$numTelefone = $sqlTelefone->rowCount();
-
-        //return $telefones;
     }
 
     public function listaDocumentos()

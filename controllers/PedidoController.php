@@ -45,13 +45,13 @@ class PedidoController extends PedidoModel
                 $pedido = array_merge($pedido,$pj);
                 //representante
                 $repObj = new RepresentanteController();
-                if ($pj['representante_legal1_id']){
-                    $idRep1 = $this->encryption($pj['representante_legal1_id']);
+                if ($pj->representante_legal1_id){
+                    $idRep1 = $this->encryption($pfj>representante_legal1_id);
                     $rep1 = $repObj->recuperaRepresentante($idRep1)->fetch(PDO::FETCH_ASSOC);
                     $pedido = array_merge($pedido,$rep1);
                 }
-                if ($pj['representante_legal2_id']){
-                    $idRep2 = $this->encryption($pj['representante_legal2_id']);
+                if ($pfj>representante_legal2_id){
+                    $idRep2 = $this->encryption($pfj>representante_legal2_id);
                     $rep2 = $repObj->recuperaRepresentante($idRep2)->fetch(PDO::FETCH_ASSOC);
                     $pedido = array_merge($pedido,$rep2);
                 }
