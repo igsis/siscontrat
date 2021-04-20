@@ -5,14 +5,15 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../controllers/PedidoController.php";
 require_once "../controllers/EventoController.php";
+require_once "../controllers/FormacaoController.php";
 
 $pedidoObj = new PedidoController();
 $eventoObj = new EventoController();
+$formObj = new FormacaoController();
 
-$pedido = $pedidoObj->recuperaPedido(2, 2);
-$evento = $eventoObj->recuperaEvento(4);
+$pedido = $pedidoObj->listaPedidos(2,'2021');
+$form = $formObj->recuperaFormacaoContratacao(intval(2));
 ?>
-
 <html>
 <head>
     <meta http-equiv=\"Content-Type\" content=\"text/html. charset=Windows-1252\">
@@ -22,9 +23,9 @@ $evento = $eventoObj->recuperaEvento(4);
 <body>
 <br>
 <div align="left">
-    <pre>
+     <pre>
         <?php
-        var_dump($evento);
+        var_dump($form);
         ?>
     </pre>
     <hr>
@@ -33,8 +34,6 @@ $evento = $eventoObj->recuperaEvento(4);
         var_dump($pedido);
         ?>
     </pre>
-
-
 </div>
 </body>
 </html>

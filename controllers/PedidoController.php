@@ -46,12 +46,12 @@ class PedidoController extends PedidoModel
                 //representante
                 $repObj = new RepresentanteController();
                 if ($pj->representante_legal1_id){
-                    $idRep1 = $this->encryption($pfj>representante_legal1_id);
+                    $idRep1 = $this->encryption($pfj->representante_legal1_id);
                     $rep1 = $repObj->recuperaRepresentante($idRep1)->fetch(PDO::FETCH_ASSOC);
                     $pedido = array_merge($pedido,$rep1);
                 }
-                if ($pfj>representante_legal2_id){
-                    $idRep2 = $this->encryption($pfj>representante_legal2_id);
+                if ($pfj->representante_legal2_id){
+                    $idRep2 = $this->encryption($pfj->representante_legal2_id);
                     $rep2 = $repObj->recuperaRepresentante($idRep2)->fetch(PDO::FETCH_ASSOC);
                     $pedido = array_merge($pedido,$rep2);
                 }
@@ -77,6 +77,37 @@ class PedidoController extends PedidoModel
         }
 
         return (object)$pedido;
+    }
+
+    public function listaPedidos($origem_tipo_id, $ano = false)
+    {
+        $pedidos = PedidoModel::listaBasePedido($origem_tipo_id);
+        if ($origem_tipo_id == 1) { //evento
+            foreach ($pedidos as $pedido) {
+                if ($pedido->pessoa_tipo_id == 2) { //pessoa jurídica
+                    $pjObj = new PessoaJuridicaController();
+                    $idPj = $this->encryption($pedido->pessoa_juridica_id);
+                    $pj = $pjObj->recuperaPessoaJuridica($idPj);
+                    $pedido->proponente = $pj->razao_social;
+                    $pedido->documento = $pj->cnpj;
+                } else {
+                    $pfObj = new PessoaFisicaController();
+                    $idPf = $this->encryption($pedido->pessoa_fisica_id);
+                    $pf = $pfObj->recuperaPessoaFisica($idPf);
+                    $pedido->proponente = $pf->nome;
+                    $pedido->documento = $pf->cpf;
+                }
+            }
+        }
+        if ($origem_tipo_id == 2){ //formação
+            $formObj = new FormacaoController();
+            foreach ($pedidos as $pedido) {
+                $form = $formObj->recuperaFormacaoContratacao(intval($pedido->origem_id));
+                $pedido->proponente = $form->nome;
+                $pedido->documento = $form->cpf;
+            }
+        }
+        return (object)$pedidos;
     }
 
     public function getParcelarPedidoFomentos($id)

@@ -995,8 +995,26 @@ class FormacaoController extends FormacaoModel
         $pfObj = new PessoaFisicaController();
         $idPf = $this->encryption($form['pessoa_fisica_id']);
         $pf = $pfObj->recuperaPessoaFisica($idPf);
-        $contratacao = array_merge($form,array($pf));
+        $contratacao = array_merge($form,(array)$pf);
         return (object)$contratacao;
+    }
+
+    /**
+     * @param int $ano
+     * @return array
+     */
+    public function listaContratacao($ano)
+    {
+        return DbModel::consultaSimples("SELECT fc.*, fs.status, pro.programa, l.linguagem, prj.projeto, pf.nome as proponente, pf.cpf as documento
+            FROM formacao_contratacoes AS fc
+                INNER JOIN formacao_status fs on fc.form_status_id = fs.id
+                INNER JOIN programas AS pro ON pro.id = fc.programa_id
+                INNER JOIN linguagens AS l ON l.id = fc.linguagem_id
+                INNER JOIN projetos prj on fc.projeto_id = prj.id
+                INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
+                INNER JOIN pessoa_fisicas pf on fc.pessoa_fisica_id = pf.id
+            WHERE fc.publicado = 1 AND fc.ano = '$ano'
+        ")->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function recuperaContratacao($contratacao_id, $decription = 0)
