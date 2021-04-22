@@ -2186,7 +2186,7 @@ class FormacaoController extends FormacaoModel
         $pfObj = new PessoaFisicaController();
         $idPf = $this->encryption($form['pessoa_fisica_id']);
         $pf = $pfObj->recuperaPessoaFisica($idPf);
-        $contratacao = array_merge((array)$form,$pf);
+        $contratacao = array_merge((array)$form,(array)$pf);
         return (object)$contratacao;
     }
 }
