@@ -19,6 +19,8 @@ if (isset($_POST['_method'])) {
     $insPessoaFisica = new PessoaFisicaController();
 
     switch ($_POST['_method']) {
+
+//      Cargo
         case "cadastrarCargo":
             echo (new FormacaoCargoController)->inserir($_POST);
             break;
@@ -28,6 +30,14 @@ if (isset($_POST['_method'])) {
         case "apagarCargo":
             echo (new FormacaoCargoController)->apagar($_POST);
             break;
+        case "vincularCargo":
+            echo (new FormacaoCargoController)->vincular($_POST);
+            break;
+        case "desvincularCargo":
+            echo (new FormacaoCargoController)->desvincular($_POST);
+            break;
+
+//      Coordenadoria
         case "cadastrarCoordenadoria":
             echo (new FormacaoCoordenadoriaController)->inserir($_POST);
             break;
@@ -37,6 +47,8 @@ if (isset($_POST['_method'])) {
         case "apagarCoordenadoria":
             echo (new FormacaoCoordenadoriaController)->apagar($_POST);
             break;
+
+//      Programa
         case "cadastrarPrograma":
             echo (new FormacaoProgramaController)->inserir($_POST);
             break;
@@ -46,6 +58,8 @@ if (isset($_POST['_method'])) {
         case "apagarPrograma":
             echo (new FormacaoProgramaController)->apagar($_POST);
             break;
+
+//      Linguagem
         case "cadastrarLinguagem":
             echo (new FormacaoLinguagemController)->inserir($_POST);
             break;
@@ -55,6 +69,8 @@ if (isset($_POST['_method'])) {
         case "apagarLinguagem":
             echo (new FormacaoLinguagemController)->apagar($_POST);
             break;
+
+//      Projeto
         case "cadastrarProjeto":
             echo (new FormacaoProjetoController)->inserir($_POST);
             break;
@@ -64,6 +80,8 @@ if (isset($_POST['_method'])) {
         case "apagarProjeto":
             echo (new FormacaoProjetoController)->apagar($_POST);
             break;
+
+//      Subprefeitura
         case "cadastrarSubprefeitura":
             echo (new FormacaoSubprefeituraController)->inserir($_POST);
             break;
@@ -73,6 +91,8 @@ if (isset($_POST['_method'])) {
         case "apagarSubprefeitura":
             echo (new FormacaoSubprefeituraController)->apagar($_POST);
             break;
+
+//      Territorio
         case "cadastrarTerritorio":
             echo (new FormacaoTerritorioController)->inserir($_POST);
             break;
@@ -82,6 +102,8 @@ if (isset($_POST['_method'])) {
         case "apagarTerritorio":
             echo (new FormacaoTerritorioController)->apagar($_POST);
             break;
+
+//      Vigencia
         case "cadastrarVigencia":
             echo (new FormacaoVigenciaController)->inserir($_POST);
             break;
@@ -91,12 +113,21 @@ if (isset($_POST['_method'])) {
         case "apagarVigencia":
             echo (new FormacaoVigenciaController)->apagar($_POST);
             break;
+
+//      Parcela vigencia
         case "cadastrarParcelaVigencia":
             echo (new FormacaoParcelaVigenciaController())->inserir($_POST);
             break;
         case "editarParcelaVigencia":
             echo (new FormacaoParcelaVigenciaController)->editar($_POST);
             break;
+
+//      Parcela
+//        case "editarParcela":
+//            echo (new FormacaoParcelaVigenciaController)->editar($_POST);
+//            break;
+
+//      Pedido
         case "cadastrarPedido":
             echo (new FormacaoPedidoController)->inserir($_POST);
             break;
@@ -106,15 +137,19 @@ if (isset($_POST['_method'])) {
         case "deletarPedido":
             echo (new FormacaoPedidoController)->apagar($_POST);
             break;
-        case "editarParcela":
-            echo (new FormacaoCargoController)->editarParcela($_POST);
+        case "concluirPedido":
+            echo (new FormacaoPedidoController)->concluir($_POST);
             break;
+
+//      Nota Empenho
         case "cadastrarNotaEmpenho":
-            echo (new FormacaoCargoController)->cadastrarNotaEmpenho($_POST);
+            echo (new FormacaoNotaEmpenhoController)->inserir($_POST);
             break;
         case "editarNotaEmpenho":
-            echo (new FormacaoCargoController)->editarNotaEmpenho($_POST);
+            echo (new FormacaoNotaEmpenhoController)->editar($_POST);
             break;
+
+//      Pessoa Fisica
         case "cadastrarPF":
             echo $insPessoaFisica->inserePessoaFisica($_POST['pagina']);
             break;
@@ -125,57 +160,56 @@ if (isset($_POST['_method'])) {
             echo $insPessoaFisica->editaPessoaFisica($_POST['id'], $_POST['pagina'], false, true);
             break;
         case "editarPFImport":
-            echo (new FormacaoCargoController)->insereInscrito($_POST['capac_id'], false, $_POST['id']);
-            break;
-        case "cadastrarDadosContratacao":
-            echo (new FormacaoCargoController)->insereDadosContratacao($_POST);
-            break;
-        case "editarDadosContratacao":
-            echo (new FormacaoCargoController)->editaDadosContratacao($_POST);
-            break;
-        case "apagarDadosContratacao":
-            echo (new FormacaoCargoController)->apagaDadosContratacao($_POST);
-            break;
-        case "pesquisa":
-            echo (new FormacaoCargoController)->pesquisas($_POST['search'], $_POST['where']);
-            break;
-        case "concluirPedido":
-            echo (new FormacaoCargoController)->concluirPedido($_POST);
-            break;
-        case "cadastrarDocumento":
-            echo (new FormacaoCargoController)->insereDocumento($_POST);
-            break;
-        case "editarDocumento":
-            echo (new FormacaoCargoController)->editaDocumento($_POST);
-            break;
-        case "apagarDocumento":
-            echo (new FormacaoCargoController)->apagaDocumento($_POST);
-            break;
-        case "cadastrarAbertura":
-            echo (new FormacaoCargoController)->insereAbertura($_POST);
-            break;
-        case "editarAbertura":
-            echo (new FormacaoCargoController)->editaAbertura($_POST);
-            break;
-        case "apagarAbertura":
-            echo (new FormacaoCargoController)->apagaAbertura($_POST);
-            break;
-        case "vincularCargo":
-            echo (new FormacaoCargoController)->vincularCargo($_POST);
-            break;
-        case "desvincularCargo":
-            echo (new FormacaoCargoController)->desvincularCargo($_POST);
+            echo (new FormacaoInscritoController)->inserir($_POST['capac_id'], false, $_POST['id']);
             break;
         case "importarInscrito":
-            echo (new FormacaoCargoController)->insereInscrito($_POST['id']);
+            echo (new FormacaoInscritoController)->inserir($_POST['id']);
             break;
         case "importarPf":
             echo $insPessoaFisica->importarPf($_POST['id']);
             break;
+
+//      Perdido por ai
+        case "pesquisa":
+            echo (new FormacaoController)->pesquisar($_POST['search'], $_POST['where']);
+            break;
+
+//      Dados contratacao
+        case "cadastrarDadosContratacao":
+            echo (new FormacaoContratacaoController)->inserir($_POST);
+            break;
+        case "editarDadosContratacao":
+            echo (new FormacaoContratacaoController)->editar($_POST);
+            break;
+        case "apagarDadosContratacao":
+            echo (new FormacaoContratacaoController)->apagar($_POST);
+            break;
+
+//      Documentos
+        case "cadastrarDocumento":
+            echo (new FormacaoDocumentoController)->inserir($_POST);
+            break;
+        case "editarDocumento":
+            echo (new FormacaoDocumentoController)->editar($_POST);
+            break;
+        case "apagarDocumento":
+            echo (new FormacaoDocumentoController)->apagar($_POST);
+            break;
+
+//      Edital
+        case "cadastrarAbertura":
+            echo (new FormacaoEditalController)->inserir($_POST);
+            break;
+        case "editarAbertura":
+            echo (new FormacaoEditalController)->editar($_POST);
+            break;
+        case "apagarAbertura":
+            echo (new FormacaoEditalController)->apagar($_POST);
+            break;
     }
     if (isset($_POST['_method'])) {
         if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
-            echo (new FormacaoCargoController)->listaDocumento($_POST['search'], $_POST['where']);
+                echo (new FormacaoDocumentoController)->pesquisar($_POST['search'], $_POST['where']);
         }
     }
 } else {

@@ -211,6 +211,48 @@ class FormacaoController extends FormacaoModel
         return MainModel::encryption($idContratacao);
     }
 
+    public function pesquisar($post, $where)
+    {
+        $sqlProtocolo = "";
+        $sqlProponente = "";
+        $sqlProcesso = "";
+        $sqlStatus = "";
+
+        if ($where == "protocolo") {
+            $protocolo = $post;
+            $sqlProtocolo = " AND fc.protocolo LIKE '%$protocolo%'";
+        }
+
+        if ($where == "proponente") {
+            $proponente = $post;
+            $sqlProponente = " AND p.pessoa_fisica_id = '$proponente'";
+        }
+        if ($where == "processo") {
+            $processo = $post;
+            $sqlProcesso = " AND p.numero_processo LIKE '%$processo%'";
+        }
+        if ($where == "status") {
+            $status = $post;
+            $sqlStatus = " AND p.status_pedido_id = '$status'";
+        }
+
+
+        $consulta = DbModel::consultaSimples("SELECT p.id AS pedido_id, fc.protocolo, pf.nome, ns.nome_social, p.numero_processo, s.status 
+                                                  FROM formacao_contratacoes fc 
+                                                  INNER JOIN pedidos p ON fc.id = p.origem_id
+                                                  LEFT JOIN pessoa_fisicas pf ON p.pessoa_fisica_id = pf.id
+                                                  LEFT JOIN pf_nome_social ns ON ns.pessoa_fisica_id = pf.id
+                                                  INNER JOIN pedido_status s ON s.id = p.status_pedido_id
+                                                  WHERE p.origem_tipo_id = 2 AND p.publicado = 1$sqlProponente $sqlProcesso $sqlProtocolo $sqlStatus")->fetchAll(PDO::FETCH_ASSOC);
+        if (count($consulta) > 0) {
+            for ($i = 0; $i < count($consulta); $i++) {
+                $consulta[$i]['pedido_id'] = MainModel::encryption($consulta[$i]['pedido_id']);
+            }
+            return json_encode(array($consulta));
+        }
+
+        return '0';
+    }
 
     /*
      * apagar a partir daqui

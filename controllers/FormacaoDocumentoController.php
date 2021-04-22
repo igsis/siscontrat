@@ -106,9 +106,9 @@ class FormacaoDocumentoController extends FormacaoModel
         return $this->listaPublicado("formacao_lista_documentos", null);
     }
 
-//    public function listaDocumento($documento, $tipo_documento)
-//    {
-//        return parent::getDocumento($documento, $tipo_documento);
-//    }
+    public function pesquisar($documento, $tipo_documento)
+    {
+        return parent::getDocumento($documento, $tipo_documento);
+    }
 
 }
