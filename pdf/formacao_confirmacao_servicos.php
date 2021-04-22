@@ -55,19 +55,19 @@ $ano = date('Y');
         <p>&nbsp;</p>
         <p><strong>Recebimento da Documentação </strong></p>
         <p>Atesto:</p>
-        <p>( X ) o recebimento em <?= $dataAtual ?> de toda a documentação [INSERIR NÚMERO SEI DA NOTA FISCAL E ARQUIVOS CONSOLIDADOS] prevista na Portaria SF nº 170/2020.<br>O prazo contratual é <?= $periodo ?>.</p>
-        <p>( &nbsp; ) o recebimento em <?= $dataAtual ?> da documentação [INSERIR NÚMERO SEI DA NOTA FISCAL E ARQUIVOS CONSOLIDADOS] prevista na Portaria SF nº 170/2020, ressalvado (s) [RELACIONAR OS DOCUMENTOS IRREGULARES].<br>O prazo contratual é <?= $periodo ?>.</p>
+        <p align="justify">( X ) o recebimento em <?= $dataAtual ?> de toda a documentação [INSERIR NÚMERO SEI DA NOTA FISCAL E ARQUIVOS CONSOLIDADOS] prevista na Portaria SF nº 170/2020.<br>O prazo contratual é <?= $periodo ?>.</p>
+        <p align="justify">( &nbsp; ) o recebimento em <?= $dataAtual ?> da documentação [INSERIR NÚMERO SEI DA NOTA FISCAL E ARQUIVOS CONSOLIDADOS] prevista na Portaria SF nº 170/2020, ressalvado (s) [RELACIONAR OS DOCUMENTOS IRREGULARES].<br>O prazo contratual é <?= $periodo ?>.</p>
         <p>&nbsp;</p>
-        <p><strong>Recebimento de material e/ou serviços: </strong></p>
+        <p align="justify"><strong>Recebimento de material e/ou serviços: </strong></p>
         <p>Atesto:</p>
-        <p>( X ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia <?= $data_inicio ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>.</p>
-        <p>( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ] foram entregues e/ou executados parcialmente, nos termos previstos no instrumento contratual (ou documento
+        <p align="justify">( X ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia <?= $data_inicio ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>.</p>
+        <p align="justify">( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ] foram entregues e/ou executados parcialmente, nos termos previstos no instrumento contratual (ou documento
             equivalente), do dia <?= $data_fim ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>. </p>
-        <p>( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia _____ / _____ / _____, com atraso de ____ dias.<br>O prazo contratual é <?= $periodo ?>.</p>
+        <p align="justify">( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia _____ / _____ / _____, com atraso de ____ dias.<br>O prazo contratual é <?= $periodo ?>.</p>
         <p>&nbsp;</p>
         <p><b>INFORMAÇÕES COMPLEMENTARES</b></p>
-        <p>____________________________________________________________________________________________________________________________________</p>
-        <p>____________________________________________________________________________________________________________________________________</p>
+        <p align="justify">&nbsp;</p>
+        <p>&nbsp;</p>
         <p>À área gestora / de liquidação e pagamento. </p>
         <p>&nbsp;</p>
         <p>Encaminho para prosseguimento </p>
