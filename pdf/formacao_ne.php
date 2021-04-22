@@ -30,7 +30,7 @@ $pdf->AddPage();
 $x = 20;
 $l = 7; //DEFINE A ALTURA DA LINHA
 
-$pdf->SetXY($x, 35);// SetXY - DEFINE O X (largura) E O Y (altura) NA PÁGINA
+$pdf->SetXY($x, 30);// SetXY - DEFINE O X (largura) E O Y (altura) NA PÁGINA
 
 $pdf->SetTitle('Nota de Empenho');
 
@@ -38,7 +38,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 14);
 $pdf->Cell(180, 15, utf8_decode("RECIBO DE ENTREGA DE NOTA DE EMPENHO"), 0, 1, 'C');
 
-$pdf->Ln(5);
+$pdf->Ln(15);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 11);
@@ -68,13 +68,13 @@ $pdf->Ln(9);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 11);
-$pdf->Cell(40, $l, utf8_decode("São Paulo, " . MainModel::dataParaBR($data)));
+$pdf->Cell(40, $l, utf8_decode("São Paulo, " . MainModel::dataParaBR($ne->entrega_nota_empenho)));
 
 $pdf->Ln(75);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
-$pdf->Cell(165, $l, utf8_decode($nome), 'T', 0, 'L');
+$pdf->Cell(170, $l, utf8_decode($nome), 'T', 0, 'L');
 
 $pdf->Ln();
 
@@ -115,7 +115,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
 $pdf->Cell(15, $l, "Objeto:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(170, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 'L', 0);
+$pdf->MultiCell(155, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)));
 
 $pdf->Output('formacao_ne.pdf', 'I');
 ?>
