@@ -7,6 +7,7 @@ if ($pedidoAjax) {
     require_once "../controllers/AtracaoController.php";
     require_once "../controllers/LiderController.php";
     require_once "../controllers/RepresentanteController.php";
+    require_once "../controllers/FormacaoController.php";
 } else {
     require_once "./models/PedidoModel.php";
     require_once "./controllers/PessoaJuridicaController.php";
@@ -15,6 +16,7 @@ if ($pedidoAjax) {
     require_once "./controllers/AtracaoController.php";
     require_once "./controllers/LiderController.php";
     require_once "./controllers/RepresentanteController.php";
+    require_once "./controllers/FormacaoController.php";
 }
 
 class PedidoController extends PedidoModel
@@ -231,5 +233,36 @@ class PedidoController extends PedidoModel
     public function recuperaVerba($id)
     {
         return DbModel::getInfo("verbas",$id)->fetchObject();
+    }
+
+    public function listaPedidos($origem_tipo_id, $ano = false)
+    {
+        $pedidos = PedidoModel::listaBasePedido($origem_tipo_id);
+        if ($origem_tipo_id == 1) { //evento
+            foreach ($pedidos as $pedido) {
+                if ($pedido->pessoa_tipo_id == 2) { //pessoa jurídica
+                    $pjObj = new PessoaJuridicaController();
+                    $idPj = $this->encryption($pedido->pessoa_juridica_id);
+                    $pj = $pjObj->recuperaPessoaJuridica($idPj);
+                    $pedido->proponente = $pj->razao_social;
+                    $pedido->documento = $pj->cnpj;
+                } else {
+                    $pfObj = new PessoaFisicaController();
+                    $idPf = $this->encryption($pedido->pessoa_fisica_id);
+                    $pf = $pfObj->recuperaPessoaFisica($idPf);
+                    $pedido->proponente = $pf->nome;
+                    $pedido->documento = $pf->cpf;
+                }
+            }
+        }
+        if ($origem_tipo_id == 2){ //formação
+            $formObj = new FormacaoController();
+            foreach ($pedidos as $pedido) {
+                $form = $formObj->recuperaFormacaoContratacao(intval($pedido->origem_id));
+                $pedido->proponente = $form->nome;
+                $pedido->documento = $form->cpf;
+            }
+        }
+        return (object)$pedidos;
     }
 }
