@@ -87,7 +87,7 @@ $pdf->MultiCell(145, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido->o
 $pdf->Ln();
 
 $pdf->SetX($x);
-$pdf->MultiCell(200, $l, utf8_decode("PAGAMENTO LIBERÁVEL A PARTIR DE " . MainModel::dataParaBR($parcelaDados->data_inicio) . " MEDIANTE CONFIRMAÇÃO DA UNIDADE PROPONENTE."), 0, 'L', 0);
+$pdf->MultiCell(200, $l, utf8_decode("PAGAMENTO LIBERÁVEL A PARTIR DE " . MainModel::dataParaBR($parcelaDados->data_pagamento) . " MEDIANTE CONFIRMAÇÃO DA UNIDADE PROPONENTE."), 0, 'L', 0);
 
 $pdf->Ln();
 
