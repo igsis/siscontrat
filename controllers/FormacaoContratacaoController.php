@@ -10,7 +10,7 @@ if ($pedidoAjax) {
 
 class FormacaoContratacaoController extends FormacaoModel
 {
-    public function insereDadosContratacao($post)
+    public function inserir($post)
     {
         unset($post['_method']);
         $locais_id = $post['local_id'];
@@ -55,7 +55,7 @@ class FormacaoContratacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function editaDadosContratacao($post)
+    public function editar($post)
     {
         $contratacao_id = MainModel::decryption($post['id']);
         unset($post['id']);
@@ -98,7 +98,7 @@ class FormacaoContratacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function apagaDadosContratacao($post)
+    public function apagar($post)
     {
         unset($post['_method']);
         $contratacao_id = MainModel::decryption($post['id']);
@@ -121,5 +121,64 @@ class FormacaoContratacaoController extends FormacaoModel
             ];
         }
         return MainModel::sweetAlert($alerta);
+    }
+
+    /**
+     * @param int|string $contratacao_id <p>id da tabela formacao_contratacoes</p>
+     * @return object
+     */
+    public function recuperaFormacaoContratacao($contratacao_id):stdClass //para o PedidoController::recuperaPedido
+    {
+        if (gettype($contratacao_id) == "string") {
+            $contratacao_id = MainModel::decryption($contratacao_id);
+        }
+        $form = DbModel::consultaSimples("SELECT fc.protocolo, fc.pessoa_fisica_id, fc.ano, fs.status, fc.chamado, fc.classificacao, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, fc.form_vigencia_id, fc.observacao, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, fc.num_processo_pagto, user.nome_completo as usuario_nome, fc.data_envio, rp.regiao
+            FROM formacao_contratacoes AS fc
+                INNER JOIN formacao_status fs on fc.form_status_id = fs.id
+                INNER JOIN territorios t on fc.territorio_id = t.id
+                INNER JOIN coordenadorias AS cor ON cor.id = fc.coordenadoria_id
+                INNER JOIN subprefeituras s on fc.subprefeitura_id = s.id
+                INNER JOIN programas AS pro ON pro.id = fc.programa_id
+                INNER JOIN linguagens AS l ON l.id = fc.linguagem_id
+                INNER JOIN projetos prj on fc.projeto_id = prj.id
+                INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
+                LEFT JOIN usuarios fis on fc.fiscal_id = fis.id
+                LEFT JOIN usuarios sup on fc.suplente_id = sup.id
+                LEFT JOIN usuarios user on fc.usuario_id = user.id
+                INNER JOIN regiao_preferencias rp on fc.regiao_preferencia_id = rp.id
+                WHERE fc.id = '$contratacao_id' AND fc.publicado = 1
+        ")->fetch(PDO::FETCH_ASSOC);
+        $pfObj = new PessoaFisicaController();
+        $idPf = $this->encryption($form['pessoa_fisica_id']);
+        $pf = $pfObj->recuperaPessoaFisica($idPf);
+        $contratacao = array_merge($form,(array)$pf);
+        return (object)$contratacao;
+    }
+
+
+    public function listar($ano = 0)
+    {
+        $whereAno = "";
+        if ($ano) {
+            $whereAno = " AND c.ano = {$ano}";
+        }
+
+        $sql = "SELECT
+                    c.id AS 'id',
+                    c.protocolo AS 'protocolo',
+                    pf.nome AS 'pessoa',
+                    ns.nome_social,
+                    c.ano AS 'ano',
+                    p.programa AS 'programa',
+                    l.linguagem AS 'linguagem',
+                    fc.cargo AS 'cargo'
+                FROM formacao_contratacoes AS c
+                INNER JOIN pessoa_fisicas AS pf ON pf.id = c.pessoa_fisica_id
+                LEFT JOIN pf_nome_social AS ns ON pf.id = ns.pessoa_fisica_id                    
+                INNER JOIN programas AS p ON p.id = c.programa_id
+                INNER JOIN linguagens AS l ON l.id = c.linguagem_id
+                INNER JOIN formacao_cargos AS fc ON fc.id = c.form_cargo_id
+                WHERE c.publicado = 1 {$whereAno}";
+        return DbModel::consultaSimples($sql);
     }
 }
