@@ -11,9 +11,7 @@ if ($pedidoAjax) {
 
 class FormacaoController extends FormacaoModel
 {
-    /*
-     * retorna objeto
-     */
+
     /**
      * @param int|string $contratacao_id
      * @return string

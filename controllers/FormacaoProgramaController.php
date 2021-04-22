@@ -10,7 +10,7 @@ if ($pedidoAjax) {
 
 class FormacaoProgramaController extends FormacaoModel
 {
-    public function inserePrograma($post)
+    public function inserir($post)
     {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
@@ -35,7 +35,7 @@ class FormacaoProgramaController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function editaPrograma($post)
+    public function editar($post)
     {
         $programa_id = MainModel::decryption($post['id']);
         unset($post['id']);
@@ -61,7 +61,7 @@ class FormacaoProgramaController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function apagaPrograma($id)
+    public function apagar($id)
     {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("programas", $id);

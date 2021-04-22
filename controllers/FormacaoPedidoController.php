@@ -8,7 +8,7 @@ if ($pedidoAjax) {
     require_once "./controllers/PessoaFisicaController.php";
 }
 
-class FormcacaoPedidoController extends FormacaoModel
+class FormacaoPedidoController extends FormacaoModel
 {
     public function inserir($post)
     {
