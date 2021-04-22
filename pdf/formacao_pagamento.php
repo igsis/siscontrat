@@ -30,9 +30,9 @@ $pdf->AddPage();
 
 
 $x = 20;
-$l = 7; //DEFINE A ALTURA DA LINHA
+$l = 6; //DEFINE A ALTURA DA LINHA
 
-$pdf->SetXY($x, 35);// SetXY - DEFINE O X (largura) E O Y (altura) NA PÁGINA
+$pdf->SetXY($x, 25);// SetXY - DEFINE O X (largura) E O Y (altura) NA PÁGINA
 
 $pdf->SetTitle('Pagamento');
 
@@ -40,7 +40,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 14);
 $pdf->Cell(180, 15, utf8_decode("PEDIDO DE PAGAMENTO"), 0, 1, 'C');
 
-$pdf->Ln(5);
+$pdf->Ln();
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -54,36 +54,42 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(180, $l, utf8_decode("Secretaria Municipal de Cultura"), 0, 1, 'L');
 
+$pdf->Ln(14);
+
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(16, $l, utf8_decode("Assunto:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(140, $l, utf8_decode("Pedido de Pagamento de R$ " . MainModel::dinheiroParaBr($parcelaDados->valor) . " ( " . MainModel::valorPorExtenso($parcelaDados->valor) . ")"), 0, 'L', 0);
+$pdf->MultiCell(166, $l, utf8_decode("Pedido de Pagamento de R$ " . MainModel::dinheiroParaBr($parcelaDados->valor) . " ( " . MainModel::valorPorExtenso($parcelaDados->valor) . ")"), 0, 'L', 0);
+
+$pdf->Ln();
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(14, $l, utf8_decode("Objeto:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(40, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 0, 'L');
-
-$pdf->Ln(7);
+$pdf->MultiCell(166, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)));
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(17, $l, utf8_decode("Local(s):"), 0, 0, 'L');
+$pdf->Cell(15, $l, utf8_decode("Local(s):"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(120, $l, utf8_decode($formObj->retornaLocaisFormacao($pedido->origem_id)), 0, 'L', 0);
+$pdf->MultiCell(165, $l, utf8_decode($formObj->retornaLocaisFormacao($pedido->origem_id)), 0, 'L', 0);
+
+$pdf->Ln();
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(35, $l, utf8_decode("Período de locação:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(120, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido->origem_id, '', '1', $parcela_id)), 0, 'L', 0);
+$pdf->MultiCell(145, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido->origem_id, '', '1', $parcela_id)), 0, 'L', 0);
+
+$pdf->Ln();
 
 $pdf->SetX($x);
 $pdf->MultiCell(200, $l, utf8_decode("PAGAMENTO LIBERÁVEL A PARTIR DE " . MainModel::dataParaBR($parcelaDados->data_inicio) . " MEDIANTE CONFIRMAÇÃO DA UNIDADE PROPONENTE."), 0, 'L', 0);
 
-$pdf->Ln(5);
+$pdf->Ln();
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -91,15 +97,12 @@ $pdf->Cell(12, $l, 'Nome:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
 $pdf->MultiCell(120, $l, utf8_decode($nome), 0, 'L', 0);
 
-$pdf->Ln(7);
-
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 if ($pf->passaporte != NULL) {
     $pdf->Cell(21, $l, utf8_decode('Passaporte:'), 0, 0, 'L');
     $pdf->SetFont('Arial', '', 10);
-    $pdf->Cell(50, $l, utf8_decode($pf->passaporte), 0, 0, 'L');
-
+    $pdf->Cell(50, $l, utf8_decode($pf->passaporte), 0, 1, 'L');
 } else {
     $pdf->Cell(7, $l, utf8_decode('RG:'), 0, 0, 'L');
     $pdf->SetFont('Arial', '', 10);
@@ -107,14 +110,12 @@ if ($pf->passaporte != NULL) {
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(9, $l, utf8_decode('CPF:'), 0, 0, 'L');
     $pdf->SetFont('Arial', '', 10);
-    $pdf->Cell(45, $l, utf8_decode($pf->cpf), 0, 0, 'L');
+    $pdf->Cell(45, $l, utf8_decode($pf->cpf), 0, 1, 'L');
 }
-
-$pdf->Ln(7);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(35, $l, 'Data de Nascimento:', 0, 0, 'L');
+$pdf->Cell(37, $l, 'Data de Nascimento:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
 $pdf->MultiCell(120, $l, utf8_decode(MainModel::dataParaBR($pf->data_nascimento) == "00-00-0000" ? "Não Cadastrado" : MainModel::dataParaBR($pf->data_nascimento)), 0, 'L', 0);
 
@@ -122,9 +123,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(18, $l, utf8_decode("Endereço:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(160, $l, utf8_decode( $pf->logradouro . ", " . $pf->numero . " " . $pf->complemento . " / - " . $pf->bairro . " - " . $pf->cidade . " / " . $pf->uf), 0, 'L', 0);
-
-$pdf->Ln(7);
+$pdf->MultiCell(160, $l, utf8_decode( $pf->logradouro . ", " . $pf->numero . " " . $pf->complemento . " / - " . $pf->bairro . " - " . $pf->cidade . " / " . $pf->uf));
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -136,9 +135,9 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(12, $l, 'Email:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(168, $l, utf8_decode($pf->email), 0, 0, 'L');
+$pdf->Cell(168, $l, utf8_decode($pf->email), 0, 1, 'L');
 
-$pdf->Ln(7);
+$pdf->Ln();
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -146,8 +145,7 @@ $pdf->MultiCell(180, $l, utf8_decode("Venho, mui respeitosamente, requerer que o
 Declaro, sob as penas da Lei, não possuir débitos perante as Fazendas Públicas, em especial com a Prefeitura do Município de São Paulo.
 Nestes termos, encaminho para deferimento."));
 
-
-$pdf->Ln(7);
+$pdf->Ln(10);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
