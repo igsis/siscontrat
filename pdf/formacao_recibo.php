@@ -45,13 +45,13 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
 $pdf->Cell(14, $l, 'Nome:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(180, $l, utf8_decode($nome), 0, 'L', 0);
+$pdf->MultiCell(166, $l, utf8_decode($nome), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
 $pdf->Cell(14, $l, utf8_decode("Objeto:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(170, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 'L', 0);
+$pdf->MultiCell(166, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)));
 
 $pdf->Ln(6);
 
@@ -59,7 +59,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
 $pdf->Cell(14, $l, 'C.C.M.:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(40, $l, utf8_decode(MainModel::checaCampo($pf->ccm)), 0, 'L', 0);
+$pdf->Cell(40, $l, utf8_decode(MainModel::checaCampo($pf->ccm)), 0, 1, 'L');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
@@ -83,7 +83,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
 $pdf->Cell(20, $l, utf8_decode("Endereço:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(160, $l, utf8_decode($pf->logradouro . ", " . $pf->numero . " " . $pf->complemento . " / - " . $pf->bairro . " - " . $pf->cidade . " / " . $pf->uf), 0, 'L', 0);
+$pdf->MultiCell(160, $l, utf8_decode($pf->logradouro . ", " . $pf->numero . " " . $pf->complemento . " / - " . $pf->bairro . " - " . $pf->cidade . " / " . $pf->uf));
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);

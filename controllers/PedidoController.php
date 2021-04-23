@@ -16,6 +16,93 @@ if ($pedidoAjax) {
 class PedidoController extends PedidoModel
 {
     /**
+     * @param int $origem_tipo_id
+     * @param int|string $origem_id
+     * @return string
+     * @throws Exception
+     */
+    public function recuperaFormaPagto(int $origem_tipo_id,$origem_id):string
+    {
+        if (gettype($origem_id == "string")){
+            $origem_id = MainModel::decryption($origem_id);
+        }
+        if ($origem_tipo_id == 2){
+            $dadosParcelas = DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fp.publicado = 1 AND fc.id = $origem_id")->fetchAll(PDO::FETCH_OBJ);
+            $formaCompleta = "";
+            for ($i = 0; $i < count($dadosParcelas); $i++) :
+                $forma = $i + 1 . "º parcela R$ " . MainModel::dinheiroParaBr($dadosParcelas[$i]->valor) . ". Entrega de documentos a partir de " . MainModel::dataParaBR($dadosParcelas[$i]->data_pagamento) . ".\n";
+                $formaCompleta .= $forma;
+            endfor;
+            $formaCompleta .= "A liquidação de cada parcela se dará em 3 (três) dias úteis após a data de confirmação da correta execução do(s) serviço(s).";
+        }
+        return $formaCompleta;
+    }
+
+    public function inserePedido($origem_tipo_id,$pagina)
+    {
+        unset($_POST['_method']);
+
+        $dados = MainModel::limpaPost($_POST);
+
+        $insert = DbModel::insert('pedidos', $dados);
+        if ($insert->rowCount() >= 1) {
+            $pedido_id = DbModel::connection()->lastInsertId();
+            $dados['id'] = $pedido_id;
+            if ($origem_tipo_id == 2){//formacao
+                DbModel::updateEspecial("formacao_contratacoes",$dados,"id",$dados['origem_id']);
+            }
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Pedido Cadastrado',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . $pagina . '&pedido_id=' . MainModel::encryption($pedido_id)
+            ];
+        } else {
+            $alerta = [
+                'Alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde.',
+                'tipo' => 'error'
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function cadastrarPedido($post, $pagina)
+    {
+        unset($post['_method']);
+
+        if (isset($post['valor_total'])) {
+            $post['valor_total'] = MainModel::dinheiroDeBr($post['valor_total']);
+        }
+
+        $dados = MainModel::limpaPost($post);
+
+        $insert = DbModel::insert('pedidos', $dados);
+        if ($insert->rowCount() >= 1) {
+            $pedido_id = DbModel::connection()->lastInsertId();
+
+            DbModel::consultaSimples("UPDATE formacao_contratacoes SET pedido_id = '$pedido_id' WHERE publicado = 1 AND id = " . $dados['origem_id']);
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Pedido Cadastrado',
+                'texto' => 'Dados cadastrados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . $pagina . '&pedido_id=' . MainModel::encryption($pedido_id)
+            ];
+        } else {
+            $alerta = [
+                'Alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde.',
+                'tipo' => 'error'
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    /**
      * @param int $origem_tipo_id <p>1-Evento; 2-Formação; 3-EMIA</p>
      * @param int|string $origem_id <p>id do evento, formação ou emia</p>
      * @return object
@@ -46,12 +133,12 @@ class PedidoController extends PedidoModel
                 //representante
                 $repObj = new RepresentanteController();
                 if ($pj->representante_legal1_id){
-                    $idRep1 = $this->encryption($pfj>representante_legal1_id);
+                    $idRep1 = $this->encryption($pfj->representante_legal1_id);
                     $rep1 = $repObj->recuperaRepresentante($idRep1)->fetch(PDO::FETCH_ASSOC);
                     $pedido = array_merge($pedido,$rep1);
                 }
-                if ($pfj>representante_legal2_id){
-                    $idRep2 = $this->encryption($pfj>representante_legal2_id);
+                if ($pfj->representante_legal2_id){
+                    $idRep2 = $this->encryption($pfj->representante_legal2_id);
                     $rep2 = $repObj->recuperaRepresentante($idRep2)->fetch(PDO::FETCH_ASSOC);
                     $pedido = array_merge($pedido,$rep2);
                 }
@@ -77,6 +164,37 @@ class PedidoController extends PedidoModel
         }
 
         return (object)$pedido;
+    }
+
+    public function listaPedidos($origem_tipo_id, $ano = false)
+    {
+        $pedidos = PedidoModel::listaBasePedido($origem_tipo_id);
+        if ($origem_tipo_id == 1) { //evento
+            foreach ($pedidos as $pedido) {
+                if ($pedido->pessoa_tipo_id == 2) { //pessoa jurídica
+                    $pjObj = new PessoaJuridicaController();
+                    $idPj = $this->encryption($pedido->pessoa_juridica_id);
+                    $pj = $pjObj->recuperaPessoaJuridica($idPj);
+                    $pedido->proponente = $pj->razao_social;
+                    $pedido->documento = $pj->cnpj;
+                } else {
+                    $pfObj = new PessoaFisicaController();
+                    $idPf = $this->encryption($pedido->pessoa_fisica_id);
+                    $pf = $pfObj->recuperaPessoaFisica($idPf);
+                    $pedido->proponente = $pf->nome;
+                    $pedido->documento = $pf->cpf;
+                }
+            }
+        }
+        if ($origem_tipo_id == 2){ //formação
+            $formObj = new FormacaoController();
+            foreach ($pedidos as $pedido) {
+                $form = $formObj->recuperaFormacaoContratacao(intval($pedido->origem_id));
+                $pedido->proponente = $form->nome;
+                $pedido->documento = $form->cpf;
+            }
+        }
+        return (object)$pedidos;
     }
 
     public function getParcelarPedidoFomentos($id)
