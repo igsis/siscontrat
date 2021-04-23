@@ -17,7 +17,7 @@ if ($id && $type == null) {
 
 if (isset($_POST['pf_cpf'])){
     $documento = $_POST['pf_cpf'];
-    $pf = $insPessoaFisica->getCPF($documento)->fetch();
+    $pf = $insPessoaFisica->getCPF($documento)->fetchObject();
     if ($pf){
         $id = MainModel::encryption($pf->id);
         $pf = $insPessoaFisica->recuperaPessoaFisica($id);
