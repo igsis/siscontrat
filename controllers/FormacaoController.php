@@ -194,12 +194,6 @@ class FormacaoController extends FormacaoModel
         return $protocolo > 0 ? true : false;
     }
 
-    public function recuperaDadosContratacaoCapac($capac_id)
-    {
-        $capac_id = MainModel::decryption($capac_id);
-        return DbModel::getInfo('form_cadastros', $capac_id, true)->fetchObject();
-    }
-
     public function recuperaAnoVigente()
     {
         return DbModel::consultaSimples("SELECT MAX(ano_referencia) as ano_vigente FROM capac_new.form_aberturas WHERE publicado != 0", true)->fetchObject();

@@ -127,7 +127,7 @@ class FormacaoContratacaoController extends FormacaoModel
      * @param int|string $contratacao_id <p>id da tabela formacao_contratacoes</p>
      * @return object
      */
-    public function recuperaFormacaoContratacao($contratacao_id):stdClass //para o PedidoController::recuperaPedido
+    public function recuperar($contratacao_id):stdClass //para o PedidoController::recuperaPedido
     {
         if (gettype($contratacao_id) == "string") {
             $contratacao_id = MainModel::decryption($contratacao_id);
@@ -180,5 +180,11 @@ class FormacaoContratacaoController extends FormacaoModel
                 INNER JOIN formacao_cargos AS fc ON fc.id = c.form_cargo_id
                 WHERE c.publicado = 1 {$whereAno}";
         return DbModel::consultaSimples($sql);
+    }
+
+    public function recuperarCapac($capac_id)
+    {
+        $capac_id = MainModel::decryption($capac_id);
+        return DbModel::getInfo('form_cadastros', $capac_id, true)->fetchObject();
     }
 }
