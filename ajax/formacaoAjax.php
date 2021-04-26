@@ -13,6 +13,7 @@ if (isset($_POST['_method'])) {
     require_once "../controllers/FormacaoVigenciaController.php";
     require_once "../controllers/FormacaoContratacaoController.php";
     require_once "../controllers/FormacaoSubprefeituraController.php";
+    require_once "../controllers/FormacaoLinguagemController.php";
     require_once "../controllers/FormacaoTerritorioController.php";
     require_once "../controllers/FormacaoPedidoController.php";
 
