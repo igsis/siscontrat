@@ -84,7 +84,7 @@ class FormacaoProgramaController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function recuperaPrograma($programa_id)
+    public function recuperar($programa_id)
     {
         $programa_id = MainModel::decryption($programa_id);
         return DbModel::getInfo('programas', $programa_id)->fetchObject();

@@ -1,8 +1,8 @@
 <?php
-    require_once "./controllers/FormacaoController.php";
-    $programaObj = new FormacaoController();
+    require_once "./controllers/FormacaoProgramaController.php";
+    $programaObj = new FormacaoProgramaController();
     
-    $programas = $programaObj->listaProgramas();
+    $programas = $programaObj->listar();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
