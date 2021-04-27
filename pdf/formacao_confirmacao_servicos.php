@@ -66,7 +66,15 @@ $ano = date('Y');
         <p align="justify">( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia _____ / _____ / _____, com atraso de ____ dias.<br>O prazo contratual é <?= $periodo ?>.</p>
         <p>&nbsp;</p>
         <p><b>INFORMAÇÕES COMPLEMENTARES</b></p>
-        <p align="justify">&nbsp;</p>
+        <p align="justify">
+            <b>Nota de Empenho:</b> <br>
+            <b>Anexo da Nota de Empenho:</b> <br>
+            <b>Recibo da Nota de Empenho:</b> <br>
+            <b>Pedido de Pagamento:</b> <br>
+            <b>Recibo de Pagamento:</b> <br>
+            <b>PIS/NIT/PASEP:</b> <br>
+            <b>Certidões Fiscais / CCM:</b>
+        </p>
         <p>&nbsp;</p>
         <p>À área gestora / de liquidação e pagamento. </p>
         <p>&nbsp;</p>
