@@ -72,6 +72,7 @@ $ano = date('Y');
             <b>Recibo da Nota de Empenho:</b> <br>
             <b>Pedido de Pagamento:</b> <br>
             <b>Recibo de Pagamento:</b> <br>
+            <b>Relatório de Horas Trabalhadas:</b> <br>
             <b>PIS/NIT/PASEP:</b> <br>
             <b>Certidões Fiscais / CCM:</b>
         </p>
