@@ -295,6 +295,8 @@ class PessoaFisicaController extends PessoaFisicaModel
 
         if ($pf['nome_social']){
             $pf['nome_exibicao'] = $pf['nome_social'] . " (" . $pf['nome'] . ")";
+        } else {
+            $pf['nome_exibicao'] = $pf['nome'];
         }
 
         $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$id'", $capac)->fetchAll(PDO::FETCH_ASSOC);
