@@ -291,10 +291,13 @@ class PessoaFisicaController extends PessoaFisicaModel
             LEFT JOIN grau_instrucoes gi on pd.grau_instrucao_id = gi.id
             LEFT JOIN pf_nome_social ns on pf.id = ns.pessoa_fisica_id
             WHERE pf.id = '$id'", $capac);
-
         $pf = $pf->fetch(PDO::FETCH_ASSOC);
-        $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$id'", $capac)->fetchAll(PDO::FETCH_ASSOC);
 
+        if ($pf['nome_social']){
+            $pf['nome_exibicao'] = $pf['nome_social'] . " (" . $pf['nome'] . ")";
+        }
+
+        $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$id'", $capac)->fetchAll(PDO::FETCH_ASSOC);
         foreach ($telefones as $key => $telefone) {
             $pf['telefones']['tel_'.$key] = $telefone['telefone'];
         }
