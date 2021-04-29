@@ -3,9 +3,11 @@
 if ($pedidoAjax) {
     require_once "../models/FormacaoModel.php";
     require_once "../controllers/PessoaFisicaController.php";
+    require_once "../controllers/PedidoController.php";
 } else {
     require_once "./models/FormacaoModel.php";
     require_once "./controllers/PessoaFisicaController.php";
+    require_once "./controllers/PedidoController.php";
 }
 
 class FormacaoContratacaoController extends FormacaoModel
@@ -55,6 +57,9 @@ class FormacaoContratacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    /**
+     * @throws Exception
+     */
     public function editar($post)
     {
         $contratacao_id = MainModel::decryption($post['id']);
@@ -80,20 +85,13 @@ class FormacaoContratacaoController extends FormacaoModel
         $dados = MainModel::limpaPost($post);
         $update = DbModel::update('formacao_contratacoes', $dados, $contratacao_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
-            $pedido = DbModel::consultaSimples("SELECT pedido_id FROM formacao_contratacoes WHERE id = '{$contratacao_id}'")->fetchAll(PDO::FETCH_COLUMN)[0];
-
-            if ($pedido != null) {
-                $dadosPedido['valor_total'] = DbModel::consultaSimples("SELECT SUM(fp.valor) FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = '{$contratacao_id}' AND fp.publicado = 1")->fetch(PDO::FETCH_COLUMN);
-                $dadosParcelas = DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fp.publicado = 1 AND fc.id = '{$contratacao_id}'")->fetchAll(PDO::FETCH_OBJ);
-                $formaCompleta = "";
-                for ($i = 0; $i < count($dadosParcelas); $i++) :
-                    $forma = $i + 1 . "º parcela R$ " . MainModel::dinheiroParaBr($dadosParcelas[$i]->valor) . ". Entrega de documentos a partir de " . MainModel::dataParaBR($dadosParcelas[$i]->data_pagamento) . ".\n";
-                    $formaCompleta = $formaCompleta . $forma;
-                endfor;
-                $formaCompleta = $formaCompleta . "\nA liquidação de cada parcela se dará em 3 (três) dias úteis após a data de confirmação da correta execução do(s) serviço(s).";
-                $dadosPedido['forma_pagamento'] = $formaCompleta;
-                $update = DbModel::update('pedidos', $dadosPedido, $pedido);
+            $pedido = (new PedidoController)->existePedido(2, $contratacao_id);
+            if ($pedido){
+                $dados['forma_pagamento'] = (new PedidoController)->recuperaFormaPagto(2,intval($pedido->id));
+                //$dados['valor_total'] = "";
+                DbModel::update("pedidos", $dados, $pedido->id);
             }
+
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Dados de Contratação Atualizados!',
@@ -114,11 +112,16 @@ class FormacaoContratacaoController extends FormacaoModel
 
     public function apagar($post)
     {
-        unset($post['_method']);
         $contratacao_id = MainModel::decryption($post['id']);
+        unset($post['_method']);
         unset($post['id']);
+
         $delete = DbModel::apaga('formacao_contratacoes', $contratacao_id);
         if ($delete->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $pedido = (new PedidoController)->existePedido(2, $contratacao_id);
+            if ($pedido) {
+                DbModel::apaga('pedido',$pedido->id);
+            }
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Dados de contratação Apagados!',

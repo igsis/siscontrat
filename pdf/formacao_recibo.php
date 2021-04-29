@@ -18,7 +18,7 @@ class PDF extends FPDF
 $pedido = $formObj->recuperaPedido($pedido_id);
 $pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
 $telPf = $formObj->recuperaTelPf($pedido->pessoa_fisica_id);
-$parcelaDados = $formObj->retornaDadosParcelas($pedido->origem_id, '', '1', $parcela_id);
+$parcelaDados = $formObj->recuperaDadosParcelas($pedido->origem_id, '', '1', $parcela_id);
 
 $nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
 
