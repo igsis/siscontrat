@@ -169,7 +169,7 @@ class PedidoController extends PedidoModel
             $formObj = new FormacaoContratacaoController();
             foreach ($pedidos as $pedido) {
                 $form = $formObj->recuperar(intval($pedido->origem_id));
-                $pedido->proponente = $form->nome_social != null ? "$form->nome ($form->nome_social)" : $form->nome;
+                $pedido->proponente = $form->nome;
                 $pedido->documento = $form->cpf;
                 $pedido->protocolo = $form->protocolo;
                 $pedido->ano = $form->ano;

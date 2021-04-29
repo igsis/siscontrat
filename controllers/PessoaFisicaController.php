@@ -301,6 +301,27 @@ class PessoaFisicaController extends PessoaFisicaModel
         return (object)$pf;
     }
 
+    /**
+     * <p>Função para ser usada nas listagens</p>
+     * @param int|string $id
+     * @param false $capac
+     * <p>True se for para conectar no banco capac</p>
+     * @return object
+     */
+    public function recuperaPessoaFisicaResumo($id, $capac = false):stdClass
+    {
+        if (gettype($id == "string")) {
+            $id = MainModel::decryption($id);
+        }
+        $pf = DbModel::consultaSimples("SELECT pf.id, pf.nome, pf.rg, pf.cpf, pf.passaporte, ns.nome_social FROM pessoa_fisicas as pf LEFT JOIN pf_nome_social ns on pf.id = ns.pessoa_fisica_id WHERE pf.id = '$id'")->fetchObject();
+        if ($pf->nome_social) {
+            $pf->nome = $pf->nome_social . " (" . $pf->nome . ")";
+        }
+        $pf->documento = $pf->passaporte ?? $pf->cpf;
+
+        return $pf;
+    }
+
     public function recuperaPessoaFisicaCapac($id) {
         $id = MainModel::decryption($id);
         $pf = DbModel::consultaSimples(
