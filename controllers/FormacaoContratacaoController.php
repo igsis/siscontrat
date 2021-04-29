@@ -147,7 +147,7 @@ class FormacaoContratacaoController extends FormacaoModel
         if (strlen($contratacao_id) > 10) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
-        $form = DbModel::consultaSimples("SELECT fc.protocolo, fc.pessoa_fisica_id, fc.ano, fs.status, fc.chamado, fc.classificacao, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, fc.form_vigencia_id, fc.observacao, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, fc.num_processo_pagto, user.nome_completo as usuario_nome, fc.data_envio, rp.regiao
+        $form = DbModel::consultaSimples("SELECT fc.protocolo,fc.id as formacao_contratacao_id, fc.pessoa_fisica_id, fc.ano, fs.status, fc.chamado, fc.classificacao, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, fc.form_vigencia_id, fc.observacao, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, fc.num_processo_pagto, user.nome_completo as usuario_nome, fc.data_envio, rp.regiao
             FROM formacao_contratacoes AS fc
                 INNER JOIN formacao_status fs on fc.form_status_id = fs.id
                 INNER JOIN territorios t on fc.territorio_id = t.id

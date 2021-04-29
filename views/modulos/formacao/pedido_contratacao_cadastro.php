@@ -49,7 +49,7 @@ endif;
                             <div class="form-group col-md">
                                 <label for="origem_id">Código de Dados para Contratação:</label>
                                 <input type="text" name="origem_id" class="form-control" readonly
-                                       value="<?= $contratacao->id ?>">
+                                       value="<?= $contratacao->formacao_contratacao_id ?>">
                             </div>
 
                             <div class="form-group col-md">
@@ -117,7 +117,7 @@ endif;
 
                             <div class="form-group col-md">
                                 <label for="justificativa">Justificativa: *</label>
-                                <textarea name="justificativa" class="form-control" rows="8" required><?= isset($contratacao->cargo_justificativa) ? $contratacao->cargo_justificativa : "" ?></textarea>
+                                <textarea name="justificativa" class="form-control" rows="8" required value="<?= isset($contratacao->cargo_justificativa) ? $contratacao->cargo_justificativa : "" ?>"></textarea>
                             </div>
                         </div>
 
@@ -144,14 +144,14 @@ endif;
                             <div class="form-group col-md">
                                 <label for="fiscal">Fiscal:</label>
                                 <input type="text" name="fiscal" class="form-control"
-                                       value="<?= isset($contratacao->fiscal) ? $contratacao->fiscal : "" ?>"
+                                       value="<?= isset($contratacao->fiscal_nome) ? $contratacao->fiscal_nome : "" ?>"
                                        disabled>
                             </div>
 
                             <div class="form-group col-md">
                                 <label for="suplente">Suplente:</label>
                                 <input type="text" name="suplente" class="form-control"
-                                       value="<?= isset($contratacao->suplente) ? $contratacao->suplente : "" ?>"
+                                       value="<?= isset($contratacao->suplente_nome) ? $contratacao->suplente_nome : "" ?>"
                                        disabled>
                             </div>
                         </div>
