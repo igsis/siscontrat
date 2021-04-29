@@ -130,9 +130,9 @@ class PedidoController extends PedidoModel
         }
         /** Tipo Formação */
         if ($origem_tipo_id == 2){
-            $formObj = new FormacaoController();
+            $formObj = new FormacaoContratacaoController();
             $pedido = PedidoModel::recuperaBasePedido($origem_tipo_id, $origem_id);
-            $formacao = $formObj->recuperaFormacaoContratacao($origem_id);
+            $formacao = $formObj->recuperar($origem_id);
             $pedido = array_merge($pedido,array($formacao));
         }
         /** Tipo EMIA */
@@ -166,11 +166,13 @@ class PedidoController extends PedidoModel
             }
         }
         if ($origem_tipo_id == 2){ //formação
-            $formObj = new FormacaoController();
+            $formObj = new FormacaoContratacaoController();
             foreach ($pedidos as $pedido) {
-                $form = $formObj->recuperaFormacaoContratacao(intval($pedido->origem_id));
-                $pedido->proponente = $form->nome;
+                $form = $formObj->recuperar(intval($pedido->origem_id));
+                $pedido->proponente = $form->nome_social != null ? "$form->nome ($form->nome_social)" : $form->nome;
                 $pedido->documento = $form->cpf;
+                $pedido->protocolo = $form->protocolo;
+                $pedido->ano = $form->ano;
             }
         }
         return (object)$pedidos;
