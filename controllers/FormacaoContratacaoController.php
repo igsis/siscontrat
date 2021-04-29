@@ -144,11 +144,10 @@ class FormacaoContratacaoController extends FormacaoModel
      * @param int|string $contratacao_id <p>id da tabela formacao_contratacoes</p>
      * @return object
      */
-    //para o PedidoController::recuperaPedido
     public function recuperar($contratacao_id):stdClass
     {
         $contratacao_id = MainModel::decryption($contratacao_id);
-        $form = DbModel::consultaSimples("SELECT fc.protocolo,fc.id as formacao_contratacao_id, fc.pessoa_fisica_id, fc.ano, fs.status, fc.chamado, fc.classificacao, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, fc.form_vigencia_id, fc.observacao, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, fc.num_processo_pagto, user.nome_completo as usuario_nome, fc.data_envio, rp.regiao
+        $form = DbModel::consultaSimples("SELECT fc.*, fc.id as formacao_contratacao_id, fc.pessoa_fisica_id, fs.status, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, user.nome_completo as usuario_nome, rp.regiao
             FROM formacao_contratacoes AS fc
                 INNER JOIN formacao_status fs on fc.form_status_id = fs.id
                 INNER JOIN territorios t on fc.territorio_id = t.id
