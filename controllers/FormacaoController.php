@@ -15,9 +15,9 @@ class FormacaoController extends FormacaoModel
      * @param int|string $contratacao_id
      * @return string
      */
-    public function retornaObjetoFormacao($contratacao_id): string
+    public function retornarObjeto($contratacao_id, $description = 0): string
     {
-        if (gettype($contratacao_id == "string")) {
+        if ($description != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
         $cstObjeto = DbModel::consultaSimples("SELECT fc.programa_id, p.programa, l.linguagem, p.edital, fcargo.cargo 
@@ -41,11 +41,9 @@ class FormacaoController extends FormacaoModel
     }
 
     //retorna uma string ou um objeto com todos os locais que o pedido possui
-    public function retornaLocaisFormacao($contratacao_id, $obj = 0, $decryption = 0)
+    public function retornaLocaisFormacao($contratacao_id, $obj = 0)
     {
-        if ($decryption != 0) {
-            $contratacao_id = MainModel::decryption($contratacao_id);
-        }
+        $contratacao_id = MainModel::decryption($contratacao_id);
         $locais = "";
         $locaisArrays = DbModel::consultaSimples("SELECT l.id, l.local FROM formacao_locais AS fl INNER JOIN locais AS l ON fl.local_id = l.id WHERE form_pre_pedido_id = $contratacao_id")->fetchAll();
         if ($obj != 0):
@@ -66,10 +64,7 @@ class FormacaoController extends FormacaoModel
      */
     public function recuperaDadosParcelas($contratacao_id, $unica = false, $parcela_id = NULL)
     {
-        if (gettype($contratacao_id == "string")){
-            $contratacao_id = MainModel::decryption($contratacao_id);
-        }
-
+        $contratacao_id = MainModel::decryption($contratacao_id);
         if ($unica && $parcela_id != NULL):
             $parcelas = DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 AND fp.id = $parcela_id")->fetchObject();
         else:
@@ -77,8 +72,8 @@ class FormacaoController extends FormacaoModel
             $carga = 0;
             $valor = 0;
             foreach ($parcelas as $parcela) {
-                $carga = $carga + $parcela['carga_horaria'];
-                $valor = $valor + $parcela['valor'];
+                $carga = $carga + $parcela->carga_horaria;
+                $valor = $valor + $parcela->valor;
             }
             $parcelas['carga_horaria_total'] = $carga;
             $parcelas['valor_total'] = $valor;
@@ -86,11 +81,9 @@ class FormacaoController extends FormacaoModel
         return $parcelas;
     }
 
-    /*public function retornaCargaHoraria($contratacao_id, $decryption = 0)
+    public function retornaCargaHoraria($contratacao_id)
     {
-        if ($decryption != 0) {
-            $contratacao_id = MainModel::decryption($contratacao_id);
-        }
+        $contratacao_id = MainModel::decryption($contratacao_id);
 
         $carga = 0;
         $consultaParcelas = DbModel::consultaSimples("SELECT fp.carga_horaria FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1")->fetchAll();
@@ -98,13 +91,11 @@ class FormacaoController extends FormacaoModel
             $carga = $carga + $consultaParcela['carga_horaria'];
         }
         return $carga;
-    }*/
+    }
 
-    public function retornaPeriodoFormacao($contratacao_id, $decryption = 0, $unico = 0, $parcela_id = NULL)
+    public function retornaPeriodoFormacao($contratacao_id, $unico = 0, $parcela_id = NULL)
     {
-        if ($decryption != 0) {
-            $contratacao_id = MainModel::decryption($contratacao_id);
-        }
+        $contratacao_id = MainModel::decryption($contratacao_id);
 
         if ($unico != 0 && $parcela_id != NULL) {
             $testaDataInicio = DbModel::consultaSimples("SELECT fp.data_inicio FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 AND fp.id = $parcela_id");

@@ -18,6 +18,8 @@ if (isset($_POST['_method'])) {
     require_once "../controllers/FormacaoDocumentoController.php";
     require_once "../controllers/FormacaoEditalController.php";
     require_once "../controllers/FormacaoPedidoController.php";
+    require_once "../controllers/FormacaoNotaEmpenhoController.php";
+
 
     require_once "../controllers/PessoaFisicaController.php";
     $insPessoaFisica = new PessoaFisicaController();

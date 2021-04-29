@@ -276,9 +276,7 @@ class PessoaFisicaController extends PessoaFisicaModel
      */
     public function recuperaPessoaFisica($id, $capac = false):stdClass
     {
-        if (gettype($id == "string")){
-            $id = MainModel::decryption($id);
-        }
+        $id = MainModel::decryption($id);
         $pf = DbModel::consultaSimples(
             "SELECT pf.*, pe.*, pb.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, gi.grau_instrucao, ns.nome_social 
             FROM pessoa_fisicas AS pf
