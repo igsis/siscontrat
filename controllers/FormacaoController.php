@@ -16,7 +16,7 @@ class FormacaoController extends FormacaoModel
      * @param int|string $contratacao_id
      * @return string
      */
-    public function retornaObjetoFormacao($contratacao_id): string
+    public function retornarObjeto($contratacao_id): string
     {
         if (gettype($contratacao_id == "string")) {
             $contratacao_id = MainModel::decryption($contratacao_id);
@@ -86,9 +86,9 @@ class FormacaoController extends FormacaoModel
     }
 
     //retorna uma string ou um objeto com todos os locais que o pedido possui
-    public function retornaLocaisFormacao($contratacao_id, $obj = 0, $decryption = 0)
+    public function retornaLocaisFormacao($contratacao_id, $obj = 0)
     {
-        if ($decryption != 0) {
+        if (gettype($contratacao_id) == "string") {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
         $locais = "";
@@ -116,9 +116,9 @@ class FormacaoController extends FormacaoModel
         endif;
     }
 
-    public function retornaCargaHoraria($contratacao_id, $decryption = 0)
+    public function retornaCargaHoraria($contratacao_id)
     {
-        if ($decryption != 0) {
+        if (gettype($contratacao_id) == "string") {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
@@ -130,9 +130,9 @@ class FormacaoController extends FormacaoModel
         return $carga;
     }
 
-    public function retornaPeriodoFormacao($contratacao_id, $decryption = 0, $unico = 0, $parcela_id = NULL)
+    public function retornaPeriodoFormacao($contratacao_id, $unico = 0, $parcela_id = NULL)
     {
-        if ($decryption != 0) {
+        if (gettype($contratacao_id) == "string") {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
