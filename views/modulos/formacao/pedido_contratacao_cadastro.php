@@ -10,8 +10,7 @@ $pfObj =  new PessoaFisicaController();
 
 if ($pedido_id != ''):
     $pedido = $pedidoObj->recuperar($pedido_id);
-    var_dump($pedido);
-//    $contratacao_id = $pedido->origem_id;
+    $contratacao_id = $pedido->origem_id;
     $contratacao = $contratacaoObj->recuperar($contratacao_id);
 else:
     $contratacao_id = isset($_GET['contratacao_id']) ? $_GET['contratacao_id'] : "";
@@ -68,7 +67,7 @@ endif;
                             <div class="form-group col-md">
                                 <label for="objeto">Objeto:</label>
                                 <textarea name="objeto" class="form-control" rows="3"
-                                          disabled><?= (new FormacaoController)->retornarObjeto($contratacao_id) ?>
+                                          disabled><?= isset($_GET['contratacao_id']) ? (new FormacaoController)->retornarObjeto($contratacao_id, '1') : (new FormacaoController)->retornarObjeto($contratacao_id) ?>
                                 </textarea>
                             </div>
 

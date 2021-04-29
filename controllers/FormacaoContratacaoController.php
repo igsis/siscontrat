@@ -141,9 +141,10 @@ class FormacaoContratacaoController extends FormacaoModel
      * @param int|string $contratacao_id <p>id da tabela formacao_contratacoes</p>
      * @return object
      */
-    public function recuperar($contratacao_id):stdClass //para o PedidoController::recuperaPedido
+    //para o PedidoController::recuperaPedido
+    public function recuperar($contratacao_id):stdClass
     {
-        if (gettype($contratacao_id) == "string") {
+        if (strlen($contratacao_id) > 10) {
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
         $form = DbModel::consultaSimples("SELECT fc.protocolo, fc.pessoa_fisica_id, fc.ano, fs.status, fc.chamado, fc.classificacao, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, fc.form_vigencia_id, fc.observacao, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, fc.num_processo_pagto, user.nome_completo as usuario_nome, fc.data_envio, rp.regiao
