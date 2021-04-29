@@ -64,10 +64,7 @@ class FormacaoController extends FormacaoModel
      */
     public function recuperaDadosParcelas($contratacao_id, $unica = false, $parcela_id = NULL)
     {
-        if (gettype($contratacao_id == "string")){
-            $contratacao_id = MainModel::decryption($contratacao_id);
-        }
-
+        $contratacao_id = MainModel::decryption($contratacao_id);
         if ($unica && $parcela_id != NULL):
             $parcelas = DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 AND fp.id = $parcela_id")->fetchObject();
         else:
@@ -75,8 +72,8 @@ class FormacaoController extends FormacaoModel
             $carga = 0;
             $valor = 0;
             foreach ($parcelas as $parcela) {
-                $carga = $carga + $parcela['carga_horaria'];
-                $valor = $valor + $parcela['valor'];
+                $carga = $carga + $parcela->carga_horaria;
+                $valor = $valor + $parcela->valor;
             }
             $parcelas['carga_horaria_total'] = $carga;
             $parcelas['valor_total'] = $valor;
@@ -94,7 +91,7 @@ class FormacaoController extends FormacaoModel
             $carga = $carga + $consultaParcela['carga_horaria'];
         }
         return $carga;
-    }*/
+    }
 
     public function retornaPeriodoFormacao($contratacao_id, $unico = 0, $parcela_id = NULL)
     {
