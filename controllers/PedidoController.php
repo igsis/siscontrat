@@ -88,9 +88,7 @@ class PedidoController extends PedidoModel
      */
     public function recuperaPedido(int $origem_tipo_id, $origem_id):stdClass
     {
-        if (gettype($origem_id) == "string") {
-            $origem_id = MainModel::decryption($origem_id);
-        }
+        $origem_id = MainModel::decryption($origem_id);
 
         /** Tipo Evento */
         if ($origem_tipo_id == 1){
