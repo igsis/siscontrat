@@ -5,26 +5,20 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
 require_once "../controllers/PessoaFisicaController.php";
-require_once "../controllers/FormacaoController.php";
 $pfObj = new PessoaFisicaController();
-$formObj = new FormacaoController();
 
 $id_pf =  $_GET['id'];
 
 class PDF extends FPDF{
     function Header()
     {
-        // Logo
+        // grade de fundo
         $this->Image('../views/dist/img/fac_pf.jpg', 15, 10, 180);
-
-        // Line break
         $this->Ln(20);
     }
 }
 
 $pf = $pfObj->recuperaPessoaFisica($id_pf);
-
-$nome = $pf->nome_social != null ? "{$pf->nome_social} ({$pf->nome})" : $pf->nome;
 
 $data = date('d-m-Y');
 
@@ -54,7 +48,7 @@ $pdf->Cell(53, $l, utf8_decode($pf->ccm == NULL ? "Não cadastrado" : $pf->ccm),
 
 $pdf->SetXY($x, 55);
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(160, $l, utf8_decode($nome), 0, 0, 'L');
+$pdf->Cell(160, $l, utf8_decode($pf->nome_exibicao), 0, 0, 'L');
 
 $pdf->SetXY($x, 68);
 $pdf->SetFont('Arial', '', 10);
@@ -87,8 +81,7 @@ $pdf->Cell(33, $l, utf8_decode(""), 0, 0, 'L');
 
 $pdf->SetXY($x, 122);
 $pdf->SetFont('Arial', '', 9);
-$pdf->Cell(87, $l, utf8_decode($pf->nome), 0, 0, 'L');
+$pdf->Cell(87, $l, utf8_decode($pf->nome_exibicao), 0, 0, 'L');
 $pdf->Cell(50, $l, utf8_decode($pf->rg), 0, 0, 'L');
 
-
-$pdf->Output('FACC '.$nome.'.pdf', 'I');
+$pdf->Output('FACC '.$pf->nome.'.pdf', 'I');
