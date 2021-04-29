@@ -167,7 +167,7 @@ class FormacaoContratacaoController extends FormacaoModel
         ")->fetch(PDO::FETCH_ASSOC);
         $pfObj = new PessoaFisicaController();
         $idPf = $this->encryption($form['pessoa_fisica_id']);
-        $pf = $pfObj->recuperaPessoaFisica($idPf);
+        $pf = $pfObj->recuperaPessoaFisicaResumo($idPf);
         $contratacao = array_merge($form,(array)$pf);
         return (object)$contratacao;
     }
