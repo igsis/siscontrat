@@ -1,9 +1,9 @@
 <?php
 $pedido_id = isset($_GET['id']) ? $_GET['id'] : "";
-require_once "./controllers/FormacaoController.php";
-$formObj = new FormacaoController();
+require_once "./controllers/FormacaoNotaEmpenhoController.php";
+$formObj = new FormacaoNotaEmpenhoController();
 
-$nota = $formObj->retornaNotaEmpenho($pedido_id);
+$nota = $formObj->recuperar($pedido_id);
 $readonly = "";
 if (isset($nota->nota_empenho))
     $readonly = "readonly";

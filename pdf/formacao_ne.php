@@ -4,9 +4,11 @@ $pedidoAjax = true;
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
+require_once "../controllers/FormacaoNotaEmpenhoController.php";
+require_once "../controllers/FormacaoPedidoController.php";
 require_once "../controllers/FormacaoController.php";
 
-$formObj = new FormacaoController();
+$formObj = new FormacaoNotaEmpenhoController();
 
 $pedido_id = $_GET['id'];
 
@@ -14,9 +16,9 @@ class PDF extends FPDF
 {
 }
 
-$ne = $formObj->retornaNotaEmpenho($pedido_id);
-$pedido = $formObj->recuperaPedido($pedido_id);
-$pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
+$ne = $formObj->recuperar($pedido_id);
+$pedido = (new FormacaoPedidoController)->recuperar($pedido_id);
+$pf = (new FormacaoController)->recuperaPf($pedido->pessoa_fisica_id);
 
 $nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
 
