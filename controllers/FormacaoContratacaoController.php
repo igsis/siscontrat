@@ -3,9 +3,11 @@
 if ($pedidoAjax) {
     require_once "../models/FormacaoModel.php";
     require_once "../controllers/PessoaFisicaController.php";
+    require_once "../controllers/PedidoController.php";
 } else {
     require_once "./models/FormacaoModel.php";
     require_once "./controllers/PessoaFisicaController.php";
+    require_once "./controllers/PedidoController.php";
 }
 
 class FormacaoContratacaoController extends FormacaoModel
@@ -55,6 +57,9 @@ class FormacaoContratacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    /**
+     * @throws Exception
+     */
     public function editar($post)
     {
         $contratacao_id = MainModel::decryption($post['id']);
@@ -80,6 +85,13 @@ class FormacaoContratacaoController extends FormacaoModel
         $dados = MainModel::limpaPost($post);
         $update = DbModel::update('formacao_contratacoes', $dados, $contratacao_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $pedido = (new PedidoController)->existePedido(2, $contratacao_id);
+            if ($pedido){
+                $dados['forma_pagamento'] = (new PedidoController)->recuperaFormaPagto(2,intval($pedido->id));
+                //$dados['valor_total'] = "";
+                DbModel::update("pedidos", $dados, $pedido->id);
+            }
+
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Dados de Contratação Atualizados!',
@@ -100,11 +112,16 @@ class FormacaoContratacaoController extends FormacaoModel
 
     public function apagar($post)
     {
-        unset($post['_method']);
         $contratacao_id = MainModel::decryption($post['id']);
+        unset($post['_method']);
         unset($post['id']);
+
         $delete = DbModel::apaga('formacao_contratacoes', $contratacao_id);
         if ($delete->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $pedido = (new PedidoController)->existePedido(2, $contratacao_id);
+            if ($pedido) {
+                DbModel::apaga('pedido',$pedido->id);
+            }
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Dados de contratação Apagados!',

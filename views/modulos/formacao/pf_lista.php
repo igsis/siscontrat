@@ -1,10 +1,10 @@
 <?php
-    require_once "./controllers/FormacaoController.php";
-    $formacaoObj = new FormacaoController();
-    
-    $lista_pf = $formacaoObj->listaPedidos();
+    require_once "./controllers/PedidoController.php";
+    $pedidoObj = new PedidoController();
 
-    $anoVigencia = $formacaoObj->recuperaAnoVigente()->ano_vigente;
+    $lista_pf = $pedidoObj->listaPedidos(2);
+
+    //$anoVigencia = $formacaoObj->recuperaAnoVigente()->ano_vigente;
 
 ?>
 <!-- Content Header (Page header) -->

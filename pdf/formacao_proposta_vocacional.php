@@ -33,7 +33,7 @@ $contratacao = $formObj->recuperaContratacao($pedido->origem_id);
 $pf = $pfObj->recuperaPessoaFisica($pfObj->encryption($pedido->pessoa_fisica_id));
 $Observacao = "Todas as atividades dos programas da Supervisão de Formação são inteiramente gratuitas e é terminantemente proibido cobrar por elas sob pena de multa e rescisão de contrato.";
 $penalidades = PedidoController::retornaPenalidades(20);
-$dadosParcelas = $formObj->retornaDadosParcelas($pedido->origem_id);
+$dadosParcelas = $formObj->recuperaDadosParcelas($pedido->origem_id);
 
 $nome = $pf->nome_social != null ? "{$pf->nome_social} ({$pf->nome})" : $pf->nome;
 

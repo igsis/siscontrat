@@ -11,7 +11,6 @@ if ($pedidoAjax) {
 
 class FormacaoController extends FormacaoModel
 {
-
     /**
      * @param int|string $contratacao_id
      * @return string
@@ -41,50 +40,6 @@ class FormacaoController extends FormacaoModel
         return "";
     }
 
-    public function listaPedidos($ano = 0, $pedido = 0)
-    {
-        $whereAno = "";
-        if ($ano) {
-            $whereAno = "AND fc.ano = {$ano}";
-        }
-
-        $whereStatusPedido = "";
-        if ($pedido) {
-            if ($pedido == 2) {
-                $whereStatusPedido = "AND p.status_pedido_id = 2";
-            } else {
-                $whereStatusPedido = "AND p.status_pedido_id != 2";
-            }
-        }
-
-        $sql = "SELECT   p.id, p.origem_id,fc.protocolo, fc.ano,
-                         p.numero_processo,fc.num_processo_pagto, 
-                         pf.id AS 'pessoa_fisica_id', pf.nome, ns.nome_social, pf.cpf, pf.passaporte, v.verba, 
-                         ps.`status`, fc.form_status_id 
-            FROM pedidos p 
-            LEFT JOIN pedido_status ps ON p.status_pedido_id = ps.id
-            INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id 
-            INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id                
-            LEFT JOIN pf_nome_social ns ON pf.id = ns.pessoa_fisica_id                
-            INNER JOIN verbas v on p.verba_id = v.id 
-            INNER JOIN formacao_status fs on fc.form_status_id = fs.id
-            WHERE p.publicado = 1 AND p.origem_tipo_id = 2 {$whereAno} {$whereStatusPedido}";
-
-        return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
-    }
-
-    public function anosPedido()
-    {
-        $sql = "SELECT MIN(ano) AS min, MAX(ano) AS max                                              
-            FROM pedidos p                                                           
-            INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id               
-            INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id              
-            INNER JOIN verbas v on p.verba_id = v.id                                 
-            INNER JOIN formacao_status fs on fc.form_status_id = fs.id               
-            WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2";
-        return DbModel::consultaSimples($sql)->fetchObject();
-    }
-
     //retorna uma string ou um objeto com todos os locais que o pedido possui
     public function retornaLocaisFormacao($contratacao_id, $obj = 0, $decryption = 0)
     {
@@ -103,20 +58,35 @@ class FormacaoController extends FormacaoModel
         endif;
     }
 
-    public function retornaDadosParcelas($contratacao_id, $decryption = 0, $unica = 0, $parcela_id = NULL)
+    /**
+     * @param int|string $contratacao_id
+     * @param false $unica <p>Informar true se for recuperar os dados de uma determinada parcela</p>
+     * @param null $parcela_id <p>Informar o id da parcela se $unica = true</p>
+     * @return array|mixed
+     */
+    public function recuperaDadosParcelas($contratacao_id, $unica = false, $parcela_id = NULL)
     {
-        if ($decryption != 0) {
+        if (gettype($contratacao_id == "string")){
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
 
-        if ($unica != 0 && $parcela_id != NULL):
-            return DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 AND fp.id = $parcela_id")->fetchObject();
+        if ($unica && $parcela_id != NULL):
+            $parcelas = DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 AND fp.id = $parcela_id")->fetchObject();
         else:
-            return DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+            $parcelas =  DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+            $carga = 0;
+            $valor = 0;
+            foreach ($parcelas as $parcela) {
+                $carga = $carga + $parcela['carga_horaria'];
+                $valor = $valor + $parcela['valor'];
+            }
+            $parcelas['carga_horaria_total'] = $carga;
+            $parcelas['valor_total'] = $valor;
         endif;
+        return $parcelas;
     }
 
-    public function retornaCargaHoraria($contratacao_id, $decryption = 0)
+    /*public function retornaCargaHoraria($contratacao_id, $decryption = 0)
     {
         if ($decryption != 0) {
             $contratacao_id = MainModel::decryption($contratacao_id);
@@ -128,7 +98,7 @@ class FormacaoController extends FormacaoModel
             $carga = $carga + $consultaParcela['carga_horaria'];
         }
         return $carga;
-    }
+    }*/
 
     public function retornaPeriodoFormacao($contratacao_id, $decryption = 0, $unico = 0, $parcela_id = NULL)
     {
@@ -162,8 +132,6 @@ class FormacaoController extends FormacaoModel
         }
 
     }
-
-//    dados contratacao
 
     public function listaDadosContratacaoCapac($ano = 0)
     {
@@ -251,6 +219,48 @@ class FormacaoController extends FormacaoModel
     /*
      * apagar a partir daqui
      */
+    /*public function listaPedidos($ano = 0, $pedido = 0)
+{
+    $whereAno = "";
+    if ($ano) {
+        $whereAno = "AND fc.ano = {$ano}";
+    }
+
+    $whereStatusPedido = "";
+    if ($pedido) {
+        if ($pedido == 2) {
+            $whereStatusPedido = "AND p.status_pedido_id = 2";
+        } else {
+            $whereStatusPedido = "AND p.status_pedido_id != 2";
+        }
+    }
+
+    $sql = "SELECT   p.id, p.origem_id,fc.protocolo, fc.ano,
+                     p.numero_processo,fc.num_processo_pagto,
+                     pf.id AS 'pessoa_fisica_id', pf.nome, ns.nome_social, pf.cpf, pf.passaporte, v.verba,
+                     ps.`status`, fc.form_status_id
+        FROM pedidos p
+        LEFT JOIN pedido_status ps ON p.status_pedido_id = ps.id
+        INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id
+        INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
+        LEFT JOIN pf_nome_social ns ON pf.id = ns.pessoa_fisica_id
+        INNER JOIN verbas v on p.verba_id = v.id
+        INNER JOIN formacao_status fs on fc.form_status_id = fs.id
+        WHERE p.publicado = 1 AND p.origem_tipo_id = 2 {$whereAno} {$whereStatusPedido}";
+
+    return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
+}*/
+    /*public function anosPedido()
+    {
+        $sql = "SELECT MIN(ano) AS min, MAX(ano) AS max
+            FROM pedidos p
+            INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id
+            INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
+            INNER JOIN verbas v on p.verba_id = v.id
+            INNER JOIN formacao_status fs on fc.form_status_id = fs.id
+            WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2";
+        return DbModel::consultaSimples($sql)->fetchObject();
+    }*/
     /*public function recuperaPedido($pedido_id, $excel = 0, $ano = 0)
     {
         if ($excel != 0 && $ano != 0):
