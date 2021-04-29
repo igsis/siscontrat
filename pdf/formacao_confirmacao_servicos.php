@@ -4,6 +4,7 @@ $pedidoAjax = true;
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
 require_once "../controllers/FormacaoController.php";
+require_once "../controllers/FormacaoPedidoController.php";
 
 $formObj = new FormacaoController();
 
@@ -11,9 +12,9 @@ $parcela_id = $_GET['parcela'];
 $pedido_id = $_GET['id'];
 
 $dataAtual = date('d/m/Y');
-$contratacao_id = $formObj->recuperaPedido($pedido_id)->origem_id;
-$dadosParcela = $formObj->recuperaDadosParcelas($contratacao_id, '', '1', $parcela_id);
-$periodo = $formObj->retornaPeriodoFormacao($contratacao_id, '', '1', $parcela_id);
+$contratacao_id = (new FormacaoPedidoController)->recuperar($pedido_id)->origem_id;
+$dadosParcela = $formObj->recuperaDadosParcelas($contratacao_id, '1', $parcela_id);
+$periodo = $formObj->retornaPeriodoFormacao($contratacao_id, '1', $parcela_id);
 
 $data_inicio = MainModel::dataParaBR($dadosParcela->data_inicio);
 $data_fim = MainModel::dataParaBR($dadosParcela->data_fim);
