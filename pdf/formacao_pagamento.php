@@ -26,7 +26,7 @@ foreach ($pf->telefones as $key => $telefone) {
     }
     $telPf .= "{$telefone}";
 }
-$parcelaDados = (new FormacaoController)->recuperaDadosParcelas($pedido->origem_id, '', $parcela_id);
+$parcelaDados = (new FormacaoController)->recuperaDadosParcelas($pedido->origem_id, true, $parcela_id);
 
 $nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
 
@@ -68,7 +68,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(16, $l, utf8_decode("Assunto:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(166, $l, utf8_decode("Pedido de Pagamento de R$ " . MainModel::dinheiroParaBr($parcelaDados[$parcela_id]->valor) . " ( " . MainModel::valorPorExtenso($parcelaDados[$parcela_id]->valor) . ")"), 0, 'L', 0);
+$pdf->MultiCell(166, $l, utf8_decode("Pedido de Pagamento de R$ " . MainModel::dinheiroParaBr($parcelaDados->valor) . " ( " . MainModel::valorPorExtenso($parcelaDados->valor) . ")"), 0, 'L', 0);
 
 $pdf->Ln();
 
@@ -95,7 +95,7 @@ $pdf->MultiCell(145, $l, utf8_decode((new FormacaoController)->retornaPeriodoFor
 $pdf->Ln();
 
 $pdf->SetX($x);
-$pdf->MultiCell(200, $l, utf8_decode("PAGAMENTO LIBERÁVEL A PARTIR DE " . MainModel::dataParaBR($parcelaDados[$parcela_id]->data_pagamento) . " MEDIANTE CONFIRMAÇÃO DA UNIDADE PROPONENTE."), 0, 'L', 0);
+$pdf->MultiCell(200, $l, utf8_decode("PAGAMENTO LIBERÁVEL A PARTIR DE " . MainModel::dataParaBR($parcelaDados->data_pagamento) . " MEDIANTE CONFIRMAÇÃO DA UNIDADE PROPONENTE."), 0, 'L', 0);
 
 $pdf->Ln();
 
