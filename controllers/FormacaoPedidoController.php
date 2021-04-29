@@ -53,9 +53,7 @@ class FormacaoPedidoController extends FormacaoModel
 
     public function editar($post)
     {
-        if (strlen($post['id']) > 10){
-            $pedido_id = MainModel::decryption($post['id']);
-        }
+        $pedido_id = MainModel::decryption($post['id']);
 
         unset($post['_method']);
         unset($post['id']);

@@ -88,9 +88,7 @@ class FormacaoController extends FormacaoModel
     //retorna uma string ou um objeto com todos os locais que o pedido possui
     public function retornaLocaisFormacao($contratacao_id, $obj = 0)
     {
-        if (strlen($contratacao_id) > 10) {
-            $contratacao_id = MainModel::decryption($contratacao_id);
-        }
+        $contratacao_id = MainModel::decryption($contratacao_id);
         $locais = "";
         $locaisArrays = DbModel::consultaSimples("SELECT l.id, l.local FROM formacao_locais AS fl INNER JOIN locais AS l ON fl.local_id = l.id WHERE form_pre_pedido_id = $contratacao_id")->fetchAll();
         if ($obj != 0):
@@ -118,9 +116,7 @@ class FormacaoController extends FormacaoModel
 
     public function retornaCargaHoraria($contratacao_id)
     {
-        if (strlen($contratacao_id) > 10) {
-            $contratacao_id = MainModel::decryption($contratacao_id);
-        }
+        $contratacao_id = MainModel::decryption($contratacao_id);
 
         $carga = 0;
         $consultaParcelas = DbModel::consultaSimples("SELECT fp.carga_horaria FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1")->fetchAll();
@@ -132,9 +128,7 @@ class FormacaoController extends FormacaoModel
 
     public function retornaPeriodoFormacao($contratacao_id, $unico = 0, $parcela_id = NULL)
     {
-        if (strlen($contratacao_id) > 10) {
-            $contratacao_id = MainModel::decryption($contratacao_id);
-        }
+        $contratacao_id = MainModel::decryption($contratacao_id);
 
         if ($unico != 0 && $parcela_id != NULL) {
             $testaDataInicio = DbModel::consultaSimples("SELECT fp.data_inicio FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fc.id = $contratacao_id AND fp.publicado = 1 AND fp.id = $parcela_id");
