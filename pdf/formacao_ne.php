@@ -7,6 +7,7 @@ require_once "../views/plugins/fpdf/fpdf.php";
 require_once "../controllers/FormacaoNotaEmpenhoController.php";
 require_once "../controllers/FormacaoPedidoController.php";
 require_once "../controllers/FormacaoController.php";
+require_once "../controllers/PessoaFisicaController.php";
 
 $formObj = new FormacaoNotaEmpenhoController();
 
@@ -18,7 +19,7 @@ class PDF extends FPDF
 
 $ne = $formObj->recuperar($pedido_id);
 $pedido = (new FormacaoPedidoController)->recuperar($pedido_id);
-$pf = (new FormacaoController)->recuperaPf($pedido->pessoa_fisica_id);
+$pf = (new PessoaFisicaController)->recuperaPessoaFisica($pedido->pessoa_fisica_id);
 
 $nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
 
@@ -117,7 +118,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
 $pdf->Cell(15, $l, "Objeto:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(155, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)));
+$pdf->MultiCell(155, $l, utf8_decode((new FormacaoController)->retornarObjeto($pedido->origem_id)));
 
 $pdf->Output('formacao_ne.pdf', 'I');
 ?>
