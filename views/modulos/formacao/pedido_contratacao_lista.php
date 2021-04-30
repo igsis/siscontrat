@@ -8,9 +8,9 @@ $pedidoEnviado = isset($_GET['pedidoEnviado']) ? $_GET['pedidoEnviado'] : 0;
 
 
 if ($anoPedido || $pedidoEnviado) {
-    $pedidos = $formObj->listaPedidos($anoPedido, $pedidoEnviado);
+    $pedidos = $formObj->listaPedidos(2 ,$anoPedido, $pedidoEnviado);
 } else {
-    $pedidos = $formObj->listaPedidos();
+    $pedidos = $formObj->listaPedidos(2);
 }
 
 $anos = $formObj->recuperaAnos();

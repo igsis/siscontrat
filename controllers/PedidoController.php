@@ -143,7 +143,7 @@ class PedidoController extends PedidoModel
         return (object)$pedido;
     }
 
-    public function listaPedidos($origem_tipo_id, $ano = false)
+    public function listaPedidos($origem_tipo_id, $ano = false, $statusPedido = false)
     {
         $pedidos = PedidoModel::listaBasePedido($origem_tipo_id);
         if ($origem_tipo_id == 1) { //evento
@@ -164,6 +164,23 @@ class PedidoController extends PedidoModel
             }
         }
         if ($origem_tipo_id == 2){ //formação
+
+            $whereStatusPedido = "";
+            $whereAno = "";
+
+            if ($ano) {
+
+            }
+
+            if ($statusPedido) {
+                if ($statusPedido == 2) {
+                    $whereStatusPedido = "AND p.status_pedido_id = 2";
+                } else {
+                    $whereStatusPedido = "AND p.status_pedido_id != 2";
+                }
+            }
+
+
             $formObj = new FormacaoContratacaoController();
             foreach ($pedidos as $pedido) {
                 $form = $formObj->recuperar(intval($pedido->origem_id));
