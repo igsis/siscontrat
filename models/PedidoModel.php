@@ -18,7 +18,7 @@ class PedidoModel extends MainModel
         )->fetch(PDO::FETCH_ASSOC);
     }
 
-    protected function listaBasePedido($origem_tipo_id)
+    protected function listaBasePedido($origem_tipo_id, $filtro)
     {
         return DbModel::consultaSimples("SELECT p.*, v.verba, ps.status, uc.nome_completo as operador_contrato, up.nome_completo as operador_pagamento 
                 FROM pedidos p
@@ -26,7 +26,7 @@ class PedidoModel extends MainModel
                 INNER JOIN pedido_status ps on p.status_pedido_id = ps.id
                 LEFT JOIN usuarios uc on p.operador_id = uc.id
                 LEFT JOIN usuarios up on p.operador_pagamento_id = up.id
-                WHERE p.origem_tipo_id = '$origem_tipo_id' AND p.publicado = 1
+                WHERE p.origem_tipo_id = '$origem_tipo_id' AND p.publicado = 1 {$filtro}
         ")->fetchAll(PDO::FETCH_OBJ);
     }
 

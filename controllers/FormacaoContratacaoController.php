@@ -145,9 +145,10 @@ class FormacaoContratacaoController extends FormacaoModel
      * @param int|string $contratacao_id <p>id da tabela formacao_contratacoes</p>
      * @return object
      */
-    public function recuperar($contratacao_id, $filtro)
+    public function recuperar($contratacao_id)
     {
         $contratacao_id = MainModel::decryption($contratacao_id);
+
         $form = DbModel::consultaSimples("SELECT fc.*, fc.id as formacao_contratacao_id, fc.pessoa_fisica_id, fs.status, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, user.nome_completo as usuario_nome, rp.regiao
             FROM formacao_contratacoes AS fc
                 INNER JOIN formacao_status fs on fc.form_status_id = fs.id
@@ -158,11 +159,12 @@ class FormacaoContratacaoController extends FormacaoModel
                 INNER JOIN linguagens AS l ON l.id = fc.linguagem_id
                 INNER JOIN projetos prj on fc.projeto_id = prj.id
                 INNER JOIN formacao_cargos AS c ON c.id = fc.form_cargo_id
+                INNER JOIN pedidos AS p ON fc.pedido_id = p.id
                 LEFT JOIN usuarios fis on fc.fiscal_id = fis.id
                 LEFT JOIN usuarios sup on fc.suplente_id = sup.id
                 LEFT JOIN usuarios user on fc.usuario_id = user.id
                 INNER JOIN regiao_preferencias rp on fc.regiao_preferencia_id = rp.id
-                WHERE fc.id = '$contratacao_id' AND fc.publicado = 1 {$filtro}")->fetch(PDO::FETCH_ASSOC);
+                WHERE fc.id = '$contratacao_id' AND fc.publicado = 1")->fetch(PDO::FETCH_ASSOC);
         if ($form){
             $pfObj = new PessoaFisicaController();
             $pf = $pfObj->recuperaPessoaFisicaResumo($form['pessoa_fisica_id']);

@@ -145,7 +145,20 @@ class PedidoController extends PedidoModel
 
     public function listaPedidos($origem_tipo_id, $ano = false, $statusPedido = false)
     {
-        $pedidos = PedidoModel::listaBasePedido($origem_tipo_id);
+        $whereStatusPedido = "";
+        $whereAno = "";
+        if ($ano) {
+            $whereAno = "AND fc.ano = {$ano}";
+        }
+        if ($statusPedido) {
+            if ($statusPedido == 2) {
+                $whereStatusPedido = "AND p.status_pedido_id = 2";
+            } else {
+                $whereStatusPedido = "AND p.status_pedido_id != 2";
+            }
+        }
+        $filtro = "{$whereAno} {$whereStatusPedido}";
+        $pedidos = PedidoModel::listaBasePedido($origem_tipo_id, $filtro);
         if ($origem_tipo_id == 1) { //evento
             foreach ($pedidos as $pedido) {
                 if ($pedido->pessoa_tipo_id == 2) { //pessoa jurídica
@@ -164,22 +177,10 @@ class PedidoController extends PedidoModel
             }
         }
         if ($origem_tipo_id == 2){ //formação
-            $whereStatusPedido = "";
-            $whereAno = "";
-            if ($ano) {
-                $whereAno = "AND fc.ano = {$ano}";
-            }
-            if ($statusPedido) {
-                if ($statusPedido == 2) {
-                    $whereStatusPedido = "AND p.status_pedido_id = 2";
-                } else {
-                    $whereStatusPedido = "AND p.status_pedido_id != 2";
-                }
-            }
-            $filtro = "{$whereAno} {$whereStatusPedido}";
+
             $formObj = new FormacaoContratacaoController();
             foreach ($pedidos as $pedido) {
-                $form = $formObj->recuperar(intval($pedido->origem_id), $filtro);
+                $form = $formObj->recuperar(intval($pedido->origem_id));
                 if ($form) {
                     $pedido->proponente = $form->nome;
                     $pedido->documento = $form->documento;
