@@ -120,7 +120,7 @@ class FormacaoContratacaoController extends FormacaoModel
         if ($delete->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $pedido = (new PedidoController)->existePedido(2, $contratacao_id);
             if ($pedido) {
-                DbModel::apaga('pedido',$pedido->id);
+                DbModel::apaga('pedidos',$pedido->id);
             }
             $alerta = [
                 'alerta' => 'sucesso',
