@@ -233,7 +233,7 @@ class PedidoController extends PedidoModel
 
     }
 
-    public function retornaPenalidades($penal_id){
+    public function recuperaPenalidades($penal_id){
         return DbModel::consultaSimples("SELECT texto FROM penalidades WHERE id = $penal_id")->fetchObject()->texto;
     }
 
