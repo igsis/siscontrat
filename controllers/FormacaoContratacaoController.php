@@ -87,9 +87,10 @@ class FormacaoContratacaoController extends FormacaoModel
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
             $pedido = (new PedidoController)->existePedido(2, $contratacao_id);
             if ($pedido){
-                $dados['forma_pagamento'] = (new PedidoController)->recuperaFormaPagto(2,intval($pedido->id));
-                //$dados['valor_total'] = "";
-                DbModel::update("pedidos", $dados, $pedido->id);
+                $dadosPedido['forma_pagamento'] = (new PedidoController)->recuperaFormaPagto(2,intval($contratacao_id));
+                $valor = (new FormacaoController)->recuperaDadosParcelas($contratacao_id);
+                $dadosPedido['valor_total'] = $valor['valor_total'];
+                DbModel::update("pedidos", $dadosPedido, $pedido->id);
             }
 
             $alerta = [
