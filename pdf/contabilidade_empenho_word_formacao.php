@@ -36,7 +36,7 @@ header("Content-Disposition: attachment;Filename=" . $pedido->numero_processo . 
         De acordo com a Portaria nº 5/2012 de SF, haverá compensação financeira, se houver atraso no pagamento do valor devido, por culpa exclusiva do Contratante, dependendo de requerimento a ser formalizado pelo Contratado.</p>
     <p style="text-align: justify"><b>FISCALIZAÇÃO DO CONTRATO NA SMC: </b>Servidor <?=$pedido->fiscal_nome?> - RF <?=$pedido->fiscal_rf?> como fiscal do contrato e Sr(a) <?=$pedido->suplente_nome?> - RF <?=$pedido->suplente_rf?> como substituto(a).<br>
         <b> De acordo com a Portaria nº 5/2012 de SF, haverá compensação financeira, se houver atraso no pagamento do valor devido, por culpa exclusiva do Contratante, dependendo de requerimento a ser formalizado pelo Contratado.</b> </p>
-    <p style="text-align: justify"><b>PENALIDADES:</b> <?= $pedidoObj->retornaPenalidades(20) ?></p>
+    <p style="text-align: justify"><b>PENALIDADES:</b> <?= $pedidoObj->recuperaPenalidades(20) ?></p>
     <p style="text-align: justify"><b>RESCISÃO CONTRATUAL: </b> DESPACHO - Dar-se-á caso ocorra quaisquer dos atos cabíveis descritos na legislação vigente.<br>
         * Contratação, por inexigibilidade da licitação, com fundamento no artigo 25, Inciso III, da Lei Federal nº. 8.666/93, e alterações posteriores, e artigo 1º da Lei Municipal nº. 13.278/02, nos termos dos artigos 16 e 17 do Decreto Municipal nº. 44.279/03.</p>
     <p style="text-align: justify"><b> ** OBSERVAÇÕES:<br/>
