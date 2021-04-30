@@ -169,7 +169,7 @@ class PedidoController extends PedidoModel
             $whereAno = "";
 
             if ($ano) {
-
+                $whereAno = "AND fc.ano = {$ano}";
             }
 
             if ($statusPedido) {
@@ -180,10 +180,11 @@ class PedidoController extends PedidoModel
                 }
             }
 
+            $filtro = "{$whereAno} {$whereStatusPedido}";
 
             $formObj = new FormacaoContratacaoController();
             foreach ($pedidos as $pedido) {
-                $form = $formObj->recuperar(intval($pedido->origem_id));
+                $form = $formObj->recuperar(intval($pedido->origem_id), $filtro);
                 $pedido->proponente = $form->nome;
                 $pedido->documento = $form->cpf;
                 $pedido->protocolo = $form->protocolo;
