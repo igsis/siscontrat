@@ -315,14 +315,16 @@ class PessoaFisicaController extends PessoaFisicaModel
      */
     public function recuperaPessoaFisicaResumo($id, $capac = false):stdClass
     {
-        if (gettype($id == "string")) {
-            $id = MainModel::decryption($id);
-        }
+        $id = MainModel::decryption($id);
         $pf = DbModel::consultaSimples("SELECT pf.id, pf.nome, pf.rg, pf.cpf, pf.passaporte, ns.nome_social FROM pessoa_fisicas as pf LEFT JOIN pf_nome_social ns on pf.id = ns.pessoa_fisica_id WHERE pf.id = '$id'")->fetchObject();
         if ($pf->nome_social) {
             $pf->nome = $pf->nome_social . " (" . $pf->nome . ")";
         }
-        $pf->documento = $pf->passaporte ?? $pf->cpf;
+        if ($pf->passaporte) {
+            $pf->documento = $pf->passaporte;
+        }else {
+            $pf->documento = $pf->cpf;
+        }
 
         return $pf;
     }

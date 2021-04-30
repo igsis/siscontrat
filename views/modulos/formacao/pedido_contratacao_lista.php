@@ -1,5 +1,6 @@
 <?php
 require_once "./controllers/PedidoController.php";
+require_once "./controllers/FormacaoController.php";
 
 $formObj = new PedidoController();
 
@@ -13,7 +14,7 @@ if ($anoPedido || $pedidoEnviado) {
     $pedidos = $formObj->listaPedidos(2);
 }
 
-$anos = $formObj->recuperaAnos();
+$anos = $formObj->recuperarAnos();
 
 ?>
 <!-- Content Header (Page header) -->
@@ -48,8 +49,7 @@ $anos = $formObj->recuperaAnos();
                                 Escolha o Ano
                             </button>
                             <!-- button with a dropdown -->
-                            <button class="btn btn-success btn-sm" data-toggle="modal"
-                                    data-target="#modal-exportar-pedido">
+                            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-exportar-pedido">
                                 <i class="fas fa-file-excel"></i> Exportar para Excel
                             </button>
                         </div>
@@ -72,19 +72,18 @@ $anos = $formObj->recuperaAnos();
                             <tbody>
                             <?php foreach ($pedidos as $pedido): ?>
                                 <tr>
-                                    <td><?= $pedido->protocolo ?></td>
+                                    <td><?= isset($pedido->protocolo) ? $pedido->protocolo : "" ?></td>
                                     <td><?= $pedido->numero_processo ?></td>
-                                    <td><?= $pedido->nome_social != null ? "$pedido->nome ($pedido->nome_social)" : $pedido->nome ?></td>
-                                    <td><?= $formObj->retornaLocaisFormacao($pedido->origem_id) ?></td>
-                                    <td><?= $pedido->ano ?></td>
+                                    <td><?= isset($pedido->proponente) ? $pedido->proponente : '' ?></td>
+                                    <td><?= (new FormacaoController)->retornaLocaisFormacao($pedido->origem_id) ?></td>
+                                    <td><?= isset($pedido->ano) ? $pedido->proponente : '' ?></td>
                                     <td><?= $pedido->verba ?></td>
                                     <td><?= $pedido->status ?></td>
                                     <td style="text-align: center">
                                         <div class="row">
                                             <div class="col">
                                                 <a href="<?= SERVERURL . "formacao/pedido_contratacao_cadastro&pedido_id=" . $formObj->encryption($pedido->id) ?>">
-                                                    <button type="submit"
-                                                            class="btn bg-gradient-primary btn-sm float-left">
+                                                    <button type="submit" class="btn bg-gradient-primary btn-sm float-left">
                                                         <i class="fas fa-user-edit"></i> Editar
                                                     </button>
                                                 </a>

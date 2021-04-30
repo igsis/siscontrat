@@ -164,14 +164,11 @@ class PedidoController extends PedidoModel
             }
         }
         if ($origem_tipo_id == 2){ //formação
-
             $whereStatusPedido = "";
             $whereAno = "";
-
             if ($ano) {
                 $whereAno = "AND fc.ano = {$ano}";
             }
-
             if ($statusPedido) {
                 if ($statusPedido == 2) {
                     $whereStatusPedido = "AND p.status_pedido_id = 2";
@@ -179,19 +176,19 @@ class PedidoController extends PedidoModel
                     $whereStatusPedido = "AND p.status_pedido_id != 2";
                 }
             }
-
             $filtro = "{$whereAno} {$whereStatusPedido}";
-
             $formObj = new FormacaoContratacaoController();
             foreach ($pedidos as $pedido) {
                 $form = $formObj->recuperar(intval($pedido->origem_id), $filtro);
-                $pedido->proponente = $form->nome;
-                $pedido->documento = $form->cpf;
-                $pedido->protocolo = $form->protocolo;
-                $pedido->ano = $form->ano;
+                if ($form) {
+                    $pedido->proponente = $form->nome;
+                    $pedido->documento = $form->documento;
+                    $pedido->protocolo = $form->protocolo;
+                    $pedido->ano = $form->ano;
+                }
             }
         }
-        return (object)$pedidos;
+        return $pedidos;
     }
 
     /**
@@ -294,7 +291,7 @@ class PedidoController extends PedidoModel
         return DbModel::consultaSimples("SELECT id FROM pedidos WHERE origem_tipo_id = '$tipo_origem_id' AND origem_id = '$origem_id' AND publicado = 1")->fetch(PDO::FETCH_OBJ);
     }
 
-    public function recuperaAnos()
+    public function recuperarAnos()
     {
         $sql = "SELECT MIN(ano) AS min, MAX(ano) AS max
             FROM pedidos p

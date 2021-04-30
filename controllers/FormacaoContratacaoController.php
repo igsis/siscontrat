@@ -145,7 +145,7 @@ class FormacaoContratacaoController extends FormacaoModel
      * @param int|string $contratacao_id <p>id da tabela formacao_contratacoes</p>
      * @return object
      */
-    public function recuperar($contratacao_id, $filtro):stdClass
+    public function recuperar($contratacao_id, $filtro)
     {
         $contratacao_id = MainModel::decryption($contratacao_id);
         $form = DbModel::consultaSimples("SELECT fc.*, fc.id as formacao_contratacao_id, fc.pessoa_fisica_id, fs.status, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, user.nome_completo as usuario_nome, rp.regiao
@@ -162,12 +162,14 @@ class FormacaoContratacaoController extends FormacaoModel
                 LEFT JOIN usuarios sup on fc.suplente_id = sup.id
                 LEFT JOIN usuarios user on fc.usuario_id = user.id
                 INNER JOIN regiao_preferencias rp on fc.regiao_preferencia_id = rp.id
-                WHERE fc.id = '$contratacao_id' AND fc.publicado = 1 {$filtro} ")->fetch(PDO::FETCH_ASSOC);
-        $pfObj = new PessoaFisicaController();
-        $idPf = $this->encryption($form['pessoa_fisica_id']);
-        $pf = $pfObj->recuperaPessoaFisicaResumo($idPf);
-        $contratacao = array_merge($form,(array)$pf);
-        return (object)$contratacao;
+                WHERE fc.id = '$contratacao_id' AND fc.publicado = 1 {$filtro}")->fetch(PDO::FETCH_ASSOC);
+        if ($form){
+            $pfObj = new PessoaFisicaController();
+            $pf = $pfObj->recuperaPessoaFisicaResumo($form['pessoa_fisica_id']);
+            $contratacao = array_merge((array)$pf, $form);
+            return (object)$contratacao;
+        }
+        return $form;
     }
 
 
