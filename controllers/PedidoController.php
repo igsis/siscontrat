@@ -123,7 +123,7 @@ class PedidoController extends PedidoModel
                 $pfObj = new PessoaFisicaController();
                 $idPf = $this->encryption($pedido['pessoa_fisica_id']);
                 $pf = $pfObj->recuperaPessoaFisica($idPf);
-                $pedido = array_merge($pedido,$pf);
+                $pedido = array_merge((array)$pedido,(array)$pf);
             }
         }
         /** Tipo Formação */
