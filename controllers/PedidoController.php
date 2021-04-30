@@ -279,4 +279,16 @@ class PedidoController extends PedidoModel
         }
         return DbModel::consultaSimples("SELECT id FROM pedidos WHERE origem_tipo_id = '$tipo_origem_id' AND origem_id = '$origem_id' AND publicado = 1")->fetchObject();
     }
+
+    public function recuperaAnos()
+    {
+        $sql = "SELECT MIN(ano) AS min, MAX(ano) AS max
+            FROM pedidos p
+            INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id
+            INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
+            INNER JOIN verbas v on p.verba_id = v.id
+            INNER JOIN formacao_status fs on fc.form_status_id = fs.id
+            WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2";
+        return DbModel::consultaSimples($sql)->fetchObject();
+    }
 }
