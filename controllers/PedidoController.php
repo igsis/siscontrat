@@ -5,39 +5,18 @@ if ($pedidoAjax) {
     require_once "../controllers/PessoaJuridicaController.php";
     require_once "../controllers/RepresentanteController.php";
     require_once "../controllers/FormacaoController.php";
+    require_once "../controllers/FormacaoContratacaoController.php";
 } else {
     require_once "./models/PedidoModel.php";
     require_once "./controllers/PessoaFisicaController.php";
     require_once "./controllers/PessoaJuridicaController.php";
     require_once "./controllers/RepresentanteController.php";
     require_once "./controllers/FormacaoController.php";
+    require_once "./controllers/FormacaoContratacaoController.php";
 }
 
 class PedidoController extends PedidoModel
 {
-    /**
-     * @param int $origem_tipo_id
-     * @param int|string $origem_id
-     * @return string
-     * @throws Exception
-     */
-    public function recuperaFormaPagto(int $origem_tipo_id,$origem_id):string
-    {
-        if (gettype($origem_id == "string")){
-            $origem_id = MainModel::decryption($origem_id);
-        }
-        if ($origem_tipo_id == 2){
-            $dadosParcelas = DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fp.publicado = 1 AND fc.id = $origem_id")->fetchAll(PDO::FETCH_OBJ);
-            $formaCompleta = "";
-            for ($i = 0; $i < count($dadosParcelas); $i++) :
-                $forma = $i + 1 . "º parcela R$ " . MainModel::dinheiroParaBr($dadosParcelas[$i]->valor) . ". Entrega de documentos a partir de " . MainModel::dataParaBR($dadosParcelas[$i]->data_pagamento) . ".\n";
-                $formaCompleta .= $forma;
-            endfor;
-            $formaCompleta .= "A liquidação de cada parcela se dará em 3 (três) dias úteis após a data de confirmação da correta execução do(s) serviço(s).";
-        }
-        return $formaCompleta;
-    }
-
     public function inserePedido($origem_tipo_id,$pagina)
     {
         unset($_POST['_method']);
@@ -109,9 +88,7 @@ class PedidoController extends PedidoModel
      */
     public function recuperaPedido(int $origem_tipo_id, $origem_id):stdClass
     {
-        if (gettype($origem_id) == "string") {
-            $origem_id = MainModel::decryption($origem_id);
-        }
+        $origem_id = MainModel::decryption($origem_id);
 
         /** Tipo Evento */
         if ($origem_tipo_id == 1){
@@ -133,12 +110,12 @@ class PedidoController extends PedidoModel
                 //representante
                 $repObj = new RepresentanteController();
                 if ($pj->representante_legal1_id){
-                    $idRep1 = $this->encryption($pfj->representante_legal1_id);
+                    $idRep1 = $this->encryption($pj->representante_legal1_id);
                     $rep1 = $repObj->recuperaRepresentante($idRep1)->fetch(PDO::FETCH_ASSOC);
                     $pedido = array_merge($pedido,$rep1);
                 }
-                if ($pfj->representante_legal2_id){
-                    $idRep2 = $this->encryption($pfj->representante_legal2_id);
+                if ($pj->representante_legal2_id){
+                    $idRep2 = $this->encryption($pj->representante_legal2_id);
                     $rep2 = $repObj->recuperaRepresentante($idRep2)->fetch(PDO::FETCH_ASSOC);
                     $pedido = array_merge($pedido,$rep2);
                 }
@@ -151,9 +128,9 @@ class PedidoController extends PedidoModel
         }
         /** Tipo Formação */
         if ($origem_tipo_id == 2){
-            $formObj = new FormacaoController();
+            $formObj = new FormacaoContratacaoController();
             $pedido = PedidoModel::recuperaBasePedido($origem_tipo_id, $origem_id);
-            $formacao = $formObj->recuperaFormacaoContratacao($origem_id);
+            $formacao = $formObj->recuperar($origem_id);
             $pedido = array_merge($pedido,array($formacao));
         }
         /** Tipo EMIA */
@@ -187,14 +164,37 @@ class PedidoController extends PedidoModel
             }
         }
         if ($origem_tipo_id == 2){ //formação
-            $formObj = new FormacaoController();
+            $formObj = new FormacaoContratacaoController();
             foreach ($pedidos as $pedido) {
-                $form = $formObj->recuperaFormacaoContratacao(intval($pedido->origem_id));
+                $form = $formObj->recuperar(intval($pedido->origem_id));
                 $pedido->proponente = $form->nome;
                 $pedido->documento = $form->cpf;
+                $pedido->protocolo = $form->protocolo;
+                $pedido->ano = $form->ano;
             }
         }
         return (object)$pedidos;
+    }
+
+    /**
+     * @param int $origem_tipo_id
+     * @param int|string $origem_id
+     * @return string
+     * @throws Exception
+     */
+    public function recuperaFormaPagto(int $origem_tipo_id,$origem_id):string
+    {
+        $origem_id = MainModel::decryption($origem_id);
+        if ($origem_tipo_id == 2){
+            $dadosParcelas = DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fp.publicado = 1 AND fc.id = $origem_id")->fetchAll(PDO::FETCH_OBJ);
+            $formaCompleta = "";
+            for ($i = 0; $i < count($dadosParcelas); $i++) :
+                $forma = $i + 1 . "º parcela R$ " . MainModel::dinheiroParaBr($dadosParcelas[$i]->valor) . ". Entrega de documentos a partir de " . MainModel::dataParaBR($dadosParcelas[$i]->data_pagamento) . ".\n";
+                $formaCompleta .= $forma;
+            endfor;
+            $formaCompleta .= "A liquidação de cada parcela se dará em 3 (três) dias úteis após a data de confirmação da correta execução do(s) serviço(s).";
+        }
+        return $formaCompleta;
     }
 
     public function getParcelarPedidoFomentos($id)
@@ -262,5 +262,29 @@ class PedidoController extends PedidoModel
             $idPedido = MainModel::decryption($idPedido);
         }
         return DbModel::consultaSimples("SELECT * FROM pedido_etapas WHERE pedido_id = '$idPedido'")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    /**
+     * <p>Função para verificar se existe um pedido</p>
+     * @param int $tipo_origem_id
+     * @param int| string $origem_id
+     * @return stdClass
+     */
+    public function existePedido(int $tipo_origem_id, $origem_id)
+    {
+        $origem_id = MainModel::decryption($origem_id);
+        return DbModel::consultaSimples("SELECT id FROM pedidos WHERE origem_tipo_id = '$tipo_origem_id' AND origem_id = '$origem_id' AND publicado = 1")->fetch(PDO::FETCH_OBJ);
+    }
+
+    public function recuperaAnos()
+    {
+        $sql = "SELECT MIN(ano) AS min, MAX(ano) AS max
+            FROM pedidos p
+            INNER JOIN formacao_contratacoes fc ON fc.id = p.origem_id
+            INNER JOIN pessoa_fisicas pf ON fc.pessoa_fisica_id = pf.id
+            INNER JOIN verbas v on p.verba_id = v.id
+            INNER JOIN formacao_status fs on fc.form_status_id = fs.id
+            WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2";
+        return DbModel::consultaSimples($sql)->fetchObject();
     }
 }

@@ -1,14 +1,18 @@
 <?php
 $pedido_id = isset($_GET['id']) ? $_GET['id'] : "";
-require_once "./controllers/FormacaoController.php";
+require_once "./controllers/FormacaoPedidoController.php";
 require_once "./controllers/PedidoController.php";
+require_once "./controllers/PessoaFisicaController.php";
+require_once "./controllers/FormacaoContratacaoController.php";
+require_once "./controllers/FormacaoController.php";
 
-$formObj = new FormacaoController();
+$formObj = new FormacaoPedidoController();
 $pedObj = new PedidoController();
+$pfObj = new PessoaFisicaController();
 
-$pedido = $formObj->recuperaPedido($pedido_id);
-$pessoa = $formObj->recuperaPf($pedido->pessoa_fisica_id);
-$contratacao = $formObj->recuperaContratacao(MainModel::encryption($pedido->origem_id), 1);
+$pedido = $formObj->recuperar($pedido_id);
+$pessoa = $pfObj->recuperaPessoaFisica($pedido->pessoa_fisica_id);
+$contratacao = (new FormacaoContratacaoController)->recuperar($pedido->origem_id);
 $parcelas = $pedObj->getParcelarPedidoFomentos($pedido_id);
 
 $nome = $pessoa->nome_social != null ? "$pessoa->nome ($pessoa->nome_social)" : $pessoa->nome;
@@ -53,7 +57,7 @@ $i = 1;
                             <div class="form-group col-md-4">
                                 <label for="local">Local(ais):</label>
                                 <input type="text" class="form-control" name="local"
-                                       value="<?= $formObj->retornaLocaisFormacao($pedido->origem_id) ?>" disabled>
+                                       value="<?= (new FormacaoController)->retornaLocaisFormacao($pedido->origem_id) ?>" disabled>
                             </div>
                         </div>
                         <div class="row">

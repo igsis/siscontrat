@@ -1,7 +1,7 @@
 <?php
-require_once "./controllers/FormacaoController.php";
+require_once "./controllers/PedidoController.php";
 
-$formObj = new FormacaoController();
+$formObj = new PedidoController();
 
 $anoPedido = isset($_GET['ano']) ? $_GET['ano'] : 0;
 $pedidoEnviado = isset($_GET['pedidoEnviado']) ? $_GET['pedidoEnviado'] : 0;
@@ -13,7 +13,7 @@ if ($anoPedido || $pedidoEnviado) {
     $pedidos = $formObj->listaPedidos();
 }
 
-$anos = $formObj->anosPedido();
+$anos = $formObj->recuperaAnos();
 
 ?>
 <!-- Content Header (Page header) -->

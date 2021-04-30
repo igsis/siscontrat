@@ -1,10 +1,10 @@
 <?php
 $id = isset($_GET['id']) ? $_GET['id'] : "";
 
-require_once "./controllers/FormacaoController.php";
-$formObj = new FormacaoController();
+require_once "./controllers/FormacaoPedidoController.php";
+$formObj = new FormacaoPedidoController();
 
-$pedido = $formObj->recuperaPedido($id);
+$pedido = $formObj->recuperar($id);
 ?>
 
 <div class="content-header">
@@ -54,12 +54,11 @@ $pedido = $formObj->recuperaPedido($id);
                                    class="form-control" disabled>
                         </div>
                     </div>
-                    <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php"
-                          method="POST" data-form="save">
-                        <input type="hidden" name="_method" value="concluirPedido">
-                        <div class="resposta-ajax"></div>
                 </div>
-
+                <form class="form-horizontal formulario-ajax" action="<?= SERVERURL ?>ajax/formacaoAjax.php"
+                      method="POST" data-form="save">
+                    <input type="hidden" name="_method" value="concluirPedido">
+                    <div class="resposta-ajax"></div>
                 <div class="card-footer">
                     <a href="<?= SERVERURL ?>formacao/conclusao_busca">
                         <button type="button" class="btn btn-default float-left">Voltar</button>
@@ -67,8 +66,8 @@ $pedido = $formObj->recuperaPedido($id);
 
                         <input type="hidden" name="id" value="<?= $id ?>">
                         <button type="submit" class="btn btn-info float-right">Concluir</button>
-                    </form>
                 </div>
+            </form>
             </div>
         </div>
     </div>

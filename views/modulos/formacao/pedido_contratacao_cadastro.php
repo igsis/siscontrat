@@ -1,17 +1,20 @@
 <?php
 $pedido_id = isset($_GET['pedido_id']) ? $_GET['pedido_id'] : "";
+require_once "./controllers/FormacaoPedidoController.php";
+require_once "./controllers/FormacaoContratacaoController.php";
 require_once "./controllers/FormacaoController.php";
 
-$formObj = new FormacaoController();
+$pedidoObj = new FormacaoPedidoController();
+$contratacaoObj =  new FormacaoContratacaoController();
 $pfObj =  new PessoaFisicaController();
 
 if ($pedido_id != ''):
-    $pedido = $formObj->recuperaPedido($pedido_id);
+    $pedido = $pedidoObj->recuperar($pedido_id);
     $contratacao_id = $pedido->origem_id;
-    $contratacao = $formObj->recuperaContratacao($contratacao_id);
+    $contratacao = $contratacaoObj->recuperar($contratacao_id);
 else:
     $contratacao_id = isset($_GET['contratacao_id']) ? $_GET['contratacao_id'] : "";
-    $contratacao = $formObj->recuperaContratacao($contratacao_id, '1');
+    $contratacao = $contratacaoObj->recuperar($contratacao_id);
 endif;
 
 ?>
@@ -46,7 +49,7 @@ endif;
                             <div class="form-group col-md">
                                 <label for="origem_id">Código de Dados para Contratação:</label>
                                 <input type="text" name="origem_id" class="form-control" readonly
-                                       value="<?= $contratacao->id ?>">
+                                       value="<?= $contratacao->formacao_contratacao_id ?>">
                             </div>
 
                             <div class="form-group col-md">
@@ -64,14 +67,14 @@ endif;
                             <div class="form-group col-md">
                                 <label for="objeto">Objeto:</label>
                                 <textarea name="objeto" class="form-control" rows="3"
-                                          disabled><?= isset($_GET['contratacao_id']) ? $formObj->retornaObjetoFormacao($contratacao_id, '1') : $formObj->retornaObjetoFormacao($contratacao_id) ?>
+                                          disabled><?= isset($_GET['contratacao_id']) ? (new FormacaoController)->retornarObjeto($contratacao_id, '1') : (new FormacaoController)->retornarObjeto($contratacao_id) ?>
                                 </textarea>
                             </div>
 
                             <div class="form-group col-md">
                                 <label for="local">Local(ais): </label>
                                 <textarea name="local" class="form-control" rows="3"
-                                          disabled><?= isset($_GET['contratacao_id']) ? $formObj->retornaLocaisFormacao($contratacao_id, '', '1') : $formObj->retornaLocaisFormacao($contratacao_id) ?>
+                                          disabled><?= (new FormacaoController)->retornaLocaisFormacao($contratacao_id, '') ?>
                                 </textarea>
                             </div>
                         </div>
@@ -80,26 +83,26 @@ endif;
                             <div class="form-group col-md">
                                 <label for="periodo">Período:</label>
                                 <input type="text" name="periodo" class="form-control" disabled
-                                       value="<?= isset($_GET['contratacao_id']) ? $formObj->retornaPeriodoFormacao($contratacao_id, '1') : $formObj->retornaPeriodoFormacao($contratacao_id) ?>">
+                                       value="<?= (new FormacaoController)->retornaPeriodoFormacao($contratacao_id) ?>">
                             </div>
 
                             <div class="form-group col-md">
                                 <label for="cargaHoraria">Carga Horária:</label>
                                 <input type="text" name="cargaHoraria" class="form-control" disabled
-                                       value="<?= isset($_GET['contratacao_id']) ? $formObj->retornaCargaHoraria($contratacao_id, '1') : $formObj->retornaCargaHoraria($contratacao_id) ?>">
+                                       value="<?= (new FormacaoController)->retornaCargaHoraria($contratacao_id)  ?>">
                             </div>
 
                             <div class="form-group col-md">
                                 <label for="valor_total">Valor: (R$)</label>
                                 <input type="text" name="valor_total" class="form-control" readonly
-                                       value="<?= isset($_GET['contratacao_id']) ? MainModel::dinheiroParaBr($formObj->retornaValorTotalVigencia($contratacao_id, '1')) : MainModel::dinheiroParaBr($formObj->retornaValorTotalVigencia($contratacao_id)) ?>">
+                                       value="<?= $pedidoObj->dinheiroParaBr($pedido->valor_total) ?>">
                             </div>
 
                             <div class="form-group col-md">
                                 <label for="verba">Verba:</label>
                                 <select name="verba_id" id="verba" tabindex="-1" class="form-control">
                                     <option value="">Selecione uma opção...</option>
-                                    <?php $formObj->geraOpcao("verbas", $pedido->verba_id ?? $contratacao->programa_verba_id) ?>
+                                    <?php $pedidoObj->geraOpcao("verbas", $pedido->verba_id ?? $contratacao->programa_verba_id) ?>
                                 </select>
                             </div>
                         </div>
@@ -114,7 +117,7 @@ endif;
 
                             <div class="form-group col-md">
                                 <label for="justificativa">Justificativa: *</label>
-                                <textarea name="justificativa" class="form-control" rows="8" required><?= isset($contratacao->cargo_justificativa) ? $contratacao->cargo_justificativa : "" ?></textarea>
+                                <textarea name="justificativa" class="form-control" rows="8" required value="<?= isset($contratacao->cargo_justificativa) ? $contratacao->cargo_justificativa : "" ?>"></textarea>
                             </div>
                         </div>
 
@@ -141,14 +144,14 @@ endif;
                             <div class="form-group col-md">
                                 <label for="fiscal">Fiscal:</label>
                                 <input type="text" name="fiscal" class="form-control"
-                                       value="<?= isset($contratacao->fiscal) ? $contratacao->fiscal : "" ?>"
+                                       value="<?= isset($contratacao->fiscal_nome) ? $contratacao->fiscal_nome : "" ?>"
                                        disabled>
                             </div>
 
                             <div class="form-group col-md">
                                 <label for="suplente">Suplente:</label>
                                 <input type="text" name="suplente" class="form-control"
-                                       value="<?= isset($contratacao->suplente) ? $contratacao->suplente : "" ?>"
+                                       value="<?= isset($contratacao->suplente_nome) ? $contratacao->suplente_nome : "" ?>"
                                        disabled>
                             </div>
                         </div>

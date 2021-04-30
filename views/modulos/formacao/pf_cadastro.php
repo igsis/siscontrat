@@ -17,7 +17,7 @@ if ($id && $type == null) {
 
 if (isset($_POST['pf_cpf'])){
     $documento = $_POST['pf_cpf'];
-    $pf = $insPessoaFisica->getCPF($documento)->fetch();
+    $pf = $insPessoaFisica->getCPF($documento)->fetchObject();
     if ($pf){
         $id = MainModel::encryption($pf->id);
         $pf = $insPessoaFisica->recuperaPessoaFisica($id);
@@ -319,7 +319,7 @@ if ($idCapac){
                                 </div>
                             <?php endif; ?>
                             <div class="form-group col">
-                                <a href="<?= SERVERURL ?>pdf/rlt_formacao_pf.php?id=<?= $id ?>" target="_blank">
+                                <a href="<?= SERVERURL ?>pdf/formacao_resumo_pf.php?id=<?= $id ?>" target="_blank">
                                     <button type="submit" class="btn btn-info btn-block">Imprimir resumo
                                     </button>
                                 </a>

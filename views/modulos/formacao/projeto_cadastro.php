@@ -1,11 +1,11 @@
 <?php
 
-require_once "./controllers/FormacaoController.php";
+require_once "./controllers/FormacaoProjetoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$projetoObj = new FormacaoController();
+$projetoObj = new FormacaoProjetoController();
 
-$projeto = $projetoObj->recuperaProjeto($id);
+$projeto = $projetoObj->recuperar($id);
 
 ?>
 <!-- Content Header (Page header) -->

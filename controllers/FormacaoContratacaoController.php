@@ -3,9 +3,11 @@
 if ($pedidoAjax) {
     require_once "../models/FormacaoModel.php";
     require_once "../controllers/PessoaFisicaController.php";
+    require_once "../controllers/PedidoController.php";
 } else {
     require_once "./models/FormacaoModel.php";
     require_once "./controllers/PessoaFisicaController.php";
+    require_once "./controllers/PedidoController.php";
 }
 
 class FormacaoContratacaoController extends FormacaoModel
@@ -55,6 +57,9 @@ class FormacaoContratacaoController extends FormacaoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    /**
+     * @throws Exception
+     */
     public function editar($post)
     {
         $contratacao_id = MainModel::decryption($post['id']);
@@ -80,6 +85,14 @@ class FormacaoContratacaoController extends FormacaoModel
         $dados = MainModel::limpaPost($post);
         $update = DbModel::update('formacao_contratacoes', $dados, $contratacao_id);
         if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $pedido = (new PedidoController)->existePedido(2, $contratacao_id);
+            if ($pedido){
+                $dadosPedido['forma_pagamento'] = (new PedidoController)->recuperaFormaPagto(2,intval($contratacao_id));
+                $valor = (new FormacaoController)->recuperaDadosParcelas($contratacao_id);
+                $dadosPedido['valor_total'] = $valor['valor_total'];
+                DbModel::update("pedidos", $dadosPedido, $pedido->id);
+            }
+
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Dados de Contratação Atualizados!',
@@ -100,11 +113,16 @@ class FormacaoContratacaoController extends FormacaoModel
 
     public function apagar($post)
     {
-        unset($post['_method']);
         $contratacao_id = MainModel::decryption($post['id']);
+        unset($post['_method']);
         unset($post['id']);
+
         $delete = DbModel::apaga('formacao_contratacoes', $contratacao_id);
         if ($delete->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $pedido = (new PedidoController)->existePedido(2, $contratacao_id);
+            if ($pedido) {
+                DbModel::apaga('pedidos',$pedido->id);
+            }
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Dados de contratação Apagados!',
@@ -127,12 +145,10 @@ class FormacaoContratacaoController extends FormacaoModel
      * @param int|string $contratacao_id <p>id da tabela formacao_contratacoes</p>
      * @return object
      */
-    public function recuperaFormacaoContratacao($contratacao_id):stdClass //para o PedidoController::recuperaPedido
+    public function recuperar($contratacao_id):stdClass
     {
-        if (gettype($contratacao_id) == "string") {
-            $contratacao_id = MainModel::decryption($contratacao_id);
-        }
-        $form = DbModel::consultaSimples("SELECT fc.protocolo, fc.pessoa_fisica_id, fc.ano, fs.status, fc.chamado, fc.classificacao, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, fc.form_vigencia_id, fc.observacao, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, fc.num_processo_pagto, user.nome_completo as usuario_nome, fc.data_envio, rp.regiao
+        $contratacao_id = MainModel::decryption($contratacao_id);
+        $form = DbModel::consultaSimples("SELECT fc.*, fc.id as formacao_contratacao_id, fc.pessoa_fisica_id, fs.status, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, user.nome_completo as usuario_nome, rp.regiao
             FROM formacao_contratacoes AS fc
                 INNER JOIN formacao_status fs on fc.form_status_id = fs.id
                 INNER JOIN territorios t on fc.territorio_id = t.id
@@ -150,7 +166,7 @@ class FormacaoContratacaoController extends FormacaoModel
         ")->fetch(PDO::FETCH_ASSOC);
         $pfObj = new PessoaFisicaController();
         $idPf = $this->encryption($form['pessoa_fisica_id']);
-        $pf = $pfObj->recuperaPessoaFisica($idPf);
+        $pf = $pfObj->recuperaPessoaFisicaResumo($idPf);
         $contratacao = array_merge($form,(array)$pf);
         return (object)$contratacao;
     }
@@ -180,5 +196,11 @@ class FormacaoContratacaoController extends FormacaoModel
                 INNER JOIN formacao_cargos AS fc ON fc.id = c.form_cargo_id
                 WHERE c.publicado = 1 {$whereAno}";
         return DbModel::consultaSimples($sql);
+    }
+
+    public function recuperarCapac($capac_id)
+    {
+        $capac_id = MainModel::decryption($capac_id);
+        return DbModel::getInfo('form_cadastros', $capac_id, true)->fetchObject();
     }
 }

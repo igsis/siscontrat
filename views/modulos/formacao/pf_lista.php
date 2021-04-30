@@ -1,11 +1,8 @@
 <?php
-    require_once "./controllers/FormacaoController.php";
-    $formacaoObj = new FormacaoController();
-    
-    $lista_pf = $formacaoObj->listaPedidos();
+require_once "./controllers/PedidoController.php";
+$pedidoObj = new PedidoController();
 
-    $anoVigencia = $formacaoObj->recuperaAnoVigente()->ano_vigente;
-
+$lista_pf = $pedidoObj->listaPedidos(2);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -58,22 +55,14 @@
                             <tbody>
                                 <?php foreach ($lista_pf as $pf): ?>
                                 <tr>
-                                    <td><?= $pf->numero_processo?></td>
-                                    <td><?= $pf->protocolo?></td>
-                                    <td><?=$pf->nome_social != null ? "$pf->nome ($pf->nome_social)" : $pf->nome?></td>
+                                    <td><?= $pf->numero_processo ?></td>
+                                    <td><?= $pf->protocolo ?></td>
+                                    <td><?= $pf->proponente ?></td>
+                                    <td><?= $pf->documento ?></td>
+                                    <td><?= $pf->ano ?></td>
+                                    <td><?= $pf->status ?></td>
                                     <td>
-                                        <?php
-                                        if (isset($pf->cpf) && $pf->cpf != ""){
-                                            echo $pf->cpf;
-                                        }else{
-                                            echo $pf->passaporte;
-                                        }
-                                        ?>
-                                    </td>
-                                    <td><?= $pf->ano?></td>
-                                    <td><?= $pf->status?></td>
-                                    <td>
-                                        <a href="<?= SERVERURL ?>formacao/pf_cadastro&id=<?= $formacaoObj->encryption($pf->pessoa_fisica_id) ?>" class="btn bg-gradient-primary btn-sm">
+                                        <a href="<?= SERVERURL ?>formacao/pf_cadastro&id=<?= $pedidoObj->encryption($pf->pessoa_fisica_id) ?>" class="btn bg-gradient-primary btn-sm">
                                             <i class="fas fa-user-edit"></i> &nbsp; Editar &nbsp; &nbsp;
                                         </a>
                                     </td>

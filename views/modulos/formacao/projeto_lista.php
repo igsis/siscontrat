@@ -1,8 +1,8 @@
 <?php
-    require_once "./controllers/FormacaoController.php";
-    $projetoObj = new FormacaoController();
+    require_once "./controllers/FormacaoProjetoController.php";
+    $projetoObj = new FormacaoProjetoController();
     
-    $projetos = $projetoObj->listaProjetos();
+    $projetos = $projetoObj->listar();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
