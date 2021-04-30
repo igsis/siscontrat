@@ -110,12 +110,12 @@ class PedidoController extends PedidoModel
                 //representante
                 $repObj = new RepresentanteController();
                 if ($pj->representante_legal1_id){
-                    $idRep1 = $this->encryption($pfj->representante_legal1_id);
+                    $idRep1 = $this->encryption($pj->representante_legal1_id);
                     $rep1 = $repObj->recuperaRepresentante($idRep1)->fetch(PDO::FETCH_ASSOC);
                     $pedido = array_merge($pedido,$rep1);
                 }
-                if ($pfj->representante_legal2_id){
-                    $idRep2 = $this->encryption($pfj->representante_legal2_id);
+                if ($pj->representante_legal2_id){
+                    $idRep2 = $this->encryption($pj->representante_legal2_id);
                     $rep2 = $repObj->recuperaRepresentante($idRep2)->fetch(PDO::FETCH_ASSOC);
                     $pedido = array_merge($pedido,$rep2);
                 }
@@ -184,9 +184,7 @@ class PedidoController extends PedidoModel
      */
     public function recuperaFormaPagto(int $origem_tipo_id,$origem_id):string
     {
-        if (gettype($origem_id == "string")){
-            $origem_id = MainModel::decryption($origem_id);
-        }
+        $origem_id = MainModel::decryption($origem_id);
         if ($origem_tipo_id == 2){
             $dadosParcelas = DbModel::consultaSimples("SELECT fp.* FROM formacao_parcelas AS fp INNER JOIN formacao_contratacoes AS fc ON fc.form_vigencia_id = fp.formacao_vigencia_id WHERE fp.publicado = 1 AND fc.id = $origem_id")->fetchAll(PDO::FETCH_OBJ);
             $formaCompleta = "";
@@ -272,12 +270,10 @@ class PedidoController extends PedidoModel
      * @param int| string $origem_id
      * @return stdClass
      */
-    public function existePedido(int $tipo_origem_id, $origem_id):stdClass
+    public function existePedido(int $tipo_origem_id, $origem_id)
     {
-        if (gettype($origem_id) == "string") {
-            $origem_id = MainModel::decryption($origem_id);
-        }
-        return DbModel::consultaSimples("SELECT id FROM pedidos WHERE origem_tipo_id = '$tipo_origem_id' AND origem_id = '$origem_id' AND publicado = 1")->fetchObject();
+        $origem_id = MainModel::decryption($origem_id);
+        return DbModel::consultaSimples("SELECT id FROM pedidos WHERE origem_tipo_id = '$tipo_origem_id' AND origem_id = '$origem_id' AND publicado = 1")->fetch(PDO::FETCH_OBJ);
     }
 
     public function recuperaAnos()
