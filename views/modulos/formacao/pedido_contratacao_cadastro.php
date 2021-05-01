@@ -117,7 +117,7 @@ endif;
 
                             <div class="form-group col-md">
                                 <label for="justificativa">Justificativa: *</label>
-                                <textarea name="justificativa" class="form-control" rows="8" required value="<?= isset($contratacao->cargo_justificativa) ? $contratacao->cargo_justificativa : "" ?>"></textarea>
+                                <textarea name="justificativa" class="form-control" rows="8" required><?=  $contratacao->cargo_justificativa ?></textarea>
                             </div>
                         </div>
 
