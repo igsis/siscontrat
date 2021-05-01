@@ -17,7 +17,7 @@ class FormacaoContratacaoController extends FormacaoModel
         unset($post['_method']);
         $locais_id = $post['local_id'];
         unset($post['local_id']);
-
+        $post['data_envio'] = '0000-00-00 00:00:00';
         $dados = MainModel::limpaPost($post);
 
         $insert = DbModel::insert('formacao_contratacoes', $dados);

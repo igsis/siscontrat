@@ -125,6 +125,21 @@ class FormacaoInscritoController extends FormacaoModel
         return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
     }
 
+    public function recuperarTel($pesquisa_fisica_id, $obj = 0)
+    {
+        $tel = "";
+
+        $telArrays = DbModel::consultaSimples("SELECT telefone FROM pf_telefones WHERE pessoa_fisica_id = $pesquisa_fisica_id", true)->fetchAll(PDO::FETCH_ASSOC);
+        if ($obj != NULL):
+            return $telArrays;
+        else:
+            foreach ($telArrays as $telArrays) {
+                $tel = $tel . $telArrays['telefone'] . '/ ';
+            }
+            return substr($tel, 0, -2);
+        endif;
+    }
+
     public function recuperarArquivosCapac($id)
     {
         $sql = "SELECT fl.documento, far.arquivo
