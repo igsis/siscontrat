@@ -67,7 +67,7 @@ endif;
                             <div class="form-group col-md">
                                 <label for="objeto">Objeto:</label>
                                 <textarea name="objeto" class="form-control" rows="3"
-                                          disabled><?= isset($_GET['contratacao_id']) ? (new FormacaoController)->retornarObjeto($contratacao_id, '1') : (new FormacaoController)->retornarObjeto($contratacao_id) ?>
+                                          disabled><?= (new FormacaoController)->retornarObjeto($contratacao_id) ?>
                                 </textarea>
                             </div>
 
