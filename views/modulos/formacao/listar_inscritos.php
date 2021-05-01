@@ -153,9 +153,9 @@ if (isset($_POST['busca'])) {
                                         <td><?= $resultado->protocolo ?></td>
                                         <td><?= $resultado->nome ?></td>
                                         <td><?= $resultado->cpf ?></td>
-                                        <td><?= (new FormacaoProgramaController)->recuperaPrograma($inscritoObj->encryption($resultado->programa_id))->programa ?></td>
-                                        <td><?= (new FormacaoLinguagemController)->recuperar($inscritoObj->encryption($resultado->linguagem_id))->linguagem ?></td>
-                                        <td><?= (new FormacaoCargoController)->recuperar($inscritoObj->encryption($resultado->form_cargo_id))->cargo ?></td>
+                                        <td><?= (new FormacaoProgramaController)->recuperar($resultado->programa_id)->programa ?></td>
+                                        <td><?= (new FormacaoLinguagemController)->recuperar($resultado->linguagem_id)->linguagem ?></td>
+                                        <td><?= (new FormacaoCargoController)->recuperar($resultado->form_cargo_id)->cargo ?></td>
                                         <td><?= $resultado->regiao ?></td>
                                         <td><?= $resultado->etnia ?></td>
                                         <td><?= $resultado->pcd ?></td>
