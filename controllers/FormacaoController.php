@@ -15,11 +15,9 @@ class FormacaoController extends FormacaoModel
      * @param int|string $contratacao_id
      * @return string
      */
-    public function retornarObjeto($contratacao_id, $description = 0): string
+    public function retornarObjeto($contratacao_id): string
     {
-        if ($description != 0) {
-            $contratacao_id = MainModel::decryption($contratacao_id);
-        }
+        $contratacao_id = MainModel::decryption($contratacao_id);
         $cstObjeto = DbModel::consultaSimples("SELECT fc.programa_id, p.programa, l.linguagem, p.edital, fcargo.cargo 
             FROM programas AS p 
             INNER JOIN formacao_contratacoes AS fc ON p.id = fc.programa_id
@@ -32,8 +30,7 @@ class FormacaoController extends FormacaoModel
             } else {
                 $texto['programa'] = "DE INICIAÇÃO ARTÍSTICA";
             }
-
-            $objeto = "CONTRATAÇÃO COMO $cstObjeto->cargo de $cstObjeto->linguagem DO PROGRAMA {$texto['programa']} - {date('Y')} NOS TERMOS DO $cstObjeto->edital - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL.";
+            $objeto = "CONTRATAÇÃO COMO {$cstObjeto->cargo} de {$cstObjeto->linguagem} DO PROGRAMA {$texto['programa']} - ". date('Y') ." NOS TERMOS DO {$cstObjeto->edital} - PROGRAMAS DA SUPERVISÃO DE FORMAÇÃO CULTURAL.";
             $encoding = 'UTF-8';
             return mb_convert_case($objeto, MB_CASE_UPPER, $encoding);
         }

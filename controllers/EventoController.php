@@ -44,6 +44,16 @@ class EventoController extends MainModel
         return (object)$evento;
     }
 
+    /**
+     * @param int $idEvento
+     * @return string
+     */
+    public function recuperaObjetoEvento(int $idEvento):string
+    {
+        $evento = DbModel::consultaSimples("SELECT tipo_evento,nome_evento FROM eventos e INNER JOIN tipo_eventos te ON e.tipo_evento_id = te.id WHERE e.id = '$idEvento'")->fetchObject();
+        return $evento->tipo_evento . " " . $evento->nome_evento;
+    }
+
     public function notificacaoEventos($id)
     {
         $sql = "SELECT ev.nome_evento, DATE_FORMAT(er.data_reabertura, '%d/%m/%Y') AS 'data_reabertura' 

@@ -1,5 +1,4 @@
 <?php
-$con = bancoMysqli();
 
 $idUser = $_SESSION['usuario_id_s'];
 
@@ -46,6 +45,8 @@ $link_normas_pj = $http . "rlt_normas_internas_teatros_pj.php";
 $link_reserva_global = $http . "rlt_reserva_global.php";
 
 $link_reserva_padrao = $http."rlt_reserva_padrao.php";
+
+
 
 $idPedido = $_POST['idPedido'];
 

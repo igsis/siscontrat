@@ -67,7 +67,7 @@ endif;
                             <div class="form-group col-md">
                                 <label for="objeto">Objeto:</label>
                                 <textarea name="objeto" class="form-control" rows="3"
-                                          disabled><?= isset($_GET['contratacao_id']) ? (new FormacaoController)->retornarObjeto($contratacao_id, '1') : (new FormacaoController)->retornarObjeto($contratacao_id) ?>
+                                          disabled><?= (new FormacaoController)->retornarObjeto($contratacao_id) ?>
                                 </textarea>
                             </div>
 
@@ -117,7 +117,7 @@ endif;
 
                             <div class="form-group col-md">
                                 <label for="justificativa">Justificativa: *</label>
-                                <textarea name="justificativa" class="form-control" rows="8" required value="<?= isset($contratacao->cargo_justificativa) ? $contratacao->cargo_justificativa : "" ?>"></textarea>
+                                <textarea name="justificativa" class="form-control" rows="8" required><?=  $contratacao->cargo_justificativa ?></textarea>
                             </div>
                         </div>
 

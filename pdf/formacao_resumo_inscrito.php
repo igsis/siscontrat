@@ -4,15 +4,15 @@ $pedidoAjax = true;
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
-require_once "../controllers/FormacaoController.php";
+require_once "../controllers/FormacaoInscritoController.php";
 require_once "../controllers/PessoaFisicaController.php";
 
-$formacaoObj = new FormacaoController();
+$formacaoObj = new FormacaoInscritoController();
 $pfObjeto = new PessoaFisicaController();
 
 $id = $_GET['id'];
-$inscrito = $formacaoObj->recuperaInscrito($id);
-$telefones = $formacaoObj->recuperaTelInscrito($inscrito->pessoa_fisica_id);
+$inscrito = $formacaoObj->recuperar($id);
+$telefones = $formacaoObj->recuperarTel($inscrito->pessoa_fisica_id);
 
 class PDF extends FPDF
 {
