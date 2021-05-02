@@ -242,10 +242,6 @@ class PessoaFisicaController extends PessoaFisicaModel
                 }
             }
 
-            // if ($_SESSION['modulo_s'] == 6 || $_SESSION['modulo_s'] == 7){ //formação ou jovem monitor
-            //     $_SESSION['origem_id_s'] = $id;
-            // }
-
             if($retornaId){
                 return $idDecryp;
             } else{
@@ -272,7 +268,14 @@ class PessoaFisicaController extends PessoaFisicaModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function recuperaPessoaFisica($id, $capac = false) {
+    /**
+     * @param int|string $id
+     * @param false $capac
+     * <p>True se for para conectar no banco capac</p>
+     * @return object
+     */
+    public function recuperaPessoaFisica($id, $capac = false):stdClass
+    {
         $id = MainModel::decryption($id);
         $pf = DbModel::consultaSimples(
             "SELECT pf.*, pe.*, pb.*, d.*, n.*, n2.nacionalidade, b.banco, b.codigo, pd.*, e.descricao, gi.grau_instrucao, ns.nome_social 
@@ -288,13 +291,41 @@ class PessoaFisicaController extends PessoaFisicaModel
             LEFT JOIN grau_instrucoes gi on pd.grau_instrucao_id = gi.id
             LEFT JOIN pf_nome_social ns on pf.id = ns.pessoa_fisica_id
             WHERE pf.id = '$id'", $capac);
-
         $pf = $pf->fetch(PDO::FETCH_ASSOC);
-        $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$id'", $capac)->fetchAll(PDO::FETCH_ASSOC);
 
+        if ($pf['nome_social']){
+            $pf['nome_exibicao'] = $pf['nome_social'] . " (" . $pf['nome'] . ")";
+        } else {
+            $pf['nome_exibicao'] = $pf['nome'];
+        }
+
+        $telefones = DbModel::consultaSimples("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$id'", $capac)->fetchAll(PDO::FETCH_ASSOC);
         foreach ($telefones as $key => $telefone) {
             $pf['telefones']['tel_'.$key] = $telefone['telefone'];
         }
+        return (object)$pf;
+    }
+
+    /**
+     * <p>Função para ser usada nas listagens</p>
+     * @param int|string $id
+     * @param false $capac
+     * <p>True se for para conectar no banco capac</p>
+     * @return object
+     */
+    public function recuperaPessoaFisicaResumo($id, $capac = false):stdClass
+    {
+        $id = MainModel::decryption($id);
+        $pf = DbModel::consultaSimples("SELECT pf.id, pf.nome, pf.rg, pf.cpf, pf.passaporte, ns.nome_social FROM pessoa_fisicas as pf LEFT JOIN pf_nome_social ns on pf.id = ns.pessoa_fisica_id WHERE pf.id = '$id'")->fetchObject();
+        if ($pf->nome_social) {
+            $pf->nome = $pf->nome_social . " (" . $pf->nome . ")";
+        }
+        if ($pf->passaporte) {
+            $pf->documento = $pf->passaporte;
+        }else {
+            $pf->documento = $pf->cpf;
+        }
+
         return $pf;
     }
 

@@ -163,11 +163,11 @@ if ($tipoCadastro != 3) {
                                         <td><?= $inscrito->protocolo ?></td>
                                         <?php if ($editalAntigo) {
                                             if ($tipoCadastro == 1) {
-                                                $pfNome = $pessoaFisicaObj->recuperaPessoaFisica($fomentoObj->encryption($inscrito->pessoa_fisica_id), true)["nome"];
-                                                echo "<td>$pfNome</td>";
+                                                $pfNome = $pessoaFisicaObj->recuperaPessoaFisica($fomentoObj->encryption($inscrito->pessoa_fisica_id), true);
+                                                echo "<td>$pfNome->nome</td>";
                                             } else {
-                                                $idRepresentante = $pessoaJuridicaObj->recuperaPessoaJuridica($fomentoObj->encryption($inscrito->pessoa_juridica_id), true)["representante_legal1_id"];
-                                                $representanteNome = $representanteObj->recuperaRepresentante($fomentoObj->encryption($idRepresentante), true)->fetchObject()->nome;
+                                                $idRepresentante = $pessoaJuridicaObj->recuperaPessoaJuridica($fomentoObj->encryption($inscrito->pessoa_juridica_id), true);
+                                                $representanteNome = $representanteObj->recuperaRepresentante($fomentoObj->encryption($idRepresentante->representante_legal1_id), true)->nome;
                                                 echo "<td>$representanteNome</td>";
                                             }
                                         } else {
@@ -203,8 +203,8 @@ if ($tipoCadastro != 3) {
                                     <tr>
                                         <td><?= $inscrito->protocolo ?></td>
                                         <?php if ($editalAntigo) {
-                                            $idRepresentante = $pessoaJuridicaObj->recuperaPessoaJuridica($fomentoObj->encryption($inscrito->pessoa_juridica_id), true)["representante_legal1_id"];
-                                            $representanteNome = $representanteObj->recuperaRepresentante($fomentoObj->encryption($idRepresentante), true)->fetchObject()->nome;
+                                            $idRepresentante = $pessoaJuridicaObj->recuperaPessoaJuridica($fomentoObj->encryption($inscrito->pessoa_juridica_id), true);
+                                            $representanteNome = $representanteObj->recuperaRepresentante($fomentoObj->encryption($idRepresentante->representante_legal1_id), true)->fetchObject()->nome;
                                             echo "<td>$representanteNome</td>";
                                         } else {
                                             echo "<td>$inscrito->nome_projeto</td>";
