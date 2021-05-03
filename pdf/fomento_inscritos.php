@@ -96,8 +96,8 @@ foreach ($inscritos as $inscrito){
         require_once "../controllers/PessoaFisicaController.php";
         $pessoaFisicaObj = new PessoaFisicaController();
         $pf = $pessoaFisicaObj->recuperaPessoaFisica($pessoaFisicaObj->encryption($inscrito->pessoa_fisica_id));
-        $proponente = $pf['nome'];
-        $documento = $pf['cpf'];
+        $proponente = $pf->nome;
+        $documento = $pf->cpf;
         $nomeRep = "não aplicável";
     } else{
         require_once "../controllers/PessoaJuridicaController.php";
@@ -105,10 +105,10 @@ foreach ($inscritos as $inscrito){
         $pessoaJuridicaObj = new PessoaJuridicaController();
         $repObj = new RepresentanteController();
         $pj = $pessoaJuridicaObj->recuperaPessoaJuridica($pessoaJuridicaObj->encryption($inscrito->pessoa_juridica_id), true);
-        $rep = $repObj->recuperaRepresentante($pessoaJuridicaObj->encryption($pj['representante_legal1_id']), true)->fetch();
-        $proponente = $pj['razao_social'];
-        $documento = $pj['cnpj'];
-        $nomeRep = $rep['nome'];
+        $rep = $repObj->recuperaRepresentante($pessoaJuridicaObj->encryption($pfj>representante_legal1_id), true)->fetch();
+        $proponente = $pj->razao_social;
+        $documento = $pj->cnpj;
+        $nomeRep = $rep->nome;
     }
 
     $zip = SERVERURL."api/downloadInscritos.php?id=".$inscrito->id;

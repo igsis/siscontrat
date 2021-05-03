@@ -1,16 +1,19 @@
 <?php
 
-require_once "./controllers/FormacaoController.php";
+require_once "./controllers/FormacaoInscritoController.php";
+require_once "./controllers/FormacaoProgramaController.php";
+require_once "./controllers/FormacaoCargoController.php";
+require_once "./controllers/FormacaoLinguagemController.php";
 require_once "./controllers/PessoaFisicaController.php";
 require_once "./controllers/ArquivoController.php";
 
-$formacaoObj = new FormacaoController();
+$formacaoObj = new FormacaoInscritoController();
 $pfObjeto = new PessoaFisicaController();
 $arquivosObj =  new ArquivoController();
 
 $id = $_GET['id'];
-$inscrito = $formacaoObj->recuperaInscrito($id);
-$telefones = $formacaoObj->recuperaTelInscrito($inscrito->pessoa_fisica_id);
+$inscrito = $formacaoObj->recuperar($id);
+$telefones = $formacaoObj->recuperarTel($inscrito->pessoa_fisica_id);
 $arquivos = $arquivosObj->listarArquivosCapac($id)->fetchAll(PDO::FETCH_OBJ);
 ;
 ?>
@@ -116,30 +119,30 @@ $arquivos = $arquivosObj->listarArquivosCapac($id)->fetchAll(PDO::FETCH_OBJ);
                         </div>
                         <div class="row">
                             <div class="col">
-                                <span class="font-weight-bold">Programa: </span> <?= $formacaoObj->recuperaPrograma($formacaoObj->encryption($inscrito->programa_id))->programa ?>
+                                <span class="font-weight-bold">Programa: </span> <?= (new FormacaoProgramaController)->recuperar($inscrito->programa_id)->programa ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <span class="font-weight-bold">Linguagem: </span> <?= $formacaoObj->recuperaLinguagem($formacaoObj->encryption($inscrito->linguagem_id))->linguagem ?>
+                                <span class="font-weight-bold">Linguagem: </span> <?= (new FormacaoLinguagemController)->recuperar($inscrito->linguagem_id)->linguagem ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <span class="font-weight-bold">Função (1º Opção): </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo_id))->cargo ?>
+                                <span class="font-weight-bold">Função (1º Opção): </span> <?= (new FormacaoCargoController)->recuperar($inscrito->form_cargo_id)->cargo ?>
                             </div>
                         </div>
                         <?php if ($inscrito->form_cargo2_id): ?>
                             <div class="row">
                                 <div class="col">
-                                    <span class="font-weight-bold">Função (2º Opção): </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo2_id))->cargo ?>
+                                    <span class="font-weight-bold">Função (2º Opção): </span> <?= (new FormacaoCargoController)->recuperar($inscrito->form_cargo2_id)->cargo ?>
                                 </div>
                             </div>
                         <?php endif;
                         if ($inscrito->form_cargo3_id): ?>
                             <div class="row">
                                 <div class="col">
-                                    <span class="font-weight-bold">Função (3º Opção): </span> <?= $formacaoObj->recuperaCargo($formacaoObj->encryption($inscrito->form_cargo3_id))->cargo ?>
+                                    <span class="font-weight-bold">Função (3º Opção): </span> <?= (new FormacaoCargoController)->recuperar($inscrito->form_cargo3_id)->cargo ?>
                                 </div>
                             </div>
                         <?php endif; ?>

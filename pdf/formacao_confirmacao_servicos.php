@@ -4,6 +4,7 @@ $pedidoAjax = true;
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
 require_once "../controllers/FormacaoController.php";
+require_once "../controllers/FormacaoPedidoController.php";
 
 $formObj = new FormacaoController();
 
@@ -11,10 +12,10 @@ $parcela_id = $_GET['parcela'];
 $pedido_id = $_GET['id'];
 
 $dataAtual = date('d/m/Y');
-$pedido = $formObj->recuperaPedido($pedido_id);
-$contratacao_id = $pedido->origem_id;
-$dadosParcela = $formObj->retornaDadosParcelas($contratacao_id, '', '1', $parcela_id);
-$periodo = $formObj->retornaPeriodoFormacao($contratacao_id, '', '1', $parcela_id);
+$contratacao = (new FormacaoPedidoController)->recuperar($pedido_id);
+$contratacao_id = $contratacao->origem_id;
+$dadosParcela = $formObj->recuperaDadosParcelas($contratacao_id, '1', $parcela_id);
+$periodo = $formObj->retornaPeriodoFormacao($contratacao_id, '1', $parcela_id);
 
 $data_inicio = MainModel::dataParaBR($dadosParcela->data_inicio);
 $data_fim = MainModel::dataParaBR($dadosParcela->data_fim);
@@ -61,12 +62,11 @@ $ano = date('Y');
         <p>&nbsp;</p>
         <p align="justify"><strong>Recebimento de material e/ou serviços: </strong></p>
         <p>Atesto:</p>
-        <p align="justify">( X ) que os materiais/serviços prestados discriminados no documento fiscal  [INSERIR NÚMERO SEI DA NOTA FISCAL]   foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no período <?= $periodo ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>.</p>
+        <p align="justify">( X ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia <?= $data_inicio ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>.</p>
         <p align="justify">( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL ] foram entregues e/ou executados parcialmente, nos termos previstos no instrumento contratual (ou documento
-            equivalente), no período <?= $periodo ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>. </p>
+            equivalente), do dia <?= $data_fim ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>. </p>
         <p align="justify">( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia _____ / _____ / _____, com atraso de ____ dias.<br>O prazo contratual é <?= $periodo ?>.</p>
         <p>&nbsp;</p>
-        <p><b>INFORMAÇÕES COMPLEMENTARES</b></p>
         <p align="justify">
             <b>Nota de Empenho:</b> <br>
             <b>Anexo da Nota de Empenho:</b> <br>
@@ -78,7 +78,7 @@ $ano = date('Y');
             <b>Certidões Fiscais / CCM:</b> <br>
             <b>FACC:</b>
         </p>
-        <p>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2019 no Sistema SOF, informamos que os valores do presente pagamento foram gastos na região <?= $pedido->coordenadoria ?>.</p>
+        <p>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2019 no Sistema SOF, informamos que os valores do presente pagamento foram gastos na região <?= $contratacao->coordenadoria ?>.</p>
         <p>&nbsp;</p>
         <p>À área gestora / de liquidação e pagamento. </p>
         <p>&nbsp;</p>

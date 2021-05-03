@@ -1,9 +1,9 @@
 
 <?php
-    require_once "./controllers/FormacaoController.php";
-    $subprefeituraObj = new FormacaoController();
+    require_once "./controllers/FormacaoSubprefeituraController.php";
+    $subprefeituraObj = new FormacaoSubprefeituraController();
     
-    $subprefeituras = $subprefeituraObj->listaSubprefeituras();
+    $subprefeituras = $subprefeituraObj->listar();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
