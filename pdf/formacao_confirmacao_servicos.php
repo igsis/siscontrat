@@ -11,7 +11,8 @@ $parcela_id = $_GET['parcela'];
 $pedido_id = $_GET['id'];
 
 $dataAtual = date('d/m/Y');
-$contratacao_id = $formObj->recuperaPedido($pedido_id)->origem_id;
+$pedido = $formObj->recuperaPedido($pedido_id);
+$contratacao_id = $pedido->origem_id;
 $dadosParcela = $formObj->retornaDadosParcelas($contratacao_id, '', '1', $parcela_id);
 $periodo = $formObj->retornaPeriodoFormacao($contratacao_id, '', '1', $parcela_id);
 
@@ -74,8 +75,10 @@ $ano = date('Y');
             <b>Recibo de Pagamento:</b> <br>
             <b>Relatório de Horas Trabalhadas:</b> <br>
             <b>PIS/NIT/PASEP:</b> <br>
-            <b>Certidões Fiscais / CCM:</b>
+            <b>Certidões Fiscais / CCM:</b> <br>
+            <b>FACC:</b>
         </p>
+        <p>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2019 no Sistema SOF, informamos que os valores do presente pagamento foram gastos na região <?= $pedido->coordenadoria ?>.</p>
         <p>&nbsp;</p>
         <p>À área gestora / de liquidação e pagamento. </p>
         <p>&nbsp;</p>

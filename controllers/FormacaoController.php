@@ -951,11 +951,12 @@ class FormacaoController extends FormacaoModel
         else:
             $pedido_id = MainModel::decryption($pedido_id);
             return DbModel::consultaSimples("SELECT p.id, p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
-                                                            p.forma_pagamento, p.justificativa AS 'cargo_justificativa', p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome, c.cargo, fc.programa_id, l.linguagem, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf
+                                                            p.forma_pagamento, p.justificativa AS 'cargo_justificativa', p.observacao, p.verba_id, s.status, fc.protocolo, pf.nome, c.cargo, fc.programa_id, l.linguagem, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, c2.coordenadoria
                                                   FROM pedidos AS p
                                                   INNER JOIN pedido_status AS s ON s.id = p.status_pedido_id 
                                                   INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id 
                                                   INNER JOIN linguagens AS l ON fc.linguagem_id = l.id
+                                                  INNER JOIN coordenadorias c2 on fc.coordenadoria_id = c2.id
                                                   INNER JOIN pessoa_fisicas AS pf ON pf.id = p.pessoa_fisica_id
                                                   INNER JOIN formacao_cargos AS c ON fc.form_cargo_id = c.id
                                                     LEFT JOIN usuarios fis on fc.fiscal_id = fis.id
