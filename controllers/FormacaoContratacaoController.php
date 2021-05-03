@@ -149,7 +149,7 @@ class FormacaoContratacaoController extends FormacaoModel
     {
         $contratacao_id = MainModel::decryption($contratacao_id);
 
-        $sql = "SELECT fc.*, fc.id as formacao_contratacao_id, fc.pessoa_fisica_id, fs.status, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, c.justificativa as cargo_justificativa, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, user.nome_completo as usuario_nome, rp.regiao
+        $sql = "SELECT fc.*, fc.id as formacao_contratacao_id,pro.programa, pro.edital, pro.verba_id AS 'programa_verba_id', fc.protocolo, fc.pessoa_fisica_id, fs.status, t.territorio, cor.coordenadoria, s.subprefeitura, pro.programa, l.linguagem, prj.projeto, c.cargo, c.justificativa as cargo_justificativa, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, user.nome_completo as usuario_nome, rp.regiao
             FROM formacao_contratacoes AS fc
                 INNER JOIN formacao_status fs on fc.form_status_id = fs.id
                 INNER JOIN territorios t on fc.territorio_id = t.id

@@ -4,15 +4,19 @@ $pedidoAjax = true;
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
 require_once "../controllers/FormacaoController.php";
+require_once "../controllers/FormacaoContratacaoController.php";
+require_once "../controllers/FormacaoPedidoController.php";
+require_once "../controllers/PessoaFisicaController.php";
 
+$pedidObj = new FormacaoPedidoController();
 $formObj = new FormacaoController();
 
 $pedido_id = $_GET['id'];
 
-$pedido = $formObj->recuperaPedido($pedido_id);
+$pedido = $pedidObj->recuperar($pedido_id);
 
-$pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
-$contratacao = $formObj->recuperaContratacao($pedido->origem_id, '0');
+$pf = (new PessoaFisicaController)->recuperaPessoaFisica($pedido->pessoa_fisica_id);
+$contratacao = (new FormacaoContratacaoController)->recuperar($pedido->origem_id);
 
 if($pf->passaporte != NULL):
     $trecho_cpf_passaporte = "<p><strong>Contratado:</strong> " . $pf->nome . ", Passaporte (" . $pf->passaporte . ")</p>";
@@ -52,7 +56,7 @@ $dotacao = DbModel::consultaSimples("SELECT acao FROM verbas WHERE id = $contrat
     $conteudo =
         "<p align='justify'>I - À vista dos elementos constantes do presente, em especial da seleção realizada conforme Edital de chamamento para credenciamento de  Artistas-Educadores e Coordenadores Artístico-Pedagógicos do " . $contratacao->programa . " - " . $contratacao->edital . ", para atuar nos equipamentos públicos da Secretaria Municipal de Cultura e nos CEUS (Centros Educacionais Unificados)  da Secretaria Municipal de Educação na edição de 2020, publicado no DOC de  24/10/2019  (link SEI), no uso da competência a mim delegada pela Portaria nº 17/2018 - SMC/G , AUTORIZO com fundamento no artigo 25 “caput”, da Lei Federal nº 8.666/93, a contratação nas condições abaixo estipuladas, observada a legislação vigente e demais cautelas legais:</p>" .
         $trecho_cpf_passaporte .
-        "<p><strong>Objeto:</strong> " . $formObj->retornaObjetoFormacao($pedido->origem_id) . "</p>" .
+        "<p><strong>Objeto:</strong> " . $formObj->retornarObjeto($pedido->origem_id) . "</p>" .
         "<p><strong>Data / Período:</strong> " . $formObj->retornaPeriodoFormacao($pedido->origem_id) . "</p>" .
         "<p><strong>Local(ais):</strong> " . $formObj->retornaLocaisFormacao($pedido->origem_id) . "</p>" .
         "<p><strong>Carga Horária:</strong> " . $formObj->retornaCargaHoraria($pedido->origem_id) . " Hora(s)" . "</p>" .

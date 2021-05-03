@@ -295,15 +295,19 @@ $pdf->MultiCell(160, $l, utf8_decode("O prestador de serviços acima citado é c
 
 $pdf->Ln(5);
 
-for ($i = 0; $i < count($dadosParcelas); $i++):
-    $inicio = MainModel::dataParaBR($dadosParcelas[$i]->data_inicio);
-    $fim = MainModel::dataParaBR($dadosParcelas[$i]->data_fim);
-    $horas = $dadosParcelas[$i]->carga_horaria;
+foreach ($dadosParcelas as $dado):
+    if (gettype($dado) === 'object'):
+        $inicio = MainModel::dataParaBR($dado->data_inicio);
+        $fim = MainModel::dataParaBR($dado->data_fim);
+        $horas = $dado->carga_horaria;
 
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial', '', 10);
-    $pdf->MultiCell(180, $l, utf8_decode("De $inicio a $fim - $horas hora(s)"));
-endfor;
+        $frase = "De {$inicio} a {$fim} - {$horas} hora(s)";
+
+        $pdf->SetX($x);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->MultiCell(180, $l, utf8_decode($frase));
+    endif;
+endforeach;
 
 $pdf->Ln(15);
 
