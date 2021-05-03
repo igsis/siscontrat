@@ -27,7 +27,7 @@ $periodo = $eventoObj->retornaPeriodo($pedido->origem_id);
 $local = $eventoObj->retornaLocais($pedido->origem_id);
 $ocorrencias = $ocorrenciaObj->recuperaOcorrencia($pedido->origem_id);
 
-//alteraStatusPedidoContratos($idPedido, "proposta", $idPenal, $idUser);
+$pedidoObj->inserePedidoEtapa(intval($idPedido),"proposta");
 
 class PDF extends FPDF
 {

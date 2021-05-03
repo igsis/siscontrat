@@ -303,4 +303,39 @@ class PedidoController extends PedidoModel
             WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2";
         return DbModel::consultaSimples($sql)->fetchObject();
     }
+
+    public function inserePedidoEtapa(int $idPedido, string $tipo)
+    {
+        $dateNow = date('Y-m-d H:i:s');
+        $status = [];
+        $dados = [];
+        switch ($tipo){
+            case "proposta":
+                $status['status_pedido_id'] = 14;
+                $dados['data_proposta'] = $dateNow;
+                session_start(['name' => 'sis']);
+                $idPenal = $_GET['penal'];
+                $userContrato = $_SESSION['usuario_id_s'];
+                DbModel::consultaSimples("INSERT INTO contratos (pedido_id, penalidade_id,usuario_contrato_id) VALUES ('$idPedido','$idPenal','$userContrato') ON DUPLICATE KEY UPDATE penalidade_id = '$idPenal', usuario_contrato_id = '$userContrato'");
+                break;
+            case "reserva":
+                $status['status_pedido_id'] = 7;
+                $dados['data_reserva'] = $dateNow;
+                break;
+            case "juridico":
+                $status['status_pedido_id'] = 15;
+                $dados['data_juridico'] = $dateNow;
+                break;
+            case "contabilidade":
+                $status['status_pedido_id'] = 17;
+                $dados['data_contabilidade'] = $dateNow;
+                break;
+            case "pagamento":
+                $status['status_pedido_id'] = 19;
+                $dados['data_pagamento'] = $dateNow;
+                break;
+        }
+        DbModel::update("pedidos",$status,$idPedido);
+        DbModel::updateEspecial("pedido_etapas",$dados,"pedido_id",$idPedido);
+    }
 }
