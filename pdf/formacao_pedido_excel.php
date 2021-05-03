@@ -5,17 +5,14 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../views/plugins/phpexcel/PHPExcel.php";
 require_once "../controllers/FormacaoController.php";
-require_once "../controllers/PessoaFisicaController.php";
+
 
 $objPHPExcel = new PHPExcel();
 $formacaoObj = new FormacaoController();
-$pfObj = new PessoaFisicaController();
 
 $ano = $_GET['ano'];
 
-
 $dadosPedidos = $formacaoObj->recuperaPedido('', 1, $ano);
-
 $nome_arquivo = "pedidos_formacao_" . $ano . ".xls";
 
 // Podemos renomear o nome das planilha atual, lembrando que um único arquivo pode ter várias planilhas
@@ -99,9 +96,8 @@ $objPHPExcel->getActiveSheet()->getStyle("A2:I2")->applyFromArray
 //contador de linhas, utilizado para que os dados comecem a ser preenchidos na linha 3, logo após o cabeçalho e a linha de colunas
 $contador = 3;
 foreach ($dadosPedidos AS $dadosPedido){
-    $pf = $pfObj->recuperaPessoaFisica($pfObj->encryption($dadosPedido->pessoa_fisica_id));
     //recupera os telefones de cada pf
-    //$tel = $formacaoObj->recuperaTelPf($dadosPedido->pessoa_fisica_id);
+    $tel = $formacaoObj->recuperaTelPf($dadosPedido->pessoa_fisica_id);
 
     $a = "A" . $contador;
     $b = "B" . $contador;
@@ -121,7 +117,7 @@ foreach ($dadosPedidos AS $dadosPedido){
         ->setCellValue($e, $dadosPedido->funcao)
         ->setCellValue($f, $dadosPedido->linguagem)
         ->setCellValue($g, $dadosPedido->email)
-        ->setCellValue($h, $pf->telefones['tel_1'])
+        ->setCellValue($h, $tel)
         ->setCellValue($i, $dadosPedido->status);
 
     $contador++;

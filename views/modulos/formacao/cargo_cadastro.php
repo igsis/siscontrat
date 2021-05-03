@@ -1,11 +1,11 @@
 <?php
 
-require_once "./controllers/FormacaoCargoController.php";
+require_once "./controllers/FormacaoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$cargoObj = new FormacaoCargoController();
+$cargoObj = new FormacaoController();
 
-$cargo = $cargoObj->recuperar($id);
+$cargo = $cargoObj->recuperaCargo($id);
 
 ?>
 <!-- Content Header (Page header) -->

@@ -1,9 +1,9 @@
 <?php
     require_once "./controllers/FormacaoController.php";
     $id = isset($_GET['id']) ? $_GET['id'] : null;
-
-    $detalhesObj = new FormacaoContratacaoController();
-    $detalhe = $detalhesObj->recuperar($id);
+    $detalhesObj = new FormacaoController();
+    
+    $detalhe = $detalhesObj->recuperaDetalhesContratacao($id);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">

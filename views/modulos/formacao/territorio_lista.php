@@ -1,9 +1,9 @@
 
 <?php
-    require_once "./controllers/FormacaoTerritorioController.php";
-    $territorioObj = new FormacaoTerritorioController();
+    require_once "./controllers/FormacaoController.php";
+    $territorioObj = new FormacaoController();
     
-    $territorios = $territorioObj->listar();
+    $territorios = $territorioObj->listaTerritorios();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">

@@ -112,7 +112,7 @@ foreach ($inscritos as $inscrito){
     $pessoaJuridicaObj = new PessoaJuridicaController();
     $repObj = new RepresentanteController();
     $pj = $pessoaJuridicaObj->recuperaPessoaJuridica($pessoaJuridicaObj->encryption($inscrito->pessoa_juridica_id), true);
-    $rep = $repObj->recuperaRepresentante($pessoaJuridicaObj->encryption($pj->representante_legal1_id), true);
+    $rep = $repObj->recuperaRepresentante($pessoaJuridicaObj->encryption($pj['representante_legal1_id']), true)->fetch();
     $dadosComp = $pessoaJuridicaObj->consultaSimples("SELECT * FROM fom_projeto_dado_pjs WHERE fom_projeto_id = $inscrito->id", true)->fetchObject();
     $usuario = $pessoaJuridicaObj->consultaSimples("SELECT nome FROM `usuarios` WHERE `id` = $inscrito->usuario_id", true)->fetchColumn();
 
@@ -133,20 +133,20 @@ foreach ($inscritos as $inscrito){
         ->setCellValue($j, $inscrito->representante_nucleo)
         ->setCellValue($k, $inscrito->coletivo_produtor)
         ->setCellValue($l, $inscrito->nucleo_artistico)
-        ->setCellValue($m, $pj->razao_social)
-        ->setCellValue($n, $pj->cnpj)
-        ->setCellValue($o, $pj->email)
-        ->setCellValue($p, $rep->nome)
-        ->setCellValue($q, $rep->rg)
-        ->setCellValue($r, $rep->cpf)
-        ->setCellValue($s, $pj->telefones['tel_0'])
-        ->setCellValue($t, $pj->telefones['tel_1'] ?? "Não Cadastrado")
-        ->setCellValue($u, $pj->cep)
-        ->setCellValue($v, $pj->logradouro)
-        ->setCellValue($w, $pj->numero)
-        ->setCellValue($x, $pj->bairro)
-        ->setCellValue($y, $pj->cidade)
-        ->setCellValue($z, $pj->uf);
+        ->setCellValue($m, $pj['razao_social'])
+        ->setCellValue($n, $pj['cnpj'])
+        ->setCellValue($o, $pj['email'])
+        ->setCellValue($p, $rep['nome'])
+        ->setCellValue($q, $rep['rg'])
+        ->setCellValue($r, $rep['cpf'])
+        ->setCellValue($s, $pj['telefones']['tel_0'])
+        ->setCellValue($t, $pj['telefones']['tel_1'] ?? "Não Cadastrado")
+        ->setCellValue($u, $pj['cep'])
+        ->setCellValue($v, $pj['logradouro'])
+        ->setCellValue($w, $pj['numero'])
+        ->setCellValue($x, $pj['bairro'])
+        ->setCellValue($y, $pj['cidade'])
+        ->setCellValue($z, $pj['uf']);
 
     if ($tipo_contratacao == 24) {
         $objPHPExcel->setActiveSheetIndex(0)

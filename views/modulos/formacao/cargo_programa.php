@@ -1,8 +1,8 @@
 <?php
-require_once "./controllers/FormacaoProgramaController.php";
-$formObj = new FormacaoProgramaController();
+require_once "./controllers/FormacaoController.php";
+$formObj = new FormacaoController();
 
-$dados = $formObj->listar();
+$dados = $formObj->listaProgramas();
 
 $link_api = SERVERURL . "api/lista_cargo_programas.php";
 ?>
@@ -83,19 +83,13 @@ $link_api = SERVERURL . "api/lista_cargo_programas.php";
                     <form action="<?= SERVERURL ?>ajax/formacaoAjax.php" class="form-horizontal formulario-ajax"
                           method="POST">
                         <input type="hidden" id="metodo" name="_method" value="">
-                        <div class="form-group">
-                            <label for="formacao_cargo_id">Cargo: *</label>
-                            <div class="input-group">
-                                <select name="formacao_cargo_id" id="cargo" class="form-control select2bs4" required>
-                                    <option value="">Selecione um cargo...</option>
-                                </select>
-                                <div class="input-group-append">
-                                    <button type='submit' id='btnVincula' class='btn btn-success float-right'>Vincular</button>
-                                    <button type='submit' id='btnDesvincula' class='btn btn-danger float-right'>Desvincular</button>
-                                </div>
-                            </div>
-                        </div>
+                        <label for="formacao_cargo_id">Cargo: *</label>
+                        <select name="formacao_cargo_id" id="cargo" class="form-control select2bs4" required>
+                            <option value="">Selecione um cargo...</option>
+                        </select>
                         <input type="hidden" name="programa_id" id="programa_id" value="">
+                        <button type='submit' id='btnVincula' class='btn btn-success float-right'>Vincular</button>
+                        <button type='submit' id='btnDesvincula' class='btn btn-danger float-right'>Desvincular</button>
                         <div class="resposta-ajax"></div>
                     </form>
                 </div>

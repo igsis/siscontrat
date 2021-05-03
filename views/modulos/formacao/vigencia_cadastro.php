@@ -1,11 +1,10 @@
 <?php
 
-require_once "./controllers/FormacaoVigenciaController.php";
-require_once "./controllers/FormacaoParcelaVigenciaController.php";
+require_once "./controllers/FormacaoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : "";
-$vigenciaObj = new FormacaoVigenciaController();
-$vigencia = $vigenciaObj->recuperar($id);
+$vigenciaObj = new FormacaoController();
+$vigencia = $vigenciaObj->recuperaVigencia($id);
 
 ?>
 <!-- Content Header (Page header) -->
@@ -62,7 +61,7 @@ $vigencia = $vigenciaObj->recuperar($id);
 
                 <?php if ($id) : ?>
                     <?php
-                    $parcela_vigencia = (new FormacaoParcelaVigenciaController)->recuperar($id);
+                    $parcela_vigencia = $vigenciaObj->recuperaParcelasVigencias($id);
                     ?>
                     <div class="card <?= (!$parcela_vigencia) ? "card-danger" : "card-info"?>">
                         <div class="card-header">

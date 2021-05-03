@@ -5,15 +5,11 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
 require_once "../controllers/FormacaoController.php";
-require_once "../controllers/FormacaoContratacaoController.php";
-require_once "../controllers/PessoaFisicaController.php";
 require_once "../controllers/PedidoController.php";
 
 $formObj = new FormacaoController();
-$pfObj = new PessoaFisicaController();
-$pedObj =  new PedidoController();
 
-$pedido_id =  $_GET['id'];
+$pedido_id = $_GET['id'];
 
 class PDF extends FPDF
 {
@@ -30,14 +26,15 @@ class PDF extends FPDF
     }
 }
 
-$pedido = $pedObj->recuperaPedido(2, $pedido_id);
-$contratacao = (new FormacaoContratacaoController)->recuperar($pedido->origem_id);
-$pf = $pfObj->recuperaPessoaFisica($pfObj->encryption($pedido->pessoa_fisica_id));
+$pedido = $formObj->recuperaPedido($pedido_id);
+$contratacao = $formObj->recuperaContratacao($pedido->origem_id);
+$pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
+$telPf = $formObj->recuperaTelPf($pedido->pessoa_fisica_id);
 $Observacao = "Todas as atividades dos programas da Supervisão de Formação são inteiramente gratuitas e é terminantemente proibido cobrar por elas sob pena de multa e rescisão de contrato.";
-$penalidades = PedidoController::recuperaPenalidades(20);
-$dadosParcelas = $formObj->recuperaDadosParcelas($pedido->origem_id);
+$penalidades = PedidoController::retornaPenalidades(20);
+$dadosParcelas = $formObj->retornaDadosParcelas($pedido->origem_id);
 
-$nome = $pf->nome_social != null ? "{$pf->nome_social} ({$pf->nome})" : $pf->nome;
+$nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
 
 $ano = date('Y');
 
@@ -51,7 +48,7 @@ $l = 7; //DEFINE A ALTURA DA LINHA
 
 $pdf->SetXY($x, 35);// SetXY - DEFINE O X (largura) E O Y (altura) NA PÁGINA
 
-$pdf->SetTitle(utf8_decode("Proposta Formação"));
+$pdf->SetTitle("Proposta Formação");
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -104,7 +101,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(36, $l, 'Data de Nascimento:', 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(30, $l, utf8_decode(MainModel::validaData($pf->data_nascimento)), 0, 0, 'L');
+$pdf->Cell(21, $l, utf8_decode(MainModel::dataParaBR($pf->data_nascimento) == "00-00-0000" ? "Não cadastrado" : MainModel::dataParaBR($pf->data_nascimento)), 0, 0, 'L');
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(26, $l, "Nacionalidade:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
@@ -112,7 +109,7 @@ $pdf->Cell(43, $l, utf8_decode(MainModel::checaCampo($pf->nacionalidade)), 0, 0,
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(10, $l, "CCM:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(21, $l, utf8_decode(MainModel::checaCampo($pf->ccm)), 0, 0, 'L');
+$pdf->Cell(30, $l, utf8_decode(MainModel::checaCampo($pf->ccm)), 0, 0, 'L');
 
 $pdf->Ln(7);
 
@@ -132,7 +129,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(21, $l, 'Telefone(s):', '0', '0', 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(168, $l, utf8_decode($pf->telefones['tel_0'] ?? null . " " .$pf->telefones['tel_1'] ?? null. " ".$pf->telefones['tel_2'] ?? null), 0, 'L', 0);
+$pdf->MultiCell(168, $l, utf8_decode($telPf), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -159,7 +156,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(13, $l, "Objeto:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(165, $l, utf8_decode($formObj->retornarObjeto($pedido->origem_id)), 0, 'L', 0);
+$pdf->MultiCell(165, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
@@ -295,19 +292,15 @@ $pdf->MultiCell(160, $l, utf8_decode("O prestador de serviços acima citado é c
 
 $pdf->Ln(5);
 
-foreach ($dadosParcelas as $dado):
-    if (gettype($dado) === 'object'):
-        $inicio = MainModel::dataParaBR($dado->data_inicio);
-        $fim = MainModel::dataParaBR($dado->data_fim);
-        $horas = $dado->carga_horaria;
+for ($i = 0; $i < count($dadosParcelas); $i++):
+    $inicio = MainModel::dataParaBR($dadosParcelas[$i]->data_inicio);
+    $fim = MainModel::dataParaBR($dadosParcelas[$i]->data_fim);
+    $horas = $dadosParcelas[$i]->carga_horaria;
 
-        $frase = "De {$inicio} a {$fim} - {$horas} hora(s)";
-
-        $pdf->SetX($x);
-        $pdf->SetFont('Arial', '', 10);
-        $pdf->MultiCell(180, $l, utf8_decode($frase));
-    endif;
-endforeach;
+    $pdf->SetX($x);
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->MultiCell(180, $l, utf8_decode("De $inicio a $fim - $horas hora(s)"));
+endfor;
 
 $pdf->Ln(15);
 

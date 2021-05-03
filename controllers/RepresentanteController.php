@@ -146,17 +146,10 @@ class RepresentanteController extends MainModel
         return MainModel::sweetAlert($alerta);
     }
 
-    /**
-     * @param int|string $id
-     * @param false $capac
-     * @return object
-     */
-    public function recuperaRepresentante($id, $capac = false)
-    {
-        if (gettype($id == "string")){
-            $id = MainModel::decryption($id);
-        }
-        return DbModel::getInfo('representante_legais',$id,$capac)->fetchObject();
+    public function recuperaRepresentante($id, $capac = false) {
+        $id = MainModel::decryption($id);
+        $representante = DbModel::getInfo('representante_legais',$id,$capac);
+        return $representante;
     }
 
     public function getCPF($cpf){

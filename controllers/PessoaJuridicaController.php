@@ -120,6 +120,10 @@ class PessoaJuridicaController extends PessoaJuridicaModel
                 }
             }
 
+            /*if ($_SESSION['modulo_s'] == 8 || $_SESSION['modulo_s'] == 9){ //fomento
+                $_SESSION['origem_id_s'] = $id;
+            }*/
+
             if($retornaId){
                 return $idDecryp;
             } else{
@@ -144,17 +148,9 @@ class PessoaJuridicaController extends PessoaJuridicaModel
         }
     }
 
-    /**
-     * @param int|string $id
-     * @param false $capac
-     * <p>True se for para conectar no banco capac</p>
-     * @return object
-     */
-    public function recuperaPessoaJuridica($id,$capac = false):stdClass
+    public function recuperaPessoaJuridica($id,$capac = false)
     {
-        if (gettype($id == "string")){
-            $id = MainModel::decryption($id);
-        }
+        $id = MainModel::decryption($id);
         $pj = DbModel::consultaSimples(
             "SELECT * FROM pessoa_juridicas AS pj
             LEFT JOIN pj_enderecos pe on pj.id = pe.pessoa_juridica_id
@@ -169,7 +165,22 @@ class PessoaJuridicaController extends PessoaJuridicaModel
             $pj['telefones']['tel_' . $key] = $telefone['telefone'];
         }
 
-        return (object)$pj;
+        return $pj;
     }
 
+
+    public function getCNPJ($cnpj)
+    {
+        $consulta_cnpj = DbModel::consultaSimples("SELECT id, cnpj FROM pessoa_juridicas WHERE cnpj = '$cnpj'");
+        return $consulta_cnpj;
+    }
+
+    /**
+     * @param $pessoa_juridica_id
+     * <p>Recebe o ID do proponente PJ já decriptado</p>
+     * @return array|bool
+     */
+    public function validaPj($pessoa_juridica_id) {
+        return PessoaJuridicaModel::validaPjModel($pessoa_juridica_id);
+    }
 }

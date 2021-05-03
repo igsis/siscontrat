@@ -4,8 +4,6 @@ $pedidoAjax = true;
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
 require_once "../controllers/FormacaoController.php";
-require_once "../controllers/FormacaoContratacaoController.php";
-require_once "../controllers/PessoaFisicaController.php";
 require_once "../controllers/PedidoController.php";
 
 $formObj = new FormacaoController();
@@ -14,13 +12,13 @@ $pedidoObj = new PedidoController();
 $pedido_id = $_GET['id'];
 //$tipo = $_GET['tipo'];
 
-$pedido = $pedidoObj->recuperaPedido(2,$pedido_id);
+$pedido = $formObj->recuperaPedido($pedido_id);
 
 $verba = $pedidoObj->recuperaVerba($pedido->verba_id);
 
-$pf = (new PessoaFisicaController)->recuperaPessoaFisica($pedido->pessoa_fisica_id);
-$contratacao = (new FormacaoContratacaoController)->recuperar($pedido->origem_id);
-$objeto = $formObj->retornarObjeto($pedido->origem_id);
+$pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
+$contratacao = $formObj->recuperaContratacao($pedido->origem_id);
+$objeto = $formObj->retornaObjetoFormacao($pedido->origem_id);
 
 $nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
 

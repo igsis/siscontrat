@@ -1,13 +1,13 @@
 <?php
-require_once "./controllers/FormacaoContratacaoController.php";
+require_once "./controllers/FormacaoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $getAno = isset($_GET['ano']) ? $_GET['ano'] : 0;
-$dados_contratacaoObj = new FormacaoContratacaoController();
+$dados_contratacaoObj = new FormacaoController();
 
 if ($getAno) {
-    $dados_contratacao = $dados_contratacaoObj->listar($getAno);
+    $dados_contratacao = $dados_contratacaoObj->listaDadosContratacao($getAno);
 } else {
-    $dados_contratacao = $dados_contratacaoObj->listar();
+    $dados_contratacao = $dados_contratacaoObj->listaDadosContratacao();
 }
 
 

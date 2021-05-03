@@ -1,8 +1,8 @@
 <?php
-    require_once "./controllers/FormacaoLinguagemController.php";
-    $linguagemObj = new FormacaoLinguagemController();
+    require_once "./controllers/FormacaoController.php";
+    $linguagemObj = new FormacaoController();
     
-    $linguagens = $linguagemObj->listar();
+    $linguagens = $linguagemObj->listaLinguagens();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">

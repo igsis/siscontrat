@@ -1,11 +1,11 @@
 <?php
 
-require_once "./controllers/FormacaoLinguagemController.php";
+require_once "./controllers/FormacaoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$linguagemObj = new FormacaoLinguagemController();
+$linguagemObj = new FormacaoController();
 
-$linguagem = $linguagemObj->recuperar($id);
+$linguagem = $linguagemObj->recuperaLinguagem($id);
 
 ?>
 <!-- Content Header (Page header) -->
