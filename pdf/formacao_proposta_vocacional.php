@@ -5,13 +5,15 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
 require_once "../controllers/FormacaoController.php";
+require_once "../controllers/FormacaoContratacaoController.php";
 require_once "../controllers/PessoaFisicaController.php";
 require_once "../controllers/PedidoController.php";
 
 $formObj = new FormacaoController();
 $pfObj = new PessoaFisicaController();
+$pedObj =  new PedidoController();
 
-$pedido_id = $_GET['id'];
+$pedido_id =  $_GET['id'];
 
 class PDF extends FPDF
 {
@@ -28,8 +30,8 @@ class PDF extends FPDF
     }
 }
 
-$pedido = $formObj->recuperaPedido($pedido_id);
-$contratacao = $formObj->recuperaContratacao($pedido->origem_id);
+$pedido = $pedObj->recuperaPedido(2, $pedido_id);
+$contratacao = (new FormacaoContratacaoController)->recuperar($pedido->origem_id);
 $pf = $pfObj->recuperaPessoaFisica($pfObj->encryption($pedido->pessoa_fisica_id));
 $Observacao = "Todas as atividades dos programas da Supervisão de Formação são inteiramente gratuitas e é terminantemente proibido cobrar por elas sob pena de multa e rescisão de contrato.";
 $penalidades = PedidoController::recuperaPenalidades(20);
@@ -157,7 +159,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(13, $l, "Objeto:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(165, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 'L', 0);
+$pdf->MultiCell(165, $l, utf8_decode($formObj->retornarObjeto($pedido->origem_id)), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
