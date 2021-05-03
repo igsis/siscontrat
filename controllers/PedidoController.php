@@ -130,8 +130,8 @@ class PedidoController extends PedidoModel
         if ($origem_tipo_id == 2){
             $formObj = new FormacaoContratacaoController();
             $pedido = PedidoModel::recuperaBasePedido($origem_tipo_id, $origem_id);
-            $formacao = $formObj->recuperar($origem_id);
-            $pedido = array_merge($pedido,array($formacao));
+            $formacao = (array) $formObj->recuperar($origem_id);
+            $pedido = array_merge($pedido,$formacao);
         }
         /** Tipo EMIA */
         if ($origem_tipo_id == 3){

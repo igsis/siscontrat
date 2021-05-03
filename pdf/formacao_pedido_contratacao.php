@@ -4,14 +4,23 @@ $pedidoAjax = true;
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
 require_once "../controllers/FormacaoController.php";
+require_once "../controllers/PessoaFisicaController.php";
+require_once "../controllers/FormacaoPedidoController.php";
 
-$formObj = new FormacaoController();
+$formObj = new FormacaoPedidoController();
 
 $pedido_id = $_GET['id'];
 
-$pedido = $formObj->recuperaPedido($pedido_id);
+$pedido = $formObj->recuperar($pedido_id);
 
-$pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
+$pf = (new PessoaFisicaController)->recuperaPessoaFisica($pedido->pessoa_fisica_id);
+$telPf = "";
+foreach ($pf->telefones as $key => $telefone) {
+    if ($key !== "tel_0"){
+        $telPf .= " / ";
+    }
+    $telPf .= "{$telefone}";
+}
 
 $nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
 
@@ -65,13 +74,13 @@ $ano = date('Y');
         "<p>&nbsp;</p>" .
         "<p><strong>Nome:</strong> " . $nome . " <br />" .
         $cpf_passaporte .
-        "<strong>Telefone(s):</strong> " . $formObj->recuperaTelPf($pedido->pessoa_fisica_id) . "<br />" .
+        "<strong>Telefone(s):</strong> " . $telPf . "<br />" .
         "<strong>E-mail:</strong> " . $pf->email . "</p>" .
         "<p>&nbsp;</p>" .
-        "<p><strong>Objeto:</strong> {$formObj->retornaObjetoFormacao($pedido->origem_id)}</p>" .
-        "<p><strong>Data / Período:</strong> " . $formObj->retornaPeriodoFormacao($pedido->origem_id) . " - conforme Proposta/Cronograma</p>" .
-        "<p><strong>Carga Horária:</strong> " . $formObj->retornaCargaHoraria($pedido->origem_id) . " hora(s)" . "</p>" .
-        "<p align='justify'><strong>Local(ais):</strong> " . $formObj->retornaLocaisFormacao($pedido->origem_id) . "</p>" .
+        "<p><strong>Objeto:</strong> ". (new FormacaoController)->retornarObjeto($pedido->origem_id)."</p>" .
+        "<p><strong>Data / Período:</strong> " . (new FormacaoController)->retornaPeriodoFormacao($pedido->origem_id) . " - conforme Proposta/Cronograma</p>" .
+        "<p><strong>Carga Horária:</strong> " . (new FormacaoController)->retornaCargaHoraria($pedido->origem_id) . " hora(s)" . "</p>" .
+        "<p align='justify'><strong>Local(ais):</strong> " . (new FormacaoController)->retornaLocaisFormacao($pedido->origem_id) . "</p>" .
         "<p><strong>Valor: </strong> R$ " . MainModel::dinheiroParaBr($pedido->valor_total) . "  (" . MainModel::valorPorExtenso($pedido->valor_total) . " )</p>" .
         "<p align='justify'><strong>Forma de Pagamento:</strong> " . $pedido->forma_pagamento . "</p>" .
         "<p align='justify'><strong>Justificativa: </strong> " . $pedido->cargo_justificativa . "</p>" .

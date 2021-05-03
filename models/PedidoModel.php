@@ -26,8 +26,8 @@ class PedidoModel extends MainModel
                 INNER JOIN pedido_status ps on p.status_pedido_id = ps.id
                 LEFT JOIN usuarios uc on p.operador_id = uc.id
                 LEFT JOIN usuarios up on p.operador_pagamento_id = up.id
-                WHERE p.origem_tipo_id = '$origem_tipo_id' AND p.publicado = 1 {$filtro}
-        ")->fetchAll(PDO::FETCH_OBJ);
+                LEFT JOIN formacao_contratacoes fc ON fc.pedido_id = p.id
+                WHERE p.origem_tipo_id = '$origem_tipo_id' AND p.publicado = 1 {$filtro}")->fetchAll(PDO::FETCH_OBJ);
     }
 
 }
