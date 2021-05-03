@@ -1,9 +1,9 @@
 <?php
-require_once "./controllers/FormacaoEditalController.php";
+require_once "./controllers/FormacaoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$formacaoObj =  new FormacaoEditalController();
-$abertura = $formacaoObj->recuperar($id);
+$formacaoObj =  new FormacaoController();
+$abertura = $formacaoObj->recuperaAbertura($id);
 
 //para js
 $dataAbertura = isset($abertura->data_abertura) ? 1 : null;

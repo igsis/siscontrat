@@ -1,11 +1,11 @@
 <?php
 
-require_once "./controllers/FormacaoSubprefeituraController.php";
+require_once "./controllers/FormacaoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$subprefeituraObj = new FormacaoSubprefeituraController();
+$subprefeituraObj = new FormacaoController();
 
-$subprefeitura = $subprefeituraObj->recuperar($id);
+$subprefeitura = $subprefeituraObj->recuperaSubprefeitura($id);
 
 ?>
 <!-- Content Header (Page header) -->

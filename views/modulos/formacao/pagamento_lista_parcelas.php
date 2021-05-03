@@ -1,18 +1,14 @@
 <?php
 $pedido_id = isset($_GET['id']) ? $_GET['id'] : "";
-require_once "./controllers/FormacaoPedidoController.php";
-require_once "./controllers/PedidoController.php";
-require_once "./controllers/PessoaFisicaController.php";
-require_once "./controllers/FormacaoContratacaoController.php";
 require_once "./controllers/FormacaoController.php";
+require_once "./controllers/PedidoController.php";
 
-$formObj = new FormacaoPedidoController();
+$formObj = new FormacaoController();
 $pedObj = new PedidoController();
-$pfObj = new PessoaFisicaController();
 
-$pedido = $formObj->recuperar($pedido_id);
-$pessoa = $pfObj->recuperaPessoaFisica($pedido->pessoa_fisica_id);
-$contratacao = (new FormacaoContratacaoController)->recuperar($pedido->origem_id);
+$pedido = $formObj->recuperaPedido($pedido_id);
+$pessoa = $formObj->recuperaPf($pedido->pessoa_fisica_id);
+$contratacao = $formObj->recuperaContratacao(MainModel::encryption($pedido->origem_id), 1);
 $parcelas = $pedObj->getParcelarPedidoFomentos($pedido_id);
 
 $nome = $pessoa->nome_social != null ? "$pessoa->nome ($pessoa->nome_social)" : $pessoa->nome;
@@ -57,12 +53,12 @@ $i = 1;
                             <div class="form-group col-md-4">
                                 <label for="local">Local(ais):</label>
                                 <input type="text" class="form-control" name="local"
-                                       value="<?= (new FormacaoController)->retornaLocaisFormacao($pedido->origem_id) ?>" disabled>
+                                       value="<?= $formObj->retornaLocaisFormacao($pedido->origem_id) ?>" disabled>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md">
-                                <a href="<?= SERVERURL ?>pdf/facc_pf.php?id=<?= MainModel::encryption($pedido->pessoa_fisica_id) ?>"
+                                <a href="<?= SERVERURL ?>pdf/rlt_fac_pf.php?id=<?= MainModel::encryption($pedido->pessoa_fisica_id) ?>"
                                    target="_blank">
                                     <button class="btn btn-primary">Gerar FACC</button>
                                 </a>

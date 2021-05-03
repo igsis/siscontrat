@@ -5,7 +5,6 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../views/plugins/phpexcel/PHPExcel.php";
 require_once "../controllers/FormacaoController.php";
-require_once "../controllers/FormacaoInscritoController.php";
 
 $objPHPExcel = new PHPExcel();
 $formacaoObj = new FormacaoController();
@@ -172,7 +171,7 @@ foreach ($dadosContratacoes AS $dadosContratacao) {
         ->setCellValue($a, $dadosContratacao->protocolo)
         ->setCellValue($b, $dadosContratacao->nome)
         ->setCellValue($c, $dadosContratacao->cpf == NULL ? $dadosContratacao->passaporte : $dadosContratacao->cpf)
-        ->setCellValue($d, (new FormacaoInscritoController)->recuperarTel($dadosContratacao->pessoa_fisica_id))
+        ->setCellValue($d, $formacaoObj->recuperaTelPf($dadosContratacao->pessoa_fisica_id, '', '1'))
         ->setCellValue($e, $dadosContratacao->email)
         ->setCellValue($f, $formacaoObj->dataParaBR($dadosContratacao->data_nascimento))
         ->setCellValue($g, $dadosContratacao->programa)

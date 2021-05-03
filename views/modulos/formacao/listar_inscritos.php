@@ -1,16 +1,14 @@
 <?php
-require_once "./controllers/FormacaoInscritoController.php";
-require_once "./controllers/FormacaoProgramaController.php";
-require_once "./controllers/FormacaoCargoController.php";
-require_once "./controllers/FormacaoLinguagemController.php";
+require_once "./controllers/FormacaoController.php";
 
-$inscritoObj = new FormacaoInscritoController();
+$formacaoObj = new FormacaoController();
 
 if (isset($_POST['busca'])) {
     $dados = $_POST;
 
     array_splice($dados, 0, 1);
-    $resultados = $inscritoObj->listarIncritos($dados);
+
+    $resultados = $formacaoObj->listarIncritos($dados);
 }
 
 ?>
@@ -59,7 +57,7 @@ if (isset($_POST['busca'])) {
                                     <select name="programa_id" id="programa_id" class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $inscritoObj->geraOpcao("programas", isset($dados['programa_id']) ? $dados['programa_id'] : '')
+                                        $formacaoObj->geraOpcao("programas", isset($dados['programa_id']) ? $dados['programa_id'] : '')
                                         ?>
                                     </select>
                                 </div>
@@ -77,7 +75,7 @@ if (isset($_POST['busca'])) {
                                             class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $inscritoObj->geraOpcao("regiao_preferencias", isset($dados['regiao_preferencial_id']) ? $dados['regiao_preferencial_id'] : '');
+                                        $formacaoObj->geraOpcao("regiao_preferencias", isset($dados['regiao_preferencial_id']) ? $dados['regiao_preferencial_id'] : '');
                                         ?>
                                     </select>
                                 </div>
@@ -86,7 +84,7 @@ if (isset($_POST['busca'])) {
                                     <select name="linguagem_id" id="linguagem_id" class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $inscritoObj->geraOpcao("linguagens", isset($dados['linguagem_id']) ? $dados['linguagem_id'] : '');
+                                        $formacaoObj->geraOpcao("linguagens", isset($dados['linguagem_id']) ? $dados['linguagem_id'] : '');
                                         ?>
                                     </select>
                                 </div>
@@ -97,7 +95,7 @@ if (isset($_POST['busca'])) {
                                     <select name="genero_id" id="genero_id" class="form-control inputs">
                                         <option value="">Selecione uma opção...</option>
                                         <?php
-                                        $inscritoObj->geraOpcao("generos", isset($dados['genero_id']) ? $dados['genero_id'] : '', false, false, true);
+                                        $formacaoObj->geraOpcao("generos", isset($dados['genero_id']) ? $dados['genero_id'] : '', false, false, true);
                                         ?>
                                     </select>
                                 </div>
@@ -153,9 +151,9 @@ if (isset($_POST['busca'])) {
                                         <td><?= $resultado->protocolo ?></td>
                                         <td><?= $resultado->nome ?></td>
                                         <td><?= $resultado->cpf ?></td>
-                                        <td><?= (new FormacaoProgramaController)->recuperar($resultado->programa_id)->programa ?></td>
-                                        <td><?= (new FormacaoLinguagemController)->recuperar($resultado->linguagem_id)->linguagem ?></td>
-                                        <td><?= (new FormacaoCargoController)->recuperar($resultado->form_cargo_id)->cargo ?></td>
+                                        <td><?= $formacaoObj->recuperaPrograma($formacaoObj->encryption($resultado->programa_id))->programa ?></td>
+                                        <td><?= $formacaoObj->recuperaLinguagem($formacaoObj->encryption($resultado->linguagem_id))->linguagem ?></td>
+                                        <td><?= $formacaoObj->recuperaCargo($formacaoObj->encryption($resultado->form_cargo_id))->cargo ?></td>
                                         <td><?= $resultado->regiao ?></td>
                                         <td><?= $resultado->etnia ?></td>
                                         <td><?= $resultado->pcd ?></td>
@@ -166,7 +164,7 @@ if (isset($_POST['busca'])) {
                                                class="btn bg-gradient-purple btn-sm rounded-bottom">Arquivos</a>
                                         </td>
                                         <td>
-                                            <a href="<?= SERVERURL ?>formacao/resumo_inscrito&id=<?= $inscritoObj->encryption($resultado->id) ?>"
+                                            <a href="<?= SERVERURL ?>formacao/resumo_inscrito&id=<?= $formacaoObj->encryption($resultado->id) ?>"
                                                class="btn btn-success btn-sm"> Resumo</a>
                                         </td>
                                     </tr>

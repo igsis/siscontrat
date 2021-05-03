@@ -1,8 +1,8 @@
 <?php
-require_once "./controllers/FormacaoVigenciaController.php";
-$vigenciaObj = new FormacaoVigenciaController();
+require_once "./controllers/FormacaoController.php";
+$vigenciaObj = new FormacaoController();
 
-$vigencias = $vigenciaObj->listar();
+$vigencias = $vigenciaObj->listaVigencias();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">

@@ -1,10 +1,10 @@
 <?php
-require_once "./controllers/FormacaoDocumentoController.php";
+require_once "./controllers/FormacaoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$documentoObj = new FormacaoDocumentoController();
+$formacaoObj = new FormacaoController();
 
-$documento = $documentoObj->recuperar($id);
+$documento = $formacaoObj->recuperaDocumento($id);
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">

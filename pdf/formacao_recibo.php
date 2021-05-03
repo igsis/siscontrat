@@ -5,8 +5,6 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
 require_once "../controllers/FormacaoController.php";
-require_once "../controllers/PessoaFisicaController.php";
-require_once "../controllers/FormacaoPedidoController.php";
 
 $formObj = new FormacaoController();
 
@@ -17,16 +15,10 @@ class PDF extends FPDF
 {
 }
 
-$pedido = (new FormacaoPedidoController)->recuperar($pedido_id);
-$pf = (new PessoaFisicaController)->recuperaPessoaFisica($pedido->pessoa_fisica_id);
-$telPf = "";
-foreach ($pf->telefones as $key => $telefone) {
-    if ($key !== "tel_0"){
-        $telPf .= " / ";
-    }
-    $telPf .= "{$telefone}";
-}
-$parcelaDados = $formObj->recuperaDadosParcelas($pedido->origem_id, 1, $parcela_id);
+$pedido = $formObj->recuperaPedido($pedido_id);
+$pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
+$telPf = $formObj->recuperaTelPf($pedido->pessoa_fisica_id);
+$parcelaDados = $formObj->retornaDadosParcelas($pedido->origem_id, '', '1', $parcela_id);
 
 $nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
 
@@ -59,7 +51,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
 $pdf->Cell(14, $l, utf8_decode("Objeto:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(166, $l, utf8_decode((new FormacaoController)->retornarObjeto($pedido->origem_id)));
+$pdf->MultiCell(166, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)));
 
 $pdf->Ln(6);
 
@@ -108,7 +100,7 @@ $pdf->MultiCell(168, $l, utf8_decode($pf->email), 0, 'L', 0);
 $pdf->Ln(16);
 
 $pdf->SetX($x);
-$pdf->MultiCell(170, $l, utf8_decode("Atesto que recebi da Prefeitura do Múnicípio de São Paulo - Secretaria Municipal de Cultura a importância de R$ " . MainModel::dinheiroParaBr($parcelaDados->valor) . " ( " . MainModel::valorPorExtenso($parcelaDados->valor) . ")  referente ao período " . $formObj->retornaPeriodoFormacao($pedido->origem_id, '1', $parcela_id) . " da " . (new FormacaoController)->retornarObjeto($pedido->origem_id)), 0, 'L', 0);
+$pdf->MultiCell(170, $l, utf8_decode("Atesto que recebi da Prefeitura do Múnicípio de São Paulo - Secretaria Municipal de Cultura a importância de R$ " . MainModel::dinheiroParaBr($parcelaDados->valor) . " ( " . MainModel::valorPorExtenso($parcelaDados->valor) . ")  referente ao período " . $formObj->retornaPeriodoFormacao($pedido->origem_id, '', '1', $parcela_id) . " da " . $formObj->retornaObjetoFormacao($pedido->origem_id)), 0, 'L', 0);
 
 $pdf->Ln(16);
 

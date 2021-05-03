@@ -69,38 +69,38 @@ $validacoesPrograma = $erroForm ? $formObj->existeErro($erroForm) : false;
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-12"><b>Nome:</b> <?= $pf->nome ?></div>
+                            <div class="col-md-12"><b>Nome:</b> <?= $pf['nome'] ?></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12"><b>Nome Artístico:</b> <?= $pf->nome_artistico ?></div>
+                            <div class="col-md-12"><b>Nome Artístico:</b> <?= $pf['nome_artistico'] ?></div>
                         </div>
                         <div class="row">
-                            <div class="col"><b>RG:</b> <?= $pf->rg ?></div>
+                            <div class="col"><b>RG:</b> <?= $pf['rg'] ?></div>
                         </div>
                         <div class="row">
-                            <div class="col"><b>CPF:</b> <?= $pf->cpf ?></div>
+                            <div class="col"><b>CPF:</b> <?= $pf['cpf'] ?></div>
                         </div>
                         <div class="row">
-                            <div class="col"><b>CCM:</b> <?= $pf->ccm ?></div>
+                            <div class="col"><b>CCM:</b> <?= $pf['ccm'] ?></div>
                         </div>
                         <div class="row">
-                            <div class="col"><b>Data de Nascimento:</b> <?= date("d/m/Y", strtotime($pf->data_nascimento)) ?></div>
+                            <div class="col"><b>Data de Nascimento:</b> <?= date("d/m/Y", strtotime($pf['data_nascimento'])) ?></div>
                         </div>
                         <div class="row">
                             <div class="col"><b>Nacionalidade:</b> <?= $pf['nacionalidade'] ?></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4"><b>E-mail:</b> <?= $pf->email ?></div>
+                            <div class="col-md-4"><b>E-mail:</b> <?= $pf['email'] ?></div>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <b>Telefones:</b>
-                                <?= isset($pf->telefones) ? implode(" | ", $pf->telefones) : "" ?>
+                                <?= isset($pf['telefones']) ? implode(" | ", $pf['telefones']) : "" ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <b>Endereço:</b> <?= $pf->logradouro . ", " . $pf->numero . " " . $pf->complemento . " " . $pf->bairro . " - " . $pf->cidade . "-" . $pf->uf . " CEP: " . $pf->cep ?>
+                                <b>Endereço:</b> <?= $pf['logradouro'] . ", " . $pf['numero'] . " " . $pf['complemento'] . " " . $pf['bairro'] . " - " . $pf['cidade'] . "-" . $pf['uf'] . " CEP: " . $pf['cep'] ?>
                             </div>
                         </div>
                         <div class="row">
@@ -113,19 +113,19 @@ $validacoesPrograma = $erroForm ? $formObj->existeErro($erroForm) : false;
                             <div class="col"><b>Grau de instrução:</b> <?= $pf['grau_instrucao'] ?></div>
                         </div>
                         <div class="row">
-                            <div class="col"><b>NIT:</b> <?= $pf->nit ?></div>
+                            <div class="col"><b>NIT:</b> <?= $pf['nit'] ?></div>
                         </div>
                         <div class="row">
-                            <div class="col"><b>DRT:</b> <?= $pf->drt ?></div>
+                            <div class="col"><b>DRT:</b> <?= $pf['drt'] ?></div>
                         </div>
                         <div class="row">
-                            <div class="col"><b>Banco:</b> <?= $pf->banco ?></div>
+                            <div class="col"><b>Banco:</b> <?= $pf['banco'] ?></div>
                         </div>
                         <div class="row">
-                            <div class="col"><b>Agência:</b> <?= $pf->agencia ?></div>
+                            <div class="col"><b>Agência:</b> <?= $pf['agencia'] ?></div>
                         </div>
                         <div class="row">
-                            <div class="col"><b>Conta:</b> <?= $pf->conta ?></div>
+                            <div class="col"><b>Conta:</b> <?= $pf['conta'] ?></div>
                         </div>
                         <br>
                         <!-- ************** Programa ************** -->

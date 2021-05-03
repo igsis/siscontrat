@@ -1,19 +1,17 @@
 <?php
-require_once "./controllers/FormacaoContratacaoController.php";
-require_once "./controllers/FormacaoPedidoController.php";
+require_once "./controllers/FormacaoController.php";
 require_once "./controllers/ArquivoController.php";
-
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $capacId = isset($_GET['capac']) ? $_GET['capac'] : null;
-$contratacaoObj = new FormacaoContratacaoController();
+$contratacaoObj = new FormacaoController();
 $pfObj =  new PessoaFisicaController();
 
 if($id){
-    $dados_contratacao = $contratacaoObj->recuperar($id);
+    $dados_contratacao = $contratacaoObj->recuperaDadosContratacao($id);
 }
 elseif($capacId){
     $arquivosObj =  new ArquivoController();
-    $dados_contratacao = $contratacaoObj->recuperarCapac($capacId);
+    $dados_contratacao = $contratacaoObj->recuperaDadosContratacaoCapac($capacId);
     $arquivos = $arquivosObj->listarArquivosCapac($capacId)->fetchAll(PDO::FETCH_OBJ);
     $idPf = $pfObj->recuperaIdPfSis($dados_contratacao->pessoa_fisica_id);
 }
@@ -213,7 +211,7 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
                                     </div>
 
                                     <?php if ($id != ""):
-                                        $local = (new FormacaoController)->retornaLocaisFormacao($id, '1', '1')[$i]['id'] ?? "";
+                                        $local = $contratacaoObj->retornaLocaisFormacao($id, '1', '1')[$i]['id'] ?? "";
                                     else:
                                         $local = "";
                                     endif; ?>
@@ -263,7 +261,7 @@ $capacId != "" ? $readonly = "tabindex='-1' aria-disabled='true' style='backgrou
 
                             <div class="resposta-ajax"></div>
                             <!-- caso tenha exista o id da contratação e não haja pedido publicado com este id é exibido o botão para gerar um pedido-->
-                            <?php if ($id && !(new FormacaoPedidoController)->recuperar($id)): ?>
+                            <?php if ($id && !$contratacaoObj->consultaPedido($id)): ?>
                                 <div class="row">
                                     <div class="col-md">
                                         <a href="<?= SERVERURL . "formacao/anexos&id=" . $contratacaoObj->encryption($dados_contratacao->id) ?>"

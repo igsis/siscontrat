@@ -4,11 +4,9 @@ $pedidoAjax = true;
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
-require_once "../controllers/FormacaoPedidoController.php";
 require_once "../controllers/FormacaoController.php";
-require_once "../controllers/PessoaFisicaController.php";
 
-$formObj = new FormacaoPedidoController();
+$formObj = new FormacaoController();
 
 $parcela_id = $_GET['parcela'];
 $pedido_id = $_GET['id'];
@@ -17,16 +15,10 @@ class PDF extends FPDF
 {
 }
 
-$pedido = $formObj->recuperar($pedido_id);
-$pf = (new PessoaFisicaController)->recuperaPessoaFisica($pedido->pessoa_fisica_id);
-$telPf = "";
-foreach ($pf->telefones as $key => $telefone) {
-    if ($key !== "tel_0"){
-        $telPf .= " / ";
-    }
-    $telPf .= "{$telefone}";
-}
-$parcelaDados = (new FormacaoController)->recuperaDadosParcelas($pedido->origem_id, true, $parcela_id);
+$pedido = $formObj->recuperaPedido($pedido_id);
+$pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
+$telPf = $formObj->recuperaTelPf($pedido->pessoa_fisica_id);
+$parcelaDados = $formObj->retornaDadosParcelas($pedido->origem_id, '', '1', $parcela_id);
 
 $nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
 
@@ -76,13 +68,13 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(14, $l, utf8_decode("Objeto:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(166, $l, utf8_decode((new FormacaoController)->retornarObjeto($pedido->origem_id)));
+$pdf->MultiCell(166, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)));
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(15, $l, utf8_decode("Local(s):"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(165, $l, utf8_decode((new FormacaoController)->retornaLocaisFormacao($pedido->origem_id)), 0, 'L', 0);
+$pdf->MultiCell(165, $l, utf8_decode($formObj->retornaLocaisFormacao($pedido->origem_id)), 0, 'L', 0);
 
 $pdf->Ln();
 
@@ -90,7 +82,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(35, $l, utf8_decode("Período de locação:"), 0, 0, 'L');
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(145, $l, utf8_decode((new FormacaoController)->retornaPeriodoFormacao($pedido->origem_id, '', '1', $parcela_id)), 0, 'L', 0);
+$pdf->MultiCell(145, $l, utf8_decode($formObj->retornaPeriodoFormacao($pedido->origem_id, '', '1', $parcela_id)), 0, 'L', 0);
 
 $pdf->Ln();
 

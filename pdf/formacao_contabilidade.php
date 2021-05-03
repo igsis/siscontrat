@@ -1,22 +1,18 @@
 <?php
 setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 $pedidoAjax = true;
-
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
 require_once "../controllers/FormacaoController.php";
-require_once "../controllers/FormacaoContratacaoController.php";
-require_once "../controllers/FormacaoPedidoController.php";
-require_once "../controllers/PessoaFisicaController.php";
 
 $formObj = new FormacaoController();
 
 $pedido_id = $_GET['id'];
 
-$pedido = (new FormacaoPedidoController)->recuperar($pedido_id);
+$pedido = $formObj->recuperaPedido($pedido_id);
 
-$pf = (new PessoaFisicaController)->recuperaPessoaFisica($pedido->pessoa_fisica_id);
-$coordenaria = (new FormacaoContratacaoController)->recuperar($pedido->origem_id)->coordenadoria;
+$pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
+$coordenaria = $formObj->recuperaContratacao($pedido->origem_id)->coordenadoria;
 
 $data = date('d/m/Y');
 $dia = date('d');
@@ -53,7 +49,7 @@ $ano = date('Y');
     $conteudo =
         "<p>&nbsp;</p>" .
         "<p><strong>Interessado:</strong> " . $pf->nome . "</p>" .
-        "<p><strong>Objeto:</strong> " . $formObj->retornarObjeto($pedido->origem_id) . "</p>" .
+        "<p><strong>Objeto:</strong> " . $formObj->retornaObjetoFormacao($pedido->origem_id) . "</p>" .
         "<p>&nbsp;</p>" .
         "<p>Atesto o recebimento em " . $data . ", de toda a documentação: recibo link SEI e arquivos consolidados, previstos na Portaria SF 08/16.</p>" .
 

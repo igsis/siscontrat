@@ -1,11 +1,11 @@
 <?php
 
-require_once "./controllers/FormacaoTerritorioController.php";
+require_once "./controllers/FormacaoController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$territorioObj = new FormacaoTerritorioController();
+$territorioObj = new FormacaoController();
 
-$territorio = $territorioObj->recuperar($id);
+$territorio = $territorioObj->recuperaTerritorio($id);
 
 ?>
 <!-- Content Header (Page header) -->
