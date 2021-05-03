@@ -1,10 +1,10 @@
 <?php
 $id = isset($_GET['pedido_id']) ? $_GET['pedido_id'] : "";
-require_once "./controllers/FormacaoController.php";
+require_once "./controllers/FormacaoPedidoController.php";
 
-$formObj = new FormacaoController();
+$formObj = new FormacaoPedidoController();
 
-$pf_id = $formObj->recuperaPedido($id)->pessoa_fisica_id;
+$pf_id = $formObj->recuperar($id)->pessoa_fisica_id;
 ?>
 
 <div class="content-header">
