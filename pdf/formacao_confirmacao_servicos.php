@@ -12,7 +12,8 @@ $parcela_id = $_GET['parcela'];
 $pedido_id = $_GET['id'];
 
 $dataAtual = date('d/m/Y');
-$contratacao_id = (new FormacaoPedidoController)->recuperar($pedido_id)->origem_id;
+$contratacao = (new FormacaoPedidoController)->recuperar($pedido_id);
+$contratacao_id = $contratacao->origem_id;
 $dadosParcela = $formObj->recuperaDadosParcelas($contratacao_id, '1', $parcela_id);
 $periodo = $formObj->retornaPeriodoFormacao($contratacao_id, '1', $parcela_id);
 
@@ -52,7 +53,7 @@ $ano = date('Y');
 
 <div align="center">
     <div id="texto" class="texto">
-        <p align="center"><strong><u>Anexo I da Portaria SF nº 170, de 31 agosto de 2020/strong></u></strong></p>
+        <p align="center"><strong><u>Anexo I da Portaria SF nº 170, de 31 agosto de 2020</u></strong></p>
         <p>&nbsp;</p>
         <p><strong>Recebimento da Documentação </strong></p>
         <p>Atesto:</p>
@@ -66,8 +67,18 @@ $ano = date('Y');
             equivalente), do dia <?= $data_fim ?>, dentro do prazo previsto.<br>O prazo contratual é <?= $periodo ?>. </p>
         <p align="justify">( &nbsp; ) que os materiais/serviços prestados discriminados no documento fiscal [INSERIR NÚMERO SEI DA NOTA FISCAL] foram entregues e/ou executados a contento nos termos previstos no instrumento contratual (ou documento equivalente) no dia _____ / _____ / _____, com atraso de ____ dias.<br>O prazo contratual é <?= $periodo ?>.</p>
         <p>&nbsp;</p>
-        <p><b>INFORMAÇÕES COMPLEMENTARES</b></p>
-        <p align="justify">&nbsp;</p>
+        <p align="justify">
+            <b>Nota de Empenho:</b> <br>
+            <b>Anexo da Nota de Empenho:</b> <br>
+            <b>Recibo da Nota de Empenho:</b> <br>
+            <b>Pedido de Pagamento:</b> <br>
+            <b>Recibo de Pagamento:</b> <br>
+            <b>Relatório de Horas Trabalhadas:</b> <br>
+            <b>PIS/NIT/PASEP:</b> <br>
+            <b>Certidões Fiscais / CCM:</b> <br>
+            <b>FACC:</b>
+        </p>
+        <p>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2019 no Sistema SOF, informamos que os valores do presente pagamento foram gastos na região <?= $contratacao->coordenadoria ?>.</p>
         <p>&nbsp;</p>
         <p>À área gestora / de liquidação e pagamento. </p>
         <p>&nbsp;</p>
