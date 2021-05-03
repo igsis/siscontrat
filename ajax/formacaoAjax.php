@@ -6,107 +6,157 @@ if (isset($_POST['_method'])) {
     session_start(['name' => 'sis']);
     // $idPf = $_SESSION['origem_id_s'];
     require_once "../controllers/FormacaoController.php";
-    $insForm = new FormacaoController();
+    require_once "../controllers/FormacaoCargoController.php";
+    require_once "../controllers/FormacaoCoordenadoriaController.php";
+    require_once "../controllers/FormacaoProgramaController.php";
+    require_once "../controllers/FormacaoParcelaVigenciaController.php";
+    require_once "../controllers/FormacaoVigenciaController.php";
+    require_once "../controllers/FormacaoContratacaoController.php";
+    require_once "../controllers/FormacaoSubprefeituraController.php";
+    require_once "../controllers/FormacaoLinguagemController.php";
+    require_once "../controllers/FormacaoInscritoController.php";
+    require_once "../controllers/FormacaoTerritorioController.php";
+    require_once "../controllers/FormacaoDocumentoController.php";
+    require_once "../controllers/FormacaoEditalController.php";
+    require_once "../controllers/FormacaoPedidoController.php";
+    require_once "../controllers/FormacaoNotaEmpenhoController.php";
+
+
     require_once "../controllers/PessoaFisicaController.php";
     $insPessoaFisica = new PessoaFisicaController();
 
     switch ($_POST['_method']) {
+
+//      Cargo
         case "cadastrarCargo":
-            echo $insForm->insereCargo($_POST);
+            echo (new FormacaoCargoController)->inserir($_POST);
             break;
         case "editarCargo":
-            echo $insForm->editaCargo($_POST);
+            echo (new FormacaoCargoController)->editar($_POST);
             break;
         case "apagarCargo":
-            echo $insForm->apagaCargo($_POST);
+            echo (new FormacaoCargoController)->apagar($_POST);
             break;
+        case "vincularCargo":
+            echo (new FormacaoCargoController)->vincular($_POST);
+            break;
+        case "desvincularCargo":
+            echo (new FormacaoCargoController)->desvincular($_POST);
+            break;
+
+//      Coordenadoria
         case "cadastrarCoordenadoria":
-            echo $insForm->insereCoordenadoria($_POST);
+            echo (new FormacaoCoordenadoriaController)->inserir($_POST);
             break;
         case "editarCoordenadoria":
-            echo $insForm->editaCoordenadoria($_POST);
+            echo (new FormacaoCoordenadoriaController)->editar($_POST);
             break;
         case "apagarCoordenadoria":
-            echo $insForm->apagaCoordenadoria($_POST);
+            echo (new FormacaoCoordenadoriaController)->apagar($_POST);
             break;
+
+//      Programa
         case "cadastrarPrograma":
-            echo $insForm->inserePrograma($_POST);
+            echo (new FormacaoProgramaController)->inserir($_POST);
             break;
         case "editarPrograma":
-            echo $insForm->editaPrograma($_POST);
+            echo (new FormacaoProgramaController)->editar($_POST);
             break;
         case "apagarPrograma":
-            echo $insForm->apagaPrograma($_POST);
+            echo (new FormacaoProgramaController)->apagar($_POST);
             break;
+
+//      Linguagem
         case "cadastrarLinguagem":
-            echo $insForm->insereLinguagem($_POST);
+            echo (new FormacaoLinguagemController)->inserir($_POST);
             break;
         case "editarLinguagem":
-            echo $insForm->editaLinguagem($_POST);
+            echo (new FormacaoLinguagemController)->editar($_POST);
             break;
         case "apagarLinguagem":
-            echo $insForm->apagaLinguagem($_POST);
+            echo (new FormacaoLinguagemController)->apagar($_POST);
             break;
+
+//      Projeto
         case "cadastrarProjeto":
-            echo $insForm->insereProjeto($_POST);
+            echo (new FormacaoProjetoController)->inserir($_POST);
             break;
         case "editarProjeto":
-            echo $insForm->editaProjeto($_POST);
+            echo (new FormacaoProjetoController)->editar($_POST);
             break;
         case "apagarProjeto":
-            echo $insForm->apagaProjeto($_POST);
+            echo (new FormacaoProjetoController)->apagar($_POST);
             break;
+
+//      Subprefeitura
         case "cadastrarSubprefeitura":
-            echo $insForm->insereSubprefeitura($_POST);
+            echo (new FormacaoSubprefeituraController)->inserir($_POST);
             break;
         case "editarSubprefeitura":
-            echo $insForm->editaSubprefeitura($_POST);
+            echo (new FormacaoSubprefeituraController)->editar($_POST);
             break;
         case "apagarSubprefeitura":
-            echo $insForm->apagaSubprefeitura($_POST);
+            echo (new FormacaoSubprefeituraController)->apagar($_POST);
             break;
+
+//      Territorio
         case "cadastrarTerritorio":
-            echo $insForm->insereTerritorio($_POST);
+            echo (new FormacaoTerritorioController)->inserir($_POST);
             break;
         case "editarTerritorio":
-            echo $insForm->editaTerritorio($_POST);
+            echo (new FormacaoTerritorioController)->editar($_POST);
             break;
         case "apagarTerritorio":
-            echo $insForm->apagaTerritorio($_POST);
+            echo (new FormacaoTerritorioController)->apagar($_POST);
             break;
+
+//      Vigencia
         case "cadastrarVigencia":
-            echo $insForm->insereVigencia($_POST);
+            echo (new FormacaoVigenciaController)->inserir($_POST);
             break;
         case "editarVigencia":
-            echo $insForm->editaVigencia($_POST);
+            echo (new FormacaoVigenciaController)->editar($_POST);
             break;
         case "apagarVigencia":
-            echo $insForm->apagaVigencia($_POST);
+            echo (new FormacaoVigenciaController)->apagar($_POST);
             break;
+
+//      Parcela vigencia
         case "cadastrarParcelaVigencia":
-            echo $insForm->insereParcelaVigencia($_POST);
+            echo (new FormacaoParcelaVigenciaController())->inserir($_POST);
             break;
         case "editarParcelaVigencia":
-            echo $insForm->editaParcelaVigencia($_POST);
+            echo (new FormacaoParcelaVigenciaController)->editar($_POST);
             break;
+
+//      Parcela
+//        case "editarParcela":
+//            echo (new FormacaoParcelaVigenciaController)->editar($_POST);
+//            break;
+
+//      Pedido
         case "cadastrarPedido":
-            echo $insForm->cadastrarPedido($_POST);
+            echo (new FormacaoPedidoController)->inserir($_POST);
             break;
         case "editarPedido":
-            echo $insForm->editarPedido($_POST);
+            echo (new FormacaoPedidoController)->editar($_POST);
             break;
         case "deletarPedido":
-            echo $insForm->deletarPedido($_POST);
+            echo (new FormacaoPedidoController)->apagar($_POST);
             break;
-        case "editarParcela":
-            echo $insForm->editarParcela($_POST);
+        case "concluirPedido":
+            echo (new FormacaoPedidoController)->concluir($_POST);
             break;
+
+//      Nota Empenho
         case "cadastrarNotaEmpenho":
-            echo $insForm->cadastrarNotaEmpenho($_POST);
+            echo (new FormacaoNotaEmpenhoController)->inserir($_POST);
             break;
         case "editarNotaEmpenho":
-            echo $insForm->editarNotaEmpenho($_POST);
+            echo (new FormacaoNotaEmpenhoController)->editar($_POST);
             break;
+
+//      Pessoa Fisica
         case "cadastrarPF":
             echo $insPessoaFisica->inserePessoaFisica($_POST['pagina']);
             break;
@@ -117,57 +167,56 @@ if (isset($_POST['_method'])) {
             echo $insPessoaFisica->editaPessoaFisica($_POST['id'], $_POST['pagina'], false, true);
             break;
         case "editarPFImport":
-            echo $insForm->insereInscrito($_POST['capac_id'], false, $_POST['id']);
-            break;
-        case "cadastrarDadosContratacao":
-            echo $insForm->insereDadosContratacao($_POST);
-            break;
-        case "editarDadosContratacao":
-            echo $insForm->editaDadosContratacao($_POST);
-            break;
-        case "apagarDadosContratacao":
-            echo $insForm->apagaDadosContratacao($_POST);
-            break;
-        case "pesquisa":
-            echo $insForm->pesquisas($_POST['search'], $_POST['where']);
-            break;
-        case "concluirPedido":
-            echo $insForm->concluirPedido($_POST);
-            break;
-        case "cadastrarDocumento":
-            echo $insForm->insereDocumento($_POST);
-            break;
-        case "editarDocumento":
-            echo $insForm->editaDocumento($_POST);
-            break;
-        case "apagarDocumento":
-            echo $insForm->apagaDocumento($_POST);
-            break;
-        case "cadastrarAbertura":
-            echo $insForm->insereAbertura($_POST);
-            break;
-        case "editarAbertura":
-            echo $insForm->editaAbertura($_POST);
-            break;
-        case "apagarAbertura":
-            echo $insForm->apagaAbertura($_POST);
-            break;
-        case "vincularCargo":
-            echo $insForm->vincularCargo($_POST);
-            break;
-        case "desvincularCargo":
-            echo $insForm->desvincularCargo($_POST);
+            echo (new FormacaoInscritoController)->inserir($_POST['capac_id'], false, $_POST['id']);
             break;
         case "importarInscrito":
-            echo $insForm->insereInscrito($_POST['id']);
+            echo (new FormacaoInscritoController)->inserir($_POST['id']);
             break;
         case "importarPf":
             echo $insPessoaFisica->importarPf($_POST['id']);
             break;
+
+//      Perdido por ai
+        case "pesquisa":
+            echo (new FormacaoController)->pesquisar($_POST['search'], $_POST['where']);
+            break;
+
+//      Dados contratacao
+        case "cadastrarDadosContratacao":
+            echo (new FormacaoContratacaoController)->inserir($_POST);
+            break;
+        case "editarDadosContratacao":
+            echo (new FormacaoContratacaoController)->editar($_POST);
+            break;
+        case "apagarDadosContratacao":
+            echo (new FormacaoContratacaoController)->apagar($_POST);
+            break;
+
+//      Documentos
+        case "cadastrarDocumento":
+            echo (new FormacaoDocumentoController)->inserir($_POST);
+            break;
+        case "editarDocumento":
+            echo (new FormacaoDocumentoController)->editar($_POST);
+            break;
+        case "apagarDocumento":
+            echo (new FormacaoDocumentoController)->apagar($_POST);
+            break;
+
+//      Edital
+        case "cadastrarAbertura":
+            echo (new FormacaoEditalController)->inserir($_POST);
+            break;
+        case "editarAbertura":
+            echo (new FormacaoEditalController)->editar($_POST);
+            break;
+        case "apagarAbertura":
+            echo (new FormacaoEditalController)->apagar($_POST);
+            break;
     }
     if (isset($_POST['_method'])) {
         if ($_POST['_method'] == "pesquisaPf" && $_POST['search'] != "") {
-            echo $insForm->listaDocumento($_POST['search'], $_POST['where']);
+                echo (new FormacaoDocumentoController)->pesquisar($_POST['search'], $_POST['where']);
         }
     }
 } else {

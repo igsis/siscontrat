@@ -115,7 +115,7 @@ foreach ($inscritos as $inscrito){
     $pessoaFisicaObj = new PessoaFisicaController();
     $pf = $pessoaFisicaObj->recuperaPessoaFisica($pessoaFisicaObj->encryption($inscrito->pessoa_fisica_id), true);
     $usuario = $pessoaFisicaObj->consultaSimples("SELECT nome FROM `usuarios` WHERE `id` = $inscrito->usuario_id", true)->fetchColumn();
-    $pfDados = $pessoaFisicaObj->recuperaPfDados($pf['id'])->fetchObject();
+    $pfDados = $pessoaFisicaObj->recuperaPfDados($pf->id)->fetchObject();
 
     $zip = SERVERURL."api/downloadInscritos.php?id=".$inscrito->id;
 
@@ -132,22 +132,22 @@ foreach ($inscritos as $inscrito){
         ->setCellValue($h, $inscrito->representante_nucleo)
         ->setCellValue($i, $inscrito->coletivo_produtor)
         ->setCellValue($j, $inscrito->nucleo_artistico)
-        ->setCellValue($k, $pf['nome'])
-        ->setCellValue($l, $pf['cpf'])
+        ->setCellValue($k, $pf->nome)
+        ->setCellValue($l, $pf->cpf)
         ->setCellValue($m, $pfDados->genero)
         ->setCellValue($n, $pfDados->descricao)
-        ->setCellValue($o, $fomentoObj->dataParaBR($pf['data_nascimento']))
+        ->setCellValue($o, $fomentoObj->dataParaBR($pf->data_nascimento))
         ->setCellValue($p, $pfDados->rede_social)
         ->setCellValue($q, $pfDados->grau_instrucao)
-        ->setCellValue($r, $pf['email'])
-        ->setCellValue($s, $pf['telefones']['tel_0'])
-        ->setCellValue($t, $pf['telefones']['tel_1'])
-        ->setCellValue($u, $pf['cep'])
-        ->setCellValue($v, $pf['logradouro'])
-        ->setCellValue($w, $pf['numero'])
-        ->setCellValue($x, $pf['bairro'])
-        ->setCellValue($y, $pf['cidade'])
-        ->setCellValue($z, $pf['uf'])
+        ->setCellValue($r, $pf->email)
+        ->setCellValue($s, $pf->telefones['tel_0'])
+        ->setCellValue($t, $pf->telefones['tel_1'])
+        ->setCellValue($u, $pf->cep)
+        ->setCellValue($v, $pf->logradouro)
+        ->setCellValue($w, $pf->numero)
+        ->setCellValue($x, $pf->bairro)
+        ->setCellValue($y, $pf->cidade)
+        ->setCellValue($z, $pf->uf)
         ->setCellValue($aa,$pfDados->subprefeitura);
 
     if ($tipo_contratacao == 24) {

@@ -8,18 +8,6 @@ if (isset($_POST['_method'])) {
     $insEvento = new EventoController();
 
     switch ($_POST['_method']) {
-        case "cadastrarEvento":
-            echo $insEvento->insereEvento($_POST);
-            break;
-        case "editarEvento":
-            echo $insEvento->editaEvento($_POST, $_POST['id']);
-            break;
-        case "envioEvento":
-            echo $insEvento->envioEvento($_POST['id'], $_POST['modulo']);
-            break;
-        case "apagaEvento":
-            echo $insEvento->apagaEvento($_POST['id']);
-            break;
         case "notificacao":
             echo $insEvento->notificacaoEventos($_POST['id']);
             break;

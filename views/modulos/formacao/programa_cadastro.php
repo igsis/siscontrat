@@ -1,10 +1,10 @@
 <?php
 
-require_once "./controllers/FormacaoController.php";
+require_once "./controllers/FormacaoProgramaController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$programaObj = new FormacaoController();
-$programa = $programaObj->recuperaPrograma($id);
+$programaObj = new FormacaoProgramaController();
+$programa = $programaObj->recuperar($id);
 
 ?>
 <!-- Content Header (Page header) -->

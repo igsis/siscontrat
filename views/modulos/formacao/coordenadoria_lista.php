@@ -1,8 +1,8 @@
 <?php
-    require_once "./controllers/FormacaoController.php";
-    $coordenadoriaObj = new FormacaoController();
+    require_once "./controllers/FormacaoCoordenadoriaController.php";
+    $coordenadoriaObj = new FormacaoCoordenadoriaController();
     
-    $coordenadorias = $coordenadoriaObj->listaCoordenadorias();
+    $coordenadorias = $coordenadoriaObj->listar();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">

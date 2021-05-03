@@ -1,8 +1,8 @@
 <?php
-require_once "./controllers/FormacaoController.php";
+require_once "./controllers/FormacaoEditalController.php";
 
-$formacaoObj =  new FormacaoController();
-$aberturas = $formacaoObj->listaAbertura();
+$formacaoObj =  new FormacaoEditalController();
+$aberturas = $formacaoObj->listar();
 
 ?>
 

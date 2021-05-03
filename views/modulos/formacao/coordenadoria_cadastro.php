@@ -1,11 +1,11 @@
 <?php
 
-require_once "./controllers/FormacaoController.php";
+require_once "./controllers/FormacaoCoordenadoriaController.php";
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
-$coordenadoriaObj = new FormacaoController();
+$coordenadoriaObj = new FormacaoCoordenadoriaController();
 
-$coordenadoria = $coordenadoriaObj->recuperaCoordenadoria($id);
+$coordenadoria = $coordenadoriaObj->recuperar($id);
 
 ?>
 <!-- Content Header (Page header) -->

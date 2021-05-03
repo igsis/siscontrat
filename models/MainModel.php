@@ -55,6 +55,43 @@ class MainModel extends DbModel
     }
 
     /**
+     * @param $campo
+     * <p>retorna sim para campos valo = 1 e não para campos valor=0</p>
+     * @return string
+     */
+    public function simNao($campo):string
+    {
+        if ($campo == 1 ) {
+            return "Sim";
+        } else {
+            return "Não";
+        }
+    }
+
+    /**
+     * @param $data
+     * @param false $hora
+     * @return string
+     */
+    public function validaData($data, $hora = false):string
+    {
+        if ($hora == true){
+            if ($data == "0000-00-00 00:00:00" || $data == null){
+                $retornaData = "não cadastrado";
+            } else{
+                $retornaData = date('d/m/Y H:i:s', strtotime($data));
+            }
+        } else{
+            if ($data == "0000-00-00" || $data == null){
+                $retornaData = "não cadastrado";
+            } else{
+                $retornaData = date('d/m/Y', strtotime($data));
+            }
+        }
+        return $retornaData;
+    }
+
+    /**
      * <p>Transforma data padrão sql para BR</p>
      * @param string $data
      * <p>Valor deve estar no padrão AAAA-MM-DD</p>
@@ -184,10 +221,14 @@ class MainModel extends DbModel
      */
     protected function decryption($string)
     {
-        $key = hash('sha256', SECRET_KEY);
-        $iv = substr(hash('sha256', SECRET_IV), 0, 16);
-        $output = openssl_decrypt(base64_decode($string), METHOD, $key, 0, $iv);
-        return $output;
+        if (strlen($string) > 10) {
+            $key = hash('sha256', SECRET_KEY);
+            $iv = substr(hash('sha256', SECRET_IV), 0, 16);
+            $output = openssl_decrypt(base64_decode($string), METHOD, $key, 0, $iv);
+            return $output;
+        }
+
+        return $string;
     }
 
     public function gravarLog($descricao)

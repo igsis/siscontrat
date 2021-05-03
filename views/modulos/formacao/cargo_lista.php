@@ -1,8 +1,8 @@
 <?php
-    require_once "./controllers/FormacaoController.php";
-    $cargoObj = new FormacaoController();
+    require_once "./controllers/FormacaoCargoController.php";
+    $cargoObj = new FormacaoCargoController();
     
-    $cargos = $cargoObj->listaCargos();
+    $cargos = $cargoObj->listar();
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">

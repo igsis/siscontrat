@@ -4,9 +4,12 @@ $pedidoAjax = true;
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
+require_once "../controllers/FormacaoNotaEmpenhoController.php";
+require_once "../controllers/FormacaoPedidoController.php";
 require_once "../controllers/FormacaoController.php";
+require_once "../controllers/PessoaFisicaController.php";
 
-$formObj = new FormacaoController();
+$formObj = new FormacaoNotaEmpenhoController();
 
 $pedido_id = $_GET['id'];
 
@@ -14,9 +17,9 @@ class PDF extends FPDF
 {
 }
 
-$ne = $formObj->retornaNotaEmpenho($pedido_id);
-$pedido = $formObj->recuperaPedido($pedido_id);
-$pf = $formObj->recuperaPf($pedido->pessoa_fisica_id);
+$ne = $formObj->recuperar($pedido_id);
+$pedido = (new FormacaoPedidoController)->recuperar($pedido_id);
+$pf = (new PessoaFisicaController)->recuperaPessoaFisica($pedido->pessoa_fisica_id);
 
 $nome = $pf->nome_social != null ? "$pf->nome_social ($pf->nome)" : $pf->nome;
 
@@ -115,7 +118,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', 11);
 $pdf->Cell(15, $l, "Objeto:", 0, 0, 'L');
 $pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(155, $l, utf8_decode($formObj->retornaObjetoFormacao($pedido->origem_id)));
+$pdf->MultiCell(155, $l, utf8_decode((new FormacaoController)->retornarObjeto($pedido->origem_id)));
 
 $pdf->Output('formacao_ne.pdf', 'I');
 ?>
