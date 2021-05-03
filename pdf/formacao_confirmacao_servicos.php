@@ -52,7 +52,7 @@ $ano = date('Y');
 
 <div align="center">
     <div id="texto" class="texto">
-        <p align="center"><strong><u>Anexo I da Portaria SF nº 170, de 31 agosto de 2020/strong></u></strong></p>
+        <p align="center"><strong><u>Anexo I da Portaria SF nº 170, de 31 agosto de 2020</u></strong></p>
         <p>&nbsp;</p>
         <p><strong>Recebimento da Documentação </strong></p>
         <p>Atesto:</p>
