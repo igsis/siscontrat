@@ -421,7 +421,7 @@ foreach ($ocorrencias as $ocorrencia) {
 }
 
 if ($evento->tipo_evento_id == 1){
-    $atracoes = (new AtracaoController)->recuperaAtracao($pedido->origem_id);
+    $atracoes = (new AtracaoController)->listaAtracao($pedido->origem_id);
     foreach ($atracoes as $atracao) {
         $excecao = $ocorrenciaObj->recuperaOcorrenciaExcecao($atracao->id);
         if ($excecao){

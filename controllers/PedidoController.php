@@ -94,7 +94,7 @@ class PedidoController extends PedidoModel
         if ($origem_tipo_id == 1){
             $pedido = PedidoModel::recuperaBasePedido($origem_tipo_id, $origem_id);
 
-            $parecer = DbModel::consultaSimples("SELECT * FROM parecer_artisticos WHERE pedido_id = '$origem_id'")->fetch(PDO::FETCH_ASSOC);
+            $parecer = DbModel::consultaSimples("SELECT topico1,topico2,topico3,topico4 FROM parecer_artisticos WHERE pedido_id = '$origem_id'")->fetch(PDO::FETCH_ASSOC);
             if ($parecer){
                 $pedido['topico1'] = $parecer['topico1'] ?? null;
                 $pedido['topico2'] = $parecer['topico2'] ?? null;
@@ -106,18 +106,19 @@ class PedidoController extends PedidoModel
                 $pjObj = new PessoaJuridicaController();
                 $idPj = $this->encryption($pedido['pessoa_juridica_id']);
                 $pj = $pjObj->recuperaPessoaJuridica($idPj);
-                $pedido = array_merge($pedido,$pj);
+                unset($pj->id);
+                $pedido = array_merge((array)$pedido,(array)$pj);
                 //representante
                 $repObj = new RepresentanteController();
                 if ($pj->representante_legal1_id){
                     $idRep1 = $this->encryption($pj->representante_legal1_id);
-                    $rep1 = $repObj->recuperaRepresentante($idRep1)->fetch(PDO::FETCH_ASSOC);
-                    $pedido = array_merge($pedido,$rep1);
+                    $rep1 = $repObj->recuperaRepresentante($idRep1);
+                    $pedido['rep1'] = (array)$rep1;
                 }
                 if ($pj->representante_legal2_id){
                     $idRep2 = $this->encryption($pj->representante_legal2_id);
-                    $rep2 = $repObj->recuperaRepresentante($idRep2)->fetch(PDO::FETCH_ASSOC);
-                    $pedido = array_merge($pedido,$rep2);
+                    $rep2 = $repObj->recuperaRepresentante($idRep2);
+                    $pedido['rep2'] = (array)$rep2;
                 }
             } else{ //pessoa física
                 $pfObj = new PessoaFisicaController();
