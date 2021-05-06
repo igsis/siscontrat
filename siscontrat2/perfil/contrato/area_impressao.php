@@ -1,14 +1,44 @@
 <?php
 require_once "../extras/MainModel.php";
-
 $mainObj = new MainModel();
 
 $idPedido = $_POST['idPedido'];
 
 $pedido = $mainObj->consultaSimples("SELECT id, origem_tipo_id, origem_id, pessoa_tipo_id FROM pedidos WHERE id = '$idPedido'")->fetchObject();
-$atracoes = $mainObj->consultaSimples("SELECT id,nome_atracao FROM atracoes WHERE evento_id = {$pedido->origem_id} AND publicado = 1 ")->fetchAll(PDO::FETCH_ASSOC);
-$numAtracoes = count($atracoes);
 
+function box_bottom($pedido,$titulo,$link){
+    $mainObj = new MainModel();
+
+    $atracoes = $mainObj->consultaSimples("SELECT id,nome_atracao FROM atracoes WHERE evento_id = {$pedido->origem_id} AND publicado = 1 ")->fetchAll(PDO::FETCH_ASSOC);
+    $numAtracoes = count($atracoes);
+
+    if ($numAtracoes > 1){
+        $inicio_box = "
+        <div class='box box-primary box-solid collapsed-box'>
+            <div class='box-header with-border' data-widget='collapse'>$titulo
+                <div class='pull-right'><i class='fa fa-plus'></i></div>
+            </div>
+            <div class='box-body' style='display: none;'>
+                <ul class='nav nav-stacked'>";
+        $lista="";
+        foreach ($atracoes as $atracao){
+            $lista .= "
+            <li>
+                <a target='_blank' href='".PDFURL.$link.$mainObj->encryption($atracao['id'])."'> 
+                    Atração: ".mb_strimwidth($atracao['nome_atracao'],0,50,"...")."
+                </a>
+            </li>";
+        }
+        $fim_box = "</ul></div></div>";
+
+        return $inicio_box.$lista.$fim_box;
+    } else{
+        return "<a href='PDFURL.$link.$mainObj->encryption($atracoes[0]['id'])' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
+    }
+}
+
+
+/*
 $http = PDFURL;
 
 
@@ -56,7 +86,7 @@ if ($pedido->pessoa_tipo_id == 1) {
     $link_facc = $link_facc_pj;
     $link_parecer = $link_parecer_pj;
     $link_normas = $link_normas_pj;
-}
+}*/
 
 ?>
 <div class="content-wrapper">
@@ -70,32 +100,9 @@ if ($pedido->pessoa_tipo_id == 1) {
                         <h3 class="box-title">PEDIDO</h3>
                     </div>
                     <div class="box-body">
-                        <?php if ($pedido->pessoa_tipo_id == 1) { ?>
-                            <a href="<?=PDFURL?>pedido_contratacao.php&id=<?=$idPedido?>" class="btn btn-info" target="_blank">Pedido de Contratação</a>
-                            <!--<form action="<?/*= $link_pedido_contratacao */?>" target="_blank" method="post">
-                                <input type="hidden" name="idPedido" value="<?/*= $idPedido */?>">
-                                <button type="submit" class="btn btn-primary center-block">Pedido de Contratação</button>
-                            </form>-->
-                        <?php
-                        }else {
-                            if ($numAtracoes > 1){
-                                ?>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Pedido de Contratação <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <?php foreach ($atracoes as $atracao){?>
-                                            <li><a target="_blank" href="<?=PDFURL?>pedido_contratacao.php?atracao=<?=$mainObj->encryption($atracao['id'])?>"><?=$atracao['nome_atracao'] ?></a></li>
-                                        <?php } ?>
-                                    </ul>
-                                </div>
-                            <?php
-                            } else{
-                            ?>
-                                <a href="#" class="btn btn-info" target="_blank">Pedido de Contratação</a>
-                            <?php } ?>
-                        <?php } ?>
+                        <div class="col-md-4">
+                            <?= box_bottom($pedido,"Pedido de Contratação","pedido_contratacao.php&id=");?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -120,35 +127,14 @@ if ($pedido->pessoa_tipo_id == 1) {
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <?php if ($pedido->pessoa_tipo_id == 1) { ?>
-                                    <form action="<?= $link_proposta_padrao . "13" ?>" target="_blank" method="post">
-                                        <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                        <input type="hidden" name="idUser" value="<?= $idUser ?>">
-                                        <button type="submit" class="btn btn-primary btn-block">
-                                            Contratações gerais - Com cachê
-                                        </button>
-                                    </form>
-
-                                    <?php
-                                }else {
-                                    if ($numAtracoes > 1){
-                                        ?>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Contratações gerais - Com cachê <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <?php foreach ($atracoes as $atracao){?>
-                                                    <li><a target="_blank" href="<?=PDFURL?>proposta_padrao_pj.php?penal=13&tipo=1&id=<?=$mainObj->encryption($atracao['id'])?>"><?=$atracao['nome_atracao'] ?></a></li>
-                                                <?php } ?>
-                                            </ul>
-                                        </div>
-                                        <?php
-                                    } else{
-                                        ?>
-                                        <a class="btn btn-info btn-block" target="_blank" href="<?=PDFURL?>proposta_padrao_pj.php?penal=13&tipo=1&id=<?=$mainObj->encryption($atracoes[0]['id'])?>">Pedido de Contratação</a>
-                                    <?php } ?>
-                                <?php } ?>
+                                <?php
+                                if ($pedido->pessoa_tipo_id == 1) {
+                                    echo box_bottom($pedido,"Contratações gerais - Com cachê","proposta_padrao_pf.php?penal=13&tipo=1&id=");
+                                }
+                                else{
+                                     echo box_bottom($pedido,"Contratações gerais - Com cachê","proposta_padrao_pj.php?penal=13&tipo=1&id=");
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="row">
