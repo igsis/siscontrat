@@ -9,31 +9,36 @@ $pedido = $mainObj->consultaSimples("SELECT id, origem_tipo_id, origem_id, pesso
 function box_bottom($pedido,$titulo,$link){
     $mainObj = new MainModel();
 
-    $atracoes = $mainObj->consultaSimples("SELECT id,nome_atracao FROM atracoes WHERE evento_id = {$pedido->origem_id} AND publicado = 1 ")->fetchAll(PDO::FETCH_ASSOC);
-    $numAtracoes = count($atracoes);
+    if ($pedido->origem_tipo_id == 1){ //atracao
+        $atracoes = $mainObj->consultaSimples("SELECT id,nome_atracao FROM atracoes WHERE evento_id = {$pedido->origem_id} AND publicado = 1 ")->fetchAll(PDO::FETCH_ASSOC);
+        $numAtracoes = count($atracoes);
 
-    if ($numAtracoes > 1){
-        $inicio_box = "
-        <div class='box box-primary box-solid collapsed-box'>
-            <div class='box-header with-border' data-widget='collapse'>$titulo
-                <div class='pull-right'><i class='fa fa-plus'></i></div>
-            </div>
-            <div class='box-body' style='display: none;'>
-                <ul class='nav nav-stacked'>";
-        $lista="";
-        foreach ($atracoes as $atracao){
-            $lista .= "
+        if ($numAtracoes > 1){
+            $inicio_box = "
+                <div class='box box-primary box-solid collapsed-box'>
+                    <div class='box-header with-border' data-widget='collapse'>$titulo
+                        <div class='pull-right'><i class='fa fa-plus'></i></div>
+                    </div>
+                    <div class='box-body' style='display: none;'>
+                        <ul class='nav nav-stacked'>";
+            $lista="";
+            foreach ($atracoes as $atracao){
+                $lista .= "
             <li>
                 <a target='_blank' href='".PDFURL.$link.$mainObj->encryption($atracao['id'])."'> 
                     Atração: ".mb_strimwidth($atracao['nome_atracao'],0,50,"...")."
                 </a>
             </li>";
-        }
-        $fim_box = "</ul></div></div>";
+            }
+            $fim_box = "</ul></div></div>";
 
-        return $inicio_box.$lista.$fim_box;
-    } else{
-        return "<a href='PDFURL.$link.$mainObj->encryption($atracoes[0]['id'])' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
+            return $inicio_box.$lista.$fim_box;
+        } else{
+            return "<a href='PDFURL.$link.$mainObj->encryption($atracoes[0]['id'])' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
+        }
+    }
+    else {
+        return "<a href='PDFURL.$link.$mainObj->encryption($pedido->origem_id)' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
     }
 }
 
@@ -101,7 +106,7 @@ if ($pedido->pessoa_tipo_id == 1) {
                     </div>
                     <div class="box-body">
                         <div class="col-md-4">
-                            <?= box_bottom($pedido,"Pedido de Contratação","pedido_contratacao.php&id=");?>
+                            <?= box_bottom($pedido,"Pedido de Contratação","pedido_contratacao.php?tipo=$pedido->origem_tipo_id&id=");?>
                         </div>
                     </div>
                 </div>
