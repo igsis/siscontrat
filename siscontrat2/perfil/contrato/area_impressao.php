@@ -24,21 +24,21 @@ function box_bottom($pedido,$titulo,$link){
             $lista="";
             foreach ($atracoes as $atracao){
                 $lista .= "
-            <li>
-                <a target='_blank' href='".PDFURL.$link.$mainObj->encryption($atracao['id'])."'> 
-                    Atração: ".mb_strimwidth($atracao['nome_atracao'],0,50,"...")."
-                </a>
-            </li>";
+                <li>
+                    <a target='_blank' href='".PDFURL.$link.$mainObj->encryption($atracao['id'])."'> 
+                        Atração: ".mb_strimwidth($atracao['nome_atracao'],0,50,"...")."
+                    </a>
+                </li>";
             }
             $fim_box = "</ul></div></div>";
 
             return $inicio_box.$lista.$fim_box;
         } else{
-            return "<a href='PDFURL.$link.$mainObj->encryption($atracoes[0]['id'])' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
+            return "<a href='".PDFURL.$link.$mainObj->encryption($atracoes[0]['id'])."' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
         }
     }
     else {
-        return "<a href='PDFURL.$link.$mainObj->encryption($pedido->origem_id)' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
+        return "<a href='".PDFURL.$link.$mainObj->encryption($pedido->origem_id)."' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
     }
 }
 
