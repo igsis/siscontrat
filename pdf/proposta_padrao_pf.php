@@ -10,8 +10,8 @@ require_once "../controllers/EventoController.php";
 require_once "../controllers/OcorrenciaController.php";
 require_once "../controllers/AtracaoController.php";
 
-$idUser = $_POST['idUser'];
-$idPedido = $_POST['idPedido'];
+$tipo = $_GET['tipo'];
+$id = $_GET['id'];
 $idPenal = $_GET['penal'];
 $ano = date('Y');
 
@@ -19,15 +19,25 @@ $pedidoObj = new PedidoController();
 $eventoObj = new EventoController();
 $ocorrenciaObj = new OcorrenciaController();
 
-$pedido = $pedidoObj->recuperaPedido(1,intval($idPedido));
-$penalidade = $pedidoObj->recuperaPenalidades($idPenal);
-$evento = $eventoObj->recuperaEvento($pedido->origem_id);
-$objeto = $eventoObj->recuperaObjetoEvento($pedido->origem_id);
-$periodo = $eventoObj->retornaPeriodo($pedido->origem_id);
-$local = $eventoObj->retornaLocais($pedido->origem_id);
-$ocorrencias = $ocorrenciaObj->recuperaOcorrencia($pedido->origem_id);
+if ($tipo == 1){//atração
+    $atracao = (new AtracaoController)->recuperaAtracao($id);
+    $idEvento = $atracao->evento_id;
+    $atracao_id = $atracao->id;
+} elseif ($tipo == 2) {//filme
+    $filme = $eventoObj->consultaSimples("SELECT id, evento_id FROM filme_eventos WHERE id = '$id'")->fetchObject();
+    $idEvento = $filme->_evento_id;
+    $atracao_id = $filme->id;
+}
 
-$pedidoObj->inserePedidoEtapa(intval($idPedido),"proposta");
+$pedido = $pedidoObj->recuperaPedido(1,$idEvento);
+$penalidade = $pedidoObj->recuperaPenalidades($idPenal);
+$evento = $eventoObj->recuperaEvento($idEvento);
+$objeto = $eventoObj->recuperaObjetoEvento($idEvento);
+$periodo = $eventoObj->retornaPeriodo($idEvento);
+$local = $eventoObj->retornaLocais($idEvento);
+$ocorrencias = $ocorrenciaObj->recuperaOcorrencia($idEvento);
+
+$pedidoObj->inserePedidoEtapa(intval($pedido->id),"proposta");
 
 class PDF extends FPDF
 {

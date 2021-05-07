@@ -22,7 +22,6 @@ $ocorrenciaObj = new OcorrenciaController();
 $liderObj = new LiderController();
 
 if ($tipo == 1){//atração
-    //$atracao = $eventoObj->consultaSimples("SELECT id, evento_id FROM atracoes WHERE id = '$id'")->fetchObject();
     $atracao = (new AtracaoController)->recuperaAtracao($id);
     $idEvento = $atracao->evento_id;
     $atracao_id = $atracao->id;
@@ -40,7 +39,6 @@ $periodo = $eventoObj->retornaPeriodo($idEvento);
 $local = $eventoObj->retornaLocais($idEvento);
 $ocorrencias = $ocorrenciaObj->recuperaOcorrencia($idEvento);
 $lider = $liderObj->recuperaLider($pedido->id,$atracao_id);
-
 
 $pedidoObj->inserePedidoEtapa(intval($pedido->id),"proposta");
 
