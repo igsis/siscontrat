@@ -879,7 +879,7 @@ class FormacaoController extends FormacaoModel
             $contratacao_id = MainModel::decryption($contratacao_id);
         }
         $locais = "";
-        $locaisArrays = DbModel::consultaSimples("SELECT l.id, l.local FROM formacao_locais AS fl INNER JOIN locais AS l ON fl.local_id = l.id WHERE form_pre_pedido_id = $contratacao_id")->fetchAll();
+        $locaisArrays = DbModel::consultaSimples("SELECT l.id, l.local, l.instituicao_id, fl.subprefeitura_id FROM formacao_locais AS fl INNER JOIN locais AS l ON fl.local_id = l.id WHERE form_pre_pedido_id = $contratacao_id")->fetchAll();
         if ($obj != 0):
             return $locaisArrays;
         else:
@@ -938,15 +938,18 @@ class FormacaoController extends FormacaoModel
     public function recuperaPedido($pedido_id, $excel = 0, $ano = 0)
     {
         if ($excel != 0 && $ano != 0):
-            $sql = "SELECT p.numero_processo, fc.protocolo, fc.programa_id, pf.id, pf.nome, pro.programa, c.cargo AS 'funcao', c.justificativa AS 'cargo_justificativa', l.linguagem, pf.email, s.status
-                                                      FROM pedidos AS p
-                                                      INNER JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
-                                                      INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id
-                                                      INNER JOIN programas AS pro ON fc.programa_id = pro.id
-                                                      INNER JOIN formacao_cargos AS c ON fc.form_cargo_id = c.id
-                                                      INNER JOIN linguagens AS l ON fc.linguagem_id = l.id
-                                                      INNER JOIN formacao_status AS s ON fc.form_status_id = s.id
-                                                      WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 AND fc.ano = $ano";
+            $sql = "SELECT p.numero_processo, p.pessoa_fisica_id,fc.protocolo, fc.programa_id, pf.id, pf.nome, pro.programa, c.cargo AS 'funcao', c.justificativa AS 'cargo_justificativa', l.linguagem, pf.email, s.status, su.subprefeitura, lo.`local`
+                        FROM pedidos AS p
+                        INNER JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
+                        INNER JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id  
+                        INNER JOIN formacao_locais AS fl ON fl.form_pre_pedido_id = fc.id
+                        INNER JOIN locais AS lo ON fl.local_id = lo.id
+                        INNER JOIN subprefeituras AS su ON fl.subprefeitura_id = su.id
+                        INNER JOIN programas AS pro ON fc.programa_id = pro.id
+                        INNER JOIN formacao_cargos AS c ON fc.form_cargo_id = c.id
+                        INNER JOIN linguagens AS l ON fc.linguagem_id = l.id
+                        INNER JOIN formacao_status AS s ON fc.form_status_id = s.id
+                    WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 AND fc.ano = {$ano}";
             return DbModel::consultaSimples($sql)->fetchAll(PDO::FETCH_OBJ);
         else:
             $pedido_id = MainModel::decryption($pedido_id);
@@ -1537,6 +1540,8 @@ class FormacaoController extends FormacaoModel
         unset($post['_method']);
         $locais_id = $post['local_id'];
         unset($post['local_id']);
+        $subprefeitura_id = $post['subprefeitura_local_id'];
+        unset($post['subprefeitura_local_id']);
 
         $dados = MainModel::limpaPost($post);
 
@@ -1554,7 +1559,8 @@ class FormacaoController extends FormacaoModel
                 if ($locais_id[$i] > 0):
                     $array = [
                         'form_pre_pedido_id' => $contratacao_id,
-                        'local_id' => $locais_id[$i]
+                        'local_id' => $locais_id[$i],
+                        'subprefeitura_id' => $subprefeitura_id[$i]
                     ];
                     DbModel::insert('formacao_locais', $array);
                 endif;
