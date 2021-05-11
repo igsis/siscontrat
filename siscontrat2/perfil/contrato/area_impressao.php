@@ -147,6 +147,14 @@ if ($pedido->pessoa_tipo_id == 1) {
                         </div>
                         <div class="row">
                             <div class="col-md-12">
+                                <?php
+                                if ($pedido->pessoa_tipo_id == 1) {
+                                    echo box_bottom($pedido,"Contratações gerais - Reversão de Bilheteria","proposta_reversao_pf.php?penal=13&id=");
+                                }
+                                else{
+                                    echo box_bottom($pedido,"Contratações gerais - Reversão de Bilheteria","proposta_reversao_pj.php?penal=13&id=");
+                                }
+                                ?>
                                 <form action="<?= $link_reversao . "13" ?>" target="_blank" method="post">
                                     <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
                                     <input type="hidden" name="idUser" value="<?= $idUser ?>">
