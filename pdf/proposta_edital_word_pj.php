@@ -26,7 +26,7 @@ if ($tipo == 1){//atração
     $idEvento = $atracao->evento_id;
 } elseif ($tipo == 2) {//filme
     $filmeObj = new FilmeController();
-    $idEvento = $id;
+    $idEvento = $filmeObj->getIdEvento($id);
 }
 
 $pedido = $pedidoObj->recuperaPedido(1,$idEvento);
@@ -38,11 +38,11 @@ $local = $eventoObj->retornaLocais($idEvento);
 
 $pedidoObj->inserePedidoEtapa(intval($pedido->id),"proposta");
 
-//header("Content-type: application/vnd.ms-word");
-//header("Content-Disposition: attachment;Filename=proposta_edital_pj_$pedido->id.doc");
+header("Content-type: application/vnd.ms-word");
+header("Content-Disposition: attachment;Filename=proposta_edital_pj_$pedido->id.doc");
 ?>
 <html>
-<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <body>
 <table style="width: 100%; border: 0">
     <tr>
@@ -157,9 +157,9 @@ elseif ($tipo == 2) {//filme
         $excecao = $ocorrenciaObj->recuperaOcorrenciaExcecao($filme->id);
         $detalheFilme = $filmeObj->recuperaDetalheFilme($filme->id);
         echo "<p>
-            <strong>Título:</strong> $filme->titulo<br>
-            <strong>Gênero:</strong> $filme->genero<br>
-            <strong>Duração:</strong> $filme->duracao<br>
+            <strong>Título:</strong> $detalheFilme->titulo<br>
+            <strong>Gênero:</strong> $detalheFilme->genero<br>
+            <strong>Duração:</strong> $detalheFilme->duracao<br>
         ";
         foreach ($ocorrencias as $ocorrencia) {
             echo "

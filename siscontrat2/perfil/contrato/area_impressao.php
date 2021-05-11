@@ -27,7 +27,7 @@ function box_bottom($pedido,$titulo,$link){
             foreach ($atracoes as $atracao){
                 $lista .= "
                 <li>
-                    <a target='_blank' href='".PDFURL.$link.$mainObj->encryption($atracao['id'])."'> 
+                    <a target='_blank' href='".PDFURL.$link.$mainObj->encryption($atracao['id'])."&tipo=".$tipo_evento."'> 
                         Atração: ".mb_strimwidth($atracao['nome_atracao'],0,50,"...")."
                     </a>
                 </li>";
@@ -36,11 +36,11 @@ function box_bottom($pedido,$titulo,$link){
 
             return $inicio_box.$lista.$fim_box;
         } else{
-            return "<a href='".PDFURL.$link.$mainObj->encryption($atracoes[0]['id'])."' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
+            return "<a href='".PDFURL.$link.$mainObj->encryption($atracoes[0]['id'])."&tipo=".$tipo_evento."' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
         }
     }
     else {
-        return "<a href='".PDFURL.$link."".$mainObj->encryption($pedido->origem_id)."' target='_blank' class='btn btn-primary btn-block'>$pedido->$titulo</a>";
+        return "<a href='".PDFURL.$link.$mainObj->encryption($pedido->origem_id)."&tipo=".$tipo_evento."' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
     }
 }
 
@@ -125,10 +125,10 @@ if ($pedido->pessoa_tipo_id == 1) {
                             <div class="col-md-12">
                                 <?php
                                 if ($pedido->pessoa_tipo_id == 1) {
-                                    echo box_bottom($pedido,"Editais","proposta_edital_word_pf.php?penal=13&tipo=1&id=");
+                                    echo box_bottom($pedido,"Editais","proposta_edital_word_pf.php?penal=13&id=");
                                 }
                                 else{
-                                    echo box_bottom($pedido,"Editais","proposta_edital_word_pj.php?penal=13&tipo=1&id=");
+                                    echo box_bottom($pedido,"Editais","proposta_edital_word_pj.php?penal=13&id=");
                                 }
                                 ?>
                             </div>
@@ -137,10 +137,10 @@ if ($pedido->pessoa_tipo_id == 1) {
                             <div class="col-md-12">
                                 <?php
                                 if ($pedido->pessoa_tipo_id == 1) {
-                                    echo box_bottom($pedido,"Contratações gerais - Com cachê","proposta_padrao_pf.php?penal=13&tipo=1&id=");
+                                    echo box_bottom($pedido,"Contratações gerais - Com cachê","proposta_padrao_pf.php?penal=13&id=");
                                 }
                                 else{
-                                     echo box_bottom($pedido,"Contratações gerais - Com cachê","proposta_padrao_pj.php?penal=13&tipo=1&id=");
+                                     echo box_bottom($pedido,"Contratações gerais - Com cachê","proposta_padrao_pj.php?penal=13&id=");
                                 }
                                 ?>
                             </div>
