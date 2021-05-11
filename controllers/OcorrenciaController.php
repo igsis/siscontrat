@@ -9,16 +9,17 @@ class OcorrenciaController extends MainModel
 {
     /**
      * @param int|string $id
-     * @param string $tipo <p>Recupera por evento como padrão, declarar "atracao" para ocorrência por atracção</p>
+     * @param int $tipo <p>Recupera por evento como padrão, declarar "atracao" para ocorrência por atração ou filme</p>
+     * @param int $atracao_id <p>idAtração ou idFilme</p>
      * @return array
      */
-    public function recuperaOcorrencia($id, $tipo = false)
+    public function recuperaOcorrencia($id, $tipo = false, $atracao_id = false)
     {
         if (gettype($id) == "string") {
             $id = MainModel::decryption($id);
         }
-        if ($tipo == "atracao"){
-            $filtro = "atracao_id = $id";
+        if ($tipo){
+            $filtro = "tipo_ocorrencia_id = $tipo AND atracao_id = $atracao_id";
         } else{
             $filtro = "origem_ocorrencia_id = $id";
         }
@@ -33,6 +34,13 @@ class OcorrenciaController extends MainModel
             WHERE  $filtro AND o.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
     }
 
+    /**
+     * @param $tipo
+     * <p>1 - Atração | 2 - Filme</p>
+     * @param $origem
+     * <p>idAtracao ou idFilme</p>
+     * @return mixed
+     */
     public function recuperaOcorrenciaOrigem($tipo,$origem)
     {
         if ($tipo == 1){ // atração

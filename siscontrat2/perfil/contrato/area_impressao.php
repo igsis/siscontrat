@@ -6,10 +6,12 @@ $idPedido = $_POST['idPedido'];
 
 $pedido = $mainObj->consultaSimples("SELECT id, origem_tipo_id, origem_id, pessoa_tipo_id FROM pedidos WHERE id = '$idPedido'")->fetchObject();
 
+
 function box_bottom($pedido,$titulo,$link){
     $mainObj = new MainModel();
+    $tipo_evento = $mainObj->consultaSimples("SELECT tipo_evento_id FROM eventos WHERE id = '$pedido->origem_id'")->fetchColumn();
 
-    if ($pedido->origem_tipo_id == 1){ //atracao
+    if ($tipo_evento == 1){ //atracao
         $atracoes = $mainObj->consultaSimples("SELECT id,nome_atracao FROM atracoes WHERE evento_id = {$pedido->origem_id} AND publicado = 1 ")->fetchAll(PDO::FETCH_ASSOC);
         $numAtracoes = count($atracoes);
 
@@ -38,7 +40,7 @@ function box_bottom($pedido,$titulo,$link){
         }
     }
     else {
-        return "<a href='".PDFURL.$link.$mainObj->encryption($pedido->origem_id)."' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
+        return "<a href='".PDFURL.$link."".$mainObj->encryption($pedido->origem_id)."' target='_blank' class='btn btn-primary btn-block'>$pedido->$titulo</a>";
     }
 }
 
@@ -121,13 +123,14 @@ if ($pedido->pessoa_tipo_id == 1) {
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <form action="<?= $link_edital . "23" ?>" target="_blank" method="post">
-                                    <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                    <input type="hidden" name="idUser" value="<?= $idUser ?>">
-                                    <button type="submit" class="btn btn-info btn-block">
-                                        Editais
-                                    </button>
-                                </form>
+                                <?php
+                                if ($pedido->pessoa_tipo_id == 1) {
+                                    echo box_bottom($pedido,"Editais","proposta_edital_word_pf.php?penal=13&tipo=1&id=");
+                                }
+                                else{
+                                    echo box_bottom($pedido,"Editais","proposta_edital_word_pj.php?penal=13&tipo=1&id=");
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="row">
