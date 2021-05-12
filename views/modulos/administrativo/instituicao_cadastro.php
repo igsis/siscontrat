@@ -71,7 +71,7 @@ if ($id){
     <?php if ($id): ?>
     <div class="d-flex flex-row-reverse m-3">
         <div class="col-3">
-            <a href="<?= SERVERURL ?>administrativo/local_cadastro&id<?= $instituicaoObj->encryption($instituicao->id) ?>" class="btn btn-success btn-block">Adicionar novo Local</a>
+            <a href="<?= SERVERURL ?>administrativo/local_cadastro&instituicao_id=<?= $instituicaoObj->encryption($instituicao->id) ?>" class="btn btn-success btn-block">Adicionar novo Local</a>
         </div>
     </div>
     <div class="row">
@@ -105,7 +105,7 @@ if ($id){
                                                 <td><?= $local->logradouro ?></td>
                                                 <td><?= $local->subprefeitura ?></td>
                                                 <td>
-                                                    <a href="<?= SERVERURL . "administrativo/local_cadastro&id=" . $instituicaoObj->encryption($local->id) ?>"
+                                                    <a href="<?= SERVERURL . "administrativo/local_cadastro&id=" . $instituicaoObj->encryption($local->id) . "&instituicao_id=" . $id ?>"
                                                        class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
                                             </tr>
                                         <?php endforeach; ?>

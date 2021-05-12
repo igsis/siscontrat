@@ -208,19 +208,19 @@ class AdministrativoController extends AdministrativoModel
 
     public function insereLocal($post)
     {
+        $post['instituicao_id'] = MainModel::decryption($post['instituicao_id']);
         unset ($post['_method']);
-
         $dados = MainModel::limpaPost($post);
-
         $inserir = MainModel::insert('locais', $dados);
 
         if ($inserir) {
+            $id = DbModel::connection()->lastInsertId();
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Instituição Inserido!',
                 'texto' => 'Dados inseridos com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL . 'administrativo/local_cadastro&id='
+                'location' => SERVERURL . 'administrativo/local_cadastro&id=' . MainModel::encryption($id) . "&instituicao_id=" . MainModel::encryption($post['instituicao_id'])
             ];
         } else {
             $alerta = [
@@ -236,7 +236,8 @@ class AdministrativoController extends AdministrativoModel
 
     public function editaLocal($post)
     {
-        $local_id = MainModel::decryption($post['id']);
+        $local_id = $post['id'];
+        $post['instituicao_id'] = MainModel::decryption($post['instituicao_id']);
         unset($post['id']);
         unset ($post['_method']);
 
@@ -249,7 +250,7 @@ class AdministrativoController extends AdministrativoModel
                 'titulo' => 'Categoria Atualizada!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL . 'administrativo/local_cadastro&id=' . MainModel::encryption($post['instituicao_id'])
+                'location' => SERVERURL . 'administrativo/local_cadastro&id=' . MainModel::encryption($local_id) . '&instituicao_id=' . MainModel::encryption($post['instituicao_id'])
             ];
         } else {
             $alerta = [
