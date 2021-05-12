@@ -114,6 +114,7 @@ class ViewsModel
             'instituicoes',
             'instituicao_cadastro',
             'local_cadastro',
+            'espaco_cadastro',
             'modulo',
             'cadastrar_modulo',
             'perfil',

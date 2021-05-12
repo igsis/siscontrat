@@ -5,7 +5,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
 $local_id = $_GET['local_id'];
 
 $espacObj = new AdministrativoController();
-if ($id){
+if ($id) {
     $espaco = $espacObj->recuperaEspaco($id);
 }
 ?>
@@ -35,33 +35,17 @@ if ($id){
                     <!-- form start -->
                     <form class="form-horizontal formulario-ajax" method="POST"
                           action="<?= SERVERURL ?>ajax/administrativoAjax.php" role="form"
-                          data-form="<?= isset($espaco->id) ? "update" : "save" ?>">
-                        <input type="hidden" name="_method"
-                               value="<?= isset($espaco->id) ? "editaLocal" : "cadastraLocal" ?>">
+                          data-form="<?= isset($local->id) ? "update" : "save" ?>">
+                        <input type="hidden" name="_method" value="<?= isset($espaco->id) ? "editaEspaco" : "cadastraEspaco" ?>">
                         <?php if ($id): ?>
-                            <input type="hidden" name="id" id="local_id" value="<?= $espaco->id ?>">
+                            <input type="hidden" name="id" id="espaco_id" value="<?= $espacObj->encryption($espaco->id) ?>">
                         <?php endif; ?>
+                        <input type="hidden" name="local_id" id="local_id" value="<?= $local_id ?>">
                         <div class="card-body">
-                            <input type="hidden" name="instituicao_id" value="<?= $local_id ?>">
                             <div class="row">
-                                <div class="col">
-                                    <label for="local">Local: *</label>
-                                    <input type="text" class="form-control" id="local" name="local"
-                                           placeholder="Digite o local"
-                                           value="<?= isset($local) ? $local->local : "" ?>" required>
-                                </div>
-                                <div class="col">
-                                    <label for="cep">CEP: *</label>
-                                    <input type="text" class="form-control" id="cep" name="cep" maxlength="9"
-                                           onkeypress="mask(this, '#####-###')" placeholder="Digite o local"
-                                           value="<?= isset($local) ? $local->cep : "" ?>" required>
-                                </div>
-                                <div class="col">
-                                    <label for="zona">Zona: *</label>
-                                    <select name="zona_id" id="zona" class="form-control" required>
-                                        <option value="">Selecione uma opção</option>
-                                        <?= $localObj->geraOpcao('zonas', isset($local) ? $local->zona_id : "") ?>
-                                    </select>
+                                <div class="col-12">
+                                    <label for="espaco">Espaço:*</label>
+                                    <input type="text" class="form-control" name="espaco" required value="<?= isset($espaco) ? $espaco->espaco : "" ?>">
                                 </div>
                             </div>
                         </div>
@@ -81,3 +65,4 @@ if ($id){
         </div>
         <!-- /.row -->
     </div><!-- /.container-fluid -->
+</div>
