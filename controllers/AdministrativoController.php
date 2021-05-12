@@ -182,6 +182,86 @@ class AdministrativoController extends AdministrativoModel
         return DbModel::getInfo('instituicoes', $instituicao_id, false)->fetchObject();
     }
 
+    public function recuperaLocal($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT * FROM locais WHERE id = '$id'")->fetchObject();
+    }
+
+    public function listaLocal($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT l.*,s.subprefeitura FROM locais AS l  LEFT JOIN subprefeituras AS s ON l.subprefeitura_id = s.id WHERE l.instituicao_id = '$id' AND l.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function recuperaEspaco($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT * FROM espacos WHERE id = '$id' AND publicado = 1")->fetchObject();
+    }
+
+    public function listaEspaco($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT * FROM espacos WHERE local_id = '$id' AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function insereLocal($post)
+    {
+        unset ($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $inserir = MainModel::insert('locais', $dados);
+
+        if ($inserir) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Instituição Inserido!',
+                'texto' => 'Dados inseridos com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/local_cadastro&id='
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editaLocal($post)
+    {
+        $local_id = MainModel::decryption($post['id']);
+        unset($post['id']);
+        unset ($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $update = DbModel::update('locais', $dados, $local_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Categoria Atualizada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/local_cadastro&id=' . MainModel::encryption($post['instituicao_id'])
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
     public function insereInstituicao($post)
     {
         unset ($post['_method']);

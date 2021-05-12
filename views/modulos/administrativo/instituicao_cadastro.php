@@ -4,7 +4,11 @@ require_once "./controllers/AdministrativoController.php";
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $instituicaoObj = new AdministrativoController();
 
-$instituicao = $instituicaoObj->recuperaInstituicao($id);
+if ($id){
+    $instituicao = $instituicaoObj->recuperaInstituicao($id);
+    $locais = $instituicaoObj->listaLocal($id);
+}
+
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -64,6 +68,75 @@ $instituicao = $instituicaoObj->recuperaInstituicao($id);
         </div>
         <!-- /.row -->
     </div><!-- /.container-fluid -->
+    <?php if ($id): ?>
+    <div class="d-flex flex-row-reverse m-3">
+        <div class="col-3">
+            <a href="<?= SERVERURL ?>administrativo/local_cadastro&id<?= $instituicaoObj->encryption($instituicao->id) ?>" class="btn btn-success btn-block">Adicionar novo Local</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- Horizontal Form -->
+                            <div class="card card-info">
+                                <div class="card-header">
+                                    <h3 class="card-title">Locais</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <div class="card-body">
+                                    <table id="tabela" class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Local</th>
+                                            <th>Logradouro</th>
+                                            <th>Subprefeitura</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php foreach ($locais as $local): ?>
+
+                                            <tr>
+                                                <td><?= $local->local ?></td>
+                                                <td><?= $local->logradouro ?></td>
+                                                <td><?= $local->subprefeitura ?></td>
+                                                <td>
+                                                    <a href="<?= SERVERURL . "administrativo/local_cadastro&id=" . $instituicaoObj->encryption($local->id) ?>"
+                                                       class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th>Local</th>
+                                            <th>Logradouro</th>
+                                            <th>Subprefeitura</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+
+                                </div>
+                                <!-- /.card-footer -->
+
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+    </div>
+<?php endif; ?>
 </div>
 
 <script type="application/javascript">
