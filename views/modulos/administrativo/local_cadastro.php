@@ -17,7 +17,7 @@ if ($id) {
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Cadastro de instituição</h1>
+                <h1 class="m-0 text-dark">Cadastro de Local</h1>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -130,8 +130,8 @@ if ($id) {
     <?php if ($id): ?>
         <div class="d-flex flex-row-reverse m-3">
             <div class="col-3">
-                <a href="<?= SERVERURL ?>administrativo/local_cadastro" class="btn btn-success btn-block">Adicionar novo
-                    Local</a>
+                <a href="<?= SERVERURL . "administrativo/espaco_cadastro&local_id=" . $localObj->encryption($local->id) ?>" class="btn btn-success btn-block">Adicionar novo
+                    Espaço</a>
             </div>
         </div>
         <div class="row">
