@@ -207,6 +207,63 @@ class AdministrativoController extends AdministrativoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    public function insereLocal($post)
+    {
+        $post['instituicao_id'] = MainModel::decryption($post['instituicao_id']);
+        unset ($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $inserir = MainModel::insert('locais', $dados);
+
+        if ($inserir) {
+            $id = DbModel::connection()->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Instituição Inserido!',
+                'texto' => 'Dados inseridos com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/local_cadastro&id=' . MainModel::encryption($id) . "&instituicao_id=" . MainModel::encryption($post['instituicao_id'])
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editaLocal($post)
+    {
+        $local_id = $post['id'];
+        $post['instituicao_id'] = MainModel::decryption($post['instituicao_id']);
+        unset($post['id']);
+        unset ($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $update = DbModel::update('locais', $dados, $local_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Categoria Atualizada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/local_cadastro&id=' . MainModel::encryption($local_id) . '&instituicao_id=' . MainModel::encryption($post['instituicao_id'])
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
     public function editaInstituicao($post)
     {
         unset ($post['_method']);
