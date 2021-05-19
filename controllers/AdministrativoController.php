@@ -225,6 +225,12 @@ class AdministrativoController extends AdministrativoModel
         return DbModel::consultaSimples("SELECT * FROM espacos WHERE id = '$id' AND publicado = 1")->fetchObject();
     }
 
+    public function listaEspaco($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT * FROM espacos WHERE local_id = '$id' AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
+
     public function insereLocal($post)
     {
         $post['instituicao_id'] = MainModel::decryption($post['instituicao_id']);
