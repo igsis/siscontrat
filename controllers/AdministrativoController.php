@@ -207,6 +207,117 @@ class AdministrativoController extends AdministrativoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    public function recuperaLocal($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT * FROM locais WHERE id = '$id'")->fetchObject();
+    }
+
+    public function listaLocal($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT l.*,s.subprefeitura FROM locais AS l  LEFT JOIN subprefeituras AS s ON l.subprefeitura_id = s.id WHERE l.instituicao_id = '$id' AND l.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function recuperaEspaco($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT * FROM espacos WHERE id = '$id' AND publicado = 1")->fetchObject();
+    }
+
+    public function listaEspaco($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT * FROM espacos WHERE local_id = '$id' AND publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function insereLocal($post)
+    {
+        $post['instituicao_id'] = MainModel::decryption($post['instituicao_id']);
+        unset ($post['_method']);
+        $dados = MainModel::limpaPost($post);
+        $inserir = MainModel::insert('locais', $dados);
+
+        if ($inserir) {
+            $id = DbModel::connection()->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Instituição Inserido!',
+                'texto' => 'Dados inseridos com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/local_cadastro&id=' . MainModel::encryption($id) . "&instituicao_id=" . MainModel::encryption($post['instituicao_id'])
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function editaLocal($post)
+    {
+        $local_id = $post['id'];
+        $post['instituicao_id'] = MainModel::decryption($post['instituicao_id']);
+        unset($post['id']);
+        unset ($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $update = DbModel::update('locais', $dados, $local_id, false);
+        if ($update->rowCount() >= 1 || DbModel::connection()->errorCode() == 0) {
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Categoria Atualizada!',
+                'texto' => 'Dados atualizados com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/local_cadastro&id=' . MainModel::encryption($local_id) . '&instituicao_id=' . MainModel::encryption($post['instituicao_id'])
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+        return MainModel::sweetAlert($alerta);
+    }
+
+    public function insereEspaco($post)
+    {
+        $post['local_id'] = MainModel::decryption($post['local_id']);
+        unset($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $inserir = MainModel::insert('espacos', $dados);
+
+        if ($inserir) {
+            $id = DbModel::connection()->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Instituição Inserido!',
+                'texto' => 'Dados inseridos com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/espaco_cadastro&id=' . MainModel::encryption($id) . "&local_id=" . MainModel::encryption($post['local_id'])
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
+
     public function editaInstituicao($post)
     {
         unset ($post['_method']);
@@ -233,7 +344,9 @@ class AdministrativoController extends AdministrativoModel
 
         return MainModel::sweetAlert($alerta);
     }
-    public function insereModulo($post){
+
+    public function insereModulo($post)
+    {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
         $insert = DbModel::insert('modulos', $dados, false);
@@ -257,8 +370,9 @@ class AdministrativoController extends AdministrativoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function listaModulo(){
-        $pdo = self::connection($capac=false);
+    public function listaModulo()
+    {
+        $pdo = self::connection($capac = false);
         $sql = "SELECT * FROM modulos";
         $statement = $pdo->query($sql);
         $statement->execute();
@@ -272,12 +386,14 @@ class AdministrativoController extends AdministrativoModel
 
     }
 
-    public function recuperaModulo($modulo_id) {
+    public function recuperaModulo($modulo_id)
+    {
         $modulo_id = MainModel::decryption($modulo_id);
         return DbModel::getInfo('modulos', $modulo_id, false)->fetchObject();
     }
 
-    public function editaModulo($post) {
+    public function editaModulo($post)
+    {
         $modulo_id = MainModel::decryption($post['id']);
         unset($post['id']);
         unset ($post['_method']);
@@ -303,16 +419,19 @@ class AdministrativoController extends AdministrativoModel
     }
 
     // PERFIL
-    public function listaPerfil() {
+    public function listaPerfil()
+    {
         return parent::getPerfil();
     }
 
-    public function recuperaPerfil($id){
+    public function recuperaPerfil($id)
+    {
         $id = MainModel::decryption($id);
         return DbModel::getInfo('perfis', $id)->fetchObject();
     }
 
-    public function inserePerfil($post) {
+    public function inserePerfil($post)
+    {
         unset ($post['_method']);
 
         $dados = MainModel::limpaPost($post);
@@ -338,7 +457,8 @@ class AdministrativoController extends AdministrativoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function editaPerfil($post) {
+    public function editaPerfil($post)
+    {
         $perfil_id = MainModel::decryption($post['id']);
         unset($post['id']);
         unset($post['_method']);
@@ -364,18 +484,20 @@ class AdministrativoController extends AdministrativoModel
         }
         return MainModel::sweetAlert($alerta);
     }
-    public function apagaPerfil($id){
+
+    public function apagaPerfil($id)
+    {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("perfis", $id);
-        if ($apaga){
+        if ($apaga) {
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Perfil',
                 'texto' => 'Perfil apagado com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL.'administrativo/perfil'
+                'location' => SERVERURL . 'administrativo/perfil'
             ];
-        }else {
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',
@@ -485,12 +607,14 @@ class AdministrativoController extends AdministrativoModel
         return parent::getRelacoesJuridicas();
     }
 
-    public function recuperaRelacoesJuridicas($relacao_id) {
+    public function recuperaRelacoesJuridicas($relacao_id)
+    {
         $relacao_id = MainModel::decryption($relacao_id);
         return DbModel::getInfo('relacao_juridicas', $relacao_id, false)->fetchObject();
     }
 
-    public function editaRelacoesJuridicas($post) {
+    public function editaRelacoesJuridicas($post)
+    {
         $relacao_id = MainModel::decryption($post['id']);
         unset($post['id']);
         unset ($post['_method']);
@@ -515,7 +639,8 @@ class AdministrativoController extends AdministrativoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function insereRelacoesJuridicas($post){
+    public function insereRelacoesJuridicas($post)
+    {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
         $insert = DbModel::insert('relacao_juridicas', $dados, false);
@@ -540,18 +665,19 @@ class AdministrativoController extends AdministrativoModel
     }
 
 
-    public function apagaRelacoesJuridicas($id){
+    public function apagaRelacoesJuridicas($id)
+    {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("relacao_juridicas", $id, false);
-        if ($apaga){
+        if ($apaga) {
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Relação Jurídica Deletada!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL.'administrativo/relacoes_juridicas'
+                'location' => SERVERURL . 'administrativo/relacoes_juridicas'
             ];
-        }else {
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',
@@ -567,12 +693,14 @@ class AdministrativoController extends AdministrativoModel
         return parent::getUsuarios();
     }
 
-    public function recuperaUsuarios($usuario_id) {
+    public function recuperaUsuarios($usuario_id)
+    {
         $usuario_id = MainModel::decryption($usuario_id);
         return DbModel::getInfo('usuarios', $usuario_id, false)->fetchObject();
     }
 
-    public function editaUsuarios($post) {
+    public function editaUsuarios($post)
+    {
         $usuario_id = MainModel::decryption($post['id']);
         unset($post['id']);
         unset ($post['_method']);
@@ -597,7 +725,8 @@ class AdministrativoController extends AdministrativoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function insereUsuarios($post){
+    public function insereUsuarios($post)
+    {
         unset($post['_method']);
         $dados = MainModel::limpaPost($post);
         $insert = DbModel::insert('usuarios', $dados, false);
@@ -621,18 +750,19 @@ class AdministrativoController extends AdministrativoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function apagaUsuarios($id){
+    public function apagaUsuarios($id)
+    {
         $id = MainModel::decryption($id['id']);
         $apaga = DbModel::apaga("usuarios", $id, false);
-        if ($apaga){
+        if ($apaga) {
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Usuário Deletado!',
                 'texto' => 'Dados atualizados com sucesso!',
                 'tipo' => 'success',
-                'location' => SERVERURL.'administrativo/usuarios'
+                'location' => SERVERURL . 'administrativo/usuarios'
             ];
-        }else {
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',
@@ -643,10 +773,11 @@ class AdministrativoController extends AdministrativoModel
         return MainModel::sweetAlert($alerta);
     }
 
-    public function resetaSenha($id){
+    public function resetaSenha($id)
+    {
         $id = MainModel::decryption($id['id']);
         $pdo = self::connection($capac = false);
-        $senha =  MainModel::encryption('siscontrat2019');
+        $senha = MainModel::encryption('siscontrat2019');
         $sql = "UPDATE usuarios SET senha =  :senha  WHERE id = :id";
         $statement = $pdo->prepare($sql);
         $statement->bindValue(":id", $id);
@@ -654,15 +785,15 @@ class AdministrativoController extends AdministrativoModel
         $statement->execute();
         $reseta = $statement;
 
-        if ($reseta){
+        if ($reseta) {
             $alerta = [
                 'alerta' => 'sucesso',
                 'titulo' => 'Senha Resetada!',
                 'texto' => 'A senha foi resetada para: siscontrat2019',
                 'tipo' => 'success',
-                'location' => SERVERURL.'administrativo/usuarios'
+                'location' => SERVERURL . 'administrativo/usuarios'
             ];
-        }else {
+        } else {
             $alerta = [
                 'alerta' => 'simples',
                 'titulo' => 'Oops! Algo deu Errado!',

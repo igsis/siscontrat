@@ -20,6 +20,18 @@ if (isset($_POST['_method'])) {
         case "editaInstituicao":
             echo $adminObj->editaInstituicao($_POST);
             break;
+        case "cadastraLocal":
+            echo $adminObj->insereLocal($_POST);
+            break;
+        case "editaLocal":
+            echo $adminObj->editaLocal($_POST);
+            break;
+        case "cadastraEspaco":
+            echo $adminObj->insereEspaco($_POST);
+            break;
+        case "editaEspaco":
+            echo $adminObj->editaEspaco($_POST);
+            break;
         case "cadastraPerfil":
             echo $adminObj->inserePerfil($_POST);
             break;

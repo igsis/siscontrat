@@ -113,6 +113,8 @@ class ViewsModel
             'cadastra_categoria',
             'instituicoes',
             'instituicao_cadastro',
+            'local_cadastro',
+            'espaco_cadastro',
             'modulo',
             'cadastrar_modulo',
             'perfil',
