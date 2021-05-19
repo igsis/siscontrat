@@ -288,6 +288,36 @@ class AdministrativoController extends AdministrativoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    public function insereEspaco($post)
+    {
+        $post['local_id'] = MainModel::decryption($post['local_id']);
+        unset($post['_method']);
+
+        $dados = MainModel::limpaPost($post);
+
+        $inserir = MainModel::insert('espacos', $dados);
+
+        if ($inserir) {
+            $id = DbModel::connection()->lastInsertId();
+            $alerta = [
+                'alerta' => 'sucesso',
+                'titulo' => 'Instituição Inserido!',
+                'texto' => 'Dados inseridos com sucesso!',
+                'tipo' => 'success',
+                'location' => SERVERURL . 'administrativo/espaco_cadastro&id=' . MainModel::encryption($id) . "&local_id=" . MainModel::encryption($post['local_id'])
+            ];
+        } else {
+            $alerta = [
+                'alerta' => 'simples',
+                'titulo' => 'Oops! Algo deu Errado!',
+                'texto' => 'Falha ao salvar os dados no servidor, tente novamente mais tarde',
+                'tipo' => 'error',
+            ];
+        }
+
+        return MainModel::sweetAlert($alerta);
+    }
+
     public function editaInstituicao($post)
     {
         unset ($post['_method']);
