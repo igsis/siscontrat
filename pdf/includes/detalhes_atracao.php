@@ -1,7 +1,7 @@
 <?php
 require_once "../../controllers/AtracaoController.php";
 $atracaoObj = new AtracaoController();
-$atracoes = $atracaoObj->recuperaAtracao($idEvento);
+$atracoes = $atracaoObj->listaAtracao($idEvento);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial','B', 12);

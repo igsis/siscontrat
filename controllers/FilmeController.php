@@ -7,8 +7,19 @@ if ($pedidoAjax) {
 
 class FilmeController extends MainModel
 {
-    public function recuperaFilme($idEvento)
+    public function listaFilme($idEvento)
     {
-        return DbModel::consultaSimples("SELECT * FROM filme_eventos fe INNER JOIN filmes f on fe.filme_id = f.id WHERE evento_id = '$idEvento'")->fetchAll(PDO::FETCH_OBJ);
+        $idEvento = $this->decryption($idEvento);
+        return DbModel::consultaSimples("SELECT id, filme_id FROM filme_eventos WHERE evento_id = '$idEvento'")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function recuperaDetalheFilme($idFilme)
+    {
+        return DbModel::consultaSimples("SELECT titulo, genero, duracao FROM filmes WHERE id = $idFilme AND publicado = 1")->fetchObject();
+    }
+
+    public function getIdEvento($idEvento)
+    {
+        return $this->decryption($idEvento);
     }
 }

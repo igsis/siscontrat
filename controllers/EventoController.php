@@ -164,4 +164,16 @@ class EventoController extends MainModel
         }
         return MainModel::sweetAlert($alerta);
     }
+
+    public function instituicaoSolicitante($evento_id) {
+        return DbModel::consultaSimples("SELECT i.nome FROM eventos as eve
+            INNER JOIN usuarios u on eve.usuario_id = u.id
+            INNER JOIN instituicoes i on u.instituicao_id = i.id
+            WHERE eve.id = '$evento_id'")->fetchColumn();
+    }
+
+    public function retornaTotalApresentacao($evento_id)
+    {
+        return DbModel::consultaSimples("SELECT SUM(quantidade_apresentacao) as apresentacoes FROM atracoes WHERE publicado = 1 AND evento_id = '$evento_id'")->fetchColumn();
+    }
 }

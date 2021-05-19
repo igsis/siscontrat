@@ -10,17 +10,18 @@ if ($pedidoAjax) {
 class AtracaoController extends AtracaoModel
 {
     /**
-     * @param int|string $idEvento
-     * @return object
+     * @param $idAtracao
+     * @return stdClass
      */
-    public function recuperaAtracao($idEvento):stdClass
+    public function recuperaAtracao($idAtracao):stdClass
     {
-         $atracao =  DbModel::consultaSimples("SELECT a.*, ci.classificacao_indicativa, p.nome, p.email, p.telefone1, p.telefone2, p.observacao 
+        $idAtracao = MainModel::decryption($idAtracao);
+        $atracao =  DbModel::consultaSimples("SELECT a.*, ci.classificacao_indicativa, p.nome, p.email, p.telefone1, p.telefone2, p.observacao 
             FROM atracoes a 
             INNER JOIN classificacao_indicativas ci on a.classificacao_indicativa_id = ci.id 
             LEFT JOIN produtores p on a.produtor_id = p.id
-            WHERE evento_id = '$idEvento' AND publicado = 1
-        ")->fetchAll(PDO::FETCH_OBJ);
+            WHERE a.id = '$idAtracao'
+        ")->fetch(PDO::FETCH_OBJ);
 
         return (object)$atracao;
     }
@@ -49,5 +50,21 @@ class AtracaoController extends AtracaoModel
             $idAtracao = MainModel::decryption($idAtracao);
         }
         return DbModel::consultaSimples("SELECT * FROM integrantes i INNER JOIN atracao_integrante ai on i.id = ai.integrante_id WHERE atracao_id = '$idAtracao'")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    /**
+     * @param int|string $idEvento
+     * @return object
+     */
+    public function listaAtracao($idEvento):stdClass
+    {
+        $atracao =  DbModel::consultaSimples("SELECT a.*, ci.classificacao_indicativa, p.nome, p.email, p.telefone1, p.telefone2, p.observacao 
+            FROM atracoes a 
+            INNER JOIN classificacao_indicativas ci on a.classificacao_indicativa_id = ci.id 
+            LEFT JOIN produtores p on a.produtor_id = p.id
+            WHERE evento_id = '$idEvento' AND publicado = 1
+        ")->fetchAll(PDO::FETCH_OBJ);
+
+        return (object)$atracao;
     }
 }

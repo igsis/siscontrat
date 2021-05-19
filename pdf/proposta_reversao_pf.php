@@ -20,7 +20,8 @@ $eventoObj = new EventoController();
 $ocorrenciaObj = new OcorrenciaController();
 
 if ($tipo == 1){//atração
-    $atracao = (new AtracaoController)->recuperaAtracao($id);
+    $atracaoObj = new AtracaoController();
+    $atracao = $atracaoObj->recuperaAtracao($id);
     $idEvento = $atracao->evento_id;
     $atracao_id = $atracao->id;
 } elseif ($tipo == 2) {//filme
@@ -78,7 +79,7 @@ $l = 7; //DEFINE A ALTURA DA LINHA
 
 $pdf->SetXY($x, 35);// SetXY - DEFINE O X (largura) E O Y (altura) NA PÁGINA
 
-$pdf->SetTitle("Proposta PF");
+$pdf->SetTitle("Reversão PF",true);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
@@ -240,11 +241,9 @@ $pdf->AddPage('', '');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
-$pdf->Cell(10, $l, '(C)', 0, 0, 'L');
+$pdf->Cell(10, $l, '(D)', 0, 0, 'L');
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Cell(160, $l, utf8_decode('OBSERVAÇÃO'), 0, 1, 'C');
-
-$pdf->Ln(5);
 
 $pdf->SetX($x);
 $pdf->PrintChapter('includes/proposta_observacao_padrao.txt');
@@ -279,51 +278,13 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial','', 9);
 $pdf->MultiCell(180,5,utf8_decode('3) Os ingressos poderão ser vendidos com preços reduzidos, em face de promoções realizadas pela produção do evento.'));
 
-$pdf->Ln(5);
-
-$pdf->SetX($x);
-$pdf->SetFont('Arial','B', 9);
-$pdf->Cell(180,$l,utf8_decode('NOS CASOS DE CONTRATAÇÕES COM APRESENTAÇÕES EM MODO VIRTUAL (ONLINE)'),0,1,'C');
-
-$pdf->SetX($x);
-$pdf->SetFont('Arial','', 9);
-$pdf->MultiCell(180,5,utf8_decode('Declaro Que:'));
-
-$pdf->SetX($x);
-$pdf->SetFont('Arial','', 9);
-$pdf->MultiCell(180,5,utf8_decode('1) Sou responsável por todas as informações contidas no projeto, incluindo conteúdo e direitos autorais relacionados a atividade proposta.'));
-
-$pdf->SetX($x);
-$pdf->SetFont('Arial','', 9);
-$pdf->MultiCell(180,5,utf8_decode('2) Estou ciente e tenho condições de executar a atividade no formato online, em redes sociais, bem como enviar o vídeo da atividade desenvolvida para a Secretaria Municipal de Cultura.'));
-
-$pdf->SetX($x);
-$pdf->SetFont('Arial','', 9);
-$pdf->MultiCell(180,5,utf8_decode('3) Tenho ciência de que a habilitação da atividade não gera automaticamente direito às contratações e que, mesmo habilitado e selecionado para contratação, a Secretaria Municipal de Cultura não tem obrigatoriedade de efetivar a contratação.'));
-
-$pdf->SetX($x);
-$pdf->SetFont('Arial','', 9);
-$pdf->MultiCell(180,5,utf8_decode('4) Me responsabilizo pelo cumprimento da agenda acordada, no tocante ao local, data e horário, para a realização da atividade.'));
-
-$pdf->SetX($x);
-$pdf->SetFont('Arial','', 9);
-$pdf->MultiCell(180,5,utf8_decode('5) Estou ciente de que a contratação não gera vínculo trabalhista entre a municipalidade e o contratado.'));
-
-$pdf->SetX($x);
-$pdf->SetFont('Arial','', 9);
-$pdf->MultiCell(180,5,utf8_decode('6) A apresentação contratada não oferecerá risco à minha saúde e à de terceiros, pois estou ciente que fica vedada qualquer forma de aglomeração ou encontro entre artistas e técnicos que residam em diferentes endereços.'));
-
-$pdf->SetX($x);
-$pdf->SetFont('Arial','', 9);
-$pdf->MultiCell(180,5,utf8_decode('7) Fica vedada a veiculação de publicidade não oficial no âmbito das atividades on line contratadas e na plataforma digital onde a atividade será transmitida ou divulgada, bem como referências a membros dos três Poderes ou quaisquer outras que possam implicar em violação ao princípio da impessoalidade ou demais princípios de Direito Público, ressalvada a possibilidade de identificação do evento como promovido pela Prefeitura de São Paulo, sob pena de aplicação da sanção de suspensão do direito de contratar com a Administração, prevista no artigo 87, inciso III, da Lei nº 8.666/93.'));
-
 $pdf->Ln();
 
 $pdf->SetX($x);
-$pdf->SetFont('Arial','', 9);
-$pdf->Cell(10,$l,'',0,0,'L');
-$pdf->SetFont('Arial','B', 9);
-$pdf->Cell(160,5,utf8_decode('RESCISÃO'),0,1,'C');
+$pdf->SetFont('Arial', '', 9);
+$pdf->Cell(10, $l, '', 0, 0, 'L');
+$pdf->SetFont('Arial', 'B', 9);
+$pdf->Cell(160, 5, utf8_decode('RESCISÃO'), 0, 1, 'C');
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial','', 9);
@@ -332,22 +293,23 @@ $pdf->MultiCell(180,5,utf8_decode('Este instrumento poderá ser rescindido, no i
 $pdf->Ln();
 
 $pdf->SetX($x);
-$pdf->SetFont('Arial','', 9);
-$pdf->Cell(10,$l,'',0,0,'L');
-$pdf->SetFont('Arial','B', 9);
-$pdf->Cell(160,5,utf8_decode('FORO'),0,1,'C');
+$pdf->SetFont('Arial', 'B', 9);
+$pdf->Cell(180, 5, utf8_decode('FORO'), 0, 1, 'C');
 
 $pdf->SetX($x);
-$pdf->SetFont('Arial','', 9);
-$pdf->MultiCell(180,5,utf8_decode('Fica eleito o foro da Fazenda Pública para todo e qualquer procedimento judicial oriundo deste instrumento.'));
+$pdf->SetFont('Arial', '', 9);
+$pdf->MultiCell(180, 5, utf8_decode('Fica eleito o foro da Fazenda Pública para todo e qualquer procedimento judicial oriundo deste instrumento.'));
 
-$pdf->Ln(10);
+$pdf->Ln(5);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(180, $l, "Data: _________ / _________ / " . "$ano" . ".", 0, 0, 'L');
 
-$pdf->SetXY($x, 262);
+$pdf->Ln(40);
+
+//RODAPÉ PERSONALIZADO
+$pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(100, 4, utf8_decode($pedido->nome), 'T', 1, 'L');
 
@@ -365,6 +327,26 @@ if ($pedido->passaporte != NULL) {
     $pdf->Cell(100, 4, "CPF: " . $pedido->cpf, 0, 0, 'L');
 }
 
+$pdf->Ln(60);
+
+$pdf->SetX($x);
+$pdf->SetFont('Arial','', 10);
+$pdf->MultiCell(180,5,utf8_decode('Autorizo a execução do serviço.'));
+
+$pdf->Ln();
+
+$pdf->SetXY($x,262);
+$pdf->SetFont('Arial','', 10);
+$pdf->Cell(100,4,utf8_decode('Tais Ribeiro Lara'),'T',1,'L');
+
+$pdf->SetX($x);
+$pdf->SetFont('Arial','', 10);
+$pdf->Cell(100,4,"Chefe de Gabinete",0,1,'L');
+
+$pdf->SetX($x);
+$pdf->SetFont('Arial','', 10);
+$pdf->Cell(100,4,"Secretaria Municipal de Cultura",0,0,'L');
+
 $pdf->AddPage('', '');
 $f = 10; //tamanho da fonte
 $l = 6;
@@ -374,82 +356,76 @@ $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(180, 5, "CRONOGRAMA", 0, 1, 'C');
 
 $pdf->Ln(5);
-
-foreach ($ocorrencias as $ocorrencia) {
-    $nomeOrigem = $ocorrenciaObj->recuperaOcorrenciaOrigem($ocorrencia->tipo_ocorrencia_id, $ocorrencia->atracao_id);
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(180, $l, utf8_decode($nomeOrigem), 0, 1, 'L');
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->Cell(180, $l, utf8_decode("Ação: " . (new AtracaoController)->recuperaAcaoAtracao($ocorrencia->atracao_id)), 0, 1, 'L');
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->Cell(28, $l, "Data: ".date('d/m/Y',strtotime($ocorrencia->data_inicio)), 0, 0, 'L');
-    if ($ocorrencia->data_fim != "0000-00-00"){
-        $pdf->Cell(22, $l, utf8_decode("à ".date('d/m/Y', strtotime($ocorrencia->data_fim))), 0, 0, 'L');
-    }
-    $pdf->Cell(31, $l, utf8_decode("das ".substr($ocorrencia->horario_inicio,0,-3)." às ".substr($ocorrencia->horario_fim,0,-3)), 0, 0, 'L');
-    $pdf->Cell(21,$l,utf8_decode("(".$ocorrenciaObj->diadasemanaocorrencia($ocorrencia->id).")"),0,1,'L');
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->MultiCell(180,$l,utf8_decode("Local: ($ocorrencia->sigla) {$ocorrencia->local}"));
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->Cell(180, $l, utf8_decode("Subprefeitura: ".$ocorrencia->subprefeitura), 0, 1, 'L');
-
-    if($ocorrencia->libras == 1 || $ocorrencia->audiodescricao == 1){
-        if($ocorrencia->libras == 1){
-            $libras = "Libras";
-        } else {
-            $libras = "";
-        }
-        if($ocorrencia->audiodescricao == 1){
-            $audio = "Audiodescrição";
-        } else {
-            $audio = "";
-        }
-        $pdf->SetX($x);
-        $pdf->Cell(130, $l, utf8_decode("Especial: ".$libras." ".$audio), 0, 1, 'L');
-    }
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->Cell(145, $l, utf8_decode("Retirada de ingresso: ".$ocorrencia->retirada_ingresso), 0, 0, 'L');
-    $pdf->Cell(80,$l,utf8_decode("Valor: R$ ". (new MainModel)->dinheiroParaBr($ocorrencia->valor_ingresso)),0,1,'L');
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->Cell(180, $l, utf8_decode("Observação: ".$ocorrencia->observacao), 0, 1, 'L');
-
-    $pdf->Ln();
-}
-
-if ($evento->tipo_evento_id == 1){
-    $atracoes = (new AtracaoController)->listaAtracao($pedido->origem_id);
+if ($tipo == 1) {//atracao
+    $atracoes = $atracaoObj->listaAtracao($idEvento);
     foreach ($atracoes as $atracao) {
+        $ocorrencias = $ocorrenciaObj->recuperaOcorrencia($idEvento, $tipo, $atracao->id);
         $excecao = $ocorrenciaObj->recuperaOcorrenciaExcecao($atracao->id);
-        if ($excecao){
+
+        $pdf->SetX($x);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(180, $l, utf8_decode($atracao->nome_atracao), 'B', 1, 'L');
+
+        foreach ($ocorrencias as $ocorrencia) {
             $pdf->SetX($x);
-            $pdf->SetFont('Arial', 'B', $f);
-            $pdf->Cell(26, 6, utf8_decode("EXCEÇÕES EM ".$atracao->nome_atracao), 0, 1, 'L');
+            $pdf->SetFont('Arial','', $f);
+            $pdf->Cell(180, $l, utf8_decode("Ação: " . (new AtracaoController)->recuperaAcaoAtracao($ocorrencia->atracao_id)), 0, 1, 'L');
 
             $pdf->SetX($x);
             $pdf->SetFont('Arial','', $f);
-            $pdf->Cell(180, $l, utf8_decode("Dia(s): ".$excecao), 0, 1, 'L');
+            $pdf->Cell(28, $l, "Data: ".date('d/m/Y',strtotime($ocorrencia->data_inicio)), 0, 0, 'L');
+            if ($ocorrencia->data_fim != "0000-00-00"){
+                $pdf->Cell(22, $l, utf8_decode("à ".date('d/m/Y', strtotime($ocorrencia->data_fim))), 0, 0, 'L');
+            }
+            $pdf->Cell(31, $l, utf8_decode("das ".substr($ocorrencia->horario_inicio,0,-3)." às ".substr($ocorrencia->horario_fim,0,-3)), 0, 0, 'L');
+            $pdf->Cell(21,$l,utf8_decode("(".$ocorrenciaObj->diadasemanaocorrencia($ocorrencia->id).")"),0,1,'L');
+
+            $pdf->SetX($x);
+            $pdf->SetFont('Arial','', $f);
+            $pdf->MultiCell(180,$l,utf8_decode("Local: ($ocorrencia->sigla) {$ocorrencia->local}"));
+
+            $pdf->SetX($x);
+            $pdf->SetFont('Arial','', $f);
+            $pdf->Cell(180, $l, utf8_decode("Subprefeitura: ".$ocorrencia->subprefeitura), 0, 1, 'L');
+
+            if($ocorrencia->libras == 1 || $ocorrencia->audiodescricao == 1){
+                if($ocorrencia->libras == 1){
+                    $libras = "Libras";
+                } else {
+                    $libras = "";
+                }
+                if($ocorrencia->audiodescricao == 1){
+                    $audio = "Audiodescrição";
+                } else {
+                    $audio = "";
+                }
+                $pdf->SetX($x);
+                $pdf->Cell(130, $l, utf8_decode("Especial: ".$libras." ".$audio), 0, 1, 'L');
+            }
+
+            $pdf->SetX($x);
+            $pdf->SetFont('Arial','', $f);
+            $pdf->Cell(145, $l, utf8_decode("Retirada de ingresso: ".$ocorrencia->retirada_ingresso), 0, 0, 'L');
+            $pdf->Cell(80,$l,utf8_decode("Valor: R$ ". (new MainModel)->dinheiroParaBr($ocorrencia->valor_ingresso)),0,1,'L');
+
+            if ($ocorrencia->observacao){
+                $pdf->SetX($x);
+                $pdf->SetFont('Arial','', $f);
+                $pdf->Cell(180, $l, utf8_decode("Observação: ".$ocorrencia->observacao), 0, 1, 'L');
+            }
 
             $pdf->Ln();
         }
+        if ($excecao){
+            $pdf->SetX($x);
+            $pdf->SetFont('Arial','', $f);
+            $pdf->MultiCell(180, $l, utf8_decode("Exceto dia(s): ".$excecao));
+        }
+        $pdf->Ln(10);
     }
 }
 
-
-$pdf->SetXY($x, 262);
+$pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(100, 4, utf8_decode($pedido->nome), 'T', 1, 'L');
 
@@ -468,5 +444,3 @@ if ($pedido->passaporte != NULL) {
 }
 
 $pdf->Output();
-
-
