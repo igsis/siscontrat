@@ -207,6 +207,24 @@ class AdministrativoController extends AdministrativoModel
         return MainModel::sweetAlert($alerta);
     }
 
+    public function recuperaLocal($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT * FROM locais WHERE id = '$id'")->fetchObject();
+    }
+
+    public function listaLocal($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT l.*,s.subprefeitura FROM locais AS l  LEFT JOIN subprefeituras AS s ON l.subprefeitura_id = s.id WHERE l.instituicao_id = '$id' AND l.publicado = 1")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function recuperaEspaco($id)
+    {
+        $id = MainModel::decryption($id);
+        return DbModel::consultaSimples("SELECT * FROM espacos WHERE id = '$id' AND publicado = 1")->fetchObject();
+    }
+
     public function insereLocal($post)
     {
         $post['instituicao_id'] = MainModel::decryption($post['instituicao_id']);
