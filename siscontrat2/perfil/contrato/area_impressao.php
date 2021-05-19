@@ -40,7 +40,7 @@ function box_bottom($pedido,$titulo,$link){
         }
     }
     else {
-        return "<a href='".PDFURL.$link.$mainObj->encryption($pedido->origem_id)."&tipo=".$tipo_evento."' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
+        return "<a href='".PDFURL.$link.$mainObj->encryption($pedido->origem_id)."&tipo=".$tipo_evento."' target='_blank' class='btn btn-primary btn-block'>$titulo</a><br/>";
     }
 }
 
@@ -155,13 +155,6 @@ if ($pedido->pessoa_tipo_id == 1) {
                                     echo box_bottom($pedido,"Contratações gerais - Reversão de Bilheteria","proposta_reversao_pj.php?penal=13&id=");
                                 }
                                 ?>
-                                <form action="<?= $link_reversao . "13" ?>" target="_blank" method="post">
-                                    <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                    <input type="hidden" name="idUser" value="<?= $idUser ?>">
-                                    <button type="submit" class="btn btn-primary btn-block">
-                                        Contratações gerais - Reversão de Bilheteria
-                                    </button>
-                                </form>
                             </div>
                         </div>
                         <?php
