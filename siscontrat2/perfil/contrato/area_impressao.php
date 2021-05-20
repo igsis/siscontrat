@@ -188,7 +188,7 @@ if ($pedido->pessoa_tipo_id == 1) {
                         if ($pedido->pessoa_tipo_id == 1) { ?>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <a href="<?=PDFURL."direitos_conexos.php?id=".$mainObj->encryption($pedido->origem_id)?>" target='_blank' class='btn btn-primary btn-block' style="text-align: left">Direitos Conexos</a><br>
+                                    <a href="<?=PDFURL."declaracao_direitos_conexos.php?id=".$mainObj->encryption($pedido->origem_id)?>" target='_blank' class='btn btn-primary btn-block' style="text-align: left">Direitos Conexos</a><br>
                                 </div>
                             </div>
                         <?php }?>
