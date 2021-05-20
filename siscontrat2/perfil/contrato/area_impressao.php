@@ -55,8 +55,6 @@ $link_condicionamento_pf = $http . "rlt_condicionamento_pf.php";
 $link_condicionamento_pj = $http . "rlt_condicionamento_pj.php";
 $link_parecer_pf = $http . "rlt_parecer_pf.php";
 $link_parecer_pj = $http . "rlt_parecer_pj.php";
-$link_normas_pf = $http . "rlt_normas_internas_teatros_pf.php";
-$link_normas_pj = $http . "rlt_normas_internas_teatros_pj.php";
 $link_reserva_global = $http . "rlt_reserva_global.php";
 $link_reserva_padrao = $http."rlt_reserva_padrao.php";
 
@@ -68,13 +66,11 @@ if ($pedido->pessoa_tipo_id == 1) {
     $link_condicionamento = $link_condicionamento_pf;
     $link_parecer = $link_parecer_pf;
     $idPessoa = $pedido['pessoa_fisica_id'];
-    $link_normas = $link_normas_pf;
 } else if ($pedido->pessoa_tipo_id == 2) {
     $link_convenio = $link_convenio_pj;
     $link_exclusividade = $link_exclusividade_pj;
     $link_condicionamento = $link_condicionamento_pj;
     $link_parecer = $link_parecer_pj;
-    $link_normas = $link_normas_pj;
 }*/
 
 ?>
@@ -192,12 +188,7 @@ if ($pedido->pessoa_tipo_id == 1) {
                         if ($pedido->pessoa_tipo_id == 1) { ?>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <form action="<?= $link_direitos ?>" target="_blank" method="post">
-                                        <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                        <button type="submit" class="btn btn-primary btn-block">
-                                            Direitos Conexos
-                                        </button>
-                                    </form>
+                                    <a href="<?=PDFURL."direitos_conexos.php?id=".$mainObj->encryption($pedido->origem_id)?>" target='_blank' class='btn btn-primary btn-block' style="text-align: left">Direitos Conexos</a><br>
                                 </div>
                             </div>
                         <?php }?>
@@ -225,7 +216,7 @@ if ($pedido->pessoa_tipo_id == 1) {
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <a href="<?=PDFURL."parecer_comissao.php?id=".$mainObj->encryption($pedido->origem_id)?>" target='_blank' class='btn btn-primary btn-block'>Parecer da Comissão</a><br>
+                                <a href="<?=PDFURL."parecer_comissao.php?id=".$mainObj->encryption($pedido->origem_id)?>" target='_blank' class='btn btn-primary btn-block' style="text-align: left">Parecer da Comissão</a><br>
                             </div>
                         </div>
                         <div class="row">

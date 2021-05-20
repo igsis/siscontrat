@@ -45,11 +45,12 @@ class EventoController extends MainModel
     }
 
     /**
-     * @param int $idEvento
+     * @param int|string $idEvento
      * @return string
      */
-    public function recuperaObjetoEvento(int $idEvento):string
+    public function recuperaObjetoEvento($idEvento):string
     {
+        $idEvento = MainModel::decryption($idEvento);
         $evento = DbModel::consultaSimples("SELECT tipo_evento,nome_evento FROM eventos e INNER JOIN tipo_eventos te ON e.tipo_evento_id = te.id WHERE e.id = '$idEvento'")->fetchObject();
         return $evento->tipo_evento . " " . $evento->nome_evento;
     }
@@ -83,6 +84,7 @@ class EventoController extends MainModel
 
     public function retornaPeriodo($idEvento):string
     {
+        $idEvento = MainModel::decryption($idEvento);
         $primeiroDia = DbModel::consultaSimples("SELECT MIN(data_inicio) as data_inicio, virada FROM ocorrencias WHERE publicado = 1 AND origem_ocorrencia_id = '$idEvento' LIMIT 0,1")->fetch(PDO::FETCH_OBJ);
         $ultimoDia = DbModel::consultaSimples("SELECT MAX(data_fim) as data_fim FROM ocorrencias WHERE publicado = 1 AND origem_ocorrencia_id = '$idEvento' LIMIT 0,1")->fetch(PDO::FETCH_OBJ);
 
@@ -102,6 +104,7 @@ class EventoController extends MainModel
 
     public function retornaLocais($idEvento):string
     {
+        $idEvento = MainModel::decryption($idEvento);
         $locais = DbModel::consultaSimples("SELECT i.sigla, l.local FROM ocorrencias o INNER JOIN instituicoes i on o.instituicao_id = i.id INNER JOIN locais l on o.local_id = l.id and i.id = l.instituicao_id WHERE o.publicado = 1 AND origem_ocorrencia_id = '$idEvento'")->fetchAll(PDO::FETCH_OBJ);
         $lista = "";
         foreach ($locais as $local) {
