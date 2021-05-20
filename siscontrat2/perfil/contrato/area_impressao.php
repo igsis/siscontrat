@@ -4,7 +4,7 @@ $mainObj = new MainModel();
 
 $idPedido = $_POST['idPedido'];
 
-$pedido = $mainObj->consultaSimples("SELECT id, origem_tipo_id, origem_id, pessoa_tipo_id FROM pedidos WHERE id = '$idPedido'")->fetchObject();
+$pedido = $mainObj->consultaSimples("SELECT id, origem_tipo_id, origem_id, pessoa_tipo_id, pessoa_fisica_id, pessoa_juridica_id FROM pedidos WHERE id = '$idPedido'")->fetchObject();
 
 
 function box_bottom($pedido,$titulo,$link){
@@ -46,13 +46,6 @@ function box_bottom($pedido,$titulo,$link){
 
 
 /*
-$http = PDFURL;
-
-
-$link_emia = $http . "rlt_proposta_emia.php";
-$link_proposta_convenio = $http . "rlt_proposta_oficina_convenio.php?penal=";
-$link_reversao_pf = $http . "rlt_reversao_proposta_pf.php?penal=";
-$link_reversao_pj = $http . "rlt_reversao_proposta_pj.php?penal=";
 $link_direitos = $http . "rlt_direitos_conexos.php";
 $link_convenio_pf = $http . "rlt_convenio500_pf.php";
 $link_convenio_pj = $http . "rlt_convenio500_pj.php";
@@ -60,8 +53,6 @@ $link_exclusividade_pf = $http . "rlt_exclusividade_pf.php";
 $link_exclusividade_pj = $http . "rlt_exclusividade_pj.php";
 $link_condicionamento_pf = $http . "rlt_condicionamento_pf.php";
 $link_condicionamento_pj = $http . "rlt_condicionamento_pj.php";
-$link_facc_pf = $http . "rlt_fac_pf.php";
-$link_facc_pj = $http . "rlt_fac_pj.php";
 $link_parecer_pf = $http . "rlt_parecer_pf.php";
 $link_parecer_pj = $http . "rlt_parecer_pj.php";
 $link_normas_pf = $http . "rlt_normas_internas_teatros_pf.php";
@@ -69,24 +60,19 @@ $link_normas_pj = $http . "rlt_normas_internas_teatros_pj.php";
 $link_reserva_global = $http . "rlt_reserva_global.php";
 $link_reserva_padrao = $http."rlt_reserva_padrao.php";
 
-
-
 $link_pedido_contratacao = $http . "pedido_contratacao.php";
 if ($pedido->pessoa_tipo_id == 1) {
     $link_reversao = $link_reversao_pf;
     $link_convenio = $link_convenio_pf;
     $link_exclusividade = $link_exclusividade_pf;
     $link_condicionamento = $link_condicionamento_pf;
-    $link_facc = $link_facc_pf;
     $link_parecer = $link_parecer_pf;
     $idPessoa = $pedido['pessoa_fisica_id'];
     $link_normas = $link_normas_pf;
 } else if ($pedido->pessoa_tipo_id == 2) {
-    $link_reversao = $link_reversao_pj;
     $link_convenio = $link_convenio_pj;
     $link_exclusividade = $link_exclusividade_pj;
     $link_condicionamento = $link_condicionamento_pj;
-    $link_facc = $link_facc_pj;
     $link_parecer = $link_parecer_pj;
     $link_normas = $link_normas_pj;
 }*/
@@ -94,7 +80,7 @@ if ($pedido->pessoa_tipo_id == 1) {
 ?>
 <div class="content-wrapper">
     <section class="content">
-        <h3 class="page-header">Área de Impressão </h3>
+        <h3 class="page-header">Área de Impressão</h3>
 
         <div class="row">
             <div class="col-md-12">
@@ -158,9 +144,7 @@ if ($pedido->pessoa_tipo_id == 1) {
                         ?>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <?php
-                                    echo box_bottom($pedido,"Proposta Oficinas / Convênio MINC","proposta_oficina_convenio.php?penal=13&id=");
-                                    ?>
+                                    <?= box_bottom($pedido,"Proposta Oficinas / Convênio MINC","proposta_oficina_convenio.php?penal=13&id="); ?>
                                 </div>
                             </div>
                         <?php } ?>
@@ -229,6 +213,14 @@ if ($pedido->pessoa_tipo_id == 1) {
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-12">
+                                <?php
+                                if ($pedido->pessoa_tipo_id == 1) {
+                                    echo box_bottom($pedido,"FACC","facc_pf.php?id=$pedido->pessoa_fisica_id&idPedido=");
+                                }
+                                else{
+                                    echo box_bottom($pedido,"FACC","facc_pj.php?id=$pedido->pessoa_juridica_id&idPedido=");
+                                }
+                                ?>
                                 <form action="<?= $link_facc ?>" target="_blank" method="post">
                                     <input type="hidden" name="idPessoa" value="<?= $idPessoa ?>">
                                     <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
