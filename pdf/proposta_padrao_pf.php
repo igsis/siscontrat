@@ -20,13 +20,10 @@ $eventoObj = new EventoController();
 $ocorrenciaObj = new OcorrenciaController();
 
 if ($tipo == 1){//atração
-    $atracao = (new AtracaoController)->recuperaAtracao($id);
+    $atracaoObj = new AtracaoController();
+    $atracao = $atracaoObj->recuperaAtracao($id);
     $idEvento = $atracao->evento_id;
     $atracao_id = $atracao->id;
-} elseif ($tipo == 2) {//filme
-    $filme = $eventoObj->consultaSimples("SELECT id, evento_id FROM filme_eventos WHERE id = '$id'")->fetchObject();
-    $idEvento = $filme->_evento_id;
-    $atracao_id = $filme->id;
 }
 
 $pedido = $pedidoObj->recuperaPedido(1,$idEvento);
@@ -375,76 +372,73 @@ $pdf->Cell(180, 5, "CRONOGRAMA", 0, 1, 'C');
 
 $pdf->Ln(5);
 
-foreach ($ocorrencias as $ocorrencia) {
-    $nomeOrigem = $ocorrenciaObj->recuperaOcorrenciaOrigem($ocorrencia->tipo_ocorrencia_id, $ocorrencia->atracao_id);
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(180, $l, utf8_decode($nomeOrigem), 0, 1, 'L');
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->Cell(180, $l, utf8_decode("Ação: " . (new AtracaoController)->recuperaAcaoAtracao($ocorrencia->atracao_id)), 0, 1, 'L');
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->Cell(28, $l, "Data: ".date('d/m/Y',strtotime($ocorrencia->data_inicio)), 0, 0, 'L');
-    if ($ocorrencia->data_fim != "0000-00-00"){
-        $pdf->Cell(22, $l, utf8_decode("à ".date('d/m/Y', strtotime($ocorrencia->data_fim))), 0, 0, 'L');
-    }
-    $pdf->Cell(31, $l, utf8_decode("das ".substr($ocorrencia->horario_inicio,0,-3)." às ".substr($ocorrencia->horario_fim,0,-3)), 0, 0, 'L');
-    $pdf->Cell(21,$l,utf8_decode("(".$ocorrenciaObj->diadasemanaocorrencia($ocorrencia->id).")"),0,1,'L');
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->MultiCell(180,$l,utf8_decode("Local: ($ocorrencia->sigla) {$ocorrencia->local}"));
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->Cell(180, $l, utf8_decode("Subprefeitura: ".$ocorrencia->subprefeitura), 0, 1, 'L');
-
-    if($ocorrencia->libras == 1 || $ocorrencia->audiodescricao == 1){
-        if($ocorrencia->libras == 1){
-            $libras = "Libras";
-        } else {
-            $libras = "";
-        }
-        if($ocorrencia->audiodescricao == 1){
-            $audio = "Audiodescrição";
-        } else {
-            $audio = "";
-        }
-        $pdf->SetX($x);
-        $pdf->Cell(130, $l, utf8_decode("Especial: ".$libras." ".$audio), 0, 1, 'L');
-    }
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->Cell(145, $l, utf8_decode("Retirada de ingresso: ".$ocorrencia->retirada_ingresso), 0, 0, 'L');
-    $pdf->Cell(80,$l,utf8_decode("Valor: R$ ". (new MainModel)->dinheiroParaBr($ocorrencia->valor_ingresso)),0,1,'L');
-
-    $pdf->SetX($x);
-    $pdf->SetFont('Arial','', $f);
-    $pdf->Cell(180, $l, utf8_decode("Observação: ".$ocorrencia->observacao), 0, 1, 'L');
-
-    $pdf->Ln();
-}
-
-if ($evento->tipo_evento_id == 1){
-    $atracoes = (new AtracaoController)->listaAtracao($pedido->origem_id);
+$pdf->Ln(5);
+if ($tipo == 1) {//atracao
+    $atracoes = $atracaoObj->listaAtracao($idEvento);
     foreach ($atracoes as $atracao) {
+        $ocorrencias = $ocorrenciaObj->recuperaOcorrencia($idEvento, $tipo, $atracao->id);
         $excecao = $ocorrenciaObj->recuperaOcorrenciaExcecao($atracao->id);
-        if ($excecao){
+
+        $pdf->SetX($x);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(180, $l, utf8_decode($atracao->nome_atracao), 'B', 1, 'L');
+
+        foreach ($ocorrencias as $ocorrencia) {
             $pdf->SetX($x);
-            $pdf->SetFont('Arial', 'B', $f);
-            $pdf->Cell(26, 6, utf8_decode("EXCEÇÕES EM ".$atracao->nome_atracao), 0, 1, 'L');
+            $pdf->SetFont('Arial','', $f);
+            $pdf->Cell(180, $l, utf8_decode("Ação: " . (new AtracaoController)->recuperaAcaoAtracao($ocorrencia->atracao_id)), 0, 1, 'L');
 
             $pdf->SetX($x);
             $pdf->SetFont('Arial','', $f);
-            $pdf->Cell(180, $l, utf8_decode("Dia(s): ".$excecao), 0, 1, 'L');
+            $pdf->Cell(28, $l, "Data: ".date('d/m/Y',strtotime($ocorrencia->data_inicio)), 0, 0, 'L');
+            if ($ocorrencia->data_fim != "0000-00-00"){
+                $pdf->Cell(22, $l, utf8_decode("à ".date('d/m/Y', strtotime($ocorrencia->data_fim))), 0, 0, 'L');
+            }
+            $pdf->Cell(31, $l, utf8_decode("das ".substr($ocorrencia->horario_inicio,0,-3)." às ".substr($ocorrencia->horario_fim,0,-3)), 0, 0, 'L');
+            $pdf->Cell(21,$l,utf8_decode("(".$ocorrenciaObj->diadasemanaocorrencia($ocorrencia->id).")"),0,1,'L');
+
+            $pdf->SetX($x);
+            $pdf->SetFont('Arial','', $f);
+            $pdf->MultiCell(180,$l,utf8_decode("Local: ($ocorrencia->sigla) {$ocorrencia->local}"));
+
+            $pdf->SetX($x);
+            $pdf->SetFont('Arial','', $f);
+            $pdf->Cell(180, $l, utf8_decode("Subprefeitura: ".$ocorrencia->subprefeitura), 0, 1, 'L');
+
+            if($ocorrencia->libras == 1 || $ocorrencia->audiodescricao == 1){
+                if($ocorrencia->libras == 1){
+                    $libras = "Libras";
+                } else {
+                    $libras = "";
+                }
+                if($ocorrencia->audiodescricao == 1){
+                    $audio = "Audiodescrição";
+                } else {
+                    $audio = "";
+                }
+                $pdf->SetX($x);
+                $pdf->Cell(130, $l, utf8_decode("Especial: ".$libras." ".$audio), 0, 1, 'L');
+            }
+
+            $pdf->SetX($x);
+            $pdf->SetFont('Arial','', $f);
+            $pdf->Cell(145, $l, utf8_decode("Retirada de ingresso: ".$ocorrencia->retirada_ingresso), 0, 0, 'L');
+            $pdf->Cell(80,$l,utf8_decode("Valor: R$ ". (new MainModel)->dinheiroParaBr($ocorrencia->valor_ingresso)),0,1,'L');
+
+            if ($ocorrencia->observacao){
+                $pdf->SetX($x);
+                $pdf->SetFont('Arial','', $f);
+                $pdf->Cell(180, $l, utf8_decode("Observação: ".$ocorrencia->observacao), 0, 1, 'L');
+            }
 
             $pdf->Ln();
         }
+        if ($excecao){
+            $pdf->SetX($x);
+            $pdf->SetFont('Arial','', $f);
+            $pdf->MultiCell(180, $l, utf8_decode("Exceto dia(s): ".$excecao));
+        }
+        $pdf->Ln(10);
     }
 }
 

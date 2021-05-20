@@ -98,7 +98,7 @@ if ($pedido->pessoa_tipo_id == 1) {
 ?>
 <div class="content-wrapper">
     <section class="content">
-        <h3 class="page-header"> Área de Impressão </h3>
+        <h3 class="page-header">Área de Impressão </h3>
 
         <div class="row">
             <div class="col-md-12">

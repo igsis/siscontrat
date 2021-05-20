@@ -25,9 +25,6 @@ if ($tipo == 1){//atração
     $atracao = $atracaoObj->recuperaAtracao($id);
     $idEvento = $atracao->evento_id;
     $atracao_id = $atracao->id;
-} elseif ($tipo == 2) {//filme
-    $filmeObj = new FilmeController();
-    $idEvento = $filmeObj->getIdEvento($id);
 }
 
 $pedido = $pedidoObj->recuperaPedido(1,$idEvento);
@@ -365,89 +362,6 @@ if ($tipo == 1) {//atracao
         $pdf->SetX($x);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(180, $l, utf8_decode($atracao->nome_atracao), 'B', 1, 'L');
-
-        foreach ($ocorrencias as $ocorrencia) {
-            $pdf->SetX($x);
-            $pdf->SetFont('Arial','', $f);
-            $pdf->Cell(180, $l, utf8_decode("Ação: " . (new AtracaoController)->recuperaAcaoAtracao($ocorrencia->atracao_id)), 0, 1, 'L');
-
-            $pdf->SetX($x);
-            $pdf->SetFont('Arial','', $f);
-            $pdf->Cell(28, $l, "Data: ".date('d/m/Y',strtotime($ocorrencia->data_inicio)), 0, 0, 'L');
-            if ($ocorrencia->data_fim != "0000-00-00"){
-                $pdf->Cell(22, $l, utf8_decode("à ".date('d/m/Y', strtotime($ocorrencia->data_fim))), 0, 0, 'L');
-            }
-            $pdf->Cell(31, $l, utf8_decode("das ".substr($ocorrencia->horario_inicio,0,-3)." às ".substr($ocorrencia->horario_fim,0,-3)), 0, 0, 'L');
-            $pdf->Cell(21,$l,utf8_decode("(".$ocorrenciaObj->diadasemanaocorrencia($ocorrencia->id).")"),0,1,'L');
-
-            $pdf->SetX($x);
-            $pdf->SetFont('Arial','', $f);
-            $pdf->MultiCell(180,$l,utf8_decode("Local: ($ocorrencia->sigla) {$ocorrencia->local}"));
-
-            $pdf->SetX($x);
-            $pdf->SetFont('Arial','', $f);
-            $pdf->Cell(180, $l, utf8_decode("Subprefeitura: ".$ocorrencia->subprefeitura), 0, 1, 'L');
-
-            if($ocorrencia->libras == 1 || $ocorrencia->audiodescricao == 1){
-                if($ocorrencia->libras == 1){
-                    $libras = "Libras";
-                } else {
-                    $libras = "";
-                }
-                if($ocorrencia->audiodescricao == 1){
-                    $audio = "Audiodescrição";
-                } else {
-                    $audio = "";
-                }
-                $pdf->SetX($x);
-                $pdf->Cell(130, $l, utf8_decode("Especial: ".$libras." ".$audio), 0, 1, 'L');
-            }
-
-            $pdf->SetX($x);
-            $pdf->SetFont('Arial','', $f);
-            $pdf->Cell(145, $l, utf8_decode("Retirada de ingresso: ".$ocorrencia->retirada_ingresso), 0, 0, 'L');
-            $pdf->Cell(80,$l,utf8_decode("Valor: R$ ". (new MainModel)->dinheiroParaBr($ocorrencia->valor_ingresso)),0,1,'L');
-
-            if ($ocorrencia->observacao){
-                $pdf->SetX($x);
-                $pdf->SetFont('Arial','', $f);
-                $pdf->Cell(180, $l, utf8_decode("Observação: ".$ocorrencia->observacao), 0, 1, 'L');
-            }
-
-            $pdf->Ln();
-        }
-        if ($excecao){
-            $pdf->SetX($x);
-            $pdf->SetFont('Arial','', $f);
-            $pdf->MultiCell(180, $l, utf8_decode("Exceto dia(s): ".$excecao));
-        }
-        $pdf->Ln(10);
-    }
-}
-elseif ($tipo == 2) {//filme
-    $filmes = $filmeObj->listaFilme($id);
-    foreach ($filmes as $filme) {
-        $ocorrencias = $ocorrenciaObj->recuperaOcorrencia($idEvento, $tipo, $filme->id);
-        $excecao = $ocorrenciaObj->recuperaOcorrenciaExcecao($filme->id);
-        $detalheFilme = $filmeObj->recuperaDetalheFilme($filme->id);
-
-        $pdf->SetX($x);
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(15, $l, utf8_decode("Título:"), 0, 0, 'L');
-        $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(165, $l, utf8_decode($detalheFilme->titulo), 0, 1, 'L');
-
-        $pdf->SetX($x);
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(15, $l, utf8_decode("Gênero:"), 0, 0, 'L');
-        $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(165, $l, utf8_decode($detalheFilme->genero), 0, 1, 'L');
-
-        $pdf->SetX($x);
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(15, $l, utf8_decode("Duração:"), 0, 0, 'L');
-        $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(165, $l, utf8_decode($detalheFilme->duracao), 0, 1, 'L');
 
         foreach ($ocorrencias as $ocorrencia) {
             $pdf->SetX($x);
