@@ -44,17 +44,12 @@ function box_bottom($pedido,$titulo,$link){
     }
 }
 
-
 /*
 $link_direitos = $http . "rlt_direitos_conexos.php";
 $link_convenio_pf = $http . "rlt_convenio500_pf.php";
 $link_convenio_pj = $http . "rlt_convenio500_pj.php";
 $link_exclusividade_pf = $http . "rlt_exclusividade_pf.php";
 $link_exclusividade_pj = $http . "rlt_exclusividade_pj.php";
-$link_condicionamento_pf = $http . "rlt_condicionamento_pf.php";
-$link_condicionamento_pj = $http . "rlt_condicionamento_pj.php";
-$link_parecer_pf = $http . "rlt_parecer_pf.php";
-$link_parecer_pj = $http . "rlt_parecer_pj.php";
 $link_reserva_global = $http . "rlt_reserva_global.php";
 $link_reserva_padrao = $http."rlt_reserva_padrao.php";
 
@@ -63,14 +58,9 @@ if ($pedido->pessoa_tipo_id == 1) {
     $link_reversao = $link_reversao_pf;
     $link_convenio = $link_convenio_pf;
     $link_exclusividade = $link_exclusividade_pf;
-    $link_condicionamento = $link_condicionamento_pf;
-    $link_parecer = $link_parecer_pf;
-    $idPessoa = $pedido['pessoa_fisica_id'];
 } else if ($pedido->pessoa_tipo_id == 2) {
     $link_convenio = $link_convenio_pj;
     $link_exclusividade = $link_exclusividade_pj;
-    $link_condicionamento = $link_condicionamento_pj;
-    $link_parecer = $link_parecer_pj;
 }*/
 
 ?>
@@ -176,12 +166,7 @@ if ($pedido->pessoa_tipo_id == 1) {
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <form action="<?= $link_condicionamento ?>" target="_blank" method="post">
-                                    <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                    <button type="submit" class="btn btn-primary btn-block">
-                                        Condicionamento
-                                    </button>
-                                </form>
+                                <a href="<?=PDFURL."declaracao_condicionamento.php?id=".$mainObj->encryption($pedido->origem_id)?>" target='_blank' class='btn btn-primary btn-block' style="text-align: left">Condicionamento/a><br>
                             </div>
                         </div>
                         <?php
