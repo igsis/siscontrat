@@ -221,17 +221,12 @@ if ($pedido->pessoa_tipo_id == 1) {
                                     echo box_bottom($pedido,"FACC","facc_pj.php?id=$pedido->pessoa_juridica_id&idPedido=");
                                 }
                                 ?>
-                                <form action="<?= $link_facc ?>" target="_blank" method="post">
-                                    <input type="hidden" name="idPessoa" value="<?= $idPessoa ?>">
-                                    <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                    <button type="submit" class="btn btn-primary btn-block">
-                                        FACC
-                                    </button>
-                                </form>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
+                                <a href="<?=PDFURL."parecer_comissao.php?id=".$mainObj->encryption($pedido->origem_id)?>" target='_blank' class='btn btn-primary btn-block'>Parecer da Comissão</a><br>
+
                                 <form action="<?= $link_parecer ?>" type="submit" target="_blank" method="post">
                                     <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
                                     <button type="submit" class="btn btn-primary btn-block">
