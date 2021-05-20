@@ -166,7 +166,7 @@ if ($pedido->pessoa_tipo_id == 1) {
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <a href="<?=PDFURL."declaracao_condicionamento.php?id=".$mainObj->encryption($pedido->origem_id)?>" target='_blank' class='btn btn-primary btn-block' style="text-align: left">Condicionamento/a><br>
+                                <a href="<?=PDFURL."declaracao_condicionamento.php?id=".$mainObj->encryption($pedido->origem_id)?>" target='_blank' class='btn btn-primary btn-block' style="text-align: left">Condicionamento</a><br>
                             </div>
                         </div>
                         <?php
