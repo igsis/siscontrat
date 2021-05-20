@@ -24,7 +24,7 @@ if ($tipo == 1){//atração
 
 $pedido = $pedidoObj->recuperaPedido(1,$idEvento);
 $evento = $eventoObj->recuperaEvento($idEvento);
-$objeto = $eventoObj->recuperaObjetoEvento($idEvento);
+$objeto = $eventoObj->recuperaObjetoEvento($pedido->origem_id);
 $periodo = $eventoObj->retornaPeriodo($idEvento);
 $local = $eventoObj->retornaLocais($idEvento);
 $totalApresentacao = $eventoObj->retornaTotalApresentacao($idEvento);
@@ -54,10 +54,11 @@ else{
             text-align: justify;
         }
     </style>
-    <link rel="stylesheet" href="../siscontrat2/visual/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../siscontrat2/visual/bower_components/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="../siscontrat2/pdf/include/dist/ZeroClipboard.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="<?= SERVERURL ?>views/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="<?= SERVERURL ?>views/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="<?= SERVERURL ?>views/dist/css/custom.min.css">
     <title>Pedido de Contratação</title>
 </head>
 
@@ -65,26 +66,24 @@ else{
 <br>
 <div align="center">
     <div id="texto" class="texto">
-        <h6 class="text-center"><strong>PEDIDO DE  CONTRATAÇÃO DE PESSOA <?= $nomeTipo ?></strong></h6>
+        <h4 align="center"><strong>PEDIDO DE  CONTRATAÇÃO DE PESSOA <?= $nomeTipo ?></strong></h4>
         <p>&nbsp;</p>
         <p><strong>Sr(a).</strong></p>
         <p>Solicitamos a contratação a seguir:</p>
         <p>&nbsp;</p>
-        <p><strong>Protocolo:</strong> <?= $evento->protocolo ?></p>
-        <p><strong>Processo SEI nº:</strong> <?= $pedido->numero_processo ?></p>
-        <p><strong>Processo SEI de reserva global:</strong> <?= $pedido->numero_processo_mae ?></p>
-        <p><strong>Setor  solicitante:</strong> <?= $eventoObj->instituicaoSolicitante($evento->id) ?> </p>
-        <p>&nbsp;</p>
-        <p><strong>Proponente:</strong> <?= $proponente ?> <br>
+        <p align="left"><strong>Protocolo:</strong> <?= $evento->protocolo ?><br>
+            <strong>Processo SEI nº:</strong> <?= $pedido->numero_processo ?><br>
+            <strong>Processo SEI de reserva global:</strong> <?= $pedido->numero_processo_mae ?><br>
+            <strong>Setor  solicitante:</strong> <?= $eventoObj->instituicaoSolicitante($evento->id) ?> </p>
+        <p align="left"><strong>Proponente:</strong> <?= $proponente ?> <br>
             <strong>Documento:</strong> <?= $documento ?><br>
             <strong>Telefone(s):</strong> <?= $pedido->telefones['tel_0'] ?? null . " " .$pedido->telefones['tel_1'] ?? null. " ".$pedido->telefones['tel_2'] ?? null ?> <br>
             <strong>E-mail:</strong> <?= $pedido->email ?> </p>
-        <p>&nbsp;</p>
         <?php
         if ($tipo == 1){
             ?>
-            <p><strong>Produtor:</strong></p>
-            <p>
+            <p align="left">
+                <b>Produtor:</b><br>
                 <b>Nome:</b> <?= $atracao->nome ?> <br>
                 <b>Telefone:</b> <?= $atracao->telefone1 ?> <?= $atracao->telefone2 ? " / ".$atracao->telefone2 : null ?> <br>
                 <b>E-mail:</b> <?= $atracao->email ?><br>
@@ -93,7 +92,6 @@ else{
         <?php
         }
         ?>
-        <p>&nbsp;</p>
         <p><strong>Objeto:</strong> <?= $objeto ?>.</p>
         <p><strong>Data / Período:</strong> <?= $periodo ?>, totalizando <?= $totalApresentacao ?> <?php if ($totalApresentacao >1) echo "apresentações"; else echo "apresentacao"; ?> conforme proposta/cronograma.</p>
         <p class="text-justify"><strong>Local(ais):</strong> <?= $local ?>.</p>
@@ -116,7 +114,7 @@ else{
         <button class="btn btn-primary">CLIQUE AQUI PARA ACESSAR O <img src="../siscontrat2/visual/images/logo_sei.jpg"></button>
     </a>
 </div>
-
+<p>&nbsp;</p>
 <script>
     function copyText(element) {
         var range, selection, worked;
