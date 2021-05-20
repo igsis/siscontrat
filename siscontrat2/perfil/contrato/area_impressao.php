@@ -73,8 +73,6 @@ $link_reserva_padrao = $http."rlt_reserva_padrao.php";
 
 $link_pedido_contratacao = $http . "pedido_contratacao.php";
 if ($pedido->pessoa_tipo_id == 1) {
-    $link_edital = $http . "proposta_edital_word_pf.php?penal=";
-    $link_proposta_padrao = $http . "proposta_padrao_pf.php?penal=";
     $link_reversao = $link_reversao_pf;
     $link_convenio = $link_convenio_pf;
     $link_exclusividade = $link_exclusividade_pf;
@@ -84,8 +82,6 @@ if ($pedido->pessoa_tipo_id == 1) {
     $idPessoa = $pedido['pessoa_fisica_id'];
     $link_normas = $link_normas_pf;
 } else if ($pedido->pessoa_tipo_id == 2) {
-    $link_edital = $http . "proposta_edital_word_pj.php?penal=";
-    $link_proposta_padrao = $http . "proposta_padrao_pj.php?penal=";
     $link_reversao = $link_reversao_pj;
     $link_convenio = $link_convenio_pj;
     $link_exclusividade = $link_exclusividade_pj;
@@ -162,54 +158,9 @@ if ($pedido->pessoa_tipo_id == 1) {
                         ?>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <form action="<?= $link_proposta_convenio . "13" ?>" target="_blank" method="post">
-                                        <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                        <input type="hidden" name="idUser" value="<?= $idUser ?>">
-                                        <button type="submit" class="btn btn-primary btn-block">
-                                            Proposta Oficinas / Convênio MINC
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        <?php
-                        }
-                        if ($pedido->origem_tipo_id == 2) { ?>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <form action="<?= $link_proposta_padrao . "20" ?>" target="_blank" method="post">
-                                        <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                        <input type="hidden" name="idUser" value="<?= $idUser ?>">
-                                        <button type="submit" class="btn btn-primary btn-block">
-                                            Vocacional
-                                        </button>
-                                    </form>
-                                    <hr/>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <form action="<?= $link_proposta_padrao . "21" ?>" target="_blank" method="post">
-                                        <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                        <input type="hidden" name="idUser" value="<?= $idUser ?>">
-                                        <button type="submit" class="btn btn-primary btn-block">
-                                            PIÁ
-                                        </button>
-                                    </form>
-                                    <hr/>
-                                </div>
-                            </div>
-                        <?php }
-                        if ($pedido->origem_tipo_id == 3) {
-                            ?>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <form action="<?= $link_emia ?>" target="_blank" method="post">
-                                        <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                        <button type="submit" class="btn btn-primary btn-block">
-                                            EMIA
-                                        </button>
-                                    </form>
-                                    <hr/>
+                                    <?php
+                                    echo box_bottom($pedido,"Proposta Oficinas / Convênio MINC","proposta_oficina_convenio.php?penal=13&id=");
+                                    ?>
                                 </div>
                             </div>
                         <?php } ?>
