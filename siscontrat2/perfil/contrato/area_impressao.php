@@ -218,14 +218,8 @@ $link_reserva_padrao = $http."rlt_reserva_padrao.php";
                     </div>
                     <div class="box-body">
                         <div class="col-md-3">
-                            <form action="<?= $link_reserva_padrao ?>" target="_blank" method="post">
-                                <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                <button type="submit" class="btn btn-primary btn-block">
-                                    Reserva Padrão
-                                </button>
-                            </form>
+                            <?php echo box_bottom($pedido, "Reserva Padrão", "pedido_reserva_padrao.php?id="); ?>
                         </div>
-
                         <div class="col-md-3">
                             <?php echo box_bottom($pedido, "Reserva Global", "pedido_reserva_global.php?id="); ?>
                         </div>

@@ -16,8 +16,10 @@ if ($tipo == 1){//atração
     $idAtracao = $_GET['id'];
     $atracao = (new AtracaoController)->recuperaAtracao($idAtracao);
     $idEvento = $atracao->evento_id;
+    $trechoApre = $atracao->quantidade_apresentacao ." ( " .  substr((new MainModel)->valorPorExtenso($atracao->quantidade_apresentacao),0,-6) . " ) apresentação(ões)";
 } elseif ($tipo == 2) {//filme
     $idEvento = $_GET['id'];
+    $trechoApre = "exibição de filme";
 }
 
 $pedido = $pedidoObj->recuperaPedido(1,$idEvento);
@@ -26,6 +28,7 @@ $objeto = $eventoObj->recuperaObjetoEvento($pedido->origem_id);
 $periodo = $eventoObj->retornaPeriodo($idEvento);
 $local = $eventoObj->retornaLocais($idEvento);
 $totalApresentacao = $eventoObj->retornaTotalApresentacao($idEvento);
+$verba = $pedidoObj->recuperaVerba($pedido->verba_id);
 
 if ($pedido->pessoa_tipo_id == 1){
     $nomeTipo = "Física";
@@ -59,7 +62,7 @@ $pedidoObj->inserePedidoEtapa(intval($pedido->id),"reserva");
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= SERVERURL ?>views/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="<?= SERVERURL ?>views/dist/css/custom.min.css">
-    <title>Reserva Global</title>
+    <title>Reserva Padrão</title>
 </head>
 <body>
 <div align="center">
@@ -74,12 +77,8 @@ $pedidoObj->inserePedidoEtapa(intval($pedido->id),"reserva");
             <b>Senhor Supervisor</b>
         </p>
         <p>&nbsp;</p>
-        <p><b>Objeto:</b> <?= $objeto ?></p>
-        <p><b>Data/período:</b> <?= $periodo ?></p>
-        <p><b>Local(is):</b> <?= $local ?></p>
-        <p><b>Valor:</b> <?= "R$ " . (new MainModel)->dinheiroParaBr(($pedido->valor_total)) . " ( " .  (new MainModel)->valorPorExtenso($pedido->valor_total) . " )."?></p>
-        <p>&nbsp;</p>
-        <p align="justify">Diante do exposto, autorizo a reserva de recursos proveniente da nota de reserva inclusa no processo <?= $pedido->numero_processo_mae ?> - (Pessoa <?=$nomeTipo?>) para a presente contratação.</p>
+        <p>O presente processo trata da contratação de <?= $objeto ?>, no valor de <?= "R$ " . (new MainModel)->dinheiroParaBr(($pedido->valor_total)) . " ( " .  (new MainModel)->valorPorExtenso($pedido->valor_total) . " )"?>, concernente a <?= $trechoApre ?>, no período de <?=$periodo?>.</p>
+        <p>Assim, solicito a reserva de recursos que deverá onerar a ação <?=$verba->acao?> (Pessoa <?=$nomeTipo?>) da U.O. 25.10 - Fonte 00. </p>
         <p>&nbsp;</p>
         <p>Após, enviar para SMC/AJ para prosseguimento.</p>
         <p>&nbsp;</p>
@@ -99,7 +98,7 @@ $pedidoObj->inserePedidoEtapa(intval($pedido->id),"reserva");
         <button class="btn btn-primary">CLIQUE AQUI PARA ACESSAR O <img src="../views/dist/img/logo_sei.jpg" alt="logo_sei"></button>
     </a>
 </div>
-<p>&nbsp;</p>
+
 <script>
     function copyText(element) {
         var range, selection, worked;
