@@ -28,18 +28,20 @@ $local = $eventoObj->retornaLocais($idEvento);
 $totalApresentacao = $eventoObj->retornaTotalApresentacao($idEvento);
 
 if ($pedido->pessoa_tipo_id == 1){
-    $nomeTipo = "FÍSICA";
+    $nomeTipo = "Física";
     $proponente = $pedido->nome;
     $documento = $pedido->cpf ?? $pedido->passaporte;
 }
 else{
-    $nomeTipo = "JURÍDICA";
+    $nomeTipo = "Jurídica";
     $proponente = $pedido->razao_social;
     $documento = $pedido->cnpj;
 }
+
+$pedidoObj->inserePedidoEtapa(intval($pedido->id),"reserva");
 ?>
 
-<html lang="PT">
+<html lang="pt-br">
 <head>
     <meta http-equiv="Content-Type" content="text/html. charset=Windows-1252">
     <style>
@@ -57,46 +59,31 @@ else{
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= SERVERURL ?>views/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="<?= SERVERURL ?>views/dist/css/custom.min.css">
-    <title>Pedido de Contratação</title>
+    <title>Reserva Global</title>
 </head>
-
 <body>
-<br>
 <div align="center">
     <div id="texto" class="texto">
-        <h4 align="center"><strong>PEDIDO DE  CONTRATAÇÃO DE PESSOA <?= $nomeTipo ?></strong></h4>
+        <p>
+            <b>INTERESSADO:</b> <?= $proponente ?><br>
+            <b>ASSUNTO:</b> <?= $objeto ?>
+        </p>
         <p>&nbsp;</p>
-        <p><strong>Sr(a).</strong></p>
-        <p>Solicitamos a contratação a seguir:</p>
+        <p>
+            <b>SMC/CAF/SCO</b><br>
+            <b>Senhor Supervisor</b>
+        </p>
         <p>&nbsp;</p>
-        <p align="left"><strong>Protocolo:</strong> <?= $evento->protocolo ?><br>
-            <strong>Processo SEI nº:</strong> <?= $pedido->numero_processo ?><br>
-            <strong>Processo SEI de reserva global:</strong> <?= $pedido->numero_processo_mae ?><br>
-            <strong>Setor  solicitante:</strong> <?= $eventoObj->instituicaoSolicitante($evento->id) ?> </p>
-        <p align="left"><strong>Proponente:</strong> <?= $proponente ?> <br>
-            <strong>Documento:</strong> <?= $documento ?><br>
-            <strong>Telefone(s):</strong> <?= $pedido->telefones['tel_0'] ?? null . " " .$pedido->telefones['tel_1'] ?? null. " ".$pedido->telefones['tel_2'] ?? null ?> <br>
-            <strong>E-mail:</strong> <?= $pedido->email ?> </p>
-        <?php
-        if ($tipo == 1){
-            ?>
-            <p align="left">
-                <b>Produtor:</b><br>
-                <b>Nome:</b> <?= $atracao->nome ?> <br>
-                <b>Telefone:</b> <?= $atracao->telefone1 ?> <?= $atracao->telefone2 ? " / ".$atracao->telefone2 : null ?> <br>
-                <b>E-mail:</b> <?= $atracao->email ?><br>
-                <b>Atração: <?= $atracao->nome_atracao ?></b>
-            </p>
-        <?php
-        }
-        ?>
-        <p><strong>Objeto:</strong> <?= $objeto ?>.</p>
-        <p><strong>Data / Período:</strong> <?= $periodo ?>, totalizando <?= $totalApresentacao ?> <?php if ($totalApresentacao >1) echo "apresentações"; else echo "apresentacao"; ?> conforme proposta/cronograma.</p>
-        <p class="text-justify"><strong>Local(ais):</strong> <?= $local ?>.</p>
-        <p><strong>Valor: </strong> R$ <?= $eventoObj->dinheiroParaBr($pedido->valor_total) . " ( " .$eventoObj->valorPorExtenso($pedido->valor_total) . ")" ?>.</p>
-        <p class="text-justify"><strong>Forma de pagamento:</strong> <?=  $pedido->forma_pagamento ?></p>
-        <p class="text-justify"><strong>Justificativa:</strong> <?= $pedido->justificativa ?></p>
-        <p class="text-justify">Nos termos do art. 6º do decreto 54.873/2014, fica designado como fiscal desta contratação artística o(a) servidor(a) <?= $evento->fiscal_nome . ", RF " . $evento->fiscal_rf . " e, como substituto, " . $evento->suplente_nome . ", RF " . $evento->suplente_rf  ?>. Diante do exposto, solicitamos autorização para prosseguimento do presente.</p>
+        <p><b>Objeto:</b> <?= $objeto ?></p>
+        <p><b>Data/período:</b> <?= $periodo ?></p>
+        <p><b>Local(is):</b> <?= $local ?></p>
+        <p><b>Valor:</b> <?= "R$ " . (new MainModel)->dinheiroParaBr(($pedido->valor_total)) . " ( " .  (new MainModel)->valorPorExtenso($pedido->valor_total) . " )."?></p>
+        <p>&nbsp;</p>
+        <p align="justify">Diante do exposto, autorizo a reserva de recursos proveniente da nota de reserva inclusa no processo <?= $pedido->numero_processo_mae ?> - (Pessoa <?=$nomeTipo?>) para a presente contratação.</p>
+        <p>&nbsp;</p>
+        <p>Após, enviar para SMC/AJ para prosseguimento.</p>
+        <p>&nbsp;</p>
+        <p>Chefe de Gabinete</p>
     </div>
 </div>
 
@@ -109,7 +96,7 @@ else{
     </button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="http://sei.prefeitura.sp.gov.br" target="_blank">
-        <button class="btn btn-primary">CLIQUE AQUI PARA ACESSAR O <img src="../views/dist/img/logo_sei.jpg" alt="logo_sei"></button>
+        <button class="btn btn-primary">CLIQUE AQUI PARA ACESSAR O <img src="../siscontrat2/visual/images/logo_sei.jpg"></button>
     </a>
 </div>
 <p>&nbsp;</p>
@@ -142,3 +129,4 @@ else{
 
 </body>
 </html>
+

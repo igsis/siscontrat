@@ -47,16 +47,8 @@ function box_bottom($pedido,$titulo,$link){
 /*
 $link_exclusividade_pf = $http . "rlt_exclusividade_pf.php";
 $link_exclusividade_pj = $http . "rlt_exclusividade_pj.php";
-$link_reserva_global = $http . "rlt_reserva_global.php";
 $link_reserva_padrao = $http."rlt_reserva_padrao.php";
-
-$link_pedido_contratacao = $http . "pedido_contratacao.php";
-if ($pedido->pessoa_tipo_id == 1) {
-    $link_reversao = $link_reversao_pf;
-    $link_exclusividade = $link_exclusividade_pf;
-} else if ($pedido->pessoa_tipo_id == 2) {
-    $link_exclusividade = $link_exclusividade_pj;
-}*/
+*/
 
 ?>
 <div class="content-wrapper">
@@ -235,12 +227,7 @@ if ($pedido->pessoa_tipo_id == 1) {
                         </div>
 
                         <div class="col-md-3">
-                            <form action="<?= $link_reserva_global ?>" target="_blank" method="post">
-                                <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                <button type="submit" class="btn btn-primary btn-block">
-                                    Reserva Global
-                                </button>
-                            </form>
+                            <?php echo box_bottom($pedido, "Reserva Global", "pedido_reserva_global.php?id="); ?>
                         </div>
 
                     </div>
