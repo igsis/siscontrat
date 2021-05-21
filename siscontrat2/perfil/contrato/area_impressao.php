@@ -45,9 +45,6 @@ function box_bottom($pedido,$titulo,$link){
 }
 
 /*
-$link_direitos = $http . "rlt_direitos_conexos.php";
-$link_convenio_pf = $http . "rlt_convenio500_pf.php";
-$link_convenio_pj = $http . "rlt_convenio500_pj.php";
 $link_exclusividade_pf = $http . "rlt_exclusividade_pf.php";
 $link_exclusividade_pj = $http . "rlt_exclusividade_pj.php";
 $link_reserva_global = $http . "rlt_reserva_global.php";
@@ -56,10 +53,8 @@ $link_reserva_padrao = $http."rlt_reserva_padrao.php";
 $link_pedido_contratacao = $http . "pedido_contratacao.php";
 if ($pedido->pessoa_tipo_id == 1) {
     $link_reversao = $link_reversao_pf;
-    $link_convenio = $link_convenio_pf;
     $link_exclusividade = $link_exclusividade_pf;
 } else if ($pedido->pessoa_tipo_id == 2) {
-    $link_convenio = $link_convenio_pj;
     $link_exclusividade = $link_exclusividade_pj;
 }*/
 
@@ -156,12 +151,14 @@ if ($pedido->pessoa_tipo_id == 1) {
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <form action="<?= $link_convenio ?>" target="_blank" method="post">
-                                    <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                    <button type="submit" class="btn btn-primary btn-block">
-                                        Convênio 500
-                                    </button>
-                                </form>
+                                <?php
+                                if ($pedido->pessoa_tipo_id == 1) {
+                                    echo box_bottom($pedido,"Convênio 500","declaracao_convenio500_pf.php?id=$pedido->pessoa_fisica_id&idPedido=");
+                                }
+                                else{
+                                    echo box_bottom($pedido,"Convênio 500","declaracao_convenio500_pj.php?id=$pedido->pessoa_juridica_id&idPedido=");
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="row">
@@ -208,10 +205,10 @@ if ($pedido->pessoa_tipo_id == 1) {
                             <div class="col-md-12">
                                 <?php
                                 if ($pedido->pessoa_tipo_id == 1) {
-                                    echo box_bottom($pedido,"Normas Internas - Teatros Municipais","normas_internas_teatros.php?id=$pedido->pessoa_fisica_id&idPedido=");
+                                    echo box_bottom($pedido,"Normas Internas - Teatros Municipais","normas_internas_teatros.php?id=$pedido->pessoa_fisica_id&tipoPessoa=1&idPedido=");
                                 }
                                 else{
-                                    echo box_bottom($pedido,"Normas Internas - Teatros Municipais","normas_internas_teatros.php?id=$pedido->pessoa_juridica_id&idPedido=");
+                                    echo box_bottom($pedido,"Normas Internas - Teatros Municipais","normas_internas_teatros.php?id=$pedido->pessoa_juridica_id&tipoPessoa=2&idPedido=");
                                 }
                                 ?>
                             </div>

@@ -6,7 +6,7 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
 
-$tipo = $_GET['tipo'];
+$tipo = $_GET['tipoPessoa'];
 $id =  $_GET['id'];
 
 if ($tipo == 1){
