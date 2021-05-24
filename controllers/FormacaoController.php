@@ -935,23 +935,31 @@ class FormacaoController extends FormacaoModel
         return $carga;
     }
 
-    public function recuperaPedido($pedido_id, $excel = 0, $ano = 0)
+    public function recuperaPedido($pedido_id, $excel = 0, $ano = 0, $programa = 3)
     {
         if ($excel != 0 && $ano != 0):
+
+            if ($programa != 3) {
+                $programa = " AND pro.id = {$programa}";
+            } else {
+                $programa = "";
+            }
+
             return DbModel::consultaSimples("SELECT  p.numero_processo, p.pessoa_fisica_id,fc.protocolo, fc.programa_id, pf.id, pf.nome, 
-                            pro.programa, c.cargo AS 'funcao', c.justificativa AS 'cargo_justificativa', l.linguagem, 
-                            pf.email, s.status, su.subprefeitura, lo.`local`
-                        FROM pedidos AS p
-                        LEFT JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
-                        LEFT JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id  
-                        LEFT JOIN formacao_locais AS fl ON fl.form_pre_pedido_id = fc.id
-                        LEFT JOIN locais AS lo ON fl.local_id = lo.id
-                        LEFT JOIN subprefeituras AS su ON lo.subprefeitura_id = su.id
-                        LEFT JOIN programas AS pro ON fc.programa_id = pro.id
-                        LEFT JOIN formacao_cargos AS c ON fc.form_cargo_id = c.id
-                        LEFT JOIN linguagens AS l ON fc.linguagem_id = l.id
-                        LEFT JOIN formacao_status AS s ON fc.form_status_id = s.id
-                    WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 AND fc.ano = {$ano}")->fetchAll(PDO::FETCH_OBJ);
+                                                            pro.programa, c.cargo AS 'funcao', c.justificativa AS 'cargo_justificativa', l.linguagem, 
+                                                            pf.email, CONCAT(pe.logradouro, ', ', pe.numero, ' - ', pe.bairro, ', ', pe.cidade, ' - ', pe.uf) AS 'endereco', pe.cep, s.status, su.subprefeitura, lo.`local`
+                                                        FROM pedidos AS p
+                                                        LEFT JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
+                                                        LEFT JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id  
+                                                        LEFT JOIN formacao_locais AS fl ON fl.form_pre_pedido_id = fc.id
+                                                        LEFT JOIN locais AS lo ON fl.local_id = lo.id
+                                                        LEFT JOIN subprefeituras AS su ON lo.subprefeitura_id = su.id
+                                                        LEFT JOIN programas AS pro ON fc.programa_id = pro.id
+                                                        LEFT JOIN formacao_cargos AS c ON fc.form_cargo_id = c.id
+                                                        LEFT JOIN linguagens AS l ON fc.linguagem_id = l.id
+                                                        LEFT JOIN formacao_status AS s ON fc.form_status_id = s.id
+                                                        LEFT JOIN pf_enderecos AS pe ON pf.id = pe.pessoa_fisica_id
+                                                    WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 AND fc.ano = {$ano} {$programa}")->fetchAll(PDO::FETCH_OBJ);
         else:
             $pedido_id = MainModel::decryption($pedido_id);
             return DbModel::consultaSimples("SELECT p.id, p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
@@ -1938,11 +1946,10 @@ class FormacaoController extends FormacaoModel
                     } else {
                         if (count($value) == 2 && ($value[0] != '' && $value[1] != '')) {
                             $where .= " AND (fc.data_envio BETWEEN '{$value[0]}' AND '{$value[1]}') ";
-                        } elseif (count($value) == 1){
-                            if ($value[0] != ''){
+                        } elseif (count($value) == 1) {
+                            if ($value[0] != '') {
                                 $where .= " AND fc.data_envio = '{$value[0]}' ";
-                            }
-                            elseif ($value[1] != ''){
+                            } elseif ($value[1] != '') {
                                 $where .= " AND fc.data_envio = '{$value[1]}' ";
                             }
                         }
@@ -2167,7 +2174,7 @@ class FormacaoController extends FormacaoModel
      * @param int|string $contratacao_id <p>id da tabela formacao_contratacoes</p>
      * @return object
      */
-    public function recuperaFormacaoContratacao($contratacao_id):stdClass //para o PedidoController::recuperaPedido
+    public function recuperaFormacaoContratacao($contratacao_id): stdClass //para o PedidoController::recuperaPedido
     {
         if (gettype($contratacao_id) == "string") {
             $contratacao_id = MainModel::decryption($contratacao_id);
@@ -2191,7 +2198,7 @@ class FormacaoController extends FormacaoModel
         $pfObj = new PessoaFisicaController();
         $idPf = $this->encryption($form['pessoa_fisica_id']);
         $pf = $pfObj->recuperaPessoaFisica($idPf);
-        $contratacao = array_merge((array)$form,(array)$pf);
+        $contratacao = array_merge((array)$form, (array)$pf);
         return (object)$contratacao;
     }
 }

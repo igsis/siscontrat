@@ -11,8 +11,9 @@ $objPHPExcel = new PHPExcel();
 $formacaoObj = new FormacaoController();
 
 $ano = $_GET['ano'];
+$programa = $_GET['programa'];
 
-$dadosPedidos = $formacaoObj->recuperaPedido('', 1, $ano);
+$dadosPedidos = $formacaoObj->recuperaPedido('', 1, $ano, $programa);
 $nome_arquivo = "pedidos_formacao_" . $ano . ".xls";
 
 // Podemos renomear o nome das planilha atual, lembrando que um único arquivo pode ter várias planilhas
@@ -50,12 +51,14 @@ $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue("G1")
     ->setCellValue("I1")
     ->setCellValue("J1")
-    ->setCellValue("K1");
+    ->setCellValue("K1")
+    ->setCellValue("L1")
+    ->setCellValue("M1");
 
 //ajustando tamanho do cabeçalho e centralizando o texto
 $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, 1, "PEDIDOS DE CONTRATAÇÃO");
-$objPHPExcel->getActiveSheet()->getStyle('A1:K1')->getFont()->setBold(true);
-$objPHPExcel->getActiveSheet()->mergeCells('A1:K1');
+$objPHPExcel->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->mergeCells('A1:M1');
 $objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->applyFromArray(
     array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
         'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER)
@@ -67,25 +70,27 @@ $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue("A2", "Protocolo")
     ->setCellValue("B2", "Número do Processo")
     ->setCellValue("C2", "Nome Completo")
-    ->setCellValue("D2", "Programa")
-    ->setCellValue("E2", "Função")
-    ->setCellValue("F2", "Linguagem")
-    ->setCellValue("G2", "Local")
-    ->setCellValue("H2", "Subprefeitura")
-    ->setCellValue("I2", "E-mail")
-    ->setCellValue("J2", "Telefone(s) do Proponente")
-    ->setCellValue("K2", "Status do Pedido");
+    ->setCellValue("D2", "Endereço (Proponente)")
+    ->setCellValue("E2", "CEP (Proponente)")
+    ->setCellValue("F2", "E-mail")
+    ->setCellValue("G2", "Telefone(s) do Proponente")
+    ->setCellValue("H2", "Programa")
+    ->setCellValue("I2", "Função")
+    ->setCellValue("J2", "Linguagem")
+    ->setCellValue("K2", "Local")
+    ->setCellValue("L2", "Subprefeitura")
+    ->setCellValue("M2", "Status do Pedido");
 
 // Definimos o estilo da fonte das colunas
-$objPHPExcel->getActiveSheet()->getStyle('A2:K2')->getFont()->setBold(true);
+$objPHPExcel->getActiveSheet()->getStyle('A2:M2')->getFont()->setBold(true);
 
 //define o tamanho de cada célula de cada coluna
-$objPHPExcel->getActiveSheet()->getStyle('A2:K2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A2:M2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 $objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(30);
-$objPHPExcel->getActiveSheet()->getStyle('A2:K2')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+$objPHPExcel->getActiveSheet()->getStyle('A2:M2')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 
 //colorir as primeiras células de cada coluna
-$objPHPExcel->getActiveSheet()->getStyle("A2:K2")->applyFromArray
+$objPHPExcel->getActiveSheet()->getStyle("A2:M2")->applyFromArray
 (
     array
     (
@@ -114,37 +119,47 @@ foreach ($dadosPedidos AS $dadosPedido){
     $i = "I" . $contador;
     $j = "J" . $contador;
     $k = "K" . $contador;
+    $l = "L" . $contador;
+    $m = "M" . $contador;
 
     $objPHPExcel->setActiveSheetIndex(0)
         ->setCellValue($a, $dadosPedido->protocolo)
         ->setCellValue($b, $dadosPedido->numero_processo)
         ->setCellValue($c, $dadosPedido->nome)
-        ->setCellValue($d, $dadosPedido->programa)
-        ->setCellValue($e, $dadosPedido->funcao)
-        ->setCellValue($f, $dadosPedido->linguagem)
-        ->setCellValue($g, $dadosPedido->local)
-        ->setCellValue($h, $dadosPedido->subprefeitura)
-        ->setCellValue($i, $dadosPedido->email)
-        ->setCellValue($j, $tel)
-        ->setCellValue($k, $dadosPedido->status);
+        ->setCellValue($d, $dadosPedido->endereco)
+        ->setCellValue($e, $dadosPedido->cep)
+        ->setCellValue($f, $dadosPedido->email)
+        ->setCellValue($g, $tel)
+        ->setCellValue($h, $dadosPedido->programa)
+        ->setCellValue($i, $dadosPedido->funcao)
+        ->setCellValue($j, $dadosPedido->linguagem)
+        ->setCellValue($k, $dadosPedido->local)
+        ->setCellValue($l, $dadosPedido->subprefeitura)
+        ->setCellValue($m, $dadosPedido->status);
 
     $contador++;
 }
 
 //setando tamanho das colunas
-for ($col = 'A'; $col !== 'I'; $col++) {
+for ($col = 'A'; $col !== 'M'; $col++) {
     $objPHPExcel->getActiveSheet()
         ->getColumnDimension($col)
         ->setAutoSize(true);
 }
 
+
+
+//Consertando a coluna referente ao Endereço
+$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+
 //Consertando a coluna referente ao telefone
-$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(50);
+$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(50);
 
 //Consertando a coluna referente ao status
-$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(50);
+$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(50);
 
 // Cabeçalho do arquivo para ele baixar(Excel2007)
 header('Content-Type: text/html; charset=ISO-8859-1');

@@ -130,7 +130,7 @@ $anos = $formObj->anosPedido();
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Escolha ano dos pedidods</h4>
+                <h4 class="modal-title">Escolha ano dos pedidodos</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -145,6 +145,27 @@ $anos = $formObj->anosPedido();
                                        max="<?= $anos->max ?>"
                                        value="<?= $anos->min ?>">
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="programa">Programa:</label>
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="programa" value="1">Vocacional
+                                </label>
+                            </div>
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="programa" value="2">PIÁ
+                                </label>
+                            </div>
+                            <div class="form-check-inline disabled">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="programa" value="3">Ambos
+                                </label>
+                            </div>
+
                         </div>
                     </div>
                 </div>
