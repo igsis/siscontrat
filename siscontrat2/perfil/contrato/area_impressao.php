@@ -133,7 +133,8 @@ function box_bottom($pedido,$titulo,$link){
                                     echo box_bottom($pedido,"Exclusividade","declaracao_exclusividade_pf.php?id=");
                                 }
                                 else{
-                                    echo box_bottom($pedido,"Exclusividade","declaracao_exclusividade_pj.php?id=");
+                                    echo box_bottom($pedido,"Exclusividade Individual","declaracao_exclusividade_pj_unica.php?id=");
+                                    echo box_bottom($pedido,"Exclusividade Grupo","declaracao_exclusividade_pj_grupo.php?id=");
                                 }
                                 ?>
                             </div>

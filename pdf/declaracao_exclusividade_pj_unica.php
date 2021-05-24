@@ -55,7 +55,7 @@ $pdf->Ln(10);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(180, $l, utf8_decode("Eu, " . $lider->nome . $documento . ", sob penas da lei, declaro que sou representado exclusivamente pela empresa " . $pedido->razao_social . ", CNPJ " . $pedido->cnpj . ""));
+$pdf->MultiCell(180, $l, utf8_decode("Eu, " . $lider->nome . $documento . ", sob penas da lei, declaro que sou representado exclusivamente pela empresa " . $pedido->razao_social . ", CNPJ " . $pedido->cnpj . "."));
 
 $pdf->Ln();
 
@@ -91,7 +91,7 @@ $pdf->Ln();
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', '', 10);
-$pdf->MultiCell(180, $l, utf8_decode("São Paulo, _______ / _______ /" . date('Y') . "."));
+$pdf->MultiCell(180, $l, utf8_decode("São Paulo, _______ / _______ / " . date('Y') . "."));
 
 $pdf->Ln(20);
 
