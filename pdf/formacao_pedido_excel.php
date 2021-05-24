@@ -25,11 +25,11 @@ $objPHPExcel->getProperties()->setDescription("Gerado automaticamente a partir d
 $objPHPExcel->getProperties()->setKeywords("office 2007 openxml php");
 $objPHPExcel->getProperties()->setCategory("Formação");
 
-$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:K1')
+$objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:M1')
     ->setCellValue("A1","Lista de Pedidos da Formacação");
 
 //Colorir o header
-$objPHPExcel->getActiveSheet()->getStyle("A1:K1")->applyFromArray
+$objPHPExcel->getActiveSheet()->getStyle("A1:M1")->applyFromArray
 (
     array
     (
