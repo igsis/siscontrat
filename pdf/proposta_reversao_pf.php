@@ -9,6 +9,7 @@ require_once "../controllers/PedidoController.php";
 require_once "../controllers/EventoController.php";
 require_once "../controllers/OcorrenciaController.php";
 require_once "../controllers/AtracaoController.php";
+require_once "../controllers/FilmeController.php";
 
 $tipo = $_GET['tipo'];
 $id = $_GET['id'];
@@ -24,10 +25,6 @@ if ($tipo == 1){//atração
     $atracao = $atracaoObj->recuperaAtracao($id);
     $idEvento = $atracao->evento_id;
     $atracao_id = $atracao->id;
-} elseif ($tipo == 2) {//filme
-    $filme = $eventoObj->consultaSimples("SELECT id, evento_id FROM filme_eventos WHERE id = '$id'")->fetchObject();
-    $idEvento = $filme->_evento_id;
-    $atracao_id = $filme->id;
 }
 
 $pedido = $pedidoObj->recuperaPedido(1,$idEvento);

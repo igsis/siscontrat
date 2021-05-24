@@ -9,18 +9,18 @@ $pfObj = new PessoaFisicaController();
 
 $id_pf =  $_GET['id'];
 
+$pf = $pfObj->recuperaPessoaFisica($id_pf);
+
+$data = date('d-m-Y');
+
 class PDF extends FPDF{
     function Header()
     {
         // grade de fundo
-        $this->Image('../views/dist/img/fac_pf.jpg', 15, 10, 180);
+        $this->Image('../views/dist/img/facc_pf.jpg', 15, 10, 180);
         $this->Ln(20);
     }
 }
-
-$pf = $pfObj->recuperaPessoaFisica($id_pf);
-
-$data = date('d-m-Y');
 
 $pdf = new PDF('P', 'mm', 'A4'); //CRIA UM NOVO ARQUIVO PDF NO TAMANHO A4
 $pdf->AliasNbPages();
