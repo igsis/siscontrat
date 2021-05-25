@@ -1,4 +1,6 @@
 <?php
+require_once "../extras/MainModel.php";
+$mainObj = new MainModel();
 
 $con = bancoMysqli();
 $idPedido = $_POST['idPedido'];
@@ -38,7 +40,7 @@ if (isset($_POST['edita'])) {
 }
 
 $empenho = recuperaDados('pagamentos', 'pedido_id', $idPedido);
-$pedido = $con->query("SELECT e.protocolo, p.numero_processo FROM pedidos AS p INNER JOIN eventos AS e ON p.origem_id = e.id WHERE p.id = $idPedido")->fetch_array();
+$pedido = $con->query("SELECT e.protocolo, p.numero_processo, p.origem_id FROM pedidos AS p INNER JOIN eventos AS e ON p.origem_id = e.id WHERE p.id = $idPedido")->fetch_array();
 
 ?>
 <div class="content-wrapper">
@@ -118,12 +120,10 @@ $pedido = $con->query("SELECT e.protocolo, p.numero_processo FROM pedidos AS p I
                     </div>
                 </div>
                 <hr/>
-
-                <div class="col-md-12" style="align-text:center">
-                    <form action="http://<?= $_SERVER['SERVER_NAME'] ?>/siscontrat2/pdf/recibo_ne.php" target="_blank" method="POST">
-                        <input type="hidden" value="<?= $idPedido ?>" name="idPedido">
-                        <button type="submit" class="btn btn-success center-block" style="width: 35%">Gerar Recibo</button>
-                    </form>
+                <div class="row" style="text-align:center">
+                    <div class="col-md-12">
+                        <a href="<?=PDFURL?>recibo_ne.php?id=<?=$pedido['origem_id']?>" class="btn btn-success" target="_blank">Gerar Recibo</a>
+                    </div>
                 </div>
 
             </div>
