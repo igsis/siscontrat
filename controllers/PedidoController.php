@@ -90,55 +90,60 @@ class PedidoController extends PedidoModel
     {
         $origem_id = MainModel::decryption($origem_id);
 
-        /** Tipo Evento */
-        if ($origem_tipo_id == 1){
-            $pedido = PedidoModel::recuperaBasePedido($origem_tipo_id, $origem_id);
 
-            $parecer = DbModel::consultaSimples("SELECT topico1,topico2,topico3,topico4 FROM parecer_artisticos WHERE pedido_id = '$origem_id'")->fetch(PDO::FETCH_ASSOC);
-            if ($parecer){
-                $pedido['topico1'] = $parecer['topico1'] ?? null;
-                $pedido['topico2'] = $parecer['topico2'] ?? null;
-                $pedido['topico3'] = $parecer['topico3'] ?? null;
-                $pedido['topico4'] = $parecer['topico4'] ?? null;
-            }
+        switch ($origem_tipo_id){
+            case 1: /** Tipo Evento */
+                $pedido = PedidoModel::recuperaBasePedido($origem_tipo_id, $origem_id);
 
-            if ($pedido['pessoa_tipo_id'] == 2){ //pessoa jurídica
-                $pjObj = new PessoaJuridicaController();
-                $idPj = $this->encryption($pedido['pessoa_juridica_id']);
-                $pj = $pjObj->recuperaPessoaJuridica($idPj);
-                unset($pj->id);
-                $pedido = array_merge((array)$pedido,(array)$pj);
-                //representante
-                $repObj = new RepresentanteController();
-                if ($pj->representante_legal1_id){
-                    $idRep1 = $this->encryption($pj->representante_legal1_id);
-                    $rep1 = $repObj->recuperaRepresentante($idRep1);
-                    $pedido['rep1'] = (array)$rep1;
+                $parecer = DbModel::consultaSimples("SELECT topico1,topico2,topico3,topico4 FROM parecer_artisticos WHERE pedido_id = '$origem_id'")->fetch(PDO::FETCH_ASSOC);
+                if ($parecer){
+                    $pedido['topico1'] = $parecer['topico1'] ?? null;
+                    $pedido['topico2'] = $parecer['topico2'] ?? null;
+                    $pedido['topico3'] = $parecer['topico3'] ?? null;
+                    $pedido['topico4'] = $parecer['topico4'] ?? null;
                 }
-                if ($pj->representante_legal2_id){
-                    $idRep2 = $this->encryption($pj->representante_legal2_id);
-                    $rep2 = $repObj->recuperaRepresentante($idRep2);
-                    $pedido['rep2'] = (array)$rep2;
+
+                if ($pedido['pessoa_tipo_id'] == 2){ //pessoa jurídica
+                    $pjObj = new PessoaJuridicaController();
+                    $idPj = $this->encryption($pedido['pessoa_juridica_id']);
+                    $pj = $pjObj->recuperaPessoaJuridica($idPj);
+                    unset($pj->id);
+                    $pedido = array_merge((array)$pedido,(array)$pj);
+                    //representante
+                    $repObj = new RepresentanteController();
+                    if ($pj->representante_legal1_id){
+                        $idRep1 = $this->encryption($pj->representante_legal1_id);
+                        $rep1 = $repObj->recuperaRepresentante($idRep1);
+                        $pedido['rep1'] = (array)$rep1;
+                    }
+                    if ($pj->representante_legal2_id){
+                        $idRep2 = $this->encryption($pj->representante_legal2_id);
+                        $rep2 = $repObj->recuperaRepresentante($idRep2);
+                        $pedido['rep2'] = (array)$rep2;
+                    }
+                } else{ //pessoa física
+                    $pfObj = new PessoaFisicaController();
+                    $idPf = $this->encryption($pedido['pessoa_fisica_id']);
+                    $pf = $pfObj->recuperaPessoaFisica($idPf);
+                    unset($pf->id);
+                    $pedido = array_merge((array)$pedido,(array)$pf);
                 }
-            } else{ //pessoa física
-                $pfObj = new PessoaFisicaController();
-                $idPf = $this->encryption($pedido['pessoa_fisica_id']);
-                $pf = $pfObj->recuperaPessoaFisica($idPf);
-                $pedido = array_merge((array)$pedido,(array)$pf);
-            }
-        }
-        /** Tipo Formação */
-        if ($origem_tipo_id == 2){
-            $formObj = new FormacaoContratacaoController();
-            $pedido = PedidoModel::recuperaBasePedido($origem_tipo_id, $origem_id);
-            $formacao = (array) $formObj->recuperar($origem_id);
-            $pedido = array_merge($pedido,$formacao);
-        }
-        /** Tipo EMIA */
-        if ($origem_tipo_id == 3){
-            $pedido = PedidoModel::recuperaBasePedido($origem_tipo_id, $origem_id);
-            $emia = array("dados"=>"construir controller emia");
-            $pedido = array_merge($pedido,$emia);
+                break;
+            case 2: /** Tipo Formação */
+                $formObj = new FormacaoContratacaoController();
+                $pedido = PedidoModel::recuperaBasePedido($origem_tipo_id, $origem_id);
+                $formacao = (array) $formObj->recuperar($origem_id);
+                unset($formacao->id);
+                $pedido = array_merge($pedido,$formacao);
+                break;
+            case 3:
+                $pedido = PedidoModel::recuperaBasePedido($origem_tipo_id, $origem_id);
+                $emia = array("dados"=>"construir controller emia");
+                unset($emia->id);
+                $pedido = array_merge($pedido,$emia);
+                break;
+            default:
+                $pedido = [];
         }
 
         return (object)$pedido;
