@@ -481,7 +481,7 @@ if ($tipo == 1) {//atracao
 
             $pdf->SetX($x);
             $pdf->SetFont('Arial','', $f);
-            $pdf->MultiCell(180,$l,utf8_decode("Local: ($ocorrencia->sigla) {$ocorrencia->local}"));
+            $pdf->MultiCell(180,$l,utf8_decode("Local: ($ocorrencia->sigla) {$ocorrencia->local} - Localizado em {$ocorrencia->logradouro}, $ocorrencia->numero $ocorrencia->complemento - $ocorrencia->bairro - $ocorrencia->cidade / $ocorrencia->uf CEP: $ocorrencia->cep"));
 
             $pdf->SetX($x);
             $pdf->SetFont('Arial','', $f);

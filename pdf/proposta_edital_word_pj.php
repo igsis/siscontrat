@@ -122,7 +122,7 @@ if ($tipo == 1){//atracao
                         echo " à ".date('d/m/Y', strtotime($ocorrencia->data_fim));
                     }
                     echo " das ".substr($ocorrencia->horario_inicio,0,-3)." às ".substr($ocorrencia->horario_fim,0,-3)." (".$ocorrenciaObj->diadasemanaocorrencia($ocorrencia->id).")<br>
-                <strong>Local: </strong> ($ocorrencia->sigla) $ocorrencia->local<br>
+                <strong>Local: </strong> ($ocorrencia->sigla) {$ocorrencia->local} - Localizado em {$ocorrencia->logradouro}, $ocorrencia->numero $ocorrencia->complemento - $ocorrencia->bairro - $ocorrencia->cidade / $ocorrencia->uf CEP: $ocorrencia->cep<br>
                 <strong>Subprefeitura:</strong> $ocorrencia->subprefeitura<br>";
             if($ocorrencia->libras == 1 || $ocorrencia->audiodescricao == 1) {
                 if ($ocorrencia->libras == 1) {

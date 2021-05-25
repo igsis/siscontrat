@@ -1,238 +1,200 @@
 <?php
+setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+$pedidoAjax = true;
 
-//require '../include/';
-require_once("../siscontrat2/funcoes/funcoesConecta.php");
-require_once("../siscontrat2/funcoes/funcoesGerais.php");
+// INSTALAÇÃO DA CLASSE NA PASTA FPDF.
+require_once "../config/configGeral.php";
+require_once "../views/plugins/fpdf/fpdf.php";
+require_once "../controllers/PedidoController.php";
+require_once "../controllers/EventoController.php";
+require_once "../controllers/OcorrenciaController.php";
+require_once "../controllers/AtracaoController.php";
+require_once "../controllers/FilmeController.php";
 
-
-//CONEXÃO COM BANCO DE DADOS
-$con = bancoMysqli();
-
-
-//CONSULTA
-$idUser = $_POST['idUser'];
-$idPedido = $_POST['idPedido'];
-$pedido = recuperaDados('pedidos', 'id', $idPedido);
-$evento = recuperaDados('eventos', 'id', $pedido['origem_id']);
-$pessoa = recuperaDados('pessoa_fisicas', 'id', $pedido['pessoa_fisica_id']);
-$ocorrencias = $con->query("SELECT atracao_id, tipo_ocorrencia_id FROM ocorrencias WHERE tipo_ocorrencia_id != 3 AND publicado = 1 AND origem_ocorrencia_id =  " . $evento['id']);
-
-$cargaHoraria = 0;
-
-while ($linhaOco = mysqli_fetch_array($ocorrencias)) {
-
-    if($linhaOco['tipo_ocorrencia_id'] == 1){
-        $sqlCarga = "SELECT carga_horaria FROM oficinas WHERE atracao_id = " . $linhaOco['atracao_id'];
-        $carga = $con->query($sqlCarga);
-
-        if($carga->num_rows > 0 || $cargaHoraria != 0){
-            while($cargaArray = mysqli_fetch_array($carga)){
-                $cargaHoraria =  $cargaHoraria + (int)$cargaArray['carga_horaria'];
-            }
-        }
-    }
-}
-$objeto = retornaTipo($evento['tipo_evento_id']) . " - " . $evento['nome_evento'];
-
-$idEvento = $pedido['origem_id'];
-
-$idPessoa = $pessoa['id'];
-
-if($pessoa['nacionalidade_id'] != NULL){
-    $nacionalidade = recuperaDados('nacionalidades', 'id', $pessoa['nacionalidade_id'])['nacionalidade'];
-}else{
-    $nacionalidade = "Não cadastrado";
-}
-
-$testaEnderecos = $con->query("SELECT * FROM pf_enderecos WHERE pessoa_fisica_id = $idPessoa");
-
-if ($testaEnderecos->num_rows > 0) {
-    while ($enderecoArray = mysqli_fetch_array($testaEnderecos)) {
-        $endereco = $enderecoArray['logradouro'] . ", " . $enderecoArray['numero'] . " " . $enderecoArray['complemento'] . " / - " .$enderecoArray['bairro'] . " - " . $enderecoArray['cidade'] . " / " . $enderecoArray['uf'];
-    }
-} else {
-    $endereco = "Não cadastrado";
-}
-
-$periodo = retornaPeriodoNovo($pedido['origem_id'], 'ocorrencias');
-
+$tipo = $_GET['tipo'];
+$id = $_GET['id'];
+$idPenal = $_GET['penal'];
 $ano = date('Y');
 
-$sqlTelefone = "SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPessoa'";
-$tel = "";
-$queryTelefone = mysqli_query($con, $sqlTelefone);
+$eventoObj = new EventoController();
+$pedidoObj = new PedidoController();
+$ocorrenciaObj = new OcorrenciaController();
 
-while ($linhaTel = mysqli_fetch_array($queryTelefone)) {
-    $tel = $tel . $linhaTel['telefone'] . ' | ';
+if ($tipo == 1){//atração
+    $atracaoObj = new AtracaoController();
+    $atracao = $atracaoObj->recuperaAtracao($id);
+    $idEvento = $atracao->evento_id;
+} elseif ($tipo == 2) {//filme
+    $filmeObj = new FilmeController();
+    $idEvento = $filmeObj->getIdEvento($id);
 }
 
-$tel = substr($tel, 0, -3);
+$pedido = $pedidoObj->recuperaPedido(1,$idEvento);
+$penalidade = $pedidoObj->recuperaPenalidades($idPenal);
+$evento = $eventoObj->recuperaEvento($idEvento);
+$objeto = $eventoObj->recuperaObjetoEvento($idEvento);
+$periodo = $eventoObj->retornaPeriodo($idEvento);
+$local = $eventoObj->retornaLocais($idEvento);
 
-$testaDrt = $con->query("SELECT drt FROM drts WHERE pessoa_fisica_id = $idPessoa");
-if ($testaDrt->num_rows > 0) {
-    while($drtArray = mysqli_fetch_array($testaDrt)){
-        $drt = $drtArray['drt'];
-    }
-}else{
-    $drt = "Não Cadastrado.";
-}
-
-$testaNit = $con->query("SELECT nit FROM nits WHERE pessoa_fisica_id = $idPessoa");
-
-if ($testaNit->num_rows > 0) {
-    while($nitArray = mysqli_fetch_array($testaNit)){
-        $nit = $nitArray['nit'];
-    }
-}else{
-    $nit = "Não Cadastrado.";
-}
-
-if ($pessoa['ccm'] != "" || $pessoa['ccm'] != NULL) {
-    $ccm = $pessoa['ccm'];
-} else {
-    $ccm = "Não Cadastrado.";
-}
-
-if($pessoa['passaporte'] != NULL){
-    $rg_cpf_passaporte = "<p><strong>Passaporte:</strong> " . $pessoa['passaporte'] . "</p>";
-    $label = "<p>Passaporte: " . $pessoa['passaporte'] . "</p>";
-}else{
-    $rg = $pessoa['rg'] == NULL ? "Não cadastrado" : $pessoa['rg'];
-    $rg_cpf_passaporte = "<p><strong>RG:</strong> " . $rg . "</p>
-                          <p><strong>CPF:</strong> " . $pessoa['cpf'] . "<p>";
-    $label = "<p>RG: " . $rg . "</p>";
-}
-
-if($pessoa['nome_artistico'] == NULL || $pessoa['nome_artistico'] == ""){
-    $nomeArtistico = "Não cadastrado";
-}else{
-    $nomeArtistico = $pessoa['nome_artistico'];
-}
-
-if($cargaHoraria == 0){
-    $ch = "Não possuí";
-}else{
-    $ch = $cargaHoraria;
-}
-
-$idPenal = $_GET['penal'];
-alteraStatusPedidoContratos($idPedido, "proposta", $idPenal, $idUser);
+$pedidoObj->inserePedidoEtapa(intval($pedido->id),"proposta");
 
 header("Content-type: application/vnd.ms-word");
-header("Content-Disposition: attachment;Filename=proposta_edital_pf_$idPedido.doc");
-echo "<html>";
-echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
-echo "<body>";
+header("Content-Disposition: attachment;Filename=proposta_edital_pf_$pedido->id.doc");
+?>
+<html lang="pt-br">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<body>
+<table style="width: 100%; border: 0">
+    <tr>
+        <td style="width: 5%">(A)</td>
+        <td style="width: 100%; text-align: center"><strong>CONTRATADO</strong></td>
+    </tr>
+</table>
+<p><i>(Quando se tratar de grupo, o líder do grupo)</i></p>
 
-echo
-    "<p>(A)</p>" .
-    "<p align='center'><strong>CONTRATADO</strong></p>" .
-    "<p><i>(Quando se tratar de grupo, o líder do grupo)</i></p>" .
-    "<p><strong>Nome:</strong> " . $pessoa['nome'] . "</p>" .
-    "<p><strong>Nome Artístico:</strong> " . $nomeArtistico . "</p>" .
-    "<p><strong>Nacionalidade:</strong> " . $nacionalidade . "</p>" .
-    $rg_cpf_passaporte .
-    "<p><strong>CCM:</strong> " . $ccm . "</p>" .
-    "<p><strong>DRT:</strong> " . $drt . "</p>" .
-    "<p><strong>Endereço:</strong> " . $endereco . "</p>" .
-    "<p><strong>Telefone(s):</strong> " . $tel . "</p>" .
-    "<p><strong>E-mail:</strong> " . $pessoa['email'] . "</p>" .
-    "<p><strong>Inscrição no INSS ou nº PIS / PASEP:</strong> " . $nit. "</p>" .
-    "<p>&nbsp;</p>" .
-    "<p>(B)</p>" .
-    "<p align='center'><strong>PROPOSTA</strong></p>" .
-    "<p align='right'>" . $ano . "-" . $pedido['id'] . "</p>" .
-    "<p>&nbsp;</p>" .
-    "<p><strong>Objeto:</strong> " . $objeto . "</p>" .
-    "<p><strong>Data / Período:</strong> " . $periodo . " - conforme cronograma</p>" .
-    "<p><strong>Carga Horária:</strong> " . $ch . "</p>" .
-    "<p><strong>Local(ais):</strong> " . listaLocais($evento['id'], '1') . "</p>" .
-    "<p><strong>Valor:</strong> " . dinheiroParaBr($pedido['valor_total']) . " (" . valorPorExtenso($pedido['valor_total']) . ")</p>" .
-    "<p><strong>Forma de Pagamento:</strong> " . $pedido['forma_pagamento'] . "</p>" .
-    "<p><strong>Justificativa:</strong> " . $pedido['justificativa'] . "</p>" .
-    "<p>&nbsp;</p>" .
-    "<p>&nbsp;</p>" .
-    "<p>___________________________</p>" .
-    "<p>" . $pessoa['nome'] . "</p>" .
-    $label .
-    "<p>&nbsp;</p>" .
-    "<p>&nbsp;</p>" .
-    "<p>(C)</p>" .
-    "<p align='center'><strong>OBSERVAÇÃO</strong></p>" .
-    "<p>As idéias e opiniões expressas durante as apresentações artísticas e culturais não representam a posição da Secretaria Municipal de Cultura, sendo os artistas e seus representantes os únicos e exclusivos responsáveis pelo conteúdo de suas manifestações, ficando a Municipalidade de São Paulo com direito de regresso sobre os mesmos, inclusive em caso de indenização por dano material, moral ou à imagem de terceiros.</p>" .
-    "<p>Os registros das atividades e ações poderão ser utilizados para fins institucionais de divulgação, promoção e difusão do Programa e da Secretaria Municipal de Cultura.</p>" .
-    "<p>&nbsp;</p>" .
-    "<p align='center'><strong>DECLARAÇÕES</strong></p>" .
-    "<p>Declaro que não tenho débitos perante as fazendas públicas, federal, estadual e, em especial perante a Prefeitura do Município de São Paulo.</p>" .
-    "<p>Declaro que estou ciente e de acordo com todas as regras do [INSIRA O TÍTULO DO EDITAL AQUI. Ex: Edital de Concurso Programa de Exposições 2016].</p>" .
-    "<p>Declaro que estou ciente da aplicação das penalidades previstas na cláusula [INSIRA A CLÁUSULA DA PENALIDADE AQUI. Ex: na cláusula 10 do Edital de Concurso Programa de Exposições 2016.].As penalidades serão aplicadas sem prejuízo das demais sanções previstas na legislação que rege a matéria.</p>" .
-    "<p>Declaro, ainda, estar ciente que do valor do serviço serão descontados os impostos cabíveis.</p>" .
-    "<p>Declaro, sob as penas da Lei, que não sou servidor público municipal e que não há, de minha parte, impedimento para contratar com a [INSIRA A UNIDADE AQUI. Ex: Prefeitura do Município de São Paulo/Secretaria Municipal de Cultura/Centro Cultural São Paulo], mediante o pagamento de cachê.</p>" .
-    "<p>Todas as informações precedentes são formadas sob as penas da Lei.</p>" .
-    "<p>&nbsp;</p>" .
-    "<p>Data: ____ / ____ / " . $ano . "</p>" .
-    "<p>&nbsp;</p>" .
-    "<p>___________________________</p>" .
-    "<p>" . $pessoa['nome'] . "</p>" .
-    $label .
-    "<p>&nbsp;</p>" .
-    "<p align='center'><strong>CRONOGRAMA</strong></p>" .
-    "<p>" . $objeto . "</p>" .
-    "<p>&nbsp;</p>";
-
-if ($evento['tipo_evento_id'] == 1) {
-    $cronograma = $con->query("SELECT * FROM ocorrencias WHERE origem_ocorrencia_id = " . $evento['id'] . " AND tipo_ocorrencia_id = 1 AND publicado = 1");
-    while ($aux = mysqli_fetch_array($cronograma)) {
-        $checaTipo = $con->query("SELECT acao_id FROM acao_atracao WHERE atracao_id = " . $aux['atracao_id'])->fetch_array();
-        $tipoAcao = $con->query("SELECT acao FROM acoes WHERE id = " . $checaTipo['acao_id'] . " AND publicado = 1")->fetch_array();
-        $acao = $tipoAcao['acao'];
-
-        $dia = retornaPeriodoNovo($aux['origem_ocorrencia_id'], 'ocorrencias');
-        $hour = exibirHora($aux['horario_inicio']) . "h - " . exibirHora($aux['horario_fim']) . "h";
-        $local = $con->query("SELECT local FROM locais WHERE id = " . $aux['local_id'] . " AND publicado = 1")->fetch_array();
-        $lugar = $local['local'];
-
-        echo "<p><strong>Ação:</strong> " . $acao . "</p>";
-        echo "<p><strong>Data/Período:</strong> " . $dia . "</p>";
-        echo "<p><strong>Horário:</strong> " . $hour . "</p>";
-        echo "<p><strong>Local:</strong> " . $lugar . "</p>";
-        echo "<p>&nbsp;</p>";
-    }
-
-} elseif ($evento['tipo_evento_id'] == 2) {
-    $filmes = $con->query("SELECT id, filme_id FROM filme_eventos WHERE evento_id = " . $evento['id']);
-    foreach ($filmes as $filme){
-        $dadosFilme = $con->query("SELECT duracao, titulo FROM filmes WHERE id = " . $filme['filme_id'] . " AND publicado = 1")->fetch_array();
-        $cronograma = $con->query("SELECT * FROM ocorrencias WHERE publicado = 1 AND tipo_ocorrencia_id = 2 AND origem_ocorrencia_id = " . $evento['id'] . " AND atracao_id = " .$filme['id']);
-        while ($aux = mysqli_fetch_array($cronograma)) {
-
-            $tipoAcao = $con->query("SELECT acao FROM acoes WHERE id = 1")->fetch_array();
-            $acao = $tipoAcao['acao'];
-
-            echo "<p><strong> Título: </strong>" . $dadosFilme['titulo'] . "</p>" .
-                 "<p><strong>Duração: </strong>" . $dadosFilme['duracao'] . " Minuto(s)" . "</p>";
-
-            $dia = retornaPeriodoNovo($aux['origem_ocorrencia_id'], 'ocorrencias');
-            $hour = exibirHora($aux['horario_inicio']) . "h - " . exibirHora($aux['horario_fim']) . "h";
-            $local = $con->query("SELECT local FROM locais WHERE id = " . $aux['local_id'] . " AND publicado = 1")->fetch_array();
-            $lugar = $local['local'];
-
-            echo "<p><strong>Ação:</strong> " . $acao . "</p>";
-            echo "<p><strong>Data/Período:</strong> " . $dia . "</p>";
-            echo "<p><strong>Horário:</strong> " . $hour . "</p>";
-            echo "<p><strong>Local:</strong> " . $lugar . "</p>";
-            echo "<p>&nbsp;</p>";
-
+<p>
+    <strong>Nome:</strong> <?= $pedido->nome ?><br>
+    <strong>Nome Artístico:</strong> <?= $pedido->nome_artistico == null ? "Não cadastrado" : $pedido->nome_artistico ?><br>
+    <?php if ($pedido->passaporte != NULL) {?>
+        <strong>Passaporte:</strong> <?= $pedido->passaporte ?><br>
+    <?php } else { ?>
+        <strong>RG:</strong> <?= $pedido->rg == NULL ? "Não cadastrado" : $pedido->rg ?><br>
+        <strong>CPF:</strong> <?= $pedido->cpf ?><br>
+    <?php } ?>
+    <strong>CCM:</strong> <?= $pedido->ccm ?>
+    <strong>DRT:</strong> <?= $pedido->drt ?>
+    <strong>Endereço:</strong> <?= $pedido->logradouro . ", " . $pedido->numero . " " . $pedido->complemento . " / - " . $pedido->bairro . " - " . $pedido->cidade . " / " . $pedido->uf ?><br>
+    <strong>Telefone(s):</strong> <?= $pedido->telefones['tel_0'] ?? null . " " .$pedido->telefones['tel_1'] ?? null. " ".$pedido->telefones['tel_2'] ?? null ?><br>
+    <strong>E-mail:</strong> <?= $pedido->email ?><br>
+    <strong>Inscrição no INSS ou nº PIS / PASEP:</strong> <?= $pedido->nit ?? null ?>
+</p>
+<hr>
+<table style="width: 100%; border: 0">
+    <tr>
+        <td style="width: 5%">(B)</td>
+        <td style="width: 100%; text-align: center"><strong>PROPOSTA</strong></td>
+    </tr>
+</table>
+<p style="text-align: right"><?=$evento->protocolo?></p>
+<p><strong>Objeto:</strong> <?= $objeto ?></p>
+<p><strong>Data / Período:</strong> <?= $periodo ?>
+<p style="text-align: justify"><strong>Local(ais):</strong> <?= $local ?></p>
+<p><strong>Valor:</strong> <?= "R$ " . (new MainModel)->dinheiroParaBr(($pedido->valor_total)) . " ( " .  (new MainModel)->valorPorExtenso($pedido->valor_total) . " )"?></p>
+<p style="text-align: justify"><strong>Forma de Pagamento:</strong> <?= $pedido->forma_pagamento ?></p>
+<p style="text-align: justify"><strong>Justificativa:</strong> <?= $pedido->justificativa ?></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>___________________________<br>
+    <?= $pedido->nome ?> <br>
+    <?= $pedido->cpf ? "CPF: ".$pedido->cpf : "Passaporte: ".$pedido->passaporte ?>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>(C)</p>
+<p style="text-align: center"><strong>OBSERVAÇÃO</strong></p>
+<p style="text-align: justify">As idéias e opiniões expressas durante as apresentações artísticas e culturais não representam a posição da Secretaria Municipal de Cultura, sendo os artistas e seus representantes os únicos e exclusivos responsáveis pelo conteúdo de suas manifestações, ficando a Municipalidade de São Paulo com direito de regresso sobre os mesmos, inclusive em caso de indenização por dano material, moral ou à imagem de terceiros.</p>
+<p style="text-align: justify">Os registros das atividades e ações poderão ser utilizados para fins institucionais de divulgação, promoção e difusão do Programa e da Secretaria Municipal de Cultura.</p>
+<p>&nbsp;</p>
+<p style="text-align: center"><strong>DECLARAÇÕES</strong></p>
+<p style="text-align: justify">Declaro que não tenho débitos perante as fazendas públicas, federal, estadual e, em especial perante a Prefeitura do Município de São Paulo.</p>
+<p style="text-align: justify">Declaro que estou ciente e de acordo com todas as regras do [INSIRA O TÍTULO DO EDITAL AQUI. Ex: Edital de Concurso Programa de Exposições 2016].</p>
+<p style="text-align: justify">Declaro que estou ciente da aplicação das penalidades previstas na cláusula [INSIRA A CLÁUSULA DA PENALIDADE AQUI. Ex: na cláusula 10 do Edital de Concurso Programa de Exposições 2016.].As penalidades serão aplicadas sem prejuízo das demais sanções previstas na legislação que rege a matéria.</p>
+<p style="text-align: justify">Declaro, ainda, estar ciente que do valor do serviço serão descontados os impostos cabíveis.</p>
+<p style="text-align: justify">Declaro, sob as penas da Lei, que não sou servidor público municipal e que não há, de minha parte, impedimento para contratar com a [INSIRA A UNIDADE AQUI. Ex: Prefeitura do Município de São Paulo/Secretaria Municipal de Cultura/Centro Cultural São Paulo], mediante o pagamento de cachê.</p>
+<p style="text-align: justify">Todas as informações precedentes são formadas sob as penas da Lei.</p>
+<p>&nbsp;</p>
+<p>Data: ____ / ____ / <?=$ano?>.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>___________________________<br>
+    <?= $pedido->nome ?> <br>
+    <?= $pedido->cpf ? "CPF: ".$pedido->cpf : "Passaporte: ".$pedido->passaporte ?>
+</p>
+<p>&nbsp;</p>
+<p style="text-align: center"><strong>CRONOGRAMA</strong></p>
+<p>&nbsp;</p>
+<?php
+if ($tipo == 1){//atracao
+    $atracoes = $atracaoObj->listaAtracao($idEvento);
+    foreach ($atracoes as $atracao){
+        $ocorrencias = $ocorrenciaObj->recuperaOcorrencia($idEvento,$tipo,$atracao->id);
+        $excecao = $ocorrenciaObj->recuperaOcorrenciaExcecao($atracao->id);
+        echo "<p><strong>$atracao->nome_atracao</strong></p>";
+        foreach ($ocorrencias as $ocorrencia) {
+            echo "<p>
+                <strong>Ação:</strong> {$atracaoObj->recuperaAcaoAtracao($ocorrencia->atracao_id)} <br>
+                <strong>Data/Período:</strong> Data: ".date('d/m/Y',strtotime($ocorrencia->data_inicio));
+            if ($ocorrencia->data_fim != "0000-00-00" ){
+                echo " à ".date('d/m/Y', strtotime($ocorrencia->data_fim));
+            }
+            echo " das ".substr($ocorrencia->horario_inicio,0,-3)." às ".substr($ocorrencia->horario_fim,0,-3)." (".$ocorrenciaObj->diadasemanaocorrencia($ocorrencia->id).")<br>
+                <strong>Local: </strong> ($ocorrencia->sigla) {$ocorrencia->local} - Localizado em {$ocorrencia->logradouro}, $ocorrencia->numero $ocorrencia->complemento - $ocorrencia->bairro - $ocorrencia->cidade / $ocorrencia->uf CEP: $ocorrencia->cep<br>
+                <strong>Subprefeitura:</strong> $ocorrencia->subprefeitura<br>";
+            if($ocorrencia->libras == 1 || $ocorrencia->audiodescricao == 1) {
+                if ($ocorrencia->libras == 1) {
+                    $libras = "Libras";
+                } else {
+                    $libras = "";
+                }
+                if ($ocorrencia->audiodescricao == 1) {
+                    $audio = "Audiodescrição";
+                } else {
+                    $audio = "";
+                }
+                echo "<strong>Especial:</strong> " . $libras . " " . $audio."<br>";
+            }
+            echo "
+                <strong>Retirada de ingresso:</strong> $ocorrencia->retirada_ingresso
+                <strong>Valor:</strong> R$ ". (new MainModel)->dinheiroParaBr($ocorrencia->valor_ingresso)."<br>";
+            if ($ocorrencia->observacao) {
+                echo "<strong>Observação:</strong> $ocorrencia->observacao";
+            }
         }
+        if ($excecao){
+            echo "<p>Dia(s): $excecao</p>";
+        }
+        echo "</p><br>";
     }
 }
-echo
-    "<p>&nbsp;</p>" .
-    "<p>___________________________</p>" .
-    "<p>" . $pessoa['nome'] . "</p>" .
-    $label .
-    "<p>&nbsp;</p>";
-
-echo "</body>";
-echo "</html>";
+elseif ($tipo == 2) {//filme
+    $filmes = $filmeObj->listaFilme($id);
+    foreach ($filmes as $filme) {
+        $ocorrencias = $ocorrenciaObj->recuperaOcorrencia($idEvento,$tipo,$filme->id);
+        $excecao = $ocorrenciaObj->recuperaOcorrenciaExcecao($filme->id);
+        $detalheFilme = $filmeObj->recuperaDetalheFilme($filme->id);
+        echo "<p>
+            <strong>Título:</strong> $detalheFilme->titulo<br>
+            <strong>Gênero:</strong> $detalheFilme->genero<br>
+            <strong>Duração:</strong> $detalheFilme->duracao<br>
+        ";
+        foreach ($ocorrencias as $ocorrencia) {
+            echo "
+            <strong>Data/Período:</strong> Data: ".date('d/m/Y',strtotime($ocorrencia->data_inicio));
+            if ($ocorrencia->data_fim != "0000-00-00" ){
+                echo " à ".date('d/m/Y', strtotime($ocorrencia->data_fim));
+            }
+            echo " das ".substr($ocorrencia->horario_inicio,0,-3)." às ".substr($ocorrencia->horario_fim,0,-3)." (".$ocorrenciaObj->diadasemanaocorrencia($ocorrencia->id).")<br>
+                <strong>Local: </strong> ($ocorrencia->sigla) $ocorrencia->local<br>
+                <strong>Subprefeitura:</strong> $ocorrencia->subprefeitura<br>";
+            echo "
+                <strong>Retirada de ingresso:</strong> $ocorrencia->retirada_ingresso
+                <strong>Valor:</strong> R$ ". (new MainModel)->dinheiroParaBr($ocorrencia->valor_ingresso)."<br>";
+            if ($ocorrencia->observacao) {
+                echo "<strong>Observação:</strong> $ocorrencia->observacao";
+            }
+        }
+        if ($excecao){
+            echo "<p>Dia(s): $excecao</p>";
+        }
+        echo "</p><br>";
+    }
+}
 ?>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>___________________________<br>
+    <?= $pedido->nome ?> <br>
+    <?= $pedido->cpf ? "CPF: ".$pedido->cpf : "Passaporte: ".$pedido->passaporte ?>
+</p>
+</body>
+</html>
