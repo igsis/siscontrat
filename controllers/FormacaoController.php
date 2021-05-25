@@ -959,7 +959,7 @@ class FormacaoController extends FormacaoModel
                                                         LEFT JOIN linguagens AS l ON fc.linguagem_id = l.id
                                                         LEFT JOIN formacao_status AS s ON fc.form_status_id = s.id
                                                         LEFT JOIN pf_enderecos AS pe ON pf.id = pe.pessoa_fisica_id
-                                                    WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 AND fc.ano = {$ano} {$programa}")->fetchAll(PDO::FETCH_OBJ);
+                                                    WHERE fc.form_status_id != 5 AND p.publicado = 1 AND p.origem_tipo_id = 2 AND p.status_pedido_id = 2 AND  fc.ano = {$ano} {$programa} group by pf.id")->fetchAll(PDO::FETCH_OBJ);
         else:
             $pedido_id = MainModel::decryption($pedido_id);
             return DbModel::consultaSimples("SELECT p.id, p.origem_id, p.valor_total, p.data_kit_pagamento, p.numero_processo, p.numero_parcelas, p.pessoa_fisica_id, p.valor_total, p.numero_processo_mae, 
