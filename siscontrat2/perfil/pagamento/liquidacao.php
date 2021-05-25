@@ -1,9 +1,12 @@
 <?php
+require_once "../extras/MainModel.php";
+$mainObj = new MainModel();
+
 $con = bancoMysqli();
 
 $idPedido = $_POST['idPedido'];
 
-$pedido = $con->query("SELECT p.numero_processo, e.protocolo FROM pedidos AS p INNER JOIN eventos AS e ON e.id = p.origem_id WHERE p.origem_tipo_id = 1 AND p.id = $idPedido")->fetch_array();
+$pedido = $con->query("SELECT p.numero_processo, e.protocolo, e.id as idEvento FROM pedidos AS p INNER JOIN eventos AS e ON e.id = p.origem_id WHERE p.origem_tipo_id = 1 AND p.id = $idPedido")->fetch_array();
 
 if(isset($_POST['cadastrar']) || isset($_POST['editar'])){
     $extrato_liquidacao = addslashes($_POST['extrato_liquidacao']);
@@ -45,16 +48,9 @@ if($liquidacao == NULL){
         <div class="box">
             <div class="box-header">
                 <h2 class="box-title">Cadastro de Nota de Liquidação</h2>
-                <?php
-                if ($botao == "editar"){
-                    $link = "http://".$_SERVER['SERVER_NAME']."/siscontrat2/pdf/recibo_liquidacao.php";
-                    ?>
-                    <form action="<?= $link ?>" method="post" target="_blank" role="form">
-                        <button type="submit" class="btn btn-primary pull-right" name="idPedido" value="<?= $idPedido ?>">Imprimir Recibo</button>
-                    </form>
-                <?php
-                }
-                ?>
+                <?php if ($botao == "editar"){?>
+                    <a href="<?=PDFURL?>recibo_liquidacao.php?id=<?=$mainObj->encryption($pedido['idEvento'])?>" class="btn btn-primary pull-right" target="_blank">Imprimir Recibo</a>
+                <?php } ?>
             </div>
             <div class="row" align="center">
                 <?= $mensagem ?? NULL; ?>
