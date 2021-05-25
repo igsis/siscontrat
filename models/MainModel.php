@@ -44,8 +44,12 @@ class MainModel extends DbModel
         return $output;
     }
 
-    //checa se o campo do parâmetro possuí algum dado, caso não possua, ele retorna "Não cadastrado"
-    public function checaCampo($campo)
+    /**
+     * <p>checa se o campo do parâmetro possuí algum dado, caso não possua, ele retorna "Não cadastrado"
+     * @param $campo
+     * @return string
+     */
+    public function checaCampo($campo):string
     {
         if ($campo == NULL || $campo == '') {
             return "Não cadastrado";
