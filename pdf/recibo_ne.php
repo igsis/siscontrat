@@ -126,6 +126,8 @@ if ($pedido->pessoa_tipo_id == 2) {
         $pdf->Cell(50, $l, utf8_decode($pedido->rep2['cpf']), 0, 1, 'L');
     }
 } else{
+    $pdf->Ln(10);
+
     $pdf->SetX($x);
     $pdf->SetFont('Arial','B', 11);
     $pdf->Cell(165,$l,utf8_decode($pedido->nome),'T',1,'L');

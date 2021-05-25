@@ -40,7 +40,7 @@ if (isset($_POST['edita'])) {
 }
 
 $empenho = recuperaDados('pagamentos', 'pedido_id', $idPedido);
-$pedido = $con->query("SELECT e.protocolo, p.numero_processo, p.origem_id FROM pedidos AS p INNER JOIN eventos AS e ON p.origem_id = e.id WHERE p.id = $idPedido")->fetch_array();
+$pedido = $con->query("SELECT e.protocolo, p.numero_processo, e.id as idEvento FROM pedidos AS p INNER JOIN eventos AS e ON p.origem_id = e.id WHERE p.id = $idPedido")->fetch_array();
 
 ?>
 <div class="content-wrapper">
@@ -122,7 +122,7 @@ $pedido = $con->query("SELECT e.protocolo, p.numero_processo, p.origem_id FROM p
                 <hr/>
                 <div class="row" style="text-align:center">
                     <div class="col-md-12">
-                        <a href="<?=PDFURL?>recibo_ne.php?id=<?=$pedido['origem_id']?>" class="btn btn-success" target="_blank">Gerar Recibo</a>
+                        <a href="<?=PDFURL?>recibo_ne.php?id=<?=$mainObj->encryption($pedido['idEvento'])?>" class="btn btn-success" target="_blank">Gerar Recibo</a>
                     </div>
                 </div>
 
