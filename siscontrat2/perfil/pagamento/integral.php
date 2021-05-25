@@ -1,4 +1,7 @@
 <?php
+require_once "../extras/MainModel.php";
+$mainObj = new MainModel();
+
 $con = bancoMysqli();
 
 $idPedido = $_POST['idPedido'];
@@ -54,7 +57,7 @@ if(isset($_POST['concluir'])){
     }
 }
 
-$sql = "SELECT e.id, p.id AS idPedido, e.protocolo, p.numero_processo, p.pessoa_tipo_id, p.pessoa_fisica_id, p.pessoa_juridica_id, e.nome_evento, p.forma_pagamento, p.valor_total, ps.status, u.nome_completo, p.data_kit_pagamento, uf.nome_completo AS fiscal, us.nome_completo AS suplente, p.operador_pagamento_id
+$sql = "SELECT e.id, p.id AS idPedido, e.id AS idEvento, e.tipo_evento_id, e.protocolo, p.numero_processo, p.pessoa_tipo_id, p.pessoa_fisica_id, p.pessoa_juridica_id, e.nome_evento, p.forma_pagamento, p.valor_total, ps.status, u.nome_completo, p.data_kit_pagamento, uf.nome_completo AS fiscal, us.nome_completo AS suplente, p.operador_pagamento_id
     FROM eventos e 
     INNER JOIN pedidos p on e.id = p.origem_id 
     INNER JOIN pedido_status ps on p.status_pedido_id = ps.id
@@ -190,8 +193,9 @@ if($testaAcesso->num_rows == 0){
         <?php
         if ($botao){
             $server = "http://" . $_SERVER['SERVER_NAME'] . "/siscontrat2/pdf/";
+            $tipoEvento = $pedido['tipo_evento_id'];
+            $link_pedido_integral = PDFURL."pedido_pagamento_integral_word.php?tipo=$tipoEvento&id=".(new MainModel)->encryption($pedido['idEvento']);
             if ($pedido['pessoa_tipo_id'] == 1 && $pedido['pessoa_tipo_id'] != NULL) {
-                $link1 = $server . "pagamento_integral_pf.php";
                 $link2 = $server . "pagamento_parcelado_pf.php";
                 $link3 = $server . "recibo_pagamento.php";
                 $link4 = $server . "ateste_documentacao.php";
@@ -238,7 +242,6 @@ if($testaAcesso->num_rows == 0){
                 </div>
                 <?php
             } else if($pedido['pessoa_tipo_id'] == 2 && $pedido['pessoa_tipo_id'] != NULL){
-                $link11 = $server . "pagamento_integral_pj.php";
                 $link12 = $server . "recibo_pagamento.php";
                 $link13 = $server . "ateste_documentacao.php";
                 $link14 = $server . "confirmacao_servico.php";
@@ -256,9 +259,7 @@ if($testaAcesso->num_rows == 0){
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <form action="<?= $link11 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" style="width:240px" name="idPedido" value="<?= $idPedido ?>">Pedido Integral</button>
-                                </form>
+                                <a href="<?= $link_pedido_integral ?>" class="btn btn-primary btn-block" style="width:240px" target="_blank">Pedido Integral</a>
                             </div>
                             <div class="col-md-3">
                                 <form action="<?= $link12 ?>" method="post" target="_blank" role="form">
