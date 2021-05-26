@@ -108,7 +108,7 @@ else{
         <i class="fa fa-copy"></i>
     </button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="http://sei.prefeitura.sp.gov.br" target="_blank">
+    <a href="https://sei.prefeitura.sp.gov.br" target="_blank">
         <button class="btn btn-primary">CLIQUE AQUI PARA ACESSAR O <img src="../views/dist/img/logo_sei.jpg" alt="logo_sei"></button>
     </a>
 </div>

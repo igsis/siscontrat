@@ -263,6 +263,22 @@ class PedidoController extends PedidoModel
     }
 
     /**
+     * <p>Retorna o valor investido por região</p>
+     * @param int|string $idEvento
+     * @param int $zona_id <p>1- Norte | 2 - Sul | 3 - Leste | 4 - Oeste | 5 - Centro
+     * @return mixed
+     */
+    public function recuperaValorRegiao($idEvento, int $zona_id)
+    {
+        $idEvento = MainModel::decryption($idEvento);
+        return DbModel::consultaSimples("SELECT SUM(ve.valor) AS valor
+            FROM ocorrencias AS o
+            INNER JOIN locais l on o.local_id = l.id
+            LEFT JOIN valor_equipamentos ve on l.id = ve.local_id
+            WHERE o.publicado = 1 AND l.publicado = 1 AND o.origem_ocorrencia_id = '$idEvento' AND l.zona_id = '$zona_id'")->fetchColumn();
+    }
+
+    /**
      * @param $idPedido
      * @return object
      */
