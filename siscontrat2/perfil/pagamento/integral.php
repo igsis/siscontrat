@@ -195,9 +195,9 @@ if($testaAcesso->num_rows == 0){
             $server = "http://" . $_SERVER['SERVER_NAME'] . "/siscontrat2/pdf/";
             $tipoEvento = $pedido['tipo_evento_id'];
             $link_pedido_integral = PDFURL."pedido_pagamento_integral_word.php?tipo=$tipoEvento&id=".(new MainModel)->encryption($pedido['idEvento']);
+            $link_recibo_pagamento = PDFURL."recibo_pagamento.php?tipo=$tipoEvento&id=".(new MainModel)->encryption($pedido['idEvento']);
             if ($pedido['pessoa_tipo_id'] == 1 && $pedido['pessoa_tipo_id'] != NULL) {
                 $link2 = $server . "pagamento_parcelado_pf.php";
-                $link3 = $server . "recibo_pagamento.php";
                 $link4 = $server . "ateste_documentacao.php";
                 $link5 = $server . "confirmacao_servico.php";
                 ?>
@@ -208,7 +208,7 @@ if($testaAcesso->num_rows == 0){
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-2">
-                                <form action="<?= $link1 ?>" method="post" target="_blank" role="form">
+                                <form action="<?= $link_pedido_integral ?>" method="post" target="_blank" role="form">
                                     <button type="submit" class="btn btn-primary btn-block" style="width:175px" name="idPedido" value="<?= $idPedido ?>">Pedido Integral
                                     </button>
                                 </form>
@@ -220,7 +220,7 @@ if($testaAcesso->num_rows == 0){
                                 </form>
                             </div>
                             <div class="col-md-2">
-                                <form action="<?= $link3 ?>" method="post" target="_blank" role="form">
+                                <form action="<?= $link_recibo_pagamento ?>" method="post" target="_blank" role="form">
                                     <button type="submit" class="btn btn-primary btn-block" style="width:175px" name="idPedido" value="<?= $idPedido ?>">Recibo Integral
                                     </button>
                                 </form>
@@ -242,7 +242,6 @@ if($testaAcesso->num_rows == 0){
                 </div>
                 <?php
             } else if($pedido['pessoa_tipo_id'] == 2 && $pedido['pessoa_tipo_id'] != NULL){
-                $link12 = $server . "recibo_pagamento.php";
                 $link13 = $server . "ateste_documentacao.php";
                 $link14 = $server . "confirmacao_servico.php";
                 $link15 = $server . "minuta.php";
@@ -262,7 +261,7 @@ if($testaAcesso->num_rows == 0){
                                 <a href="<?= $link_pedido_integral ?>" class="btn btn-primary btn-block" style="width:240px" target="_blank">Pedido Integral</a>
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link12 ?>" method="post" target="_blank" role="form">
+                                <form action="<?= $link_recibo_pagamento ?>" method="post" target="_blank" role="form">
                                     <button type="submit" class="btn btn-primary btn-block" style="width:240px" name="idPedido" value="<?= $idPedido ?>">Recibo pagamento</button>
                                 </form>
                             </div>
