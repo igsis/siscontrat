@@ -198,6 +198,7 @@ if($testaAcesso->num_rows == 0){
             $link_pedido_integral = PDFURL."pedido_pagamento_integral_word.php?tipo=$tipoEvento&id=".$idEvEnc;
             $link_recibo_pagamento = PDFURL."recibo_pagamento.php?tipo=$tipoEvento&id=".$idEvEnc;
             $link_ateste_documentacao = PDFURL."ateste_documentacao.php?&id=".$idEvEnc;
+            $link_ateste_confirmacao_servico = PDFURL."ateste_confirmacao_servico.php?&id=".$idEvEnc;
             if ($pedido['pessoa_tipo_id'] == 1 && $pedido['pessoa_tipo_id'] != NULL) {
                 $link2 = $server . "pagamento_parcelado_pf.php";
                 $link4 = $server . "ateste_documentacao.php";
@@ -210,25 +211,23 @@ if($testaAcesso->num_rows == 0){
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="<?= $link_pedido_integral ?>" class="btn btn-primary btn-block" style="width:240px" target="_blank">Pedido Integral</a>
+                                <a href="<?= $link_pedido_integral ?>" class="btn btn-primary btn-block"  target="_blank">Pedido Integral</a>
                             </div>
                             <div class="col-md-2">
-                                <form action="<?= $link2 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" style="width:175px" name="idPedido" value="<?= $idPedido ?>">Pedido parcelado
+                                <a href="<?= $link_pedido_parcelado ?>" class="btn btn-primary btn-block"  target="_blank">Pedido Parcelado</a>
+                                <!--<form action="<?/*= $link2 */?>" method="post" target="_blank" role="form">
+                                    <button type="submit" class="btn btn-primary btn-block" style="width:175px" name="idPedido" value="<?/*= $idPedido */?>">Pedido parcelado
                                     </button>
-                                </form>
+                                </form>-->
                             </div>
                             <div class="col-md-2">
-                                <a href="<?= $link_recibo_pagamento ?>" class="btn btn-primary btn-block" style="width:240px" target="_blank">Recibo Pagamento</a>
+                                <a href="<?= $link_recibo_pagamento ?>" class="btn btn-primary btn-block"  target="_blank">Recibo Pagamento</a>
                             </div>
                             <div class="col-md-3">
-                                <a href="<?= $link_ateste_documentacao ?>" class="btn btn-primary btn-block" style="width:240px" target="_blank">Ateste (Documentação)</a>
+                                <a href="<?= $link_ateste_documentacao ?>" class="btn btn-primary btn-block"  target="_blank">Ateste (Documentação)</a>
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link5 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary pull-right btn-block" name="idPedido" style="width:253px" value="<?= $idPedido ?>">Confirmação de serviço
-                                    </button>
-                                </form>
+                                <a href="<?= $link_ateste_confirmacao_servico ?>" class="btn btn-primary btn-block"  target="_blank">Confirmação de serviço</a>
                             </div>
                         </div>
                     </div>
@@ -253,16 +252,13 @@ if($testaAcesso->num_rows == 0){
                                 <a href="<?= $link_pedido_integral ?>" class="btn btn-primary btn-block" style="width:240px" target="_blank">Pedido Integral</a>
                             </div>
                             <div class="col-md-3">
-                                <a href="<?=  $link_recibo_pagamento ?>" class="btn btn-primary btn-block" style="width:240px" target="_blank">Recibo Pagamento</a>
+                                <a href="<?=  $link_recibo_pagamento ?>" class="btn btn-primary pull-right btn-block" style="width:240px" target="_blank">Recibo Pagamento</a>
                             </div>
                             <div class="col-md-3">
                                 <a href="<?= $link_ateste_documentacao ?>" class="btn btn-primary btn-block" style="width:240px" target="_blank">Ateste (Documentação)</a>
                             </div>
                             <div class="col-md-3">
-                                <a href="<?=  $link_recibo_pagamento ?>" class="btn btn-primary btn-block" style="width:240px" target="_blank">Confirmação de serviço</a>
-                                <form action="<?= $link14 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" style="width:240px" value="<?= $idPedido ?>">Confirmação de serviço</button>
-                                </form>
+                                <a href="<?= $link_ateste_confirmacao_servico ?>" class="btn btn-primary pull-right btn-block" style="width:240px" target="_blank">Confirmação de serviço</a>
                             </div>
                         </div>
 
