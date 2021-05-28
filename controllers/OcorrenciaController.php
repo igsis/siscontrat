@@ -24,7 +24,7 @@ class OcorrenciaController extends MainModel
             $filtro = "origem_ocorrencia_id = $id";
         }
         return DbModel::consultaSimples("
-            SELECT o.*, i.sigla,l.local,e.espaco,s.subprefeitura,ri.retirada_ingresso 
+            SELECT o.*, i.sigla, l.local, l.logradouro, l.numero, l.complemento, l.bairro, l.cidade, l.uf, l.cep, e.espaco, s.subprefeitura, ri.retirada_ingresso 
             FROM ocorrencias o
             LEFT JOIN instituicoes i on o.instituicao_id = i.id
             LEFT JOIN locais l on o.local_id = l.id

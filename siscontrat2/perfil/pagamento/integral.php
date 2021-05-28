@@ -1,4 +1,7 @@
 <?php
+require_once "../extras/MainModel.php";
+$mainObj = new MainModel();
+
 $con = bancoMysqli();
 
 $idPedido = $_POST['idPedido'];
@@ -54,7 +57,7 @@ if(isset($_POST['concluir'])){
     }
 }
 
-$sql = "SELECT e.id, p.id AS idPedido, e.protocolo, p.numero_processo, p.pessoa_tipo_id, p.pessoa_fisica_id, p.pessoa_juridica_id, e.nome_evento, p.forma_pagamento, p.valor_total, ps.status, u.nome_completo, p.data_kit_pagamento, uf.nome_completo AS fiscal, us.nome_completo AS suplente, p.operador_pagamento_id
+$sql = "SELECT e.id, p.id AS idPedido, e.id AS idEvento, e.tipo_evento_id, e.protocolo, p.numero_processo, p.pessoa_tipo_id, p.pessoa_fisica_id, p.pessoa_juridica_id, e.nome_evento, p.forma_pagamento, p.valor_total, ps.status, u.nome_completo, p.data_kit_pagamento, uf.nome_completo AS fiscal, us.nome_completo AS suplente, p.operador_pagamento_id
     FROM eventos e 
     INNER JOIN pedidos p on e.id = p.origem_id 
     INNER JOIN pedido_status ps on p.status_pedido_id = ps.id
@@ -84,6 +87,44 @@ if($testaAcesso->num_rows == 0){
 }else{
     $acessoArray = mysqli_fetch_array($testaAcesso);
     $acesso = $acessoArray['nivel_acesso'];
+}
+
+$pedidoObj = (object)$pedido;
+function box_bottom($pedidoObj,$titulo,$link){
+    $mainObj = new MainModel();
+    $tipo_evento = $mainObj->consultaSimples("SELECT tipo_evento_id FROM eventos WHERE id = '$pedidoObj->idEvento'")->fetchColumn();
+
+    if ($tipo_evento == 1){ //atracao
+        $atracoes = $mainObj->consultaSimples("SELECT id,nome_atracao FROM atracoes WHERE evento_id = {$pedidoObj->idEvento} AND publicado = 1 ")->fetchAll(PDO::FETCH_ASSOC);
+        $numAtracoes = count($atracoes);
+
+        if ($numAtracoes > 1){
+            $inicio_box = "
+                <div class='box box-primary box-solid collapsed-box'>
+                    <div class='box-header with-border' data-widget='collapse'>$titulo
+                        <div class='pull-right'><i class='fa fa-plus'></i></div>
+                    </div>
+                    <div class='box-body' style='display: none;'>
+                        <ul class='nav nav-stacked'>";
+            $lista="";
+            foreach ($atracoes as $atracao){
+                $lista .= "
+                <li>
+                    <a target='_blank' href='".PDFURL.$link.$mainObj->encryption($atracao['id'])."&tipo=".$tipo_evento."'> 
+                        Atração: ".mb_strimwidth($atracao['nome_atracao'],0,50,"...")."
+                    </a>
+                </li>";
+            }
+            $fim_box = "</ul></div></div>";
+
+            return $inicio_box.$lista.$fim_box;
+        } else{
+            return "<a href='".PDFURL.$link.$mainObj->encryption($atracoes[0]['id'])."&tipo=".$tipo_evento."' target='_blank' class='btn btn-primary btn-block'>$titulo</a>";
+        }
+    }
+    else {
+        return "<a href='".PDFURL.$link.$mainObj->encryption($pedidoObj->idEvento)."&tipo=".$tipo_evento."' target='_blank' class='btn btn-primary btn-block'>$titulo</a><br/>";
+    }
 }
 
 ?>
@@ -190,12 +231,14 @@ if($testaAcesso->num_rows == 0){
         <?php
         if ($botao){
             $server = "http://" . $_SERVER['SERVER_NAME'] . "/siscontrat2/pdf/";
+            $tipoEvento = $pedido['tipo_evento_id'];
+            $idEvEnc = (new MainModel)->encryption($pedido['idEvento']);
+            $link_pedido_integral = PDFURL."pedido_pagamento_integral_word.php?tipo=$tipoEvento&id=".$idEvEnc;
+            $link_recibo_pagamento = PDFURL."recibo_pagamento.php?tipo=$tipoEvento&id=".$idEvEnc;
+            $link_ateste_documentacao = PDFURL."ateste_documentacao.php?&id=".$idEvEnc;
+            $link_ateste_confirmacao_servico = PDFURL."ateste_confirmacao_servico.php?&id=".$idEvEnc;
             if ($pedido['pessoa_tipo_id'] == 1 && $pedido['pessoa_tipo_id'] != NULL) {
-                $link1 = $server . "pagamento_integral_pf.php";
                 $link2 = $server . "pagamento_parcelado_pf.php";
-                $link3 = $server . "recibo_pagamento.php";
-                $link4 = $server . "ateste_documentacao.php";
-                $link5 = $server . "confirmacao_servico.php";
                 ?>
                 <div class="box">
                     <div class="box-header">
@@ -204,45 +247,30 @@ if($testaAcesso->num_rows == 0){
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-2">
-                                <form action="<?= $link1 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" style="width:175px" name="idPedido" value="<?= $idPedido ?>">Pedido Integral
-                                    </button>
-                                </form>
+                                <a href="<?= $link_pedido_integral ?>" class="btn btn-primary btn-block"  target="_blank">Pedido Integral</a>
                             </div>
                             <div class="col-md-2">
-                                <form action="<?= $link2 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" style="width:175px" name="idPedido" value="<?= $idPedido ?>">Pedido parcelado
+                                <a href="<?= $link_pedido_parcelado ?>" class="btn btn-primary btn-block"  target="_blank">Pedido Parcelado</a>
+                                <!--<form action="<?/*= $link2 */?>" method="post" target="_blank" role="form">
+                                    <button type="submit" class="btn btn-primary btn-block" style="width:175px" name="idPedido" value="<?/*= $idPedido */?>">Pedido parcelado
                                     </button>
-                                </form>
+                                </form>-->
                             </div>
                             <div class="col-md-2">
-                                <form action="<?= $link3 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" style="width:175px" name="idPedido" value="<?= $idPedido ?>">Recibo Integral
-                                    </button>
-                                </form>
+                                <a href="<?= $link_recibo_pagamento ?>" class="btn btn-primary btn-block"  target="_blank">Recibo Pagamento</a>
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link4 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary pull-left btn-block" style="width:250px" name="idPedido" value="<?= $idPedido ?>">Ateste (Documentação)
-                                    </button>
-                                </form>
+                                <a href="<?= $link_ateste_documentacao ?>" class="btn btn-primary btn-block"  target="_blank">Ateste (Documentação)</a>
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link5 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary pull-right btn-block" name="idPedido" style="width:253px" value="<?= $idPedido ?>">Confirmação de serviço
-                                    </button>
-                                </form>
+                                <a href="<?= $link_ateste_confirmacao_servico ?>" class="btn btn-primary btn-block"  target="_blank">Confirmação de serviço</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <?php
             } else if($pedido['pessoa_tipo_id'] == 2 && $pedido['pessoa_tipo_id'] != NULL){
-                $link11 = $server . "pagamento_integral_pj.php";
-                $link12 = $server . "recibo_pagamento.php";
-                $link13 = $server . "ateste_documentacao.php";
-                $link14 = $server . "confirmacao_servico.php";
-                $link15 = $server . "minuta.php";
+                $link_minuta_acima_176k = PDFURL."minuta_acima_176k.php?&id=".$idEvEnc;
                 $link16 = $server . "emissao_nf.php";
                 $link17 = $server . "declaracao_simples.php";
                 $link18 = $server . "declaracao_semFinsLucrativos.php";
@@ -256,24 +284,16 @@ if($testaAcesso->num_rows == 0){
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <form action="<?= $link11 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" style="width:240px" name="idPedido" value="<?= $idPedido ?>">Pedido Integral</button>
-                                </form>
+                                <a href="<?= $link_pedido_integral ?>" class="btn btn-primary btn-block" target="_blank">Pedido Integral</a>
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link12 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" style="width:240px" name="idPedido" value="<?= $idPedido ?>">Recibo pagamento</button>
-                                </form>
+                                <a href="<?=  $link_recibo_pagamento ?>" class="btn btn-primary btn-block" target="_blank">Recibo Pagamento</a>
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link13 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" style="width:240px" value="<?= $idPedido ?>">Ateste (Documentação)</button>
-                                </form>
+                                <a href="<?= $link_ateste_documentacao ?>" class="btn btn-primary btn-block" target="_blank">Ateste (Documentação)</a>
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link14 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" style="width:240px" value="<?= $idPedido ?>">Confirmação de serviço</button>
-                                </form>
+                                <a href="<?= $link_ateste_confirmacao_servico ?>" class="btn btn-primary btn-block" target="_blank">Confirmação de serviço</a>
                             </div>
                         </div>
 
@@ -281,23 +301,24 @@ if($testaAcesso->num_rows == 0){
 
                         <div class="row">
                             <div class="col-md-3">
-                                <form action="<?= $link15 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" style="width:240px" name="idPedido" value="<?= $idPedido ?>">Minuta acima de R$ 176 mil</button>
-                                </form>
+                                <?= box_bottom($pedidoObj,"Minuta acima de R$ 176 mil","minuta_acima_176k.php?&id="); ?>
+                                <!--<form action="<?/*= $link_minuta_acima_176k */?>" method="post" target="_blank" role="form">
+                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="<?/*= $idPedido */?>">Minuta acima de R$ 176 mil</button>
+                                </form>-->
                             </div>
                             <div class="col-md-3">
                                 <form action="<?= $link16 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" style="width:240px" value="<?= $idPedido ?>">Instruções para emissão de NF</button>
+                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="<?= $idPedido ?>">Instruções para emissão de NF</button>
                                 </form>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <form action="<?= $link17 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" style="width:230px" value="<?= $idPedido ?>">Declaração Simples</button>
+                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="<?= $idPedido ?>">Declaração Simples</button>
                                 </form>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <form action="<?= $link18 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block pull-right" name="idPedido" style="width:81%; font-size:95%" value="<?= $idPedido ?>">Declaração de associação sem fins lucrativos</button>
+                                    <button type="submit" class="btn btn-primary btn-block pull-right" name="idPedido" value="<?= $idPedido ?>">Declaração de assoc. s/ fins lucrativos</button>
                                 </form>
                             </div>
                         </div>
@@ -307,24 +328,24 @@ if($testaAcesso->num_rows == 0){
                         <div class="row">
                             <div class="col-md-3">
                                 <form action="<?= $link19 ?>?modelo=empresas" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" style="width:240px" value="<?= $idPedido ?>">Email Empresas</button>
+                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="<?= $idPedido ?>">Email Empresas</button>
                                 </form>
                             </div>
                             <div class="col-md-3">
                                 <form action="<?= $link19 ?>?modelo=cooperativas" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" style="width:240px" value="<?= $idPedido ?>">Email Cooperativas
+                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="<?= $idPedido ?>">Email Cooperativas
                                     </button>
                                 </form>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <form action="<?= $link19 ?>?modelo=associacoes" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" style="width:240px" value="<?= $idPedido ?>">Email Associações e institutos
+                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="<?= $idPedido ?>">Email Associações e institutos
                                     </button>
                                 </form>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <form action="<?= $link19 ?>?modelo=''" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block pull-right" name="idPedido" style="width:78%; font-size:95%" value="<?= $idPedido ?>">Email Empresas com Minuta de Contrato
+                                    <button type="submit" class="btn btn-primary btn-block pull-right" name="idPedido" value="<?= $idPedido ?>">Email Empresas com Minuta de Contrato
                                     </button>
                                 </form>
                             </div>

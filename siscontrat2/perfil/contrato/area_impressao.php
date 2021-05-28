@@ -44,11 +44,6 @@ function box_bottom($pedido,$titulo,$link){
     }
 }
 
-/*
-$link_exclusividade_pf = $http . "rlt_exclusividade_pf.php";
-$link_exclusividade_pj = $http . "rlt_exclusividade_pj.php";
-$link_reserva_padrao = $http."rlt_reserva_padrao.php";
-*/
 
 ?>
 <div class="content-wrapper">
@@ -133,12 +128,15 @@ $link_reserva_padrao = $http."rlt_reserva_padrao.php";
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <form action="<?= $link_exclusividade ?>" target="_blank" method="post">
-                                    <input type="hidden" name="idPedido" value="<?= $idPedido ?>">
-                                    <button type="submit" class="btn btn-primary btn-block">
-                                        Exclusividade
-                                    </button>
-                                </form>
+                                <?php
+                                if ($pedido->pessoa_tipo_id == 1) {
+                                    echo box_bottom($pedido,"Exclusividade","declaracao_exclusividade_pf.php?id=");
+                                }
+                                else{
+                                    echo box_bottom($pedido,"Exclusividade Individual","declaracao_exclusividade_pj_unica.php?id=");
+                                    echo box_bottom($pedido,"Exclusividade Grupo","declaracao_exclusividade_pj_grupo.php?id=");
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="row">
