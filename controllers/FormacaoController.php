@@ -947,9 +947,12 @@ class FormacaoController extends FormacaoModel
 
             return DbModel::consultaSimples("SELECT  p.numero_processo, p.pessoa_fisica_id,fc.protocolo, fc.programa_id, pf.id, pf.nome, 
                                                             pro.programa, c.cargo AS 'funcao', c.justificativa AS 'cargo_justificativa', l.linguagem, 
-                                                            pf.email, CONCAT(pe.logradouro, ', ', pe.numero, ' - ', pe.bairro, ', ', pe.cidade, ' - ', pe.uf) AS 'endereco', pe.cep, s.status, su.subprefeitura, lo.`local`
+                                                            pf.email, CONCAT(pe.logradouro, ', ', pe.numero, ' - ', pe.bairro, ', ', pe.cidade, ' - ', pe.uf) AS 'endereco', pe.cep, s.status, su.subprefeitura, lo.`local`,
+                                                            ge.genero,pd.trans,pd.pcd
                                                         FROM pedidos AS p
                                                         LEFT JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
+                                                        LEFT JOIN pf_detalhes AS pd ON pf.id = pd.pessoa_fisica_id
+                                                        LEFT JOIN generos AS ge ON pd.genero_id = ge.id
                                                         LEFT JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id  
                                                         LEFT JOIN formacao_locais AS fl ON fl.form_pre_pedido_id = fc.id
                                                         LEFT JOIN locais AS lo ON fl.local_id = lo.id
