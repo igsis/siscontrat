@@ -13,7 +13,7 @@ $formacaoObj = new FormacaoController();
 $ano = $_GET['ano'];
 $programa = $_GET['programa'];
 
-$dadosPedidos = $formacaoObj->recuperaPedido('', 1, $ano, $programa);
+$dadosPedidos = $formacaoObj->exportarContratacaoExcel($ano, $programa);
 $nome_arquivo = "pedidos_formacao_" . $ano . ".xls";
 
 // Podemos renomear o nome das planilha atual, lembrando que um único arquivo pode ter várias planilhas
