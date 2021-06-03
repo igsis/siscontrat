@@ -1,5 +1,6 @@
 <?php
 require_once "DbModel.php";
+require_once '../../config/configAPP.php';
 
 class MainModel extends DbModel
 {
@@ -29,10 +30,14 @@ class MainModel extends DbModel
      */
     protected function decryption($string)
     {
-        $key = hash('sha256', SECRET_KEY);
-        $iv = substr(hash('sha256', SECRET_IV), 0, 16);
-        $output = openssl_decrypt(base64_decode($string), METHOD, $key, 0, $iv);
-        return $output;
+        if (strlen($string) > 10) {
+            $key = hash('sha256', SECRET_KEY);
+            $iv = substr(hash('sha256', SECRET_IV), 0, 16);
+            $output = openssl_decrypt(base64_decode($string), METHOD, $key, 0, $iv);
+            return $output;
+        }
+
+        return $string;
     }
 
     //retorna sim para campos valo = 1 e não para campos valor=0

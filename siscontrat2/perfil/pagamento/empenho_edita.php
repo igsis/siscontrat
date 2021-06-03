@@ -122,7 +122,7 @@ $pedido = $con->query("SELECT e.protocolo, p.numero_processo, e.id as idEvento F
                 <hr/>
                 <div class="row" style="text-align:center">
                     <div class="col-md-12">
-                        <a href="<?=PDFURL?>recibo_ne.php?id=<?=$mainObj->encryption($pedido['idEvento'])?>" class="btn btn-success" target="_blank">Gerar Recibo</a>
+                        <a href="<?=PDFURL?>recibo_ne.php?id=<?= $mainObj->encryption($pedido['idEvento']) ?>" class="btn btn-success" target="_blank">Gerar Recibo</a>
                     </div>
                 </div>
 
