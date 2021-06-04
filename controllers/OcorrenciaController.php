@@ -15,9 +15,7 @@ class OcorrenciaController extends MainModel
      */
     public function recuperaOcorrencia($id, $tipo = false, $atracao_id = false)
     {
-        if (gettype($id) == "string") {
-            $id = MainModel::decryption($id);
-        }
+        $id = MainModel::decryption($id);
         if ($tipo){
             $filtro = "tipo_ocorrencia_id = $tipo AND atracao_id = $atracao_id";
         } else{
