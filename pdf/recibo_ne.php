@@ -19,6 +19,7 @@ $pedido = $pedidoObj->recuperaPedido(1,$id);
 $objeto = $eventoObj->recuperaObjetoEvento($id);
 $ne = $neObj->recuperaNotaEmpenho($pedido->id);
 
+
 class PDF extends FPDF
 {
 }
@@ -108,7 +109,7 @@ if ($pedido->pessoa_tipo_id == 2) {
 
     $pdf->Ln(40);
 
-    if($pedido->rep2['nome'] != NULL) {
+    if(isset($pedido->rep2)) {
         $pdf->SetX($x);
         $pdf->SetFont('Arial', 'B', 11);
         $pdf->Cell(165, $l, utf8_decode($pedido->rep2['nome']), 'T', 1, 'L');

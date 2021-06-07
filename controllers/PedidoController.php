@@ -90,7 +90,6 @@ class PedidoController extends PedidoModel
     {
         $origem_id = MainModel::decryption($origem_id);
 
-
         switch ($origem_tipo_id){
             case 1: /** Tipo Evento */
                 $pedido = PedidoModel::recuperaBasePedido($origem_tipo_id, $origem_id);

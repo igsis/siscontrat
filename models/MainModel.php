@@ -115,6 +115,12 @@ class MainModel extends DbModel
         return $novaData->format('d/m/Y H:i:s');
     }
 
+    public function hora($hora)
+    {
+        $timestamp = strtotime($hora);
+        return date('H:i', $timestamp);
+    }
+
     public function dataParaSQL($data)
     {
         $data = DateTime::createFromFormat('d/m/Y', $data);

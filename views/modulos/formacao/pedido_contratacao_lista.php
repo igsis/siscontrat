@@ -146,6 +146,27 @@ $anos = $formObj->recuperarAnos();
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="programa">Programa:</label>
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="programa" value="1">Vocacional
+                                </label>
+                            </div>
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="programa" value="2">PIÁ
+                                </label>
+                            </div>
+                            <div class="form-check-inline disabled">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="programa" value="3">Ambos
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
