@@ -274,7 +274,7 @@ function box_bottom($pedidoObj,$titulo,$link){
                 $link_emissao_nf = PDFURL . "emissao_nf.php?&id=".$idEvEnc;
                 $link_declaracao_simples = PDFURL . "declaracao_simples.php?&id=".$idEvEnc;
                 $link_declaracao_sem_fim_lucrativos = PDFURL . "declaracao_semFinsLucrativos.php?&id".$idEvEnc;
-                $link19 = $server . "email_empresas.php";
+                $link_email_empresas = PDFURL . "email_empresas.php?&id=".$idEvEnc."?&";
                 ?>
                 <div class="box">
                     <div class="box-header">
@@ -318,24 +318,24 @@ function box_bottom($pedidoObj,$titulo,$link){
 
                         <div class="row">
                             <div class="col-md-3">
-                                <form action="<?= $link19 ?>?modelo=empresas" method="post" target="_blank" role="form">
+                                <form action="<?= $link_email_empresas ?>modelo=empresas" method="post" target="_blank" role="form">
                                     <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="<?= $idPedido ?>">Email Empresas</button>
                                 </form>
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link19 ?>?modelo=cooperativas" method="post" target="_blank" role="form">
+                                <form action="<?= $link_email_empresas ?>modelo=cooperativas" method="post" target="_blank" role="form">
                                     <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="<?= $idPedido ?>">Email Cooperativas
                                     </button>
                                 </form>
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link19 ?>?modelo=associacoes" method="post" target="_blank" role="form">
+                                <form action="<?= $link_email_empresas ?>modelo=associacoes" method="post" target="_blank" role="form">
                                     <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="<?= $idPedido ?>">Email Associações e institutos
                                     </button>
                                 </form>
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link19 ?>?modelo=''" method="post" target="_blank" role="form">
+                                <form action="<?= $link_email_empresas ?>modelo=''" method="post" target="_blank" role="form">
                                     <button type="submit" class="btn btn-primary btn-block pull-right" name="idPedido" value="<?= $idPedido ?>">Email Empresas com Minuta de Contrato
                                     </button>
                                 </form>

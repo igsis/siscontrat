@@ -1,17 +1,9 @@
 <?php
 setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 $pedidoAjax = true;
-
 // INSTALAÇÃO DA CLASSE NA PASTA FPDF.
 require_once "../config/configGeral.php";
-require_once "../views/plugins/fpdf/fpdf.php";
 require_once "../controllers/PedidoController.php";
-require_once "../controllers/EventoController.php";
-require_once "../controllers/AtracaoController.php";
-
-class PDF extends FPDF
-{
-}
 
 $idEvento = $_GET['id'];
 
