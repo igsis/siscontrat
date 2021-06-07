@@ -272,7 +272,7 @@ function box_bottom($pedidoObj,$titulo,$link){
             } else if($pedido['pessoa_tipo_id'] == 2 && $pedido['pessoa_tipo_id'] != NULL){
                 $link_minuta_acima_176k = PDFURL."minuta_acima_176k.php?&id=".$idEvEnc;
                 $link_emissao_nf = PDFURL . "emissao_nf.php?&id=".$idEvEnc;
-                $link17 = $server . "declaracao_simples.php";
+                $link_declaracao_simples = PDFURL . "declaracao_simples.php?&id=".$idEvEnc;
                 $link18 = $server . "declaracao_semFinsLucrativos.php";
                 $link19 = $server . "email_empresas.php";
                 ?>
@@ -308,14 +308,9 @@ function box_bottom($pedidoObj,$titulo,$link){
                             </div>
                             <div class="col-md-3">
                                 <a href="<?= $link_emissao_nf ?>" class="btn btn-primary btn-block" target="_blank"> Instruções para emissão de NF</a>
-<!--                                <form action="--><?//= $link16 ?><!--" method="post" target="_blank" role="form">-->
-<!--                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="--><?//= $idPedido ?><!--">Instruções para emissão de NF</button>-->
-<!--                                </form>-->
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link17 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="<?= $idPedido ?>">Declaração Simples</button>
-                                </form>
+                                <a href="<?= $link_declaracao_simples ?>" class="btn btn-primary btn-block">Declaração Simples</a>
                             </div>
                             <div class="col-md-3">
                                 <form action="<?= $link18 ?>" method="post" target="_blank" role="form">
