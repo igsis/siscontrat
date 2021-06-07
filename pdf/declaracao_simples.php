@@ -22,15 +22,6 @@ if (isset($pedido->rep2)) {
     $representante2 = $pedido->rep2;
 }
 
-//$pedido = $con->query("SELECT pj.razao_social, pj.cnpj, pe.logradouro, pe.numero, pe.complemento, pe.bairro, pe.cidade, pe.uf, pe.cep, rl1.nome r1_nome, rl2.nome r2_nome
-//    FROM pedidos p
-//    INNER JOIN pessoa_juridicas pj on p.pessoa_juridica_id = pj.id
-//    INNER JOIN pj_enderecos pe on pj.id = pe.pessoa_juridica_id
-//    INNER JOIN representante_legais rl1 on pj.representante_legal1_id = rl1.id
-//    LEFT JOIN representante_legais rl2 on pj.representante_legal2_id = rl2.id
-//    WHERE p.publicado = 1 AND p.id = '$idPedido'
-//")->fetch_assoc();
-
 // GERANDO O PDF:
 $pdf = new PDF('P', 'mm', 'A4'); //CRIA UM NOVO ARQUIVO PDF NO TAMANHO A4
 $pdf->AliasNbPages();

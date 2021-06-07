@@ -273,7 +273,7 @@ function box_bottom($pedidoObj,$titulo,$link){
                 $link_minuta_acima_176k = PDFURL."minuta_acima_176k.php?&id=".$idEvEnc;
                 $link_emissao_nf = PDFURL . "emissao_nf.php?&id=".$idEvEnc;
                 $link_declaracao_simples = PDFURL . "declaracao_simples.php?&id=".$idEvEnc;
-                $link18 = $server . "declaracao_semFinsLucrativos.php";
+                $link_declaracao_sem_fim_lucrativos = PDFURL . "declaracao_semFinsLucrativos.php?&id".$idEvEnc;
                 $link19 = $server . "email_empresas.php";
                 ?>
                 <div class="box">
@@ -302,9 +302,6 @@ function box_bottom($pedidoObj,$titulo,$link){
                         <div class="row">
                             <div class="col-md-3">
                                 <?= box_bottom($pedidoObj,"Minuta acima de R$ 176 mil","minuta_acima_176k.php?&id="); ?>
-                                <!--<form action="<?/*= $link_minuta_acima_176k */?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block" name="idPedido" value="<?/*= $idPedido */?>">Minuta acima de R$ 176 mil</button>
-                                </form>-->
                             </div>
                             <div class="col-md-3">
                                 <a href="<?= $link_emissao_nf ?>" class="btn btn-primary btn-block" target="_blank"> Instruções para emissão de NF</a>
@@ -313,9 +310,7 @@ function box_bottom($pedidoObj,$titulo,$link){
                                 <a href="<?= $link_declaracao_simples ?>" class="btn btn-primary btn-block">Declaração Simples</a>
                             </div>
                             <div class="col-md-3">
-                                <form action="<?= $link18 ?>" method="post" target="_blank" role="form">
-                                    <button type="submit" class="btn btn-primary btn-block pull-right" name="idPedido" value="<?= $idPedido ?>">Declaração de assoc. s/ fins lucrativos</button>
-                                </form>
+                                <a href="<?= $link_declaracao_sem_fim_lucrativos ?>" class="btn btn-primary btn-block">Declaração de assoc. s/ fins lucrativos</a>
                             </div>
                         </div>
 
