@@ -14,6 +14,7 @@ class ViewsModel
             "agendao",
             "fomentos",
             "administrativo",
+            "curadoria",
             "gestaoPrazo",
         ];
 
@@ -78,6 +79,7 @@ class ViewsModel
             'linguagem_lista',
             'listar_inscritos',
             'listar_inscritos',
+            'listar_eventos',
             'login',
             'logout',
             'pagamento_busca',
