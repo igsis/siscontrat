@@ -179,4 +179,40 @@ class EventoController extends MainModel
     {
         return DbModel::consultaSimples("SELECT SUM(quantidade_apresentacao) as apresentacoes FROM atracoes WHERE publicado = 1 AND evento_id = '$evento_id'")->fetchColumn();
     }
+
+    public function buscarEventos($where="")
+    {
+        if ($where != ""){
+
+        }
+
+        return $this->consultaSimples("SELECT  ev.id, ev.nome_evento, ev.protocolo, p.id AS 'pedido_id', p.numero_processo, 
+                        p.valor_total, te.tipo_evento, CONCAT(fi.nome_completo, ' / ', su.nome_completo) AS `responsaveis`, 
+                        us.nome_completo AS `usuario`
+                FROM eventos AS ev
+                LEFT JOIN pedidos AS p ON ev.id = p.origem_id
+                LEFT JOIN tipo_eventos AS te ON ev.tipo_evento_id = te.id
+                LEFT JOIN projeto_especiais AS pe ON ev.projeto_especial_id = pe.id
+                LEFT JOIN usuarios AS su ON ev.suplente_id = su.id
+                LEFT JOIN usuarios AS fi ON ev.fiscal_id = fi.id
+                LEFT JOIN usuarios AS us ON ev.usuario_id = us.id
+                WHERE ev.publicado = 1 AND p.publicado = 1 AND ev.protocolo IS NOT NULL AND p.numero_processo IS NOT NULL")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function chamadosEventos($idEvento, $count = false) {
+        $id = $this->decryption($idEvento);
+        $chamados = $this->consultaSimples("SELECT 	ct.`tipo`,
+                        ch.`titulo`,
+                        ch.`justificativa`,
+                        ch.`data`
+            FROM chamados AS ch
+            LEFT JOIN chamado_tipos AS ct ON ch.chamado_tipo_id = ct.id
+            WHERE ch.evento_id = {$id}");
+
+        if ($count) {
+            return $chamados->rowCount();
+        } else {
+            return $chamados->fetchAll(PDO::FETCH_OBJ);
+        }
+    }
 }

@@ -1,11 +1,15 @@
 <?php
+require_once "./controllers/EventoController.php";
 
+$eventObj = new EventoController();
 
 if (isset($_POST['busca'])) {
     $dados = $_POST;
 
     array_splice($dados, 0, 1);
 //    $resultados = $inscritoObj->listarIncritos($dados);
+}else {
+    $eventos = $eventObj->buscarEventos();
 }
 
 ?>
@@ -35,76 +39,39 @@ if (isset($_POST['busca'])) {
                     <form method="post">
                         <input type="hidden" name="busca" value="1">
                         <div class="card-body">
-                            <div class="row d-flex align-items-center">
-                                <div class="col-sm-12 col-md-4">
-                                    <label for="ano_inscricao">Ano de inscrição: </label>
-                                    <input type="number" id="ano" name="ano" class="form-control inputs"
-                                           value="<?= isset($dados['ano']) ? $dados['ano'] : '' ?>">
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <label for="dataInicio">Data Início:</label>
-                                    <input type="date" class="form-control inputsData" name="data[]" id="dataInicio" value="<?= isset($dados['data'][0]) ? $dados['data'][0] : '' ?>">
-                                </div>
-                                <div class="col-sm-12 col-md-2">
-                                    <label for="dataFim">Data Fim:</label>
-                                    <input type="date" class="form-control inputsData" name="data[]" id="dataFim" value="<?= isset($dados['data'][1]) ? $dados['data'][1] : '' ?>">
-                                </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <label for="programa">Programa: </label>
-                                    <select name="programa_id" id="programa_id" class="form-control inputs">
-                                        <option value="">Selecione uma opção...</option>
-                                        <?php
-//                                        $inscritoObj->geraOpcao("programas", isset($dados['programa_id']) ? $dados['programa_id'] : '')
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="row">
-                                <div class="col-sm-12 col-md-4">
-                                    <label for="funcao">Função:</label>
-                                    <select name="form_cargo_id" id="form_cargo_id" class="form-control inputs">
+                                <div class="col-md-3 col-sm-12">
+                                    <label for="id">Protocolo do Evento</label>
+                                    <input type="text" name="id" id="id" class="form-control"
+                                           placeholder="Digite o codigo do Evento">
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <label for="id">Nome do Evento:</label>
+                                    <input type="text" class="form-control" id="nome_evento" name="nome_evento" placeholder="Digite o nome do evento">
+                                </div>
+                                <div class="col-md-3 col-sm-12">
+                                    <label for="status_id"> Status do evento: </label>
+                                    <select name="status_id" id="status_id" class="form-control">
+                                        <option value="">Selecione uma opção</option>
+                                        <?= $eventObj->geraOpcao("evento_status", "") ?>
+                                    </select>
 
-                                    </select>
-                                </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <label for="regiao_preferencial">Região Preferencial: </label>
-                                    <select name="regiao_preferencial_id" id="regiao_preferencial_id"
-                                            class="form-control inputs">
-                                        <option value="">Selecione uma opção...</option>
-                                        <?php
-//                                        $inscritoObj->geraOpcao("regiao_preferencias", isset($dados['regiao_preferencial_id']) ? $dados['regiao_preferencial_id'] : '');
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <label for="linguagem">Linguagem</label>
-                                    <select name="linguagem_id" id="linguagem_id" class="form-control inputs">
-                                        <option value="">Selecione uma opção...</option>
-                                        <?php
-//                                        $inscritoObj->geraOpcao("linguagens", isset($dados['linguagem_id']) ? $dados['linguagem_id'] : '');
-                                        ?>
-                                    </select>
                                 </div>
                             </div>
-                            <div class="row d-flex align-items-center">
-                                <div class="col-sm-12 col-md-4">
-                                    <label for="genero">Gênero: </label>
-                                    <select name="genero_id" id="genero_id" class="form-control inputs">
-                                        <option value="">Selecione uma opção...</option>
-                                        <?php
-//                                        $inscritoObj->geraOpcao("generos", isset($dados['genero_id']) ? $dados['genero_id'] : '', false, false, true);
-                                        ?>
+                            <div class="row mt-2">
+                                <div class="col">
+                                    <label for="responsavel">Fiscal, suplente ou usuario que cadastrou o evento:</label>
+                                    <select name="responsavel" id="responsavel"  class="form-control">
+                                        <option value="">Selecione uma Opção</option>
+                                        <?=  $eventObj->geraOpcao("usuarios",'','1'); ?>
                                     </select>
                                 </div>
-                                <div class="col-sm-6 col-md-2 d-flex flex-column align-items-center">
-                                    <label for="trans">Trans:</label>
-                                    <input type="checkbox" name="trans" id="trans" class="form-control checks"
-                                           value="1" <?= isset($dados['trans']) ? 'checked' : '' ?>>
-                                </div>
-                                <div class="col-sm-6 col-md-2 d-flex flex-column align-items-center">
-                                    <label for="pcd">PCD: </label>
-                                    <input type="checkbox" name="pcd" id="pcd" class="form-control checks"
-                                           value="1" <?= isset($dados['pcd']) ? 'checked' : '' ?>>
+                                <div class="col">
+                                    <label for="projeto_especial_id">Tipo de Projeto:</label>
+                                    <select name="projeto_especial_id" id="projeto_especial_id" class="form-control">
+                                        <option value="">Selecione uma opção</option>
+                                        <?= $eventObj->geraOpcao("projeto_especiais","","1") ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -117,22 +84,62 @@ if (isset($_POST['busca'])) {
                 <!-- /.card -->
             </div>
         </div>
-<!--        --><?php //if (isset($_POST['busca'])): ?>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card card-info">
-                        <div class="card-header">
-                            <h5>Resultados</h5>
-                        </div>
-                        <div class="card-body overflow-auto">
-                            <table id="tabela" class="table table-bordered table-striped">
-
-                            </table>
-                        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h5>Resultados</h5>
+                    </div>
+                    <div class="card-body overflow-auto">
+                        <table id="tabela" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Protocolo</th>
+                                <th>Processo</th>
+                                <th>Nome do Evento</th>
+                                <th>Fiscal / Suplente</th>
+                                <th>Local</th>
+                                <th>Período</th>
+                                <th>Valor do Contrato</th>
+                                <th>Chamados</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody style="text-align: center">
+                            <?php foreach ($eventos as  $evento):
+                                $id = $eventObj->encryption($evento->id);
+                                ?>
+                                <tr>
+                                    <td><?= $evento->protocolo ?></td>
+                                    <td><?= $evento->numero_processo ?></td>
+                                    <td><?= $evento->nome_evento ?></td>
+                                    <td><?= $evento->responsaveis ?></td>
+                                    <td><button class="btn-sm btn-secondary" value="<?= $id ?>"> Locais </button></td>
+                                    <td><?= $eventObj->retornaPeriodo($id) ?></td>
+                                    <td><?= $eventObj->dinheiroParaBr($evento->valor_total) ?></td>
+                                    <td><button class="btn btn-info btn-sm"><?= $eventObj->chamadosEventos($id, true) ?></button></td>
+                                    <td><a class="btn btn-primary btn-md" href="<?= SERVERURL ?>curadoria/resumo&id=<?= $id ?>">Visualizar</a></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Protocolo</th>
+                                <th>Processo</th>
+                                <th>Nome do Evento</th>
+                                <th>Fiscal / Suplente</th>
+                                <th>Local</th>
+                                <th>Período</th>
+                                <th>Valor do Contrato</th>
+                                <th>Chamados</th>
+                                <th></th>
+                            </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </div>
-<!--        --><?php //endif; ?>
+        </div>
         <!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
