@@ -183,10 +183,18 @@ class EventoController extends MainModel
     public function buscarEventos($where="")
     {
         if ($where != ""){
-
+            $filtros = "";
+            foreach ($where as $key => $value) {
+                if ($value != '') {
+                    if ($key != "responsavel"){
+                        $filtros .= " AND {$key} = '{$value}'";
+                    } else {
+                      $filtros .= " OR ev.fiscal_id = '{$value}' OR ev.suplente_id = '{$value}' OR ev.usuario_id = '{$value}'";
+                    }
+                }
+            }
         }
-
-        return $this->consultaSimples("SELECT  ev.id, ev.nome_evento, ev.protocolo, p.id AS 'pedido_id', p.numero_processo, 
+        $SQL = "SELECT  ev.id, ev.nome_evento, ev.protocolo, p.id AS 'pedido_id', p.numero_processo, 
                         p.valor_total, te.tipo_evento, CONCAT(fi.nome_completo, ' / ', su.nome_completo) AS `responsaveis`, 
                         us.nome_completo AS `usuario`
                 FROM eventos AS ev
@@ -196,7 +204,8 @@ class EventoController extends MainModel
                 LEFT JOIN usuarios AS su ON ev.suplente_id = su.id
                 LEFT JOIN usuarios AS fi ON ev.fiscal_id = fi.id
                 LEFT JOIN usuarios AS us ON ev.usuario_id = us.id
-                WHERE ev.publicado = 1 AND p.publicado = 1 AND ev.protocolo IS NOT NULL AND p.numero_processo IS NOT NULL")->fetchAll(PDO::FETCH_OBJ);
+                WHERE ev.publicado = 1 AND p.publicado = 1 AND ev.protocolo IS NOT NULL AND p.numero_processo IS NOT NULL {$filtros}";
+        return $this->consultaSimples($SQL)->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function chamadosEventos($idEvento, $count = false) {

@@ -7,7 +7,7 @@ if (isset($_POST['busca'])) {
     $dados = $_POST;
 
     array_splice($dados, 0, 1);
-//    $resultados = $inscritoObj->listarIncritos($dados);
+    $eventos = $eventObj->buscarEventos($dados);
 }else {
     $eventos = $eventObj->buscarEventos();
 }
