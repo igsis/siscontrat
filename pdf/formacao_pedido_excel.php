@@ -154,7 +154,7 @@ foreach ($dadosPedidos AS $dadosPedido){
 }
 
 //setando tamanho das colunas
-for ($col = 'A'; $col !== 'M'; $col++) {
+for ($col = 'A'; $col !== 'P'; $col++) {
     $objPHPExcel->getActiveSheet()
         ->getColumnDimension($col)
         ->setAutoSize(true);
@@ -170,9 +170,13 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(false);
 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(50);
 
+//Consertando a coluna referente ao Subprefeitura
+$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(50);
+
 //Consertando a coluna referente ao status
-$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(50);
+$objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(50);
 
 // Cabeçalho do arquivo para ele baixar(Excel2007)
 header('Content-Type: text/html; charset=ISO-8859-1');
