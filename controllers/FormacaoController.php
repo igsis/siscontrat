@@ -945,9 +945,9 @@ class FormacaoController extends FormacaoModel
                 $programa = "";
             }
 
-            return DbModel::consultaSimples("SELECT  p.numero_processo, p.pessoa_fisica_id,fc.protocolo, fc.programa_id, pf.id, pf.nome, 
+            return DbModel::consultaSimples("SELECT p.origem_id, p.numero_processo, p.pessoa_fisica_id,fc.protocolo, fc.programa_id, pf.id, pf.nome, 
                                                             pro.programa, c.cargo AS 'funcao', c.justificativa AS 'cargo_justificativa', l.linguagem, 
-                                                            pf.email, CONCAT(pe.logradouro, ', ', pe.numero, ' - ', pe.bairro, ', ', pe.cidade, ' - ', pe.uf) AS 'endereco', pe.cep, s.status, su.subprefeitura, lo.`local`,
+                                                            pf.email, CONCAT(pe.logradouro, ', ', pe.numero, ' - ', pe.bairro, ', ', pe.cidade, ' - ', pe.uf) AS 'endereco', pe.cep, s.status, lo.`local`,
                                                             ge.genero,pd.trans,pd.pcd
                                                         FROM pedidos AS p
                                                         LEFT JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
@@ -2203,6 +2203,20 @@ class FormacaoController extends FormacaoModel
         $pf = $pfObj->recuperaPessoaFisica($idPf);
         $contratacao = array_merge((array)$form, (array)$pf);
         return (object)$contratacao;
+    }
+
+    public function recuperaSubprefeituraContratacao($contratacao_id)
+    {
+        $locais = $this->retornaLocaisFormacao($contratacao_id, 1);
+        $subprefeituras = "";
+        for ($i = 0; $i < sizeof($locais); $i++) {
+            if ($i === 0) {
+                $subprefeituras .= $locais[$i]['subprefeitura'];
+            } else {
+                $subprefeituras .= " ; " .$locais[$i]['subprefeitura'];
+            }
+        }
+        return $subprefeituras;
     }
 }
 

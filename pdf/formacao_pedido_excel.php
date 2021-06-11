@@ -14,7 +14,7 @@ $ano = $_GET['ano'];
 $programa = $_GET['programa'];
 
 $dadosPedidos = $formacaoObj->recuperaPedido('', 1, $ano, $programa);
-$nome_arquivo = "pedidos_formacao_" . $ano . ".xls";
+$nome_arquivo = "pedidos_formacao_" . $ano . "_" . date("his") . ".xls";
 
 // Podemos renomear o nome das planilha atual, lembrando que um único arquivo pode ter várias planilhas
 $objPHPExcel->getProperties()->setCreator("Sistema SisContrat");
@@ -84,7 +84,7 @@ $objPHPExcel->setActiveSheetIndex(0)
     ->setCellValue("L2", "Função")
     ->setCellValue("M2", "Linguagem")
     ->setCellValue("N2", "Local")
-    ->setCellValue("O2", "Subprefeitura")
+    ->setCellValue("O2", "Subprefeituras")
     ->setCellValue("P2", "Status do Pedido");
 
 // Definimos o estilo da fonte das colunas
@@ -113,6 +113,7 @@ $contador = 3;
 foreach ($dadosPedidos AS $dadosPedido){
     //recupera os telefones de cada pf
     $tel = $formacaoObj->recuperaTelPf($dadosPedido->pessoa_fisica_id);
+    $subprefeituras = $formacaoObj->recuperaSubprefeituraContratacao($dadosPedido->origem_id);
 
     $a = "A" . $contador;
     $b = "B" . $contador;
@@ -146,7 +147,7 @@ foreach ($dadosPedidos AS $dadosPedido){
         ->setCellValue($l, $dadosPedido->funcao)
         ->setCellValue($m, $dadosPedido->linguagem)
         ->setCellValue($n, $dadosPedido->local)
-        ->setCellValue($o, $dadosPedido->subprefeitura)
+        ->setCellValue($o, $subprefeituras)
         ->setCellValue($p, $dadosPedido->status);
 
     $contador++;
