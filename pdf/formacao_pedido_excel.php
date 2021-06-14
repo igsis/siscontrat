@@ -114,7 +114,8 @@ foreach ($dadosPedidos AS $dadosPedido){
     //recupera os telefones de cada pf
     $tel = $formacaoObj->recuperaTelPf($dadosPedido->pessoa_fisica_id);
     $subprefeituras = $formacaoObj->recuperaSubprefeituraContratacao($dadosPedido->origem_id);
-
+    $locais = $formacaoObj->retornaLocaisFormacao($dadosPedido->origem_id);
+    
     $a = "A" . $contador;
     $b = "B" . $contador;
     $c = "C" . $contador;
@@ -146,7 +147,7 @@ foreach ($dadosPedidos AS $dadosPedido){
         ->setCellValue($k, $dadosPedido->programa)
         ->setCellValue($l, $dadosPedido->funcao)
         ->setCellValue($m, $dadosPedido->linguagem)
-        ->setCellValue($n, $dadosPedido->local)
+        ->setCellValue($n, $locais)
         ->setCellValue($o, $subprefeituras)
         ->setCellValue($p, $dadosPedido->status);
 
