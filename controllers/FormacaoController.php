@@ -2213,10 +2213,20 @@ class FormacaoController extends FormacaoModel
             if ($i === 0) {
                 $subprefeituras .= $locais[$i]['subprefeitura'];
             } else {
-                $subprefeituras .= " ; " .$locais[$i]['subprefeitura'];
+                $subprefeituras .= " ; " . $locais[$i]['subprefeitura'];
             }
         }
         return $subprefeituras;
+    }
+
+    public function listaLocais()
+    {
+        return DbModel::consultaSimples("SELECT 	l.id, l.`local`, CONCAT(l.logradouro, ', ', l.numero, ' - ', l.bairro, ', ', l.cidade, ' - ', l.uf) AS 'endereco',
+                                                            l.cep, z.zona, s.subprefeitura, CONCAT(i.nome, '(',i.sigla,')') AS 'instituicao'
+                                                FROM locais AS l
+                                                LEFT JOIN instituicoes AS i ON l.instituicao_id = i.id
+                                                LEFT JOIN subprefeituras AS s ON l.subprefeitura_id = s.id
+                                                LEFT JOIN zonas AS z ON l.zona_id = z.id")->fetchAll(PDO::FETCH_OBJ);
     }
 }
 
