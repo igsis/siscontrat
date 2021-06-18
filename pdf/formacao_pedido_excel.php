@@ -113,6 +113,7 @@ $contador = 3;
 foreach ($dadosPedidos AS $dadosPedido){
     //recupera os telefones de cada pf
     $tel = $formacaoObj->recuperaTelPf($dadosPedido->pessoa_fisica_id);
+    $subprefeituras = $formacaoObj->recuperaSubprefeituraContratacao($dadosPedido->origem_id);
 
     $a = "A" . $contador;
     $b = "B" . $contador;
@@ -146,14 +147,14 @@ foreach ($dadosPedidos AS $dadosPedido){
         ->setCellValue($l, $dadosPedido->funcao)
         ->setCellValue($m, $dadosPedido->linguagem)
         ->setCellValue($n, $dadosPedido->local)
-        ->setCellValue($o, $dadosPedido->subprefeitura)
+        ->setCellValue($o, $subprefeituras)
         ->setCellValue($p, $dadosPedido->status);
 
     $contador++;
 }
 
 //setando tamanho das colunas
-for ($col = 'A'; $col !== 'M'; $col++) {
+for ($col = 'A'; $col !== 'P'; $col++) {
     $objPHPExcel->getActiveSheet()
         ->getColumnDimension($col)
         ->setAutoSize(true);
@@ -169,9 +170,13 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(false);
 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(50);
 
+//Consertando a coluna referente ao Subprefeitura
+$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(50);
+
 //Consertando a coluna referente ao status
-$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(false);
-$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(50);
+$objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(50);
 
 // Cabeçalho do arquivo para ele baixar(Excel2007)
 header('Content-Type: text/html; charset=ISO-8859-1');

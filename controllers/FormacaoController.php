@@ -214,23 +214,37 @@ class FormacaoController extends FormacaoModel
         }
 
         return DbModel::consultaSimples("SELECT  p.numero_processo, p.pessoa_fisica_id,fc.protocolo, fc.programa_id, pf.id, pf.nome, 
-                                                            pro.programa, c.cargo AS 'funcao', c.justificativa AS 'cargo_justificativa', l.linguagem, 
-                                                            pf.email, CONCAT(pe.logradouro, ', ', pe.numero, ' - ', pe.bairro, ', ', pe.cidade, ' - ', pe.uf) AS 'endereco', pe.cep, s.status, su.subprefeitura, lo.`local`,
-                                                            ge.genero,pd.trans,pd.pcd
-                                                        FROM pedidos AS p
-                                                        LEFT JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
-                                                        LEFT JOIN pf_detalhes AS pd ON pf.id = pd.pessoa_fisica_id
-                                                        LEFT JOIN generos AS ge ON pd.genero_id = ge.id
-                                                        LEFT JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id  
-                                                        LEFT JOIN formacao_locais AS fl ON fl.form_pre_pedido_id = fc.id
-                                                        LEFT JOIN locais AS lo ON fl.local_id = lo.id
-                                                        LEFT JOIN subprefeituras AS su ON lo.subprefeitura_id = su.id
-                                                        LEFT JOIN programas AS pro ON fc.programa_id = pro.id
-                                                        LEFT JOIN formacao_cargos AS c ON fc.form_cargo_id = c.id
-                                                        LEFT JOIN linguagens AS l ON fc.linguagem_id = l.id
-                                                        LEFT JOIN formacao_status AS s ON fc.form_status_id = s.id
-                                                        LEFT JOIN pf_enderecos AS pe ON pf.id = pe.pessoa_fisica_id
-                                                    WHERE p.publicado = 1 AND p.origem_tipo_id = 2 AND p.status_pedido_id = 2 AND  fc.ano = {$ano} {$programa} group by pf.id")->fetchAll(PDO::FETCH_OBJ);
+                                                 pro.programa, c.cargo AS 'funcao', c.justificativa AS 'cargo_justificativa', l.linguagem, 
+                                                 pf.email, CONCAT(pe.logradouro, ', ', pe.numero, ' - ', pe.bairro, ', ', pe.cidade, ' - ', pe.uf) AS 'endereco', pe.cep, s.status, su.subprefeitura, lo.`local`,
+                                                 ge.genero,pd.trans,pd.pcd
+                                         FROM pedidos AS p
+                                             LEFT JOIN pessoa_fisicas AS pf ON p.pessoa_fisica_id = pf.id
+                                             LEFT JOIN pf_detalhes AS pd ON pf.id = pd.pessoa_fisica_id
+                                             LEFT JOIN generos AS ge ON pd.genero_id = ge.id
+                                             LEFT JOIN formacao_contratacoes AS fc ON fc.id = p.origem_id  
+                                             LEFT JOIN formacao_locais AS fl ON fl.form_pre_pedido_id = fc.id
+                                             LEFT JOIN locais AS lo ON fl.local_id = lo.id
+                                             LEFT JOIN subprefeituras AS su ON lo.subprefeitura_id = su.id
+                                             LEFT JOIN programas AS pro ON fc.programa_id = pro.id
+                                             LEFT JOIN formacao_cargos AS c ON fc.form_cargo_id = c.id
+                                             LEFT JOIN linguagens AS l ON fc.linguagem_id = l.id
+                                             LEFT JOIN formacao_status AS s ON fc.form_status_id = s.id
+                                             LEFT JOIN pf_enderecos AS pe ON pf.id = pe.pessoa_fisica_id
+                                         WHERE p.publicado = 1 AND p.origem_tipo_id = 2 AND p.status_pedido_id = 2 AND  fc.ano = {$ano} {$programa} group by pf.id")->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function recuperaSubprefeituraContratacao($contratacao_id)
+    {
+        $locais = $this->retornaLocaisFormacao($contratacao_id, 1);
+        $subprefeituras = "";
+        for ($i = 0; $i < sizeof($locais); $i++) {
+            if ($i === 0) {
+                $subprefeituras .= $locais[$i]['subprefeitura'];
+            } else {
+                $subprefeituras .= " ; " .$locais[$i]['subprefeitura'];
+            }
+        }
+        return $subprefeituras;
     }
 
     /*
