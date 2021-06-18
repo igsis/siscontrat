@@ -17,11 +17,18 @@ $pedido = (new FormacaoPedidoController)->recuperar($pedido_id);
 
 $pf = (new PessoaFisicaController)->recuperaPessoaFisica($pedido->pessoa_fisica_id);
 $coordenaria = (new FormacaoContratacaoController)->recuperar($pedido->origem_id)->coordenadoria;
+$locais = $formObj->retornaLocaisFormacao($pedido->origem_id, 1);
 
 $data = date('d/m/Y');
 $dia = date('d');
 $mes = MainModel::retornaMes(date('m'));
 $ano = date('Y');
+
+if (sizeof($locais) === 2)
+    $regionalizacao = "<p align='justify'>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2021 no Sistema SOF, informamos que os valores do presente pagamento foram gastos nas subprefeituras:   {$locais[0]['subprefeitura']},  50% do valor da parcela e {$locais[1]['subprefeitura']}, 50% do valor da parcela.</p>";
+else
+    $regionalizacao = "<p align='justify'>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2021 no Sistema SOF, informamos que os valores do presente pagamento foram gastos nas subprefeituras: {$locais[0]['subprefeitura']},  100% do valor da parcela.</p>";
+
 ?>
 
 <html>
@@ -61,7 +68,7 @@ $ano = date('Y');
         "<p><strong>SMC - CONTABILIDADE</strong></p>" .
         "<p><strong>Sr.(a) Contador(a)</strong></p>" .
         "<p align='justify'>Encaminho o presente para providências quanto ao pagamento, uma vez que os serviços foram realizados e confirmados a contento conforme documento link SEI.</p>" .
-        "<p align='justify'>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2019 no Sistema SOF,  informamos que os valores do presente pagamento foram gastos na região $coordenaria." . "</p>" .
+        $regionalizacao .
         "<p>&nbsp;</p>" .
 
         "<p>INFORMAÇÕES COMPLEMENTARES</p>" .
@@ -114,8 +121,7 @@ $ano = date('Y');
         try {
             document.execCommand('copy');
             alert('Copiado com sucesso!');
-        }
-        catch (err) {
+        } catch (err) {
             alert('Texo não copiado, tente novamente.');
         }
     }
