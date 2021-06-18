@@ -31,6 +31,9 @@
                             <a href="<?= SERVERURL ?>formacao/subprefeitura_cadastro" class="btn btn-success btn-sm" >
                                 <i class="fas fa-plus"></i> Cadastrar Novo
                             </a>
+                            <a href="<?= SERVERURL ?>pdf/exportar_equipamentos_excel.php" target="_blank" class="btn btn-success btn-sm">
+                                <i class="fas fa-file-excel"></i> Exportar para Excel
+                            </a>
                         </div>
                     </div>
                     <!-- /.card-header -->
