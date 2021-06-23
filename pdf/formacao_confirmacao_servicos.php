@@ -16,6 +16,7 @@ $contratacao = (new FormacaoPedidoController)->recuperar($pedido_id);
 $contratacao_id = $contratacao->origem_id;
 $dadosParcela = $formObj->recuperaDadosParcelas($contratacao_id, '1', $parcela_id);
 $periodo = $formObj->retornaPeriodoFormacao($contratacao_id, '1', $parcela_id);
+$locais = $formObj->retornaLocaisFormacao($pedido->origem_id, 1);
 
 $data_inicio = MainModel::dataParaBR($dadosParcela->data_inicio);
 $data_fim = MainModel::dataParaBR($dadosParcela->data_fim);
@@ -23,6 +24,12 @@ $data_fim = MainModel::dataParaBR($dadosParcela->data_fim);
 $dia = date('d');
 $mes = MainModel::retornaMes(date('m'));
 $ano = date('Y');
+
+if (sizeof($locais) === 2)
+    $regionalizacao = "<p align='justify'>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2021 no Sistema SOF, informamos que os valores do presente pagamento foram gastos nas subprefeituras:   {$locais[0]['subprefeitura']},  50% do valor da parcela e {$locais[1]['subprefeitura']}, 50% do valor da parcela.</p>";
+else
+    $regionalizacao = "<p align='justify'>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2021 no Sistema SOF, informamos que os valores do presente pagamento foram gastos nas subprefeituras: {$locais[0]['subprefeitura']},  100% do valor da parcela.</p>";
+
 ?>
 
 
@@ -78,7 +85,7 @@ $ano = date('Y');
             <b>Certidões Fiscais / CCM:</b> <br>
             <b>FACC:</b>
         </p>
-        <p>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2019 no Sistema SOF, informamos que os valores do presente pagamento foram gastos na região <?= $contratacao->coordenadoria ?>.</p>
+        <p><?= $regionalizacao ?></p>
         <p>&nbsp;</p>
         <p>À área gestora / de liquidação e pagamento. </p>
         <p>&nbsp;</p>
