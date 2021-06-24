@@ -27,11 +27,12 @@ $ano = date('Y');
 $size = sizeof($locais);
 
 
-if (sizeof($locais) !== 1)
-    $regionalizacao = "<p align='justify'>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2021 no Sistema SOF, informamos que os valores do presente pagamento foram gastos nas subprefeituras:   {$locais[0]['subprefeitura']},  50% do valor da parcela e {$locais[1]['subprefeitura']}, 50% do valor da parcela.</p>";
-else
-    $regionalizacao = "<p align='justify'>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2021 no Sistema SOF, informamos que os valores do presente pagamento foram gastos nas subprefeituras: {$locais[0]['subprefeitura']},  100% do valor da parcela.</p>";
-
+if (sizeof($locais) !== 1):
+    $valores = ($dadosParcela->valor) / 2;
+    $regionalizacao = "<p align='justify'>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2021 no Sistema SOF, informamos que os valores do presente pagamento foram gastos nas subprefeituras:   {$locais[0]['subprefeitura']} (R$ ". MainModel::dinheiroParaBr($valores) ."),  50% do valor da parcela e {$locais[1]['subprefeitura']} (R$ ". MainModel::dinheiroParaBr($valores) ."), 50% do valor da parcela.</p>";
+else:
+    $regionalizacao = "<p align='justify'>Em virtude da Regionalização e Georreferenciamento das Despesas Municipais com a nova implantação do Detalhamento da Ação em 2021 no Sistema SOF, informamos que os valores do presente pagamento foram gastos nas subprefeituras: {$locais[0]['subprefeitura']} (R$ " . MainModel::dinheiroParaBr($dadosParcela->valor) . "),  100% do valor da parcela.</p>";
+endif;
 ?>
 
 
