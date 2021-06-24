@@ -42,7 +42,7 @@ class FormacaoController extends FormacaoModel
     {
         $contratacao_id = MainModel::decryption($contratacao_id);
         $locais = "";
-        $locaisArrays = DbModel::consultaSimples("SELECT l.id, l.local, l.instituicao_id, l.subprefeitura_id, s.subprefeitura FROM formacao_locais AS fl INNER JOIN locais AS l ON fl.local_id = l.id LEFT JOIN subprefeituras AS s ON l.subprefeitura_id = s.id WHERE form_pre_pedido_id = {$contratacao_id}")->fetchAll();
+        $locaisArrays = DbModel::consultaSimples("SELECT l.id, l.local, l.instituicao_id, l.subprefeitura_id, s.subprefeitura FROM formacao_locais AS fl INNER JOIN locais AS l ON fl.local_id = l.id LEFT JOIN subprefeituras AS s ON l.subprefeitura_id = s.id WHERE form_pre_pedido_id = $contratacao_id AND subprefeitura_id IS NOT NULL AND subprefeitura_id != 0")->fetchAll();
         if ($obj != 0):
             return $locaisArrays;
         else:
