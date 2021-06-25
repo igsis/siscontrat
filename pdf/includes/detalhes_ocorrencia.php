@@ -10,7 +10,7 @@ $pdf->Ln();
 
 $ocorrencias = $ocorrenciaObj->recuperaOcorrencia($idEvento);
 foreach ($ocorrencias as $ocorrencia){
-    $nomeOrigem = $eventoObj->recuperaOcorrenciaOrigem($ocorrencia->tipo_ocorrencia_id, $ocorrencia->atracao_id);
+    $nomeOrigem = $ocorrenciaObj->recuperaOcorrenciaOrigem($ocorrencia->tipo_ocorrencia_id, $ocorrencia->atracao_id);
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial','B', $f);
@@ -23,7 +23,7 @@ foreach ($ocorrencias as $ocorrencia){
         $pdf->Cell(22, $l, utf8_decode("à ".date('d/m/Y', strtotime($ocorrencia->data_fim))), 0, 0, 'L');
     }
     $pdf->Cell(31, $l, utf8_decode("das ".substr($ocorrencia->horario_inicio,0,-3)." às ".substr($ocorrencia->horario_fim,0,-3)), 0, 0, 'L');
-    $pdf->Cell(21,$l,utf8_decode("(".$eventoObj->diadasemanaocorrencia($ocorrencia->id).")"),0,1,'L');
+    $pdf->Cell(21,$l,utf8_decode("(".$ocorrenciaObj->diadasemanaocorrencia($ocorrencia->id).")"),0,1,'L');
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial','', $f);
@@ -51,7 +51,7 @@ foreach ($ocorrencias as $ocorrencia){
     $pdf->SetX($x);
     $pdf->SetFont('Arial','', $f);
     $pdf->Cell(145, $l, utf8_decode("Retirada de ingresso: ".$ocorrencia->retirada_ingresso), 0, 0, 'L');
-    $pdf->Cell(80,$l,utf8_decode("Valor: R$ ".$eventoObj->dinheiroBr($ocorrencia->valor_ingresso)),0,1,'L');
+    $pdf->Cell(80,$l,utf8_decode("Valor: R$ ".$ocorrenciaObj->dinheiroDeBr($ocorrencia->valor_ingresso)),0,1,'L');
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial','', $f);
@@ -61,9 +61,9 @@ foreach ($ocorrencias as $ocorrencia){
 }
 
 if ($evento->tipo_evento_id == 1){
-    $atracoes = $eventoObj->recuperaAtracao($idEvento);
+    $atracoes = $atracaoObj->listaAtracao($idEvento);
     foreach ($atracoes as $atracao) {
-        $excecao = $eventoObj->recuperaOcorrenciaExcecao($atracao->id);
+        $excecao = $ocorrenciaObj->recuperaOcorrenciaExcecao($atracao->id);
         if ($excecao){
             $pdf->SetX($x);
             $pdf->SetFont('Arial', 'B', $f);

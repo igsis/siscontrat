@@ -1,9 +1,9 @@
 <?php
-require_once "../../controllers/PedidoController.php";
+require_once "../controllers/PedidoController.php";
 $pedidoObj = new PedidoController();
 
-$pedido = $pedidoObj->recuperaPedido($idEvento);
-$anexos = $pedidoObj->recuperaArquivoPedido($pedido->id);
+$pedido = $pedidoObj->recuperaPedido(1,$idEvento);
+$anexos = $arquivoObj->recuperaArquivoPedido($pedido->id);
 $valoresPorEquipamento = $pedidoObj->recuperaValorLocal($pedido->id);
 $parecer = $pedidoObj->recuperaParecer($pedido->id);
 $dataEtapas = $pedidoObj->recuperaPedidoEtapas($pedido->id);
@@ -104,8 +104,8 @@ if ($pedido->pessoa_tipo_id == 1){
     }
 }
 else {
-    require_once "../../controllers/PessoaJuridicaController.php";
-    require_once "../../controllers/RepresentanteController.php";
+    require_once "../controllers/PessoaJuridicaController.php";
+    require_once "../controllers/RepresentanteController.php";
     $pjObj = new PessoaJuridicaController();
     $pj = $pjObj->recuperaPessoaJuridica($pedido->pessoa_juridica_id);
 
@@ -125,7 +125,7 @@ else {
     $pdf->SetFont('Arial','B', $f);
     $pdf->Cell(10,$l,utf8_decode('CCM:'),0,0,'L');
     $pdf->SetFont('Arial','', $f);
-    $pdf->Cell(150,$l,utf8_decode($pj['ccm']),0,1,'L');
+    $pdf->Cell(150,$l,utf8_decode($pj->ccm),0,1,'L');
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial', 'B', $f);
@@ -147,20 +147,20 @@ else {
     $pdf->SetFont('Arial', '', $f);
     $pdf->MultiCell(168, $l, utf8_decode($pj->email), 0, 'L', 0);
 
-    if ($pj['banco']){
+    if ($pj->banco){
         $pdf->SetX($x);
         $pdf->SetFont('Arial', 'B', $f);
         $pdf->Cell(13, $l, utf8_decode("Banco:"), 0, 0, 'L');
         $pdf->SetFont('Arial', '', $f);
-        $pdf->Cell(67, $l, utf8_decode($pj['banco']), 0, 0, 'L');
+        $pdf->Cell(67, $l, utf8_decode($pj->banco), 0, 0, 'L');
         $pdf->SetFont('Arial', 'B', $f);
         $pdf->Cell(16, $l, utf8_decode("Agência:"), 0, 0, 'L');
         $pdf->SetFont('Arial', '', $f);
-        $pdf->Cell(44, $l, utf8_decode($pj['agencia']), 0, 0, 'L');
+        $pdf->Cell(44, $l, utf8_decode($pj->agencia), 0, 0, 'L');
         $pdf->SetFont('Arial', 'B', $f);
         $pdf->Cell(12, $l, utf8_decode("Conta:"), 0, 0, 'L');
         $pdf->SetFont('Arial', '', $f);
-        $pdf->Cell(20, $l, utf8_decode($pj['conta']), 0, 1, 'L');
+        $pdf->Cell(20, $l, utf8_decode($pj->conta), 0, 1, 'L');
     }
 /*
             $pdf->SetX($x);
@@ -180,7 +180,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', $f);
 $pdf->Cell(11, $l, 'Valor:', '0', '0', 'L');
 $pdf->SetFont('Arial', '', $f);
-$pdf->MultiCell(168, $l, utf8_decode("R$ " . $eventoObj->dinheiroBr($pedido->valor_total) . " (" .  $eventoObj->valorPorExtenso($pedido->valor_total) . " )"), 0, 'L', 0);
+$pdf->MultiCell(168, $l, utf8_decode("R$ " . $eventoObj->dinheiroDeBr($pedido->valor_total) . " (" .  $eventoObj->valorPorExtenso($pedido->valor_total) . " )"), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', $f);
@@ -241,7 +241,7 @@ if ($valoresPorEquipamento){
    foreach ($valoresPorEquipamento as $valor){
         $pdf->SetX($x);
         $pdf->SetFont('Arial', '', $f);
-        $pdf->MultiCell(168, $l, utf8_decode($valor->local . ": R$ " .  $eventoObj->dinheiroBr($valor->valor)), 0, 'L', 0);
+        $pdf->MultiCell(168, $l, utf8_decode($valor->local . ": R$ " .  $eventoObj->dinheiroDeBr($valor->valor)), 0, 'L', 0);
    }
 } else{
     $pdf->SetX($x);
