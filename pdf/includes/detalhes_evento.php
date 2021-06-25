@@ -37,7 +37,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial','B', $f);
 $pdf->Cell(15, $l, utf8_decode("Público:"), 0, 0, 'L');
 $pdf->SetFont('Arial','', $f);
-$pdf->MultiCell(163  , $l, utf8_decode($publicos));
+$pdf->MultiCell(163  , $l, utf8_decode($evento->publicos));
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial','B', $f);
@@ -72,6 +72,6 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial','B', $f);
 $pdf->Cell(23, $l, utf8_decode("Inserido por:"), 0, 0, 'L');
 $pdf->SetFont('Arial','', $f);
-$pdf->Cell(115, $l, utf8_decode($evento->user_nome), 0, 1, 'L');
+$pdf->Cell(115, $l, utf8_decode($evento->usuario_nome), 0, 1, 'L');
 
 $pdf->Ln(10);

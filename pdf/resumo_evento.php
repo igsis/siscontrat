@@ -6,7 +6,7 @@ $pedidoAjax = true;
 require_once "../config/configGeral.php";
 require_once "../views/plugins/fpdf/fpdf.php";
 require_once "../controllers/ArquivoController.php";
-require_once "../../controllers/EventoController.php";
+require_once "../controllers/EventoController.php";
 
 $idEvento = $_GET['id'];
 

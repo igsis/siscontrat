@@ -1,5 +1,5 @@
 <?php
-require_once "../../controllers/OcorrenciaController.php";
+require_once "../controllers/OcorrenciaController.php";
 $ocorrenciaObj = new OcorrenciaController();
 
 $pdf->SetX($x);

@@ -55,7 +55,7 @@ $eventos = $gestaoObj->listaAprovar();
                                     <td>
                                         <div class="row">
                                             <div class="col-md">
-                                                <a href="http://<?=$_SERVER['HTTP_HOST']?>/siscontrat2/pdf/resumo_evento.php?id=<?= $evento->id ?>" target="_blank"
+                                                <a href="<?=SERVERURL?>pdf/resumo_evento.php?id=<?= MainModel::encryption($evento->id) ?>" target="_blank"
                                                    class="btn btn-sm btn-primary"><i class="far fa-file-alt"></i> Detalhes</a>
                                             </div>
                                             <!-- aprovar -->

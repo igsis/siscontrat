@@ -18,8 +18,7 @@ class EventoController extends MainModel
     public function recuperaEvento($idEvento): stdClass
     {
         $idEvento = MainModel::decryption($idEvento);
-
-        $evento = DbModel::consultaSimples("SELECT eve.*, te.tipo_evento, rj.relacao_juridica, pe.projeto_especial, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, user.nome_completo as usuario_nome, f.fomento
+        $evento = DbModel::consultaSimples("SELECT eve.*, te.tipo_evento, rj.relacao_juridica, pe.projeto_especial, fis.nome_completo as fiscal_nome, fis.rf_rg as fiscal_rf, sup.nome_completo as suplente_nome, sup.rf_rg as suplente_rf, user.nome_completo as usuario_nome, f.fomento as fomento_nome
             FROM eventos eve
             INNER JOIN tipo_eventos te on eve.tipo_evento_id = te.id
             INNER JOIN relacao_juridicas rj on eve.relacao_juridica_id = rj.id

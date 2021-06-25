@@ -1,5 +1,5 @@
 <?php
-require_once "../../controllers/AtracaoController.php";
+require_once "../controllers/AtracaoController.php";
 $atracaoObj = new AtracaoController();
 $atracoes = $atracaoObj->listaAtracao($idEvento);
 
