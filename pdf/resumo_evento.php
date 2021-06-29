@@ -95,9 +95,10 @@ if ($evento->contratacao = 1){
 }
 
 /*
+ * FALTA FAZER
  * Chamados
- * Histórico de reabertura
  * Histórico de envio
+ * Histórico de reabertura
  */
 
 $pdf->Output("detalhes_evento","I");
