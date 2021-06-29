@@ -180,7 +180,7 @@ $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', $f);
 $pdf->Cell(11, $l, 'Valor:', '0', '0', 'L');
 $pdf->SetFont('Arial', '', $f);
-$pdf->MultiCell(168, $l, utf8_decode("R$ " . $eventoObj->dinheiroDeBr($pedido->valor_total) . " (" .  $eventoObj->valorPorExtenso($pedido->valor_total) . " )"), 0, 'L', 0);
+$pdf->MultiCell(168, $l, utf8_decode("R$ " . $eventoObj->dinheiroParaBr($pedido->valor_total) . " (" .  $eventoObj->valorPorExtenso($pedido->valor_total) . " )"), 0, 'L', 0);
 
 $pdf->SetX($x);
 $pdf->SetFont('Arial', 'B', $f);
@@ -241,7 +241,7 @@ if ($valoresPorEquipamento){
    foreach ($valoresPorEquipamento as $valor){
         $pdf->SetX($x);
         $pdf->SetFont('Arial', '', $f);
-        $pdf->MultiCell(168, $l, utf8_decode($valor->local . ": R$ " .  $eventoObj->dinheiroDeBr($valor->valor)), 0, 'L', 0);
+        $pdf->MultiCell(168, $l, utf8_decode($valor->local . ": R$ " .  $eventoObj->dinheiroParaBr($valor->valor)), 0, 'L', 0);
    }
 } else{
     $pdf->SetX($x);

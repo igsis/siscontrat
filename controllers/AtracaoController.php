@@ -58,6 +58,7 @@ class AtracaoController extends AtracaoModel
      */
     public function listaAtracao($idEvento):stdClass
     {
+        $idEvento = MainModel::decryption($idEvento);
         $atracao =  DbModel::consultaSimples("SELECT a.*, ci.classificacao_indicativa, p.nome, p.email, p.telefone1, p.telefone2, p.observacao 
             FROM atracoes a 
             INNER JOIN classificacao_indicativas ci on a.classificacao_indicativa_id = ci.id 

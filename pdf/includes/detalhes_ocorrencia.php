@@ -51,7 +51,7 @@ foreach ($ocorrencias as $ocorrencia){
     $pdf->SetX($x);
     $pdf->SetFont('Arial','', $f);
     $pdf->Cell(145, $l, utf8_decode("Retirada de ingresso: ".$ocorrencia->retirada_ingresso), 0, 0, 'L');
-    $pdf->Cell(80,$l,utf8_decode("Valor: R$ ".$ocorrenciaObj->dinheiroDeBr($ocorrencia->valor_ingresso)),0,1,'L');
+    $pdf->Cell(80,$l,utf8_decode("Valor: R$ ".$ocorrenciaObj->dinheiroParaBr($ocorrencia->valor_ingresso)),0,1,'L');
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial','', $f);

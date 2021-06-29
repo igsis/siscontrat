@@ -10,6 +10,7 @@ $pdf->Cell(180, $l, utf8_decode("ATRAÇÕES"), 'B', 1, 'C');
 $pdf->Ln();
 
 foreach ($atracoes as $atracao) {
+    $acao = $atracaoObj->recuperaAcaoAtracao($atracao->id);
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial', 'B', 12);
@@ -19,7 +20,7 @@ foreach ($atracoes as $atracao) {
     $pdf->SetFont('Arial', 'B', $f);
     $pdf->Cell(11, $l, utf8_decode("Ação:"), 0, 0, 'L');
     $pdf->SetFont('Arial', '', $f);
-    $pdf->Cell(115, $l, utf8_decode($atracao->acoes), 0, 1, 'L');
+    $pdf->Cell(115, $l, utf8_decode($acao), 0, 1, 'L');
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial', 'B', $f);
@@ -67,7 +68,7 @@ foreach ($atracoes as $atracao) {
     $pdf->SetFont('Arial', 'B', $f);
     $pdf->Cell(29, $l, utf8_decode("Valor individual:"), 0, 0, 'L');
     $pdf->SetFont('Arial', '', $f);
-    $pdf->Cell(15, $l, utf8_decode("R$ " . $eventoObj->dinheiroBr($atracao->valor_individual)), 0, 1, 'L');
+    $pdf->Cell(15, $l, utf8_decode("R$ " . $atracaoObj->dinheiroParaBr($atracao->valor_individual)), 0, 1, 'L');
 
     $pdf->SetX($x);
     $pdf->SetFont('Arial', 'B', $f);
