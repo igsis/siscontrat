@@ -56,11 +56,20 @@ $dataEncerramento = isset($abertura->data_encerramento) ? 1 : null;
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-4">
+                                    <label for="data_abertura">Tipo de Abertura: *</label>
+                                    <select name="tipo_abertura_id" id="tipo_abertura" class="form-control" required>
+                                        <option value="">Selecione...</option>
+                                        <?php
+                                        $formacaoObj->geraOpcao("form_tipo_aberturas", $abertura->tipo_abertura_id ?? "", false, false, true);
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
                                     <label for="data_abertura">Ano de referência: </label>
-                                    <input type="number" class="form-control" id="ano_referencia" name="ano_referencia" maxlength="4" min="2020"                                 name="data_abertura"
+                                    <input type="number" class="form-control" id="ano_referencia" name="ano_referencia" maxlength="4" min="2020"
                                            value="<?= isset($abertura->ano_referencia) ? $abertura->ano_referencia : "" ?>" >
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="data_abertura">Data de abertura: </label>
                                     <input type="text" class="form-control date-picker" id="data_abertura"
                                            name="data_abertura"
