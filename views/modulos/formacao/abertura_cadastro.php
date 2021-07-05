@@ -56,11 +56,11 @@ $dataEncerramento = isset($abertura->data_encerramento) ? 1 : null;
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-4">
-                                    <label for="data_abertura">Tipo de Abertura: *</label>
-                                    <select name="tipo_abertura_id" id="tipo_abertura" class="form-control" required>
+                                    <label for="form_edital_id">Tipo de Edital: *</label>
+                                    <select name="form_edital_id" id="form_edital_id" class="form-control" required>
                                         <option value="">Selecione...</option>
                                         <?php
-                                        $formacaoObj->geraOpcao("form_tipo_aberturas", $abertura->tipo_abertura_id ?? "", false, false, true);
+                                        $formacaoObj->geraOpcao("form_editais", $abertura->form_edital_id ?? "", false, false, true);
                                         ?>
                                     </select>
                                 </div>
