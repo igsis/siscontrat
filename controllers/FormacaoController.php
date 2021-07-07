@@ -1810,7 +1810,9 @@ class FormacaoController extends FormacaoModel
 
     public function listaAbertura()
     {
-        return DbModel::listaPublicado("form_aberturas", null, true);
+        $sql = "SELECT fa.*, fe.edital FROM form_aberturas AS fa
+                INNER JOIN form_editais fe on fe.id = fa.form_edital_id";
+        return DbModel::consultaSimples($sql, true)->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function recuperaAbertura($id)

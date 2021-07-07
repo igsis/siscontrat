@@ -37,6 +37,7 @@ $aberturas = $formacaoObj->listaAbertura();
                             <thead>
                                 <tr>
                                     <th>Título</th>
+                                    <th>Tipo de edital</th>
                                     <th>Data de abertura</th>
                                     <th>Data de encerramento</th>
                                     <th>Data de publicação</th>
@@ -47,6 +48,7 @@ $aberturas = $formacaoObj->listaAbertura();
                             <?php foreach ($aberturas as $abertura): ?>
                                 <tr>
                                     <td><?=$abertura->titulo?></td>
+                                    <td><?=$abertura->edital?></td>
                                     <td> <?= isset($abertura->data_abertura) ? $formacaoObj->dataHora($abertura->data_abertura) : "" ?> </td>
                                     <td> <?= isset($abertura->data_encerramento) ? $formacaoObj->dataHora($abertura->data_encerramento) : "" ?> </td>
                                     <td ><?=$formacaoObj->dataHora($abertura->data_publicacao) ?? "-"?></td>
