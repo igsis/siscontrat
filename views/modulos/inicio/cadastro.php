@@ -50,7 +50,7 @@ $objUsuario = new UsuarioController();
                     </div>
                     <div class="form-group col-md-4">
                         <label for="local">Local *</label>
-                        <select class="form-control" id="local" name="local_id">
+                        <select class="form-control" id="local" name="local_id" required>
                             <!-- Populando pelo js -->
                         </select>
                     </div>
